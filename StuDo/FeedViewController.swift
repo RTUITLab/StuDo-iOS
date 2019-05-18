@@ -1,0 +1,69 @@
+//
+//  FeedViewController.swift
+//  StuDo
+//
+//  Created by Andrew on 5/16/19.
+//  Copyright © 2019 Andrew. All rights reserved.
+//
+
+import UIKit
+
+fileprivate let feedItemCellID = "feedItemCellID"
+
+class FeedViewController: UIViewController {
+    
+    // MARK: Data & Logic
+    
+    var feedItems: [Advertisement]?
+    
+    
+    // MARK: Visible properties
+
+    var tableView: UITableView!
+    
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        feedItems = DataMockup().getPrototypeAds(count: 42)
+        
+        tableView = UITableView(frame: view.frame, style: .plain)
+        view.addSubview(tableView)
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: feedItemCellID)
+        
+        navigationItem.title = "Ads"
+        navigationItem.largeTitleDisplayMode = .automatic
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+    }
+
+}
+
+
+extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return feedItems?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: feedItemCellID, for: indexPath)
+        cell.textLabel?.text = feedItems![indexPath.row].headline
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailVC = UIViewController()
+        detailVC.view.backgroundColor = .white
+        detailVC.hidesBottomBarWhenPushed = true
+        detailVC.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(detailVC, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
