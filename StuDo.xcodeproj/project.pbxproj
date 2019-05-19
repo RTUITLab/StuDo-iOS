@@ -13,6 +13,9 @@
 		493E8AD6228B4356004EC563 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 493E8AD4228B4356004EC563 /* LaunchScreen.storyboard */; };
 		493E8AE1228B4357004EC563 /* StuDoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8AE0228B4357004EC563 /* StuDoTests.swift */; };
 		493E8AEC228B4357004EC563 /* StuDoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8AEB228B4357004EC563 /* StuDoUITests.swift */; };
+		E0EB993B2291A0790073BBC4 /* Authorization.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0EB993A2291A0790073BBC4 /* Authorization.storyboard */; };
+		E0EB993D2291C1390073BBC4 /* SignInUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EB993C2291C1390073BBC4 /* SignInUserViewController.swift */; };
+		E0EB99412291D9820073BBC4 /* SignUpUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EB99402291D9820073BBC4 /* SignUpUserViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +48,9 @@
 		493E8AE7228B4357004EC563 /* StuDoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StuDoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		493E8AEB228B4357004EC563 /* StuDoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuDoUITests.swift; sourceTree = "<group>"; };
 		493E8AED228B4357004EC563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E0EB993A2291A0790073BBC4 /* Authorization.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Authorization.storyboard; sourceTree = "<group>"; };
+		E0EB993C2291C1390073BBC4 /* SignInUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInUserViewController.swift; sourceTree = "<group>"; };
+		E0EB99402291D9820073BBC4 /* SignUpUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpUserViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +105,9 @@
 				493E8ACD228B4354004EC563 /* ViewController.swift */,
 				493E8AD2228B4356004EC563 /* Assets.xcassets */,
 				493E8AD4228B4356004EC563 /* LaunchScreen.storyboard */,
+				E0EB993A2291A0790073BBC4 /* Authorization.storyboard */,
+				E0EB99402291D9820073BBC4 /* SignUpUserViewController.swift */,
+				E0EB993C2291C1390073BBC4 /* SignInUserViewController.swift */,
 				493E8AD7228B4356004EC563 /* Info.plist */,
 			);
 			path = StuDo;
@@ -228,6 +237,7 @@
 			files = (
 				493E8AD6228B4356004EC563 /* LaunchScreen.storyboard in Resources */,
 				493E8AD3228B4356004EC563 /* Assets.xcassets in Resources */,
+				E0EB993B2291A0790073BBC4 /* Authorization.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +263,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				493E8ACE228B4354004EC563 /* ViewController.swift in Sources */,
+				E0EB99412291D9820073BBC4 /* SignUpUserViewController.swift in Sources */,
+				E0EB993D2291C1390073BBC4 /* SignInUserViewController.swift in Sources */,
 				493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
