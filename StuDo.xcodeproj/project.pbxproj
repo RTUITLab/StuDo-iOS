@@ -17,6 +17,10 @@
 		49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */; };
 		49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B382228DD75400CA9EC7 /* FeedViewController.swift */; };
 		49B1B385228DD8F000CA9EC7 /* DataMockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B384228DD8F000CA9EC7 /* DataMockup.swift */; };
+		49CAEC8D229D91FE0008D809 /* CardTransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC8C229D91FE0008D809 /* CardTransitionAnimator.swift */; };
+		49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC8E229D93B00008D809 /* AdViewController.swift */; };
+		49CAEC91229D98330008D809 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC90229D98330008D809 /* Constants.swift */; };
+		49CAEC9322A1762A0008D809 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC9222A1762A0008D809 /* UIDeviceExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,10 @@
 		49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		49B1B382228DD75400CA9EC7 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		49B1B384228DD8F000CA9EC7 /* DataMockup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMockup.swift; sourceTree = "<group>"; };
+		49CAEC8C229D91FE0008D809 /* CardTransitionAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTransitionAnimator.swift; sourceTree = "<group>"; };
+		49CAEC8E229D93B00008D809 /* AdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewController.swift; sourceTree = "<group>"; };
+		49CAEC90229D98330008D809 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		49CAEC9222A1762A0008D809 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,10 +113,14 @@
 			children = (
 				493E8ACB228B4354004EC563 /* AppDelegate.swift */,
 				49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */,
+				49CAEC8C229D91FE0008D809 /* CardTransitionAnimator.swift */,
+				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
 				49B1B382228DD75400CA9EC7 /* FeedViewController.swift */,
 				49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */,
 				49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */,
+				49CAEC90229D98330008D809 /* Constants.swift */,
 				49B1B384228DD8F000CA9EC7 /* DataMockup.swift */,
+				49CAEC9222A1762A0008D809 /* UIDeviceExtension.swift */,
 				491422062290628B00BDB4FF /* Assets.xcassets */,
 				493E8AD4228B4356004EC563 /* LaunchScreen.storyboard */,
 				493E8AD7228B4356004EC563 /* Info.plist */,
@@ -269,7 +281,11 @@
 				49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */,
 				49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */,
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,
+				49CAEC9322A1762A0008D809 /* UIDeviceExtension.swift in Sources */,
+				49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */,
+				49CAEC8D229D91FE0008D809 /* CardTransitionAnimator.swift in Sources */,
 				493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */,
+				49CAEC91229D98330008D809 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

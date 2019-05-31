@@ -16,6 +16,8 @@ class FeedViewController: UIViewController {
     
     var feedItems: [Advertisement]?
     
+    var animator = CardTransitionAnimator()
+    
     
     // MARK: Visible properties
 
@@ -59,11 +61,22 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailVC = UIViewController()
-        detailVC.view.backgroundColor = .white
-        detailVC.hidesBottomBarWhenPushed = true
-        detailVC.navigationItem.largeTitleDisplayMode = .never
-        navigationController?.pushViewController(detailVC, animated: true)
+        let detailVC = AdViewController()
+        detailVC.transitioningDelegate = self
+        self.present(detailVC, animated: true, completion: nil)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+
+extension FeedViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        animator.isPresenting = false
+        return animator
+    }
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        animator.isPresenting = true
+        return animator
     }
 }
