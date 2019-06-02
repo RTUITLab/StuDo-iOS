@@ -44,6 +44,7 @@ class ProfilesViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: personItemCellID)
         
         searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.placeholder = "Find people for your event"
         searchController.dimsBackgroundDuringPresentation = false
         searchController.delegate = self
         
