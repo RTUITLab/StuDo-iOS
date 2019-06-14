@@ -213,12 +213,18 @@ extension APIClient {
                             throw APIError.requestFailed
                         }
                         let user = try response.decode(to: User.self).body
-                        self.delegate?.apiClient(self, didFinishRegistrationRequest: request, andRecievedUser: user)
+                        DispatchQueue.main.async {
+                            self.delegate?.apiClient(self, didFinishRegistrationRequest: request, andRecievedUser: user)
+                        }
                     } catch let error {
-                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                        DispatchQueue.main.async {
+                            self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                        }
                     }
                 case .failure(let error):
-                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
                 }
             }
         }
@@ -240,13 +246,19 @@ extension APIClient {
                             
                             self.accessToken = accessToken
                             let user = try self.decode(userDictionary: userDictionary)
-                            self.delegate?.apiClient(self, didFinishLoginRequest: request, andRecievedUser: user)
+                            DispatchQueue.main.async {
+                                self.delegate?.apiClient(self, didFinishLoginRequest: request, andRecievedUser: user)
+                            }
                         }
                     } catch let error {
-                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                        DispatchQueue.main.async {
+                            self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                        }
                     }
                 case .failure(let error):
-                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
                 }
             }
         }
