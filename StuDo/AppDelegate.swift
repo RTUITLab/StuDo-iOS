@@ -22,25 +22,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // --- end
         
         let tabBarController = TabBarController()
-        
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = tabBarController
-        window?.makeKeyAndVisible()
+
         
         if !isAuthorized {
-            // TODO: Change it to the actual authorization view controller
-            let authVC = UIViewController()
-            authVC.view.backgroundColor = .white
-            tabBarController.present(authVC, animated: true, completion: nil)
-        }
-        
+            let storyboard = UIStoryboard(name: "Authorization", bundle: nil)
+            
+            let customViewController = storyboard.instantiateViewController(withIdentifier: "CustomViewController")
+            
+            window = UIWindow(frame: UIScreen.main.bounds)
+            window?.rootViewController = customViewController
+            window?.makeKeyAndVisible()
+            
+        } else {
+            window = UIWindow(frame: UIScreen.main.bounds)
+            window?.rootViewController = tabBarController
             window?.makeKeyAndVisible()
         }
         
         return true
     }
-
 }
+
+
 
 
 
