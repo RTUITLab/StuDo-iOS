@@ -60,6 +60,10 @@ extension User: Decodable {
 struct Credentials: Codable {
     let email: String
     let password: String
+    enum CodingKeys: String, CodingKey {
+        case email = "Email"
+        case password = "Password"
+    }
 }
 
 
@@ -73,7 +77,7 @@ extension APIClient {
         guard let firstName = dictionary["firstname"] as? String else { throw APIError.decodingFailure }
         guard let lastName = dictionary["surname"] as? String else { throw APIError.decodingFailure }
         guard let email = dictionary["email"] as? String else { throw APIError.decodingFailure }
-        guard let studentID = dictionary["studentCardNumber"] as? String else { throw APIError.decodingFailure }
+        let studentID = dictionary["studentCardNumber"] as? String
         
         return User(id: id, firstName: firstName, lastName: lastName, email: email, studentID: studentID, password: nil)
     }

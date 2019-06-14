@@ -58,6 +58,19 @@ enum APIError: Error {
     case decodingFailure
 }
 
+extension APIError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return NSLocalizedString("Invalid URL in API request", comment: "")
+        case .requestFailed:
+            return NSLocalizedString("API request failed", comment: "")
+        case .decodingFailure:
+            return NSLocalizedString("Error while decoding data recieved with API request", comment: "")
+        }
+    }
+}
+
 
 struct APIResponse<Body> {
     let statusCode: Int
@@ -156,6 +169,7 @@ class APIClient {
         request.headers?.forEach {
             urlRequest.addValue($0.value, forHTTPHeaderField: $0.field)
         }
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let task = session.dataTask(with: urlRequest) { (data, response, error) in
             guard let httpResponse = response as? HTTPURLResponse else {
@@ -177,6 +191,11 @@ protocol APIClientDelegate {
 
     func apiClient(_ client: APIClient, didFinishRegistrationRequest: APIRequest, andRecievedUser user: User)
     func apiClient(_ client: APIClient, didFinishLoginRequest: APIRequest, andRecievedUser user: User)
+}
+
+extension APIClientDelegate {
+    func apiClient(_ client: APIClient, didFinishRegistrationRequest: APIRequest, andRecievedUser user: User) {}
+    func apiClient(_ client: APIClient, didFinishLoginRequest: APIRequest, andRecievedUser user: User) {}
 }
 
 
