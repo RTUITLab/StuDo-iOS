@@ -1,5 +1,6 @@
 import UIKit
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -33,9 +34,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             tabBarController.present(authVC, animated: true, completion: nil)
         }
         
+            window?.makeKeyAndVisible()
+        }
+        
         return true
     }
-
 
 }
 
