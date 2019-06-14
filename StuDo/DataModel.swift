@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK:- Models
+
 struct User {
     let id: String?
     let firstName: String
@@ -49,5 +51,30 @@ extension User: Decodable {
         self.email = try values.decode(String.self, forKey: .email)
         self.studentID = try values.decode(String?.self, forKey: .studentID)
         self.password = nil
+    }
+}
+
+
+
+
+struct Credentials: Codable {
+    let email: String
+    let password: String
+}
+
+
+
+
+
+// MARK:- Decoding
+extension APIClient {
+    func decode(userDictionary dictionary: [String: Any]) throws -> User {
+        guard let id = dictionary["id"] as? String else { throw APIError.decodingFailure }
+        guard let firstName = dictionary["firstname"] as? String else { throw APIError.decodingFailure }
+        guard let lastName = dictionary["surname"] as? String else { throw APIError.decodingFailure }
+        guard let email = dictionary["email"] as? String else { throw APIError.decodingFailure }
+        guard let studentID = dictionary["studentCardNumber"] as? String else { throw APIError.decodingFailure }
+        
+        return User(id: id, firstName: firstName, lastName: lastName, email: email, studentID: studentID, password: nil)
     }
 }
