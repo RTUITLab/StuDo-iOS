@@ -187,15 +187,15 @@ class APIClient {
 // MARK:- StuDo API Requests
 
 protocol APIClientDelegate {
-    func apiClient(_ client: APIClient, didFailRequest: APIRequest, withError error: Error)
+    func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error)
 
-    func apiClient(_ client: APIClient, didFinishRegistrationRequest: APIRequest, andRecievedUser user: User)
-    func apiClient(_ client: APIClient, didFinishLoginRequest: APIRequest, andRecievedUser user: User)
+    func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User)
+    func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User)
 }
 
 extension APIClientDelegate {
-    func apiClient(_ client: APIClient, didFinishRegistrationRequest: APIRequest, andRecievedUser user: User) {}
-    func apiClient(_ client: APIClient, didFinishLoginRequest: APIRequest, andRecievedUser user: User) {}
+    func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {}
+    func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {}
 }
 
 
@@ -203,11 +203,15 @@ extension APIClient {
     
     // FIXME: This code may fail depending on the kind of data the server returns. Please check when the server is available!
     func register(user: User) {
-        if let request = try? APIRequest(method: .post, path: "auth/register", body: user) {
+        if let request = try? APIRequest(method: .post, path: "auth/register", body: user.registerDictionaryFormat) {
             self.perform(request) { (result) in
                 switch result {
                 case .success(let response):
                     do {
+                        guard response.statusCode != 401 else {
+                            print("Status code: \(response.statusCode)")
+                            throw APIError.requestFailed
+                        }
                         let user = try response.decode(to: User.self).body
                         self.delegate?.apiClient(self, didFinishRegistrationRequest: request, andRecievedUser: user)
                     } catch let error {

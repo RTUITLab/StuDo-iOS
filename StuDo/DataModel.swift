@@ -28,6 +28,24 @@ struct User {
     }
 }
 
+extension User {
+    var registerDictionaryFormat: [String: String] {
+        return [
+            "Firstname": firstName,
+            "Surname": lastName,
+            "Email": email,
+            "Password": password!,
+            "PasswordConfirm": password!,
+            "StudentCardNumber": studentID ?? "" // FIXME: handle somehow null values as well, not it will send an empty string to the server if no card id is specified
+        ]
+    }
+    
+//    var registerFormat: Data {
+//        let data = try! JSONSerialization.data(withJSONObject: registerDictionary, options: [])
+//        return data
+//    }
+}
+
 extension User: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
