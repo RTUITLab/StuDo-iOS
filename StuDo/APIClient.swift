@@ -55,6 +55,7 @@ struct APIRequest {
 enum APIError: Error {
     case invalidURL
     case requestFailed
+    case wrongResponseStatus(Int)
     case decodingFailure
 }
 
@@ -64,9 +65,11 @@ extension APIError: LocalizedError {
         case .invalidURL:
             return NSLocalizedString("Invalid URL in API request", comment: "")
         case .requestFailed:
-            return NSLocalizedString("API request failed", comment: "")
+            return NSLocalizedString("Server returned no response", comment: "")
         case .decodingFailure:
-            return NSLocalizedString("Error while decoding data recieved with API request", comment: "")
+            return NSLocalizedString("Cannot decode data recieved with API request", comment: "")
+        case .wrongResponseStatus(let status):
+            return NSLocalizedString("Server responded with the error status code: \(status)", comment: "")
         }
     }
 }
@@ -97,7 +100,7 @@ enum APIResult<Body> {
 }
 
 class APIClient {
-    typealias APIClientCompletion = (APIResult<Data?>) -> ()
+    typealias APIClientCompletion = (APIResult<Data?>) throws -> ()
     
     private let session = URLSession.shared
     private let baseURL = URL(string: "https://dev.studo.rtuitlab.ru/api/")!
@@ -159,7 +162,7 @@ class APIClient {
         urlComponents.queryItems = request.queryItems
         
         guard let url = urlComponents.url?.appendingPathComponent(request.path) else {
-            completion(.failure(.invalidURL)); return
+            try? completion(.failure(.invalidURL)); return
         }
         
         var urlRequest = URLRequest(url: url)
@@ -172,10 +175,21 @@ class APIClient {
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let task = session.dataTask(with: urlRequest) { (data, response, error) in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(.failure(.requestFailed)); return
+            do {
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    throw APIError.requestFailed
+                }
+                guard httpResponse.statusCode == 200 else {
+                    throw APIError.wrongResponseStatus(httpResponse.statusCode)
+
+                }
+            
+                try completion(.success(APIResponse(statusCode: httpResponse.statusCode, body: data)))
+            } catch {
+                if error is APIError {
+                    try! completion(.failure(error as! APIError))
+                }
             }
-            completion(.success(APIResponse(statusCode: httpResponse.statusCode, body: data)))
         }
         task.resume()
     }
@@ -201,25 +215,13 @@ extension APIClientDelegate {
 
 extension APIClient {
     
-    // FIXME: This code may fail depending on the kind of data the server returns. Please check when the server is available!
     func register(user: User) {
         if let request = try? APIRequest(method: .post, path: "auth/register", body: user.registerDictionaryFormat) {
             self.perform(request) { (result) in
                 switch result {
-                case .success(let response):
-                    do {
-                        guard response.statusCode != 401 else {
-                            print("Status code: \(response.statusCode)")
-                            throw APIError.requestFailed
-                        }
-                        let user = try response.decode(to: User.self).body
-                        DispatchQueue.main.async {
-                            self.delegate?.apiClient(self, didFinishRegistrationRequest: request, andRecievedUser: user)
-                        }
-                    } catch let error {
-                        DispatchQueue.main.async {
-                            self.delegate?.apiClient(self, didFailRequest: request, withError: error)
-                        }
+                case .success(_):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFinishRegistrationRequest: request, andRecievedUser: user)
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
@@ -235,24 +237,18 @@ extension APIClient {
             self.perform(request) { [self] (result) in
                 switch result {
                 case .success(let response):
-                    do {
-                        if let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                            guard let userDictionary = decodedJSON["user"] as? [String: Any] else {
-                                throw APIError.decodingFailure
-                            }
-                            guard let accessToken = decodedJSON["accessToken"] as? String else {
-                                throw APIError.decodingFailure
-                            }
-                            
-                            self.accessToken = accessToken
-                            let user = try self.decode(userDictionary: userDictionary)
-                            DispatchQueue.main.async {
-                                self.delegate?.apiClient(self, didFinishLoginRequest: request, andRecievedUser: user)
-                            }
+                    if let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                        guard let userDictionary = decodedJSON["user"] as? [String: Any] else {
+                            throw APIError.decodingFailure
                         }
-                    } catch let error {
+                        guard let accessToken = decodedJSON["accessToken"] as? String else {
+                            throw APIError.decodingFailure
+                        }
+                        
+                        self.accessToken = accessToken
+                        let user = try self.decode(userDictionary: userDictionary)
                         DispatchQueue.main.async {
-                            self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                            self.delegate?.apiClient(self, didFinishLoginRequest: request, andRecievedUser: user)
                         }
                     }
                 case .failure(let error):

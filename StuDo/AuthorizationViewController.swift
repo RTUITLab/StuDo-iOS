@@ -130,7 +130,7 @@ class AuthorizationViewController: UIViewController {
 
 extension AuthorizationViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
-        displayMessage(userMessage: "Ошибка!")
+        displayMessage(userMessage: error.localizedDescription)
     }
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {
         let accountPage = TabBarController()
@@ -138,7 +138,7 @@ extension AuthorizationViewController: APIClientDelegate {
         appDelegate?.window??.rootViewController = accountPage
     }
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {
-        displayMessage(userMessage: "Успешно!")
+        client.login(withCredentials: Credentials(email: user.email, password: user.password!))
     }
 }
 
