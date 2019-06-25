@@ -28,22 +28,51 @@ struct User {
     }
 }
 
+fileprivate let userIdFieldName = "id"
+fileprivate let firstNameFieldName = "Firstname"
+fileprivate let lastNameFieldName = "Surname"
+fileprivate let emailFieldName = "Email"
+fileprivate let passwordFieldName = "Password"
+fileprivate let passwordConfirmFieldName = "PasswordConfirm"
+fileprivate let studentCardNumberFieldName = "StudentCardNumber"
+
 extension User {
     var registerDictionaryFormat: [String: String] {
         return [
-            "Firstname": firstName,
-            "Surname": lastName,
-            "Email": email,
-            "Password": password!,
-            "PasswordConfirm": password!,
-            "StudentCardNumber": studentID ?? "" // FIXME: handle somehow null values as well, not it will send an empty string to the server if no card id is specified
+            firstNameFieldName: firstName,
+            lastNameFieldName: lastName,
+            emailFieldName: email,
+            passwordFieldName: password!,
+            passwordConfirmFieldName: password!,
+            studentCardNumberFieldName: studentID ?? "" // FIXME: handle somehow null values as well, not it will send an empty string to the server if no card id is specified
         ]
     }
     
-//    var registerFormat: Data {
-//        let data = try! JSONSerialization.data(withJSONObject: registerDictionary, options: [])
-//        return data
-//    }
+    var userDefaultsFormat: [String: String] {
+        return [
+            userIdFieldName: id ?? "",
+            firstNameFieldName: firstName,
+            lastNameFieldName: lastName,
+            emailFieldName: email,
+            studentCardNumberFieldName: studentID ?? ""
+        ]
+    }
+    
+    init?(fromUserDefaultsDictionary dictionary: [String: String]) {
+        guard let id = dictionary[userIdFieldName],
+            let firstName = dictionary[firstNameFieldName],
+            let lastName = dictionary[lastNameFieldName],
+            let email = dictionary[emailFieldName],
+            let studentID = dictionary[studentCardNumberFieldName] else {
+                return nil
+        }
+        self.id = id
+        self.firstName = firstName
+        self.lastName = lastName
+        self.email = email
+        self.studentID = studentID
+        self.password = nil
+    }
 }
 
 extension User: Encodable {

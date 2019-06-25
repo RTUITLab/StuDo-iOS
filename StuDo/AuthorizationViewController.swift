@@ -136,6 +136,9 @@ extension AuthorizationViewController: APIClientDelegate {
         let accountPage = TabBarController()
         let appDelegate = UIApplication.shared.delegate
         appDelegate?.window??.rootViewController = accountPage
+        
+        PersistentStore.shared.user = user
+        PersistentStore.save()
     }
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {
         client.login(withCredentials: Credentials(email: user.email, password: user.password!))

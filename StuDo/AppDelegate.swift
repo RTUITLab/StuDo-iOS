@@ -6,14 +6,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    var isAuthorized: Bool = false
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         let tabBarController = TabBarController()
-
         
-        if !isAuthorized {
+        if PersistentStore.shared.user == nil {
             let storyboard = UIStoryboard(name: "Authorization", bundle: nil)
             
             let customViewController = storyboard.instantiateViewController(withIdentifier: "CustomViewController")

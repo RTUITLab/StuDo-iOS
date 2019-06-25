@@ -15,6 +15,7 @@
 		493E8AD6228B4356004EC563 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 493E8AD4228B4356004EC563 /* LaunchScreen.storyboard */; };
 		493E8AE1228B4357004EC563 /* StuDoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8AE0228B4357004EC563 /* StuDoTests.swift */; };
 		493E8AEC228B4357004EC563 /* StuDoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8AEB228B4357004EC563 /* StuDoUITests.swift */; };
+		494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C64A822C24B0E0039740B /* PersistentStore.swift */; };
 		495B27AF22C0145600AADD19 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */; };
 		49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */; };
 		49B1B37F228DD59600CA9EC7 /* ProfilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */; };
@@ -59,6 +60,7 @@
 		493E8AE7228B4357004EC563 /* StuDoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StuDoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		493E8AEB228B4357004EC563 /* StuDoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuDoUITests.swift; sourceTree = "<group>"; };
 		493E8AED228B4357004EC563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		494C64A822C24B0E0039740B /* PersistentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStore.swift; sourceTree = "<group>"; };
 		495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 		49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilesViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				49CAEC9222A1762A0008D809 /* UIDeviceExtension.swift */,
 				493C5A4F22A189370032AB6E /* APIClient.swift */,
 				4928D43522A3ED9700F4D703 /* DataModel.swift */,
+				494C64A822C24B0E0039740B /* PersistentStore.swift */,
 				492DEA2022B410DD00D87AAA /* Authorization.storyboard */,
 				495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */,
 				491422062290628B00BDB4FF /* Assets.xcassets */,
@@ -294,6 +297,7 @@
 				49B1B37F228DD59600CA9EC7 /* ProfilesViewController.swift in Sources */,
 				495B27AF22C0145600AADD19 /* AuthorizationViewController.swift in Sources */,
 				49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */,
+				494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */,
 				49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */,
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,
 				493C5A5022A189370032AB6E /* APIClient.swift in Sources */,
