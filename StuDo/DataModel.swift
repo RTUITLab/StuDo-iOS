@@ -116,6 +116,20 @@ struct Credentials: Codable {
 
 
 
+struct Ad {
+    let id: String
+    let name: String
+    let shortDescription: String
+    let beginTime: Date?
+    let endTime: Date?
+    let userId: String
+    var user: User?
+    let organizationId: String?
+    let organization: String?
+}
+
+
+
 
 // MARK:- Decoding
 extension APIClient {

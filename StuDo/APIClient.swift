@@ -194,6 +194,22 @@ class APIClient {
         task.resume()
     }
     
+    private func perform(secureRequest request: APIRequest, _ completion: @escaping APIClientCompletion) {
+        guard let token = self.accessToken else { return }
+        
+        let tokenHeader = HTTPHeader(field: "Authorization", value: "Bearer " + token)
+        
+        var requestCopy = request
+        if requestCopy.headers != nil {
+            requestCopy.headers!.append(tokenHeader)
+        } else {
+            requestCopy.headers = [tokenHeader]
+        }
+        
+        self.perform(requestCopy, completion)
+    }
+
+    
 }
 
 
@@ -205,11 +221,14 @@ protocol APIClientDelegate {
 
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User)
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User)
+    
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad])
 }
 
 extension APIClientDelegate {
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {}
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {}
 }
 
 
@@ -249,6 +268,47 @@ extension APIClient {
                         let user = try self.decode(userDictionary: userDictionary)
                         DispatchQueue.main.async {
                             self.delegate?.apiClient(self, didFinishLoginRequest: request, andRecievedUser: user)
+                        }
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+    }
+    
+    func getAdds() {
+        if let request = try? APIRequest(method: .get, path: "ad") {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success(let response):
+                    if let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+                        
+                        var ads = [Ad]()
+                        for object in decodedJSON {
+                            
+                            guard let id = object["id"] as? String,
+                                let name = object["name"] as? String,
+                                let shortDescription = object["shortDescription"] as? String,
+                                let userId = object["userId"] as? String else {
+                                throw APIError.decodingFailure
+                            }
+                            
+                            var ad = Ad(id: id, name: name, shortDescription: shortDescription, beginTime: nil, endTime: nil, userId: userId, user: nil, organizationId: nil, organization: nil)
+                            
+                            if let userDictionary = object["user"] as? [String: Any] {
+                                if let user = try? self.decode(userDictionary: userDictionary) {
+                                    ad.user = user
+                                }
+                            }
+                            
+                            ads.append(ad)
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.delegate?.apiClient(self, didRecieveAds: ads)
                         }
                     }
                 case .failure(let error):

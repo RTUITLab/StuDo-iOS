@@ -14,7 +14,8 @@ class FeedViewController: UIViewController {
     
     // MARK: Data & Logic
     
-    var feedItems: [Advertisement]?
+    var feedItems = [Ad]()
+    var client = APIClient()
     
     var animator = CardTransitionAnimator()
     
@@ -22,12 +23,14 @@ class FeedViewController: UIViewController {
     // MARK: Visible properties
 
     var tableView: UITableView!
+    let refreshControl = UIRefreshControl()
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        feedItems = DataMockup().getPrototypeAds(count: 42)
+        
+        client.delegate = self
+//        client.getAdds()
         
         tableView = UITableView(frame: view.frame, style: .plain)
         view.addSubview(tableView)
@@ -36,10 +39,22 @@ class FeedViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: feedItemCellID)
         
+        refreshControl.addTarget(self, action: #selector(refreshAds(_:)), for: .valueChanged)
+        
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.backgroundView = refreshControl
+        }
+        
         navigationItem.title = "Ads"
         navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
-        
+
+    }
+    
+    @objc func refreshAds(_ sender: Any) {
+        client.getAdds()
     }
 
 }
@@ -51,12 +66,12 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return feedItems?.count ?? 0
+        return feedItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: feedItemCellID, for: indexPath)
-        cell.textLabel?.text = feedItems![indexPath.row].headline
+        cell.textLabel?.text = feedItems[indexPath.row].name
         return cell
     }
     
@@ -79,4 +94,20 @@ extension FeedViewController: UIViewControllerTransitioningDelegate {
         animator.isPresenting = true
         return animator
     }
+}
+
+
+
+extension FeedViewController: APIClientDelegate {
+    func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        refreshControl.endRefreshing()
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {
+        feedItems = ads
+        tableView.reloadData()
+        refreshControl.endRefreshing()
+    }
+    
+    
 }
