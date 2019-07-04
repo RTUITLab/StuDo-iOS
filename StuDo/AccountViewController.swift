@@ -95,7 +95,8 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         let sectionInfo = sections[indexPath.section]
         if sectionInfo == .myAccount {
             let cell = tableView.dequeueReusableCell(withIdentifier: accountInfoCellID, for: indexPath)
-            cell.textLabel?.text = account?.publicInfo.name
+            let user = PersistentStore.shared.user!
+            cell.textLabel?.text = user.firstName + " " + user.lastName
             cell.accessoryType = .disclosureIndicator
             return cell
         } else if sectionInfo == .myProfiles {
@@ -122,8 +123,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         let sectionInfo = sections[indexPath.section]
         
         if sectionInfo == .myAccount {
-            let detailVC = UIViewController()
-            detailVC.view.backgroundColor = .white
+            let detailVC = AccountDetailViewController()
             detailVC.hidesBottomBarWhenPushed = true
             detailVC.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(detailVC, animated: true)
