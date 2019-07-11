@@ -119,6 +119,7 @@ struct Credentials: Codable {
 struct Ad {
     let id: String
     let name: String
+    let description: String
     let shortDescription: String
     let beginTime: Date?
     let endTime: Date?

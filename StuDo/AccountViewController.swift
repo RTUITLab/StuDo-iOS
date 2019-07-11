@@ -48,8 +48,8 @@ class AccountViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        let settingsButton = UIBarButtonItem(image: #imageLiteral(resourceName: "settings"), style: .plain, target: self, action: #selector(handleSettingsButtonTap))
-        navigationItem.rightBarButtonItem = settingsButton
+//        let settingsButton = UIBarButtonItem(image: #imageLiteral(resourceName: "settings"), style: .plain, target: self, action: #selector(handleSettingsButtonTap))
+//        navigationItem.rightBarButtonItem = settingsButton
     }
     
     @objc func handleSettingsButtonTap() {

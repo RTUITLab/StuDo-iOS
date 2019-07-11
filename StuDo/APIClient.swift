@@ -291,12 +291,13 @@ extension APIClient {
                             
                             guard let id = object["id"] as? String,
                                 let name = object["name"] as? String,
+                                let description = object["description"] as? String,
                                 let shortDescription = object["shortDescription"] as? String,
                                 let userId = object["userId"] as? String else {
                                 throw APIError.decodingFailure
                             }
                             
-                            var ad = Ad(id: id, name: name, shortDescription: shortDescription, beginTime: nil, endTime: nil, userId: userId, user: nil, organizationId: nil, organization: nil)
+                            var ad = Ad(id: id, name: name, description: description, shortDescription: shortDescription, beginTime: nil, endTime: nil, userId: userId, user: nil, organizationId: nil, organization: nil)
                             
                             if let userDictionary = object["user"] as? [String: Any] {
                                 if let user = try? self.decode(userDictionary: userDictionary) {

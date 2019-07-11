@@ -19,15 +19,15 @@ class TabBarController: UITabBarController {
 
         feedViewController = FeedViewController()
         let feedNavController = UINavigationController(rootViewController: feedViewController)
-        feedNavController.tabBarItem = UITabBarItem(title: "Feed", image: nil, selectedImage: nil)
+        feedNavController.tabBarItem = UITabBarItem(title: "Feed", image: #imageLiteral(resourceName: "today"), selectedImage: nil)
         
         peopleViewController = ProfilesViewController()
         let peopleNavController = UINavigationController(rootViewController: peopleViewController)
-        peopleNavController.tabBarItem = UITabBarItem(title: "People", image: nil, selectedImage: nil)
+        peopleNavController.tabBarItem = UITabBarItem(title: "People", image: #imageLiteral(resourceName: "report_card"), selectedImage: nil)
         
         let profileViewController = AccountViewController()
         let profileNavController = UINavigationController(rootViewController: profileViewController)
-        profileNavController.tabBarItem = UITabBarItem(title: "Account", image: nil, selectedImage: nil)
+        profileNavController.tabBarItem = UITabBarItem(title: "Me", image: #imageLiteral(resourceName: "user_male"), selectedImage: nil)
         
         viewControllers = [feedNavController, peopleNavController, profileNavController]
         
