@@ -131,7 +131,18 @@ class AuthorizationViewController: UIViewController {
 extension AuthorizationViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         displayMessage(userMessage: error.localizedDescription)
+        
+        // DEBUG
+        let accountPage = TabBarController()
+        let appDelegate = UIApplication.shared.delegate
+        appDelegate?.window??.rootViewController = accountPage
+        
+        PersistentStore.shared.user = User(id: "", firstName: "Fake", lastName: "Tester", email: "mail@me.com", studentID: nil, password: nil)
+        PersistentStore.save()
+        
+        // END
     }
+    
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {
         let accountPage = TabBarController()
         let appDelegate = UIApplication.shared.delegate

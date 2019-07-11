@@ -12,9 +12,7 @@ class AdViewController: UIViewController {
     
     // MARK: Data & Logic
     
-    var feedItems: [Advertisement]?
-    
-    var animator = CardTransitionAnimator()
+    var showedAd: Ad?
     
     var isBeingTransitioned = false
     
@@ -25,6 +23,9 @@ class AdViewController: UIViewController {
     var containerView = UIScrollView()
     var cardView = UIView()
     var contentView = UIScrollView()
+    
+    var nameLabel = UITextField()
+    var descriptionLabel = UITextView()
     
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -66,6 +67,48 @@ class AdViewController: UIViewController {
         containerView.delegate = self
         contentView.delegate = self
         
+        
+        
+        // Layout
+        
+        contentView.addSubview(nameLabel)
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 10).isActive = true
+        nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10).isActive = true
+        nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
+        nameLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        contentView.addSubview(descriptionLabel)
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor, constant: 0).isActive = true
+        descriptionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 0).isActive = true
+        descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6).isActive = true
+        
+        // Look customization
+        
+        nameLabel.font = .systemFont(ofSize: 22, weight: .medium)
+        descriptionLabel.isScrollEnabled = false
+        
+        var style = NSMutableParagraphStyle()
+        style.lineSpacing = 12
+        let attributedText = NSAttributedString(string: showedAd?.shortDescription ?? "",
+                                                attributes: [
+                                                    .paragraphStyle:style,
+                                                    .font: UIFont.systemFont(ofSize: 16, weight: .light)
+                                                ])
+        descriptionLabel.attributedText = attributedText
+        
+        
+        if showedAd?.userId != "" && showedAd?.userId == PersistentStore.shared.user?.id{
+            nameLabel.isUserInteractionEnabled = true
+            descriptionLabel.isUserInteractionEnabled = true
+        } else {
+            nameLabel.isUserInteractionEnabled = false
+            descriptionLabel.isUserInteractionEnabled = false
+        }
+        
+        
+        nameLabel.text = showedAd?.name
     }
 
 }

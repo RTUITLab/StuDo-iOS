@@ -38,6 +38,7 @@ class FeedViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: feedItemCellID)
+        tableView.rowHeight = 80
         
         refreshControl.addTarget(self, action: #selector(refreshAds(_:)), for: .valueChanged)
         
@@ -50,6 +51,10 @@ class FeedViewController: UIViewController {
         navigationItem.title = "Ads"
         navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        // FAKE DATA
+        generateFakeData()
+
 
     }
     
@@ -72,11 +77,13 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: feedItemCellID, for: indexPath)
         cell.textLabel?.text = feedItems[indexPath.row].name
+        cell.detailTextLabel?.text = feedItems[indexPath.row].shortDescription
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = AdViewController()
+        detailVC.showedAd = feedItems[indexPath.row]
         detailVC.transitioningDelegate = self
         self.present(detailVC, animated: true, completion: nil)
         tableView.deselectRow(at: indexPath, animated: true)
@@ -99,8 +106,17 @@ extension FeedViewController: UIViewControllerTransitioningDelegate {
 
 
 extension FeedViewController: APIClientDelegate {
+    fileprivate func generateFakeData() {
+        for fakeAd in DataMockup().getPrototypeAds(count: 4) {
+            let ad = Ad(id: "", name: fakeAd.headline, description: fakeAd.description, shortDescription: fakeAd.description, beginTime: nil, endTime: nil, userId: "", user: nil, organizationId: nil, organization: nil)
+            feedItems.append(ad)
+        }
+        tableView.reloadData()
+    }
+    
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         refreshControl.endRefreshing()
+        generateFakeData()
     }
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {
