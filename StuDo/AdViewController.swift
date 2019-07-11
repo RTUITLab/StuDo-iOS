@@ -73,7 +73,7 @@ class AdViewController: UIViewController {
         
         contentView.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 10).isActive = true
+        nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16).isActive = true
         nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10).isActive = true
         nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true

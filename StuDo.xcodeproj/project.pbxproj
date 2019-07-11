@@ -18,6 +18,8 @@
 		494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C64A822C24B0E0039740B /* PersistentStore.swift */; };
 		494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C64AA22C253AC0039740B /* AccountDetailViewController.swift */; };
 		495B27AF22C0145600AADD19 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */; };
+		49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77922D7397400C2661E /* AdTableViewCell.swift */; };
+		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
 		49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */; };
 		49B1B37F228DD59600CA9EC7 /* ProfilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */; };
 		49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */; };
@@ -64,6 +66,8 @@
 		494C64A822C24B0E0039740B /* PersistentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStore.swift; sourceTree = "<group>"; };
 		494C64AA22C253AC0039740B /* AccountDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailViewController.swift; sourceTree = "<group>"; };
 		495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
+		49A8F77922D7397400C2661E /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
+		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
 		49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilesViewController.swift; sourceTree = "<group>"; };
 		49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
@@ -128,8 +132,10 @@
 				49CAEC8C229D91FE0008D809 /* CardTransitionAnimator.swift */,
 				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
 				49B1B382228DD75400CA9EC7 /* FeedViewController.swift */,
+				49A8F77922D7397400C2661E /* AdTableViewCell.swift */,
 				49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */,
 				49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */,
+				49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */,
 				494C64AA22C253AC0039740B /* AccountDetailViewController.swift */,
 				49CAEC90229D98330008D809 /* Constants.swift */,
 				49B1B384228DD8F000CA9EC7 /* DataMockup.swift */,
@@ -303,6 +309,8 @@
 				494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */,
 				494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */,
 				49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */,
+				49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */,
+				49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */,
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,
 				493C5A5022A189370032AB6E /* APIClient.swift in Sources */,
 				49CAEC9322A1762A0008D809 /* UIDeviceExtension.swift in Sources */,
