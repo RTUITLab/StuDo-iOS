@@ -29,10 +29,15 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        client.delegate = self
-//        client.getAdds()
-        
         tableView = UITableView(frame: view.frame, style: .plain)
+        
+        if PersistentStore.shared.isUsingFakeData {
+            generateFakeData()
+        } else {
+            client.delegate = self
+            client.getAdds()
+        }
+        
         view.addSubview(tableView)
         
         tableView.delegate = self
@@ -51,10 +56,6 @@ class FeedViewController: UIViewController {
         navigationItem.title = "Ads"
         navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
-        
-        // FAKE DATA
-        generateFakeData()
-
 
     }
     

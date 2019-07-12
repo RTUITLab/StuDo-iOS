@@ -31,6 +31,8 @@ struct PersistentStore {
     
     var user: User?
     
+    var isUsingFakeData = true
+    
     init() {
         let defaults = UserDefaults.standard
         

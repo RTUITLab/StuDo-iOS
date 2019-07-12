@@ -25,6 +25,7 @@
 		49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */; };
 		49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B382228DD75400CA9EC7 /* FeedViewController.swift */; };
 		49B1B385228DD8F000CA9EC7 /* DataMockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B384228DD8F000CA9EC7 /* DataMockup.swift */; };
+		49C85B2522D8C2E800578F39 /* BasicTableViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */; };
 		49CAEC8D229D91FE0008D809 /* CardTransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC8C229D91FE0008D809 /* CardTransitionAnimator.swift */; };
 		49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC8E229D93B00008D809 /* AdViewController.swift */; };
 		49CAEC91229D98330008D809 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC90229D98330008D809 /* Constants.swift */; };
@@ -73,6 +74,7 @@
 		49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		49B1B382228DD75400CA9EC7 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		49B1B384228DD8F000CA9EC7 /* DataMockup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMockup.swift; sourceTree = "<group>"; };
+		49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTableViewCells.swift; sourceTree = "<group>"; };
 		49CAEC8C229D91FE0008D809 /* CardTransitionAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTransitionAnimator.swift; sourceTree = "<group>"; };
 		49CAEC8E229D93B00008D809 /* AdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewController.swift; sourceTree = "<group>"; };
 		49CAEC90229D98330008D809 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */,
 				49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */,
 				494C64AA22C253AC0039740B /* AccountDetailViewController.swift */,
+				49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */,
 				49CAEC90229D98330008D809 /* Constants.swift */,
 				49B1B384228DD8F000CA9EC7 /* DataMockup.swift */,
 				49CAEC9222A1762A0008D809 /* UIDeviceExtension.swift */,
@@ -317,6 +320,7 @@
 				49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */,
 				49CAEC8D229D91FE0008D809 /* CardTransitionAnimator.swift in Sources */,
 				493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */,
+				49C85B2522D8C2E800578F39 /* BasicTableViewCells.swift in Sources */,
 				49CAEC91229D98330008D809 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -74,13 +74,14 @@ class CurrentUserTableViewCell: UITableViewCell {
             addSubview(nameField)
             nameField.translatesAutoresizingMaskIntoConstraints = false
             nameField.leadingAnchor.constraint(equalTo: separator.leadingAnchor).isActive = true
+            nameField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
             nameField.bottomAnchor.constraint(equalTo: separator.topAnchor, constant: -distanceFromSeparator).isActive = true
-            
             
             
             addSubview(surnameField)
             surnameField.translatesAutoresizingMaskIntoConstraints = false
             surnameField.leadingAnchor.constraint(equalTo: separator.leadingAnchor).isActive = true
+            surnameField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
             surnameField.topAnchor.constraint(equalTo: separator.bottomAnchor, constant: distanceFromSeparator).isActive = true
             
             

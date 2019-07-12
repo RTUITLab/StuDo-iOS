@@ -10,6 +10,9 @@ import UIKit
 
 fileprivate let usualStyleCellId = "usualStyleCellId"
 fileprivate let currentUserCellId = "currentUserCellId"
+fileprivate let value1styleCellID = "value1styleCellID"
+fileprivate let inputFieldCellID = "inputFieldCellID"
+
 fileprivate let usualStyleHeaderFooterId = "usualStyleHeaderFooterId"
 
 class AccountDetailViewController: UITableViewController {
@@ -17,37 +20,71 @@ class AccountDetailViewController: UITableViewController {
     
     fileprivate enum SectionName: String {
         case nameAndSurname
-        case password
+        case studentId
+        case credentials
         case logout
     }
     
-    private var sections: [SectionName] = [.nameAndSurname, .password, .logout]
+    fileprivate enum TagsForTextField: Int {
+        case name
+        case surname
+        case studentID
+    }
+    
+    var editedName: String?
+    var editedLastName: String?
+    var editedStudentID: String?
+    
+    private var sections: [SectionName] = [.nameAndSurname, .studentId, .credentials, .logout]
     
     init() {
         super.init(style: .grouped)
-        view.backgroundColor = UIColor(red:0.937, green:0.937, blue:0.959, alpha:1.000)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    var doneButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: usualStyleCellId)
         tableView.register(CurrentUserTableViewCell.self, forCellReuseIdentifier: currentUserCellId)
+        tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: value1styleCellID)
+        tableView.register(TableViewCellWithInputField.self, forCellReuseIdentifier: inputFieldCellID)
+        
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: usualStyleHeaderFooterId)
         
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed(_:)))
+        doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed(_:)))
         navigationItem.rightBarButtonItem = doneButton
-        
+        doneButton.isEnabled = false
     }
     
     @objc func doneButtonPressed(_ doneButton: UIBarButtonItem) {
+        
+        // Send the edited data to server here
+        
         navigationController?.popViewController(animated: true)
+    }
+    
+    
+    @objc func valueChanged(in textField: UITextField) {
+        if textField.tag == TagsForTextField.name.rawValue {
+            editedName = textField.text
+        } else if textField.tag == TagsForTextField.surname.rawValue {
+            editedLastName = textField.text
+        } else if textField.tag == TagsForTextField.studentID.rawValue {
+            editedStudentID = textField.text
+        }
+        
+        // Check the entered data
+        if editedName != nil && editedName!.count == 0 {
+            doneButton.isEnabled = false
+        } else {
+            doneButton.isEnabled = true
+        }
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -66,6 +103,12 @@ class AccountDetailViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let sectionInfo = sections[section]
+        
+        if sectionInfo == .credentials {
+            return 2
+        }
+        
         return 1
     }
     
@@ -81,18 +124,38 @@ class AccountDetailViewController: UITableViewController {
             cell.surnameField.text = user.lastName
             cell.setupCell()
             cell.selectionStyle = .none
+            
+            cell.nameField.tag = TagsForTextField.name.rawValue
+            cell.surnameField.tag = TagsForTextField.surname.rawValue
+            cell.nameField.addTarget(self, action: #selector(valueChanged(in:)), for: .editingChanged)
+            cell.surnameField.addTarget(self, action: #selector(valueChanged(in:)), for: .editingChanged)
+
+            return cell
+        } else if sectionInfo == .studentId {
+            let cell = tableView.dequeueReusableCell(withIdentifier: inputFieldCellID, for: indexPath) as! TableViewCellWithInputField
+            cell.inputField.placeholder = "Your student ID"
+            
+            cell.inputField.tag = TagsForTextField.studentID.rawValue
+            cell.inputField.addTarget(self, action: #selector(valueChanged(in:)), for: .editingChanged)
+
             return cell
         }
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: usualStyleCellId, for: indexPath)
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: value1styleCellID, for: indexPath)
         cell.accessoryType = .disclosureIndicator
         
         switch sectionInfo {
         case .logout:
             cell.textLabel?.text = "Log out"
             cell.textLabel?.textColor = .red
-        case .password:
-            cell.textLabel?.text = "Change password"
+        case .credentials:
+            if indexPath.row == 0 {
+                cell.textLabel?.text = "Change email"
+                cell.detailTextLabel?.text = PersistentStore.shared.user!.email
+            } else {
+                cell.textLabel?.text = "Change password"
+            }
         default:
             break
         }
