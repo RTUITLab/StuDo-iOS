@@ -142,6 +142,7 @@ class APIClient {
             else {
                 throw KeychainError.unexpectedPasswordData
         }
+        print(token)
         return token
     }
     
@@ -223,12 +224,16 @@ protocol APIClientDelegate {
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User)
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad])
+    func apiClient(_ client: APIClient, didUpdateAd: Ad)
+    func apiClient(_ client: APIClient, didDeleteAd: Ad)
 }
 
 extension APIClientDelegate {
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {}
+    func apiClient(_ client: APIClient, didUpdateAd: Ad) {}
+    func apiClient(_ client: APIClient, didDeleteAd: Ad) {}
 }
 
 
@@ -291,13 +296,13 @@ extension APIClient {
                             
                             guard let id = object["id"] as? String,
                                 let name = object["name"] as? String,
-                                let description = object["description"] as? String,
+//                                let description = object["description"] as? String,
                                 let shortDescription = object["shortDescription"] as? String,
                                 let userId = object["userId"] as? String else {
                                 throw APIError.decodingFailure
                             }
                             
-                            var ad = Ad(id: id, name: name, description: description, shortDescription: shortDescription, beginTime: nil, endTime: nil, userId: userId, user: nil, organizationId: nil, organization: nil)
+                            var ad = Ad(id: id, name: name, fullDescription: nil, shortDescription: shortDescription, beginTime: nil, endTime: nil, userId: userId, user: nil, organizationId: nil, organization: nil)
                             
                             if let userDictionary = object["user"] as? [String: Any] {
                                 if let user = try? self.decode(userDictionary: userDictionary) {
@@ -320,6 +325,53 @@ extension APIClient {
             }
         }
     }
+    
+    func replaceAd(with ad: Ad) {
+        
+        // TODO: Check if description is filled!
+        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+        let updateForm = AdUpdateForm(id: ad.id, name: ad.name, description: ad.fullDescription!, shortDescription: ad.shortDescription, beginTime: formatter.string(from: Date()), endTime: formatter.string(from: Date(timeIntervalSinceNow: 3600 * 2)))
+        
+        if let request = try? APIRequest(method: .put, path: "ad", body: updateForm) {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success:
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didUpdateAd: ad)
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+    }
+    
+    func delete(ad: Ad) {
+        if let request = try? APIRequest(method: .delete, path: "ad/\(ad.id)") {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success:
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didDeleteAd: ad)
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
 }
 
 

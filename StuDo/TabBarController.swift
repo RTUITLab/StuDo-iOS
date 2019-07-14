@@ -32,5 +32,9 @@ class TabBarController: UITabBarController {
         viewControllers = [feedNavController, peopleNavController, profileNavController]
         
     }
+    
+    func refreshDataInsideControllers() {
+        feedViewController.refreshAds()
+    }
 
 }

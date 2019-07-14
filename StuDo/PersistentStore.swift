@@ -29,9 +29,7 @@ let kPersistentStoreUser = "com.StuDo.user"
 struct PersistentStore {
     static var shared = PersistentStore()
     
-    var user: User?
-    
-    var isUsingFakeData = true
+    var user: User!
     
     init() {
         let defaults = UserDefaults.standard

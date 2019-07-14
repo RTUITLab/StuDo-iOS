@@ -35,9 +35,9 @@ struct Advertisement {
 
 struct DataMockup {
     
-    func getPrototypeAds(count: Int) -> [Advertisement] {
-        var ads = [Advertisement]()
-        for _ in 0...count {
+    func getPrototypeAds(count: Int, withUserId userId: String = "fakeID") -> [Ad] {
+        var ads = [Ad]()
+        for _ in 0..<count {
             let headline = headlineMockup[Int.random(in: 0..<headlineMockup.count)]
             let description = descriptionMockup[Int.random(in: 0..<descriptionMockup.count)]
             
@@ -48,7 +48,7 @@ struct DataMockup {
             }
             
             ads.append(
-                Advertisement(associatedAccount: nil, headline: headline, description: description, tags: tags)
+                Ad(id: "fakeID", name: headline, fullDescription: description, shortDescription: description, beginTime: nil, endTime: nil, userId: userId, user: nil, organizationId: nil, organization: nil)
             )
         }
         return ads
@@ -56,7 +56,7 @@ struct DataMockup {
     
     func getPrototypePeople(count: Int) -> [Profile] {
         var people = [Profile]()
-        for _ in 0...count {
+        for _ in 0..<count {
             let briefDescription = profileDescriptionMockup[Int.random(in: 0..<profileDescriptionMockup.count)]
             let description = descriptionMockup[Int.random(in: 0..<descriptionMockup.count)]
 
@@ -65,25 +65,6 @@ struct DataMockup {
             )
         }
         return people
-    }
-    
-    func getPrototypeAccount() -> PrivateAccountInfo {
-        let name = nameMockup[Int.random(in: 0..<nameMockup.count)]
-        let surname = surnameMockup[Int.random(in: 0..<surnameMockup.count)]
-        let nickname = nicknameMockup[Int.random(in: 0..<nicknameMockup.count)]
-        
-        let publicInfo = PublicAccountInfo(name: name, surname: surname, nickname: nickname)
-        
-        var profiles = getPrototypePeople(count: 3)
-        var ads = getPrototypeAds(count: 5)
-        
-        for i in 0..<3 {
-            profiles[i].associatedAccount = publicInfo
-            ads[i].associatedAccount = publicInfo
-        }
-        
-        return PrivateAccountInfo(publicInfo: publicInfo, profiles: profiles, ads: ads)
-        
     }
     
     var nameMockup = ["Igor", "Diana", "Misha", "Danil", "Ivan", "Alisa", "Anna"]

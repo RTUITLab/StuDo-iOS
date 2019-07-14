@@ -119,9 +119,8 @@ class AccountDetailViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: currentUserCellId, for: indexPath) as! CurrentUserTableViewCell
             cell.profileImage.image = #imageLiteral(resourceName: "person")
             cell.isEditingAlailable = true
-            let user = PersistentStore.shared.user!
-            cell.nameField.text = user.firstName
-            cell.surnameField.text = user.lastName
+            cell.nameField.text = PersistentStore.shared.user.firstName
+            cell.surnameField.text = PersistentStore.shared.user.lastName
             cell.setupCell()
             cell.selectionStyle = .none
             
@@ -168,7 +167,10 @@ class AccountDetailViewController: UITableViewController {
         
         if sectionInfo == .logout {
             PersistentStore.shared.user = nil
-            PersistentStore.save()
+            
+            if !GCIsUsingFakeData {
+                PersistentStore.save()
+            }
             
             let storyboard = UIStoryboard(name: "Authorization", bundle: nil)
             

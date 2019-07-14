@@ -26,6 +26,8 @@
 		49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B382228DD75400CA9EC7 /* FeedViewController.swift */; };
 		49B1B385228DD8F000CA9EC7 /* DataMockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B384228DD8F000CA9EC7 /* DataMockup.swift */; };
 		49C85B2522D8C2E800578F39 /* BasicTableViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */; };
+		49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2622D8D06300578F39 /* GlobalConstants.swift */; };
+		49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2C22D8F64C00578F39 /* AccountHeaderCell.swift */; };
 		49CAEC8D229D91FE0008D809 /* CardTransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC8C229D91FE0008D809 /* CardTransitionAnimator.swift */; };
 		49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC8E229D93B00008D809 /* AdViewController.swift */; };
 		49CAEC91229D98330008D809 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC90229D98330008D809 /* Constants.swift */; };
@@ -75,6 +77,8 @@
 		49B1B382228DD75400CA9EC7 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		49B1B384228DD8F000CA9EC7 /* DataMockup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMockup.swift; sourceTree = "<group>"; };
 		49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTableViewCells.swift; sourceTree = "<group>"; };
+		49C85B2622D8D06300578F39 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
+		49C85B2C22D8F64C00578F39 /* AccountHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeaderCell.swift; sourceTree = "<group>"; };
 		49CAEC8C229D91FE0008D809 /* CardTransitionAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTransitionAnimator.swift; sourceTree = "<group>"; };
 		49CAEC8E229D93B00008D809 /* AdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewController.swift; sourceTree = "<group>"; };
 		49CAEC90229D98330008D809 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -129,16 +133,12 @@
 		493E8ACA228B4354004EC563 /* StuDo */ = {
 			isa = PBXGroup;
 			children = (
+				49C85B2E22D9EBBC00578F39 /* Account Tab */,
+				49C85B2F22D9EBFC00578F39 /* Ads */,
 				493E8ACB228B4354004EC563 /* AppDelegate.swift */,
 				49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */,
 				49CAEC8C229D91FE0008D809 /* CardTransitionAnimator.swift */,
-				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
-				49B1B382228DD75400CA9EC7 /* FeedViewController.swift */,
-				49A8F77922D7397400C2661E /* AdTableViewCell.swift */,
 				49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */,
-				49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */,
-				49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */,
-				494C64AA22C253AC0039740B /* AccountDetailViewController.swift */,
 				49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */,
 				49CAEC90229D98330008D809 /* Constants.swift */,
 				49B1B384228DD8F000CA9EC7 /* DataMockup.swift */,
@@ -146,6 +146,7 @@
 				493C5A4F22A189370032AB6E /* APIClient.swift */,
 				4928D43522A3ED9700F4D703 /* DataModel.swift */,
 				494C64A822C24B0E0039740B /* PersistentStore.swift */,
+				49C85B2622D8D06300578F39 /* GlobalConstants.swift */,
 				492DEA2022B410DD00D87AAA /* Authorization.storyboard */,
 				495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */,
 				491422062290628B00BDB4FF /* Assets.xcassets */,
@@ -171,6 +172,27 @@
 				493E8AED228B4357004EC563 /* Info.plist */,
 			);
 			path = StuDoUITests;
+			sourceTree = "<group>";
+		};
+		49C85B2E22D9EBBC00578F39 /* Account Tab */ = {
+			isa = PBXGroup;
+			children = (
+				49C85B2C22D8F64C00578F39 /* AccountHeaderCell.swift */,
+				49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */,
+				494C64AA22C253AC0039740B /* AccountDetailViewController.swift */,
+				49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */,
+			);
+			path = "Account Tab";
+			sourceTree = "<group>";
+		};
+		49C85B2F22D9EBFC00578F39 /* Ads */ = {
+			isa = PBXGroup;
+			children = (
+				49B1B382228DD75400CA9EC7 /* FeedViewController.swift */,
+				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
+				49A8F77922D7397400C2661E /* AdTableViewCell.swift */,
+			);
+			path = Ads;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,11 +332,13 @@
 				495B27AF22C0145600AADD19 /* AuthorizationViewController.swift in Sources */,
 				49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */,
 				494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */,
+				49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */,
 				494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */,
 				49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */,
 				49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */,
 				49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */,
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,
+				49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */,
 				493C5A5022A189370032AB6E /* APIClient.swift in Sources */,
 				49CAEC9322A1762A0008D809 /* UIDeviceExtension.swift in Sources */,
 				49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */,

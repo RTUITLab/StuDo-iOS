@@ -119,7 +119,7 @@ struct Credentials: Codable {
 struct Ad {
     let id: String
     let name: String
-    let description: String
+    let fullDescription: String?
     let shortDescription: String
     let beginTime: Date?
     let endTime: Date?
@@ -127,6 +127,15 @@ struct Ad {
     var user: User?
     let organizationId: String?
     let organization: String?
+}
+
+struct AdUpdateForm: Codable {
+    let id: String
+    let name: String
+    let description: String
+    let shortDescription: String
+    let beginTime: String
+    let endTime: String
 }
 
 

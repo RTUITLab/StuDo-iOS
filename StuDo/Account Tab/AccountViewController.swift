@@ -12,6 +12,7 @@ fileprivate let accountInfoCellID = "accountInfoCellID"
 fileprivate let profileCellID = "profileCellID"
 fileprivate let adCellID = "adCellID"
 fileprivate let reusableCellID = "reusableCellID"
+fileprivate let accountHeaderID = "accountHeaderID"
 
 fileprivate enum SectionName: String {
     case myAccount
@@ -22,18 +23,19 @@ fileprivate enum SectionName: String {
 
 class AccountViewController: UIViewController {
     
-    var account: PrivateAccountInfo?
-    
     var animator = CardTransitionAnimator()
     
     var tableView: UITableView!
+    
+    var client = APIClient()
+    
+    var ownAds = [Ad]()
+    var ownProfiles = [Profile]()
     
     private var sections: [SectionName] = [.myAccount, .myProfiles, .myAds]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        account = DataMockup().getPrototypeAccount()
         
         tableView = UITableView(frame: view.frame, style: .grouped)
         view.addSubview(tableView)
@@ -45,10 +47,15 @@ class AccountViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: profileCellID)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: reusableCellID)
 
+        tableView.register(AccountHeaderView.self, forHeaderFooterViewReuseIdentifier: accountHeaderID)
         
         navigationItem.title = "My Account"
         navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        if PersistentStore.shared.user != nil {
+            refreshInfo()
+        }
         
 //        let settingsButton = UIBarButtonItem(image: #imageLiteral(resourceName: "settings"), style: .plain, target: self, action: #selector(handleSettingsButtonTap))
 //        navigationItem.rightBarButtonItem = settingsButton
@@ -61,7 +68,45 @@ class AccountViewController: UIViewController {
         detailVC.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(detailVC, animated: true)
     }
+    
+    @objc func newProfileButtonTapped(_ button: UIButton) {
+        
+    }
+    
+    @objc func newAddButtonTapped(_ button: UIButton) {
+        
+    }
+    
+    
+    
+    func refreshInfo() {
+        if GCIsUsingFakeData {
+            let mockup = DataMockup()
+            ownAds = mockup.getPrototypeAds(count: 1, withUserId: "fakeUserID")
+            ownProfiles = mockup.getPrototypePeople(count: 2)
+        } else {
+            client.delegate = self
+            client.getAdds()
+        }
+    }
 
+}
+
+
+extension AccountViewController: APIClientDelegate {
+    func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        print(error)
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {
+        for ad in ads {
+            if ad.userId == PersistentStore.shared.user?.id {
+                ownAds.append(ad)
+            }
+        }
+        
+        tableView.reloadData()
+    }
 }
 
 
@@ -79,14 +124,40 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionInfo = sections[section]
-
+        
         if sectionInfo == .myProfiles || sectionInfo == .myAds {
-            return sectionInfo.rawValue
+            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: accountHeaderID) as! AccountHeaderView
+            
+            header.sectionTitle = sectionInfo.rawValue
+            
+            let title: String = "Add New"
+            if sectionInfo == .myProfiles {
+                
+                header.actionButton.addTarget(self, action: #selector(newProfileButtonTapped(_:)), for: .touchUpInside)
+
+            } else if sectionInfo == .myAds {
+                
+                header.actionButton.addTarget(self, action: #selector(newAddButtonTapped(_:)), for: .touchUpInside)
+            }
+            
+            header.actionButton.setTitle(title, for: .normal)
+            
+            return header
         }
         
         return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let sectionInfo = sections[section]
+        
+        if sectionInfo == .myAds || sectionInfo == .myProfiles {
+            return 60
+        }
+        
+        return 44
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -96,10 +167,10 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = sections[section]
         
-        if sectionInfo == .myProfiles, let profiles = account?.profiles {
-            return profiles.count
-        } else if sectionInfo == .myAds, let ads = account?.ads {
-            return ads.count
+        if sectionInfo == .myProfiles {
+            return ownProfiles.count
+        } else if sectionInfo == .myAds {
+            return ownAds.count
         }
         
         return 1
@@ -118,12 +189,13 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         } else if sectionInfo == .myProfiles {
             let cell = tableView.dequeueReusableCell(withIdentifier: profileCellID, for: indexPath)
-            cell.textLabel?.text = account?.profiles?[indexPath.row].briefDescription
+            cell.textLabel?.text = ownProfiles[indexPath.row].briefDescription
             return cell
         } else if sectionInfo == .myAds {
             let cell = tableView.dequeueReusableCell(withIdentifier: adCellID, for: indexPath) as! AdTableViewCell
-            cell.titleLabel.text = account?.ads?[indexPath.row].headline
-            cell.shortDescriptionLabel.text = account?.ads?[indexPath.row].description
+            let ad = ownAds[indexPath.row]
+            cell.titleLabel.text = ad.name
+            cell.shortDescriptionLabel.text = ad.shortDescription
             return cell
         }
         
@@ -146,20 +218,10 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             detailVC.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(detailVC, animated: true)
         } else if sectionInfo == .myAds {
-            
-            // Here the code changed ad's id so that it equals to current user's id
-            // and enables the user to edit the ad. Change it in the real app
-            
-            if let adToShow = account?.ads?[indexPath.row] {
-                
-                let detailVC = AdViewController()
-
-                detailVC.showedAd = Ad(id: "", name: adToShow.headline, description: adToShow.description, shortDescription: adToShow.description, beginTime: nil, endTime: nil, userId: PersistentStore.shared.user!.id!, user: nil, organizationId: nil, organization: nil)
-                
-                detailVC.transitioningDelegate = self
-                self.present(detailVC, animated: true, completion: nil)
-            }
-            
+            let detailVC = AdViewController()
+            detailVC.showedAd = ownAds[indexPath.row]
+            detailVC.transitioningDelegate = self
+            self.present(detailVC, animated: true, completion: nil)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
