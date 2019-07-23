@@ -142,7 +142,6 @@ class APIClient {
             else {
                 throw KeychainError.unexpectedPasswordData
         }
-        print(token)
         return token
     }
     

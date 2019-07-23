@@ -86,7 +86,9 @@ class AccountViewController: UIViewController {
             ownProfiles = mockup.getPrototypePeople(count: 2)
         } else {
             client.delegate = self
-            client.getAdds()
+            if tableView != nil {
+                client.getAdds()
+            }
         }
     }
 

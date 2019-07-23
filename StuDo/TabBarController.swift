@@ -25,7 +25,7 @@ class TabBarController: UITabBarController {
         let peopleNavController = UINavigationController(rootViewController: peopleViewController)
         peopleNavController.tabBarItem = UITabBarItem(title: "People", image: #imageLiteral(resourceName: "report_card"), selectedImage: nil)
         
-        let profileViewController = AccountViewController()
+        profileViewController = AccountViewController()
         let profileNavController = UINavigationController(rootViewController: profileViewController)
         profileNavController.tabBarItem = UITabBarItem(title: "Me", image: #imageLiteral(resourceName: "user_male"), selectedImage: nil)
         
@@ -35,6 +35,7 @@ class TabBarController: UITabBarController {
     
     func refreshDataInsideControllers() {
         feedViewController.refreshAds()
+        profileViewController.refreshInfo()
     }
 
 }

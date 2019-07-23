@@ -138,8 +138,8 @@ extension AuthorizationViewController: APIClientDelegate {
         PersistentStore.shared.user = user
         PersistentStore.save()
         
-        if let parentVC = self.parent as? TabBarController {
-            parentVC.refreshDataInsideControllers()
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.tabBarController.refreshDataInsideControllers()
         }
         
         dismiss(animated: true, completion: nil)

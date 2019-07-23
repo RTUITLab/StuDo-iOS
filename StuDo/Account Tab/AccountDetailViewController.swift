@@ -64,7 +64,7 @@ class AccountDetailViewController: UITableViewController {
     
     @objc func doneButtonPressed(_ doneButton: UIBarButtonItem) {
         
-        // Send the edited data to server here
+        // TODO: Send the edited data to server here
         
         navigationController?.popViewController(animated: true)
     }
@@ -172,11 +172,9 @@ class AccountDetailViewController: UITableViewController {
                 PersistentStore.save()
             }
             
-            let storyboard = UIStoryboard(name: "Authorization", bundle: nil)
-            
-            let authVC = storyboard.instantiateViewController(withIdentifier: "CustomViewController")
-            
-            self.present(authVC, animated: true, completion: nil)
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.setupMainVC()
+            }
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
