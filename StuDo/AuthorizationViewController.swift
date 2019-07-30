@@ -123,7 +123,6 @@ class AuthorizationViewController: UIViewController {
             }
             
             alertController.addAction(OkButton)
-            self.present(alertController, animated: true, completion: nil)
         }
     }
 }

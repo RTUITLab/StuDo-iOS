@@ -43,29 +43,14 @@ class CardTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             container.addSubview(adView)
         }
         
-        var parentViewMaximumCornerRadius: CGFloat = 8
-        if UIDevice.phoneHasRoundedCorners() {
-            parentViewMaximumCornerRadius = 40
-        }
-        
         let finalOffsetY: CGFloat = isPresenting ? 300 : 0
         let finalAlpha: CGFloat = isPresenting ? adVC?.calculateShadowViewAlpha(forOffsetY: finalOffsetY) ?? 0 : 0
-        let finalSnapshotScale: CGFloat = isPresenting ? 0.9 : 1
-        let finalSnapshotCornerRadius: CGFloat = isPresenting ? parentViewMaximumCornerRadius : 0
-        
-        let initialSnapshotScale: CGFloat = isPresenting ? 1 : 0.9
-        let initialSnapshotCornerRadius: CGFloat = isPresenting ? 0 : parentViewMaximumCornerRadius
-        
-        parentViewSnapshot?.layer.cornerRadius = initialSnapshotCornerRadius
-        parentViewSnapshot?.transform = CGAffineTransform(scaleX: initialSnapshotScale, y: initialSnapshotScale)
         
         adVC?.isBeingTransitioned = true
         UIView.animate(withDuration: duration, animations: {
             adVC?.containerView.contentOffset.y = finalOffsetY
             adVC?.shadowView.alpha = finalAlpha
-
-            parentViewSnapshot?.transform = CGAffineTransform(scaleX: finalSnapshotScale, y: finalSnapshotScale)
-            parentViewSnapshot?.layer.cornerRadius = finalSnapshotCornerRadius
+            
         }) { (success) in
             adVC?.isBeingTransitioned = false
             if !self.isPresenting {
