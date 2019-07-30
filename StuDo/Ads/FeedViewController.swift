@@ -16,9 +16,7 @@ class FeedViewController: UIViewController {
     
     var feedItems = [Ad]()
     var client = APIClient()
-    
-    var animator = CardTransitionAnimator()
-    
+        
     
     // MARK: Visible properties
 
@@ -88,25 +86,10 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = AdViewController()
         detailVC.showedAd = feedItems[indexPath.row]
-        detailVC.transitioningDelegate = self
-        self.present(detailVC, animated: true, completion: nil)
         tableView.deselectRow(at: indexPath, animated: true)
+        self.present(detailVC, animated: true, completion: nil)
     }
 }
-
-
-extension FeedViewController: UIViewControllerTransitioningDelegate {
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        animator.isPresenting = false
-        return animator
-    }
-    
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        animator.isPresenting = true
-        return animator
-    }
-}
-
 
 
 extension FeedViewController: APIClientDelegate {

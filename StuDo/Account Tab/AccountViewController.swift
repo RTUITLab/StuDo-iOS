@@ -23,7 +23,6 @@ fileprivate enum SectionName: String {
 
 class AccountViewController: UIViewController {
     
-    var animator = CardTransitionAnimator()
     
     var tableView: UITableView!
     
@@ -222,27 +221,12 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         } else if sectionInfo == .myAds {
             let detailVC = AdViewController()
             detailVC.showedAd = ownAds[indexPath.row]
-            detailVC.transitioningDelegate = self
             self.present(detailVC, animated: true, completion: nil)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
-
-
-extension AccountViewController: UIViewControllerTransitioningDelegate {
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        animator.isPresenting = false
-        return animator
-    }
-    
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        animator.isPresenting = true
-        return animator
-    }
-}
-
 
 
 
