@@ -10,4 +10,4 @@ import Foundation
 
 // CG for Global Constant
 
-let GCIsUsingFakeData = true
+let GCIsUsingFakeData = false

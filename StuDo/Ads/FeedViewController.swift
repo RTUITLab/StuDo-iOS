@@ -84,9 +84,11 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailVC = AdViewController()
-        detailVC.advertisement = feedItems[indexPath.row]
-        tableView.deselectRow(at: indexPath, animated: true)
+        let selectedAd = feedItems[indexPath.row]
+        let adId = selectedAd.id
+        
+        let detailVC = AdViewController(withID: adId)
+        tableView.deselectRow(at: indexPath, animated: false)
         self.present(detailVC, animated: true, completion: nil)
     }
 }
@@ -95,6 +97,7 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
 extension FeedViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        print(error.localizedDescription)
         refreshControl.endRefreshing()
     }
     

@@ -47,8 +47,12 @@ struct DataMockup {
                 tags.insert(tagMockup[Int.random(in: 0..<tagMockup.count)])
             }
             
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+            let fakeDate = formatter.string(from: Date())
+            
             ads.append(
-                Ad(id: "fakeID", name: headline, fullDescription: description, shortDescription: description, beginTime: nil, endTime: nil, userId: userId, user: nil, organizationId: nil, organization: nil)
+                Ad(id: "fakeID", name: headline, description: description, shortDescription: description, beginTime: fakeDate, endTime: fakeDate, userName: "Fake User")
             )
         }
         return ads

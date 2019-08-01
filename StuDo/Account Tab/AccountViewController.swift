@@ -219,9 +219,9 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             detailVC.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(detailVC, animated: true)
         } else if sectionInfo == .myAds {
-            let detailVC = AdViewController()
-            detailVC.advertisement = ownAds[indexPath.row]
-            self.present(detailVC, animated: true, completion: nil)
+//            let detailVC = AdViewController()
+//            detailVC.advertisement = ownAds[indexPath.row]
+//            self.present(detailVC, animated: true, completion: nil)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)

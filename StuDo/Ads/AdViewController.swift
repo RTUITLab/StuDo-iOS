@@ -44,13 +44,31 @@ class AdViewController: CardViewController {
     let publishButton = UIButton()
     let cancelEditingButton = UIButton()
     
+    
+    
+    init(withID id: String?) {
+        super.init()
+        
+        client.delegate = self
+        
+        if let id = id {
+            client.getAd(withId: id)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
+    
+    
+    
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        client.delegate = self
-        
         
         
         // Layout
@@ -154,9 +172,11 @@ class AdViewController: CardViewController {
 
     }
     
-    func printHello(_ action: UIAlertAction) {
-        print(action.title ?? "hello")
-    }
+    
+    
+    
+    
+    
     
     func enableEditingMode() {
         currentMode = .editing
@@ -200,7 +220,29 @@ class AdViewController: CardViewController {
     override func didEnterFullscreen() {
         nameLabel.becomeFirstResponder()
     }
+    
+    
+    
+    func deleteCurrentAd() {
+        func deleteAd() {
+            client.deleteAd(withId: advertisement!.id)
+        }
+        
+        let shouldProceedAlert = UIAlertController(title: "Are you sure you want to delete this ad? This cannot be undone.", message: nil, preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: { _ in deleteAd() } )
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        shouldProceedAlert.addAction(deleteAction)
+        shouldProceedAlert.addAction(cancelAction)
+        
+        present(shouldProceedAlert, animated: true, completion: nil)
+    }
+    
+    
 
+    
+    
 }
 
 
@@ -212,10 +254,10 @@ extension AdViewController {
     @objc func moreButtonPressed(_ button: UIButton) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let inviteAction = UIAlertAction(title: "Invite People", style: .default, handler: printHello(_:))
+        let inviteAction = UIAlertAction(title: "Invite People", style: .default, handler: nil)
         let editAction = UIAlertAction(title: "Edit Ad", style: .default, handler: { _ in self.enableEditingMode() } )
-        let deleteAction = UIAlertAction(title: "Delete Ad", style: .destructive, handler: printHello(_:))
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: printHello(_:))
+        let deleteAction = UIAlertAction(title: "Delete Ad", style: .destructive, handler: { _ in self.deleteCurrentAd() } )
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
         actionSheet.addAction(inviteAction)
         actionSheet.addAction(editAction)
@@ -235,17 +277,23 @@ extension AdViewController {
 
 
 extension AdViewController: APIClientDelegate {
-    func apiClient(_ client: APIClient, didUpdateAd: Ad) {
-        print("updated successfully!")
+    func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
+        advertisement = ad
+        
+        nameLabel.text = ad.name
+        descriptionLabel.text = ad.description
     }
     
-    func apiClient(_ client: APIClient, didDeleteAd: Ad) {
-        print("deleted successfully!")
+    func apiClient(_ client: APIClient, didUpdateAdWithID: String) {
+        print("updated")
+    }
+    
+    func apiClient(_ client: APIClient, didDeleteAdWithID: String) {
         dismiss(animated: true, completion: nil)
     }
     
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
-        print(error)
+        print(error.localizedDescription)
     }
     
     

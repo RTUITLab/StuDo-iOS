@@ -137,7 +137,6 @@
 			children = (
 				49C85B2E22D9EBBC00578F39 /* Account Tab */,
 				49C85B2F22D9EBFC00578F39 /* Ads */,
-				49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */,
 				493E8ACB228B4354004EC563 /* AppDelegate.swift */,
 				49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */,
 				49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */,
@@ -194,6 +193,7 @@
 				49A8F77922D7397400C2661E /* AdTableViewCell.swift */,
 				49BCE24922F0AC1600C64C44 /* CardViewController.swift */,
 				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
+				49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
