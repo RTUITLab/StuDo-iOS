@@ -8,35 +8,48 @@
 
 import UIKit
 
+
 class AdViewController: CardViewController {
     
     // MARK: Data & Logic
     
-    var showedAd: Ad?
+    var advertisement: Ad?
     
-    var isBeingTransitioned = false
-    var isEditingAllowed = false
-    var isEditingEnabled = false
+    let client = APIClient()
+    
+    enum AdViewerMode {
+        case viewing
+        case viewingAsOwner
+        case editing
+    }
+    var currentMode: AdViewerMode = .viewingAsOwner {
+        didSet {
+            if currentMode == .editing {
+                isFullscreen = true
+                title = "Editing"
+            } else {
+                isFullscreen = false
+                title = nil
+            }
+        }
+    }
     
     
     // MARK: Visible properties
     
-    var nameLabel = UITextField()
-    var descriptionLabel = UITextView()
-    var editButton = UIButton()
-    var deleteButton = UIButton()
+    let nameLabel = UITextField()
+    let descriptionLabel = UITextView()
     
-    let client = APIClient()
+    let moreButton = UIButton()
+    let publishButton = UIButton()
+    let cancelEditingButton = UIButton()
+    
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         client.delegate = self
-        
-        if showedAd?.userId == PersistentStore.shared.user.id {
-            isEditingAllowed = true
-        }
         
         
         
@@ -45,36 +58,74 @@ class AdViewController: CardViewController {
         contentView.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16).isActive = true
+        nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10).isActive = true
         nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        if isEditingAllowed {
-            contentView.addSubview(editButton)
-            editButton.translatesAutoresizingMaskIntoConstraints = false
-            editButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10).isActive = true
-            editButton.centerYAnchor.constraint(equalTo:
-                nameLabel.centerYAnchor).isActive = true
-            
-            contentView.addSubview(deleteButton)
-            deleteButton.translatesAutoresizingMaskIntoConstraints = false
-            deleteButton.trailingAnchor.constraint(equalTo: editButton.leadingAnchor, constant: -12).isActive = true
-            deleteButton.centerYAnchor.constraint(equalTo:
-                editButton.centerYAnchor).isActive = true
-            
-            editButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
-            deleteButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
-            
-            
-            nameLabel.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -12).isActive = true
-        } else {
-            nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10).isActive = true
-        }
+        
+        
         
         contentView.addSubview(descriptionLabel)
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor, constant: -2).isActive = true
         descriptionLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10).isActive = true
         descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6).isActive = true
+        
+        
+        
+        if currentMode == .viewingAsOwner || currentMode == .editing {
+            let leftRightPadding: CGFloat = 16
+            
+            let moreButtonSize: CGFloat = 20
+            headerView.addSubview(moreButton)
+            moreButton.translatesAutoresizingMaskIntoConstraints = false
+            moreButton.widthAnchor.constraint(equalToConstant: moreButtonSize).isActive = true
+            moreButton.heightAnchor.constraint(equalToConstant: moreButtonSize).isActive = true
+            moreButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+            moreButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -leftRightPadding).isActive = true
+            
+            let moreButtonImage = #imageLiteral(resourceName: "three-dots-menu").withRenderingMode(.alwaysTemplate)
+            moreButton.setImage(moreButtonImage, for: .normal)
+            moreButton.tintColor = UIColor(red:0.690, green:0.690, blue:0.699, alpha:1.000)
+            moreButton.adjustsImageWhenHighlighted = false
+            
+            
+            let publishButtonSize: CGFloat = 28
+            headerView.addSubview(publishButton)
+            publishButton.translatesAutoresizingMaskIntoConstraints = false
+            publishButton.widthAnchor.constraint(equalToConstant: publishButtonSize).isActive = true
+            publishButton.heightAnchor.constraint(equalToConstant: publishButtonSize).isActive = true
+            publishButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
+            publishButton.centerXAnchor.constraint(equalTo: moreButton.centerXAnchor).isActive = true
+            
+            let publishButtonImage = #imageLiteral(resourceName: "publish-button").withRenderingMode(.alwaysTemplate)
+            publishButton.setImage(publishButtonImage, for: .normal)
+            publishButton.setImage(publishButtonImage, for: .disabled)
+            publishButton.tintColor = UIColor(red:0.000, green:0.512, blue:0.870, alpha:1.000)
+            publishButton.adjustsImageWhenHighlighted = false
+            publishButton.alpha = 0
+            publishButton.isHidden = true
+            
+            
+            
+            let cancelEditingButtonSize: CGFloat = 24
+            headerView.addSubview(cancelEditingButton)
+            cancelEditingButton.translatesAutoresizingMaskIntoConstraints = false
+            cancelEditingButton.widthAnchor.constraint(equalToConstant: cancelEditingButtonSize).isActive = true
+            cancelEditingButton.heightAnchor.constraint(equalToConstant: cancelEditingButtonSize).isActive = true
+            cancelEditingButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
+            cancelEditingButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: leftRightPadding).isActive = true
+            
+            let cancelEditingButtonImage = #imageLiteral(resourceName: "cancel").withRenderingMode(.alwaysOriginal)
+            cancelEditingButton.setImage(cancelEditingButtonImage, for: .normal)
+            cancelEditingButton.alpha = 0
+            cancelEditingButton.isHidden = true
+
+        }
+        
+        
+        
+        
         
         // Look customization
         
@@ -83,86 +134,101 @@ class AdViewController: CardViewController {
         
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 12
-        let attributedText = NSAttributedString(string: showedAd?.shortDescription ?? "",
+        let attributedText = NSAttributedString(string: advertisement?.shortDescription ?? "",
                                                 attributes: [
                                                     .paragraphStyle:style,
                                                     .font: UIFont.systemFont(ofSize: 16, weight: .light)
-                                                ])
+            ])
         descriptionLabel.attributedText = attributedText
         
         nameLabel.isUserInteractionEnabled = false
         descriptionLabel.isUserInteractionEnabled = false
         
-        
-        nameLabel.text = showedAd?.name
-        
-        editButton.setTitleColor(editButton.tintColor, for: .normal)
-        editButton.setTitleColor(.white, for: .highlighted)
-        editButton.setTitleColor(.white, for: .selected)
-        
-        editButton.clipsToBounds = true
-        
-        editButton.setTitle("Edit", for: .normal)
-        editButton.setTitle("Done", for: .selected)
-        editButton.layer.cornerRadius = 6
-        editButton.layer.borderWidth = 1.5
-        editButton.layer.borderColor = editButton.tintColor.cgColor
+        nameLabel.placeholder = "Name for your advertisement"
         
         
         
-        deleteButton.setTitleColor(.red, for: .normal)
-        deleteButton.setTitleColor(UIColor(red: 1, green: 0, blue: 0, alpha: 0.5), for: .highlighted)
         
-        deleteButton.clipsToBounds = true
-        
-        deleteButton.setTitle("Delete", for: .normal)
-        deleteButton.layer.cornerRadius = 6
-        deleteButton.layer.borderWidth = 1.5
-        deleteButton.layer.borderColor = UIColor.red.cgColor
-        
-        if isEditingAllowed {
-            editButton.isHidden = false
-            editButton.addTarget(self, action: #selector(enableEditButtonPressed(_:)), for: .touchUpInside)
-            
-            deleteButton.addTarget(self, action: #selector(deleteButtonPressed(_:)), for: .touchUpInside)
-            
-            nameLabel.placeholder = "Name for your advertisement"
-        } else {
-            editButton.isHidden = true
-        }
+        moreButton.addTarget(self, action: #selector(moreButtonPressed(_:)), for: .touchUpInside)
+        cancelEditingButton.addTarget(self, action: #selector(cancelEditingButtonPressed(_:)), for: .touchUpInside)
+
     }
     
-    @objc func enableEditButtonPressed(_ button: UIButton) {
-        
-        if isEditingEnabled {
-            if let ad = showedAd {
-                
-                // TODO: Change the date to actual data
-                let adToEdit = Ad(id: ad.id, name: nameLabel.text!, fullDescription: "full Description", shortDescription: descriptionLabel.text!, beginTime: Date(), endTime: Date(timeInterval: 50000, since: Date()), userId: PersistentStore.shared.user.id!, user: nil, organizationId: nil, organization: nil)
-                client.replaceAd(with: adToEdit)
-
-            }
-        }
-        
-        isEditingEnabled = !isEditingEnabled
-        
-        nameLabel.isUserInteractionEnabled = isEditingEnabled
-        descriptionLabel.isUserInteractionEnabled = isEditingEnabled
-        editButton.isSelected = isEditingEnabled
-
-        if isEditingEnabled {
-            editButton.backgroundColor = editButton.tintColor
-            nameLabel.becomeFirstResponder()
-        } else {
-            editButton.backgroundColor = nil
-        }
+    func printHello(_ action: UIAlertAction) {
+        print(action.title ?? "hello")
     }
     
-    @objc func deleteButtonPressed(_ button: UIButton) {
+    func enableEditingMode() {
+        currentMode = .editing
         
-        client.delete(ad: showedAd!)
+        nameLabel.isUserInteractionEnabled = true
+        descriptionLabel.isUserInteractionEnabled = true
+        
+        self.publishButton.isHidden = false
+        self.cancelEditingButton.isHidden = false
+        UIView.animate(withDuration: 0.3, animations: {
+            self.moreButton.alpha = 0
+            self.publishButton.alpha = 1
+            self.cancelEditingButton.alpha = 1
+        }) { _ in
+            self.moreButton.isHidden = true
+        }
+        publishButton.isEnabled = false
+        
+    }
+    
+    func cancelEditingAd() {
+        currentMode = .viewing
+        
+        nameLabel.isUserInteractionEnabled = false
+        descriptionLabel.isUserInteractionEnabled = false
+        
+        self.moreButton.isHidden = false
+        UIView.animate(withDuration: 0.3, animations: {
+            self.moreButton.alpha = 1
+            self.publishButton.alpha = 0
+            self.cancelEditingButton.alpha = 0
+        }) { _ in
+            self.publishButton.isHidden = true
+            self.cancelEditingButton.isHidden = true
+            self.nameLabel.resignFirstResponder()
+        }
+        
+
+    }
+    
+    override func didEnterFullscreen() {
+        nameLabel.becomeFirstResponder()
     }
 
+}
+
+
+
+
+
+
+extension AdViewController {
+    @objc func moreButtonPressed(_ button: UIButton) {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let inviteAction = UIAlertAction(title: "Invite People", style: .default, handler: printHello(_:))
+        let editAction = UIAlertAction(title: "Edit Ad", style: .default, handler: { _ in self.enableEditingMode() } )
+        let deleteAction = UIAlertAction(title: "Delete Ad", style: .destructive, handler: printHello(_:))
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: printHello(_:))
+
+        actionSheet.addAction(inviteAction)
+        actionSheet.addAction(editAction)
+        actionSheet.addAction(deleteAction)
+        actionSheet.addAction(cancelAction)
+        
+        present(actionSheet, animated: true, completion: nil)
+
+    }
+    
+    @objc func cancelEditingButtonPressed(_ button: UIButton) {
+        cancelEditingAd()
+    }
 }
 
 

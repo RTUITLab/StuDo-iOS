@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		491422072290628B00BDB4FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 491422062290628B00BDB4FF /* Assets.xcassets */; };
 		4928D43622A3ED9700F4D703 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4928D43522A3ED9700F4D703 /* DataModel.swift */; };
 		492DEA2322B410DD00D87AAA /* Authorization.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 492DEA2022B410DD00D87AAA /* Authorization.storyboard */; };
 		493C5A5022A189370032AB6E /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C5A4F22A189370032AB6E /* APIClient.swift */; };
@@ -27,6 +26,7 @@
 		49B1B385228DD8F000CA9EC7 /* DataMockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B384228DD8F000CA9EC7 /* DataMockup.swift */; };
 		49BCE24A22F0AC1600C64C44 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BCE24922F0AC1600C64C44 /* CardViewController.swift */; };
 		49BCE24C22F0AC2100C64C44 /* CardAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */; };
+		49BCE24E22F31D4C00C64C44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49BCE24D22F31D4C00C64C44 /* Assets.xcassets */; };
 		49C85B2522D8C2E800578F39 /* BasicTableViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */; };
 		49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2622D8D06300578F39 /* GlobalConstants.swift */; };
 		49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2C22D8F64C00578F39 /* AccountHeaderCell.swift */; };
@@ -53,7 +53,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		491422062290628B00BDB4FF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4928D43522A3ED9700F4D703 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		492DEA2022B410DD00D87AAA /* Authorization.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Authorization.storyboard; sourceTree = "<group>"; };
 		493C5A4F22A189370032AB6E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
@@ -79,6 +78,7 @@
 		49B1B384228DD8F000CA9EC7 /* DataMockup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMockup.swift; sourceTree = "<group>"; };
 		49BCE24922F0AC1600C64C44 /* CardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
 		49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardAnimatedTransitioning.swift; sourceTree = "<group>"; };
+		49BCE24D22F31D4C00C64C44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTableViewCells.swift; sourceTree = "<group>"; };
 		49C85B2622D8D06300578F39 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		49C85B2C22D8F64C00578F39 /* AccountHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeaderCell.swift; sourceTree = "<group>"; };
@@ -138,7 +138,6 @@
 				49C85B2E22D9EBBC00578F39 /* Account Tab */,
 				49C85B2F22D9EBFC00578F39 /* Ads */,
 				49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */,
-				49BCE24922F0AC1600C64C44 /* CardViewController.swift */,
 				493E8ACB228B4354004EC563 /* AppDelegate.swift */,
 				49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */,
 				49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */,
@@ -151,8 +150,8 @@
 				494C64A822C24B0E0039740B /* PersistentStore.swift */,
 				49C85B2622D8D06300578F39 /* GlobalConstants.swift */,
 				492DEA2022B410DD00D87AAA /* Authorization.storyboard */,
+				49BCE24D22F31D4C00C64C44 /* Assets.xcassets */,
 				495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */,
-				491422062290628B00BDB4FF /* Assets.xcassets */,
 				493E8AD4228B4356004EC563 /* LaunchScreen.storyboard */,
 				493E8AD7228B4356004EC563 /* Info.plist */,
 			);
@@ -192,8 +191,9 @@
 			isa = PBXGroup;
 			children = (
 				49B1B382228DD75400CA9EC7 /* FeedViewController.swift */,
-				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
 				49A8F77922D7397400C2661E /* AdTableViewCell.swift */,
+				49BCE24922F0AC1600C64C44 /* CardViewController.swift */,
+				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -303,7 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				492DEA2322B410DD00D87AAA /* Authorization.storyboard in Resources */,
-				491422072290628B00BDB4FF /* Assets.xcassets in Resources */,
+				49BCE24E22F31D4C00C64C44 /* Assets.xcassets in Resources */,
 				493E8AD6228B4356004EC563 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

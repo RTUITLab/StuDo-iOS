@@ -85,7 +85,7 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = AdViewController()
-        detailVC.showedAd = feedItems[indexPath.row]
+        detailVC.advertisement = feedItems[indexPath.row]
         tableView.deselectRow(at: indexPath, animated: true)
         self.present(detailVC, animated: true, completion: nil)
     }

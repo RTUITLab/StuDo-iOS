@@ -220,12 +220,28 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             navigationController?.pushViewController(detailVC, animated: true)
         } else if sectionInfo == .myAds {
             let detailVC = AdViewController()
-            detailVC.showedAd = ownAds[indexPath.row]
+            detailVC.advertisement = ownAds[indexPath.row]
             self.present(detailVC, animated: true, completion: nil)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+//    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+//        let sectionInfo = sections[section]
+//
+//        if sectionInfo == .myAds {
+//            return "The active ads that you created."
+//        } else if sectionInfo == .myProfiles {
+//            return "The profiles you create help others find you by the skills you have. Add as many profiles as you like."
+//        }
+//
+//        return nil
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 70
+//    }
 }
 
 
