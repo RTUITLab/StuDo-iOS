@@ -96,7 +96,7 @@ class AccountViewController: UIViewController {
 
 extension AccountViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
-        print(error)
+        print("Account VC: \(error.localizedDescription)")
     }
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {

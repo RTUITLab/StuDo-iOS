@@ -110,7 +110,7 @@ class APIClient {
 //    private let baseURL = URL(string: "http://65706bbf.ngrok.io/api/")!
 
     
-    var delegate: APIClientDelegate?
+    weak var delegate: APIClientDelegate?
     
     private let keychainTokenLabel: String = "tokenAccessData"
     private var accessToken: String? = nil {
@@ -221,7 +221,7 @@ class APIClient {
 
 // MARK:- StuDo API Requests
 
-protocol APIClientDelegate {
+protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error)
 
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User)

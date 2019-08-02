@@ -88,6 +88,10 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         let adId = selectedAd.id
         
         let detailVC = AdViewController(withID: adId)
+        if GCIsUsingFakeData {
+            detailVC.advertisement = selectedAd
+        }
+        
         tableView.deselectRow(at: indexPath, animated: false)
         self.present(detailVC, animated: true, completion: nil)
     }
@@ -97,7 +101,7 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
 extension FeedViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
-        print(error.localizedDescription)
+        print("Feed VC: \(error.localizedDescription)")
         refreshControl.endRefreshing()
     }
     

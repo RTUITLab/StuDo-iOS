@@ -48,7 +48,7 @@ struct DataMockup {
             }
             
             let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
             let fakeDate = formatter.string(from: Date())
             
             ads.append(

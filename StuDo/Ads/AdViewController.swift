@@ -13,7 +13,14 @@ class AdViewController: CardViewController {
     
     // MARK: Data & Logic
     
-    var advertisement: Ad?
+    var advertisement: Ad? {
+        didSet {
+            if let ad = advertisement {
+                nameTextField.text = ad.name
+                descriptionTextView.text = ad.description
+            }
+        }
+    }
     
     let client = APIClient()
     
@@ -37,12 +44,19 @@ class AdViewController: CardViewController {
     
     // MARK: Visible properties
     
-    let nameLabel = UITextField()
-    let descriptionLabel = UITextView()
+    let nameTextField = UITextField()
+//    let shortDescriptionTextField = UITextField()
+    let descriptionTextView = UITextView()
     
     let moreButton = UIButton()
     let publishButton = UIButton()
     let cancelEditingButton = UIButton()
+    
+    
+    override var contentHeight: CGFloat {
+        let calculatedHeight = headerView.frame.height + 40 + descriptionTextView.frame.height
+        return calculatedHeight
+    }
     
     
     
@@ -51,9 +65,12 @@ class AdViewController: CardViewController {
         
         client.delegate = self
         
-        if let id = id {
-            client.getAd(withId: id)
+        if GCIsUsingFakeData != true {
+            if let id = id {
+                client.getAd(withId: id)
+            }
         }
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -70,24 +87,27 @@ class AdViewController: CardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let horizontalSpace: CGFloat = 8
         
-        // Layout
-        
-        contentView.addSubview(nameLabel)
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16).isActive = true
-        nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10).isActive = true
-        nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
-        nameLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        contentView.addSubview(nameTextField)
+        nameTextField.translatesAutoresizingMaskIntoConstraints = false
+        nameTextField.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16).isActive = true
+        nameTextField.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16).isActive = true
+        nameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: horizontalSpace).isActive = true
         
         
+//        contentView.addSubview(shortDescriptionTextField)
+//        shortDescriptionTextField.translatesAutoresizingMaskIntoConstraints = false
+//        shortDescriptionTextField.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor, constant: 3).isActive = true
+//        shortDescriptionTextField.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
+//        shortDescriptionTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: horizontalSpace).isActive = true
         
         
-        contentView.addSubview(descriptionLabel)
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor, constant: -2).isActive = true
-        descriptionLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10).isActive = true
-        descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6).isActive = true
+        contentView.addSubview(descriptionTextView)
+        descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
+        descriptionTextView.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor, constant: -4).isActive = true
+        descriptionTextView.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
+        descriptionTextView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: horizontalSpace).isActive = true
         
         
         
@@ -144,45 +164,31 @@ class AdViewController: CardViewController {
         
         
         
-        
-        // Look customization
-        
-        nameLabel.font = .systemFont(ofSize: 22, weight: .medium)
-        descriptionLabel.isScrollEnabled = false
-        
-        let style = NSMutableParagraphStyle()
-        style.lineSpacing = 12
-        let attributedText = NSAttributedString(string: advertisement?.shortDescription ?? "",
-                                                attributes: [
-                                                    .paragraphStyle:style,
-                                                    .font: UIFont.systemFont(ofSize: 16, weight: .light)
-            ])
-        descriptionLabel.attributedText = attributedText
-        
-        nameLabel.isUserInteractionEnabled = false
-        descriptionLabel.isUserInteractionEnabled = false
-        
-        nameLabel.placeholder = "Name for your advertisement"
-        
-        
-        
+        nameTextField.isUserInteractionEnabled = false
+        descriptionTextView.isUserInteractionEnabled = false
         
         moreButton.addTarget(self, action: #selector(moreButtonPressed(_:)), for: .touchUpInside)
         cancelEditingButton.addTarget(self, action: #selector(cancelEditingButtonPressed(_:)), for: .touchUpInside)
+        
+        descriptionTextView.layoutManager.delegate = self
+        descriptionTextView.delegate = self
+        
+        
+        nameTextField.font = .systemFont(ofSize: 20, weight: .medium)
+        nameTextField.placeholder = "Name for your advertisement"
+
+        descriptionTextView.isScrollEnabled = false
+        descriptionTextView.font = .systemFont(ofSize: 18, weight: .light)
 
     }
-    
-    
-    
-    
     
     
     
     func enableEditingMode() {
         currentMode = .editing
         
-        nameLabel.isUserInteractionEnabled = true
-        descriptionLabel.isUserInteractionEnabled = true
+        nameTextField.isUserInteractionEnabled = true
+        descriptionTextView.isUserInteractionEnabled = true
         
         self.publishButton.isHidden = false
         self.cancelEditingButton.isHidden = false
@@ -200,8 +206,8 @@ class AdViewController: CardViewController {
     func cancelEditingAd() {
         currentMode = .viewing
         
-        nameLabel.isUserInteractionEnabled = false
-        descriptionLabel.isUserInteractionEnabled = false
+        nameTextField.isUserInteractionEnabled = false
+        descriptionTextView.isUserInteractionEnabled = false
         
         self.moreButton.isHidden = false
         UIView.animate(withDuration: 0.3, animations: {
@@ -211,14 +217,14 @@ class AdViewController: CardViewController {
         }) { _ in
             self.publishButton.isHidden = true
             self.cancelEditingButton.isHidden = true
-            self.nameLabel.resignFirstResponder()
+            self.nameTextField.resignFirstResponder()
         }
         
 
     }
     
     override func didEnterFullscreen() {
-        nameLabel.becomeFirstResponder()
+        nameTextField.becomeFirstResponder()
     }
     
     
@@ -279,13 +285,10 @@ extension AdViewController {
 extension AdViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
         advertisement = ad
-        
-        nameLabel.text = ad.name
-        descriptionLabel.text = ad.description
     }
     
     func apiClient(_ client: APIClient, didUpdateAdWithID: String) {
-        print("updated")
+        
     }
     
     func apiClient(_ client: APIClient, didDeleteAdWithID: String) {
@@ -297,4 +300,25 @@ extension AdViewController: APIClientDelegate {
     }
     
     
+}
+
+
+
+
+
+extension AdViewController: NSLayoutManagerDelegate {
+    func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
+        return 10
+    }
+}
+
+
+
+
+extension AdViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        if textView === descriptionTextView {
+            adjustContentLayout()
+        }
+    }
 }
