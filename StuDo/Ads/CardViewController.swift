@@ -149,6 +149,7 @@ class CardViewController: UIViewController {
         headerLabel.font = .systemFont(ofSize: 16, weight: .light)
 
         
+        containerView.keyboardDismissMode = .interactive
         containerView.alwaysBounceVertical = true
         containerView.showsVerticalScrollIndicator = false
         containerView.delegate = self
@@ -158,7 +159,6 @@ class CardViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-
     }
     
     @objc func handleTapOnContainer(_ tap: UITapGestureRecognizer) {
@@ -184,6 +184,7 @@ class CardViewController: UIViewController {
     
     
     func didEnterFullscreen() {}
+    func shouldAllowDismissOnSwipe() -> Bool { return true }
 
     func adjustContentLayout() {
         let contentHeight = max(self.contentHeight, minimumContentHeight - visibleKeyboardHeight)
@@ -284,6 +285,12 @@ extension CardViewController {
     @objc func keyboardWillHide(notification: NSNotification) {
         visibleKeyboardHeight = 0
         adjustContentLayout()
-        containerView.contentInset = defaultContainerInsets
+        
+        if shouldAllowDismissOnSwipe() {
+            containerView.contentInset = defaultContainerInsets
+            containerView.setContentOffset(.zero, animated: true)
+        } else {
+            containerView.contentInset = .zero
+        }
     }
 }

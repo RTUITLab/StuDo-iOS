@@ -13,12 +13,12 @@ class AdViewController: CardViewController {
     
     // MARK: Data & Logic
     
-    var advertisement: Ad? {
-        didSet {
-            if let ad = advertisement {
-                nameTextField.text = ad.name
-                descriptionTextView.text = ad.description
-            }
+    private var advertisement: Ad?
+    func set(advertisement: Ad?) {
+        self.advertisement = advertisement
+        if let ad = advertisement {
+            nameTextField.text = ad.name
+            descriptionTextView.text = ad.description
         }
     }
     
@@ -45,7 +45,6 @@ class AdViewController: CardViewController {
     // MARK: Visible properties
     
     let nameTextField = UITextField()
-//    let shortDescriptionTextField = UITextField()
     let descriptionTextView = UITextView()
     
     let moreButton = UIButton()
@@ -53,22 +52,24 @@ class AdViewController: CardViewController {
     let cancelEditingButton = UIButton()
     
     
+    
+    let nameTextFieldHeight: CGFloat = 20
+    
     override var contentHeight: CGFloat {
-        let calculatedHeight = headerView.frame.height + 40 + descriptionTextView.frame.height
+        let calculatedHeight = headerView.frame.height + nameTextFieldHeight + descriptionTextView.frame.height + view.safeAreaInsets.bottom
         return calculatedHeight
     }
     
     
     
-    init(withID id: String?) {
+    init(with ad: Ad?) {
         super.init()
         
         client.delegate = self
         
-        if GCIsUsingFakeData != true {
-            if let id = id {
-                client.getAd(withId: id)
-            }
+        if let ad = ad {
+            set(advertisement: ad)
+            client.getAd(withId: ad.id)
         }
         
     }
@@ -94,13 +95,7 @@ class AdViewController: CardViewController {
         nameTextField.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16).isActive = true
         nameTextField.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16).isActive = true
         nameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: horizontalSpace).isActive = true
-        
-        
-//        contentView.addSubview(shortDescriptionTextField)
-//        shortDescriptionTextField.translatesAutoresizingMaskIntoConstraints = false
-//        shortDescriptionTextField.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor, constant: 3).isActive = true
-//        shortDescriptionTextField.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
-//        shortDescriptionTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: horizontalSpace).isActive = true
+        nameTextField.heightAnchor.constraint(equalToConstant: nameTextFieldHeight).isActive = true
         
         
         contentView.addSubview(descriptionTextView)
@@ -184,6 +179,20 @@ class AdViewController: CardViewController {
     
     
     
+    
+    
+    
+    override func didEnterFullscreen() {
+        nameTextField.becomeFirstResponder()
+    }
+    
+    override func shouldAllowDismissOnSwipe() -> Bool {
+        if currentMode == .editing {
+            return false
+        }
+        return true
+    }
+    
     func enableEditingMode() {
         currentMode = .editing
         
@@ -203,30 +212,49 @@ class AdViewController: CardViewController {
         
     }
     
+    
+    
+    
+    
+    
     func cancelEditingAd() {
-        currentMode = .viewing
-        
-        nameTextField.isUserInteractionEnabled = false
-        descriptionTextView.isUserInteractionEnabled = false
-        
-        self.moreButton.isHidden = false
-        UIView.animate(withDuration: 0.3, animations: {
-            self.moreButton.alpha = 1
-            self.publishButton.alpha = 0
-            self.cancelEditingButton.alpha = 0
-        }) { _ in
-            self.publishButton.isHidden = true
-            self.cancelEditingButton.isHidden = true
-            self.nameTextField.resignFirstResponder()
+        func cancelEditing() {
+            currentMode = .viewing
+            
+            nameTextField.isUserInteractionEnabled = false
+            descriptionTextView.isUserInteractionEnabled = false
+            
+            self.moreButton.isHidden = false
+            UIView.animate(withDuration: 0.3, animations: {
+                self.moreButton.alpha = 1
+                self.publishButton.alpha = 0
+                self.cancelEditingButton.alpha = 0
+            }) { _ in
+                self.publishButton.isHidden = true
+                self.cancelEditingButton.isHidden = true
+                self.nameTextField.resignFirstResponder()
+                
+                self.set(advertisement: self.advertisement)
+                
+                // wait for some time so that to let all text fields draw themselves and then adjust the layout of content
+                let waitTime = DispatchTime(uptimeNanoseconds: 100)
+                DispatchQueue.main.asyncAfter(deadline: waitTime, execute: {
+                    self.adjustContentLayout()
+                })
+            }
         }
         
+        let shouldProceedAlert = UIAlertController(title: "Are you sure you want to cancel editing this ad? Unsaved changes will be discarded", message: nil, preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Discard Changes", style: .destructive, handler: { _ in cancelEditing() } )
+        let cancelAction = UIAlertAction(title: "Return to Editor", style: .cancel, handler: nil)
+        
+        shouldProceedAlert.addAction(deleteAction)
+        shouldProceedAlert.addAction(cancelAction)
+        
+        present(shouldProceedAlert, animated: true, completion: nil)
 
     }
-    
-    override func didEnterFullscreen() {
-        nameTextField.becomeFirstResponder()
-    }
-    
     
     
     func deleteCurrentAd() {
@@ -284,7 +312,7 @@ extension AdViewController {
 
 extension AdViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
-        advertisement = ad
+        set(advertisement: ad)
     }
     
     func apiClient(_ client: APIClient, didUpdateAdWithID: String) {
@@ -318,7 +346,10 @@ extension AdViewController: NSLayoutManagerDelegate {
 extension AdViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         if textView === descriptionTextView {
-            adjustContentLayout()
+            let waitTime = DispatchTime(uptimeNanoseconds: 100)
+            DispatchQueue.main.asyncAfter(deadline: waitTime, execute: {
+                self.adjustContentLayout()
+            })
         }
     }
 }

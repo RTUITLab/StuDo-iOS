@@ -60,6 +60,8 @@ class AccountDetailViewController: UITableViewController {
         doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed(_:)))
         navigationItem.rightBarButtonItem = doneButton
         doneButton.isEnabled = false
+        
+        tableView.keyboardDismissMode = .interactive
     }
     
     @objc func doneButtonPressed(_ doneButton: UIBarButtonItem) {
