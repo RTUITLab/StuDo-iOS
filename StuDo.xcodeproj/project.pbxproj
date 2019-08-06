@@ -31,8 +31,6 @@
 		49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2622D8D06300578F39 /* GlobalConstants.swift */; };
 		49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2C22D8F64C00578F39 /* AccountHeaderCell.swift */; };
 		49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC8E229D93B00008D809 /* AdViewController.swift */; };
-		49CAEC91229D98330008D809 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC90229D98330008D809 /* Constants.swift */; };
-		49CAEC9322A1762A0008D809 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC9222A1762A0008D809 /* UIDeviceExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,8 +81,6 @@
 		49C85B2622D8D06300578F39 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		49C85B2C22D8F64C00578F39 /* AccountHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeaderCell.swift; sourceTree = "<group>"; };
 		49CAEC8E229D93B00008D809 /* AdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewController.swift; sourceTree = "<group>"; };
-		49CAEC90229D98330008D809 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		49CAEC9222A1762A0008D809 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,12 +134,10 @@
 				49C85B2E22D9EBBC00578F39 /* Account Tab */,
 				49C85B2F22D9EBFC00578F39 /* Ads */,
 				49D01F6D22F48388009A1D49 /* Model */,
+				49A216F822F60656009AD846 /* Reusable */,
 				493E8ACB228B4354004EC563 /* AppDelegate.swift */,
 				49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */,
 				49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */,
-				49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */,
-				49CAEC90229D98330008D809 /* Constants.swift */,
-				49CAEC9222A1762A0008D809 /* UIDeviceExtension.swift */,
 				494C64A822C24B0E0039740B /* PersistentStore.swift */,
 				49C85B2622D8D06300578F39 /* GlobalConstants.swift */,
 				492DEA2022B410DD00D87AAA /* Authorization.storyboard */,
@@ -171,6 +165,14 @@
 				493E8AED228B4357004EC563 /* Info.plist */,
 			);
 			path = StuDoUITests;
+			sourceTree = "<group>";
+		};
+		49A216F822F60656009AD846 /* Reusable */ = {
+			isa = PBXGroup;
+			children = (
+				49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */,
+			);
+			path = Reusable;
 			sourceTree = "<group>";
 		};
 		49C85B2E22D9EBBC00578F39 /* Account Tab */ = {
@@ -353,11 +355,9 @@
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,
 				49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */,
 				493C5A5022A189370032AB6E /* APIClient.swift in Sources */,
-				49CAEC9322A1762A0008D809 /* UIDeviceExtension.swift in Sources */,
 				49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */,
 				493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */,
 				49C85B2522D8C2E800578F39 /* BasicTableViewCells.swift in Sources */,
-				49CAEC91229D98330008D809 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

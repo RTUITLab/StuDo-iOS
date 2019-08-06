@@ -221,6 +221,9 @@ class AdViewController: CardViewController {
         func cancelEditing() {
             currentMode = .viewing
             
+            nameTextField.resignFirstResponder()
+            descriptionTextView.resignFirstResponder()
+            
             nameTextField.isUserInteractionEnabled = false
             descriptionTextView.isUserInteractionEnabled = false
             
@@ -243,6 +246,8 @@ class AdViewController: CardViewController {
                 })
             }
         }
+        
+        contentView.endEditing(true)
         
         let shouldProceedAlert = UIAlertController(title: "Are you sure you want to cancel editing this ad? Unsaved changes will be discarded", message: nil, preferredStyle: .alert)
         
