@@ -231,6 +231,8 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad)
     func apiClient(_ client: APIClient, didUpdateAdWithID: String)
     func apiClient(_ client: APIClient, didDeleteAdWithID: String)
+    
+    func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest)
 }
 
 extension APIClientDelegate {
@@ -240,6 +242,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAdWithID: String) {}
     func apiClient(_ client: APIClient, didDeleteAdWithID: String) {}
+    func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {}
 }
 
 
@@ -412,6 +415,30 @@ extension APIClient {
             }
         }
     }
+    
+    
+    
+    
+    
+    
+    func requestPasswordRest(forEmail email: String) {
+        let bodyDictionary = ["email": email]
+        if let request = try? APIRequest(method: .post, path: "user/password/reset", body: bodyDictionary) {
+            self.perform(request) { [self] (result) in
+                switch result {
+                case .success(let response):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didSentPasswordResetRequest: request)
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+    }
+    
     
     
     

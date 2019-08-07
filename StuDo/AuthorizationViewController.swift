@@ -19,6 +19,7 @@ class AuthorizationViewController: UIViewController {
     enum AuthorizationVCMode {
         case signIn
         case signUp
+        case resetPassword
     }
     
     
@@ -34,6 +35,10 @@ class AuthorizationViewController: UIViewController {
     let credentialsContainerView = UIView()
     let additionalInfoContainerView = UIView()
     let buttonsContainerView = UIView()
+    
+    
+    let indicatorContainerView = UIView()
+    let loadingIndicator = UIActivityIndicatorView(style: .gray)
     
     
     
@@ -214,6 +219,7 @@ class AuthorizationViewController: UIViewController {
         emailTextField.autocorrectionType = .no
         emailTextField.keyboardType = .emailAddress
         emailTextField.returnKeyType = .next
+        emailTextField.autocapitalizationType = .none
         
         
         credentialsContainerView.addSubview(passwordTextField)
@@ -359,6 +365,24 @@ class AuthorizationViewController: UIViewController {
         
         
         
+        let indicatorViewSize: CGFloat = 70
+        view.addSubview(indicatorContainerView)
+        indicatorContainerView.translatesAutoresizingMaskIntoConstraints = false
+        indicatorContainerView.widthAnchor.constraint(equalToConstant: indicatorViewSize).isActive = true
+        indicatorContainerView.heightAnchor.constraint(equalToConstant: indicatorViewSize).isActive = true
+        indicatorContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        indicatorContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -indicatorViewSize).isActive = true
+        
+        indicatorContainerView.alpha = 0
+        indicatorContainerView.backgroundColor = UIColor.white.withAlphaComponent(0.8)
+        indicatorContainerView.layer.cornerRadius = 8
+        
+        
+        indicatorContainerView.addSubview(loadingIndicator)
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -indicatorViewSize).isActive = true
+        
         
         
         
@@ -367,8 +391,9 @@ class AuthorizationViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
+        proceedButtton.addTarget(self, action: #selector(proceedButttonTapped(_:)), for: .touchUpInside)
         changeModeButton.addTarget(self, action: #selector(changeModeButtonTapped(_:)), for: .touchUpInside)
-        
+        forgotPasswordButton.addTarget(self, action: #selector(forgotPasswordButtonTapped(_:)), for: .touchUpInside)
         
         emailTextField.delegate = self
         passwordTextField.delegate = self
@@ -455,10 +480,55 @@ class AuthorizationViewController: UIViewController {
         textField.layer.add(animation, forKey: "shake")
     }
     
+    fileprivate func animateBorder(forTextField textField: UITextField) {
+        
+        textField.layer.cornerRadius = 8
+        textField.layer.borderColor = UIColor.init(white: 1, alpha: 0).cgColor
+        
+        let colorAnimation = CABasicAnimation(keyPath: #keyPath(CALayer.borderColor))
+        colorAnimation.fromValue = UIColor.red.cgColor
+        colorAnimation.toValue = UIColor.init(white: 1, alpha: 0).cgColor
+        colorAnimation.duration = 1
+        textField.layer.add(colorAnimation, forKey: #keyPath(CALayer.borderColor))
+        
+        let widthAnimation = CABasicAnimation(keyPath: #keyPath(CALayer.borderWidth))
+        widthAnimation.fromValue = 1.8
+        widthAnimation.toValue = 0
+        widthAnimation.duration = 1.4
+        textField.layer.add(widthAnimation, forKey: #keyPath(CALayer.borderWidth))
+        
+        
+    }
+    
+    fileprivate func animateLoadingIndicator(shouldAppear: Bool) {
+        let alpha: CGFloat = shouldAppear ? 1 : 0
+        
+        if shouldAppear {
+            loadingIndicator.startAnimating()
+        } else {
+            loadingIndicator.stopAnimating()
+        }
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.indicatorContainerView.alpha = alpha
+        }, completion: nil)
+    }
     
     
     
     
+    
+    fileprivate func isEmailValid(email: String) -> Bool {
+        guard !email.isEmpty else { return false }
+        
+        let range = NSRange(location: 0, length: email.utf16.count)
+        let regex = try! NSRegularExpression(pattern: #".+@.+\..{2,}"#)
+        if regex.firstMatch(in: email, options: [], range: range) == nil {
+            return false
+        }
+        
+        return true
+    }
     
     
     func checkIfShouldProceed() -> Bool {
@@ -467,14 +537,8 @@ class AuthorizationViewController: UIViewController {
         let email = emailTextField.text!
         let password = passwordTextField.text!
         
-        if email.isEmpty {
+        if !isEmailValid(email: email) {
             shouldProceed = false
-        } else {
-            let range = NSRange(location: 0, length: email.utf16.count)
-            let regex = try! NSRegularExpression(pattern: #".+@.+\..{2,}"#)
-            if regex.firstMatch(in: email, options: [], range: range) == nil {
-                shouldProceed = false
-            }
         }
         
         if password.isEmpty || password.count < 6 {
@@ -518,6 +582,12 @@ class AuthorizationViewController: UIViewController {
         let name = firstNameTextField.text!
         let surname = lastNameTextField.text!
         
+        emailTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+        checkPasswordTextField.resignFirstResponder()
+        firstNameTextField.resignFirstResponder()
+        lastNameTextField.resignFirstResponder()
+        
         if currentMode == .signIn {
             let credentials = Credentials(email: email, password: password)
             client.login(withCredentials: credentials)
@@ -525,6 +595,9 @@ class AuthorizationViewController: UIViewController {
             let newUser = User(id: nil, firstName: name, lastName: surname, email: email, studentID: nil, password: password)
             client.register(user: newUser)
         }
+        
+        animateLoadingIndicator(shouldAppear: true)
+
     }
     
     
@@ -582,18 +655,12 @@ class AuthorizationViewController: UIViewController {
     
     
     func displayMessage(userMessage:String) -> Void {
-        DispatchQueue.main.async {
-            let alertController = UIAlertController(title: "Ooops...", message: userMessage, preferredStyle: .alert)
-            let OkButton = UIAlertAction(title: "Ok", style: .default)
-            {
-                (action:UIAlertAction!) in
-                DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: nil)
-                }
-            }
-            
-            alertController.addAction(OkButton)
-        }
+        let alertController = UIAlertController(title: "Alert", message: userMessage, preferredStyle: .alert)
+        
+        let OkButton = UIAlertAction(title: "Okay", style: .cancel, handler: nil)
+        alertController.addAction(OkButton)
+        
+        self.present(alertController, animated: true, completion: nil)
     }
     
     
@@ -617,6 +684,9 @@ extension AuthorizationViewController {
         }
     }
     
+    
+    
+    
     @objc func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset = .zero
         
@@ -626,18 +696,39 @@ extension AuthorizationViewController {
     }
     
     
+    
+    
     @IBAction func proceedButttonTapped(_ button: UIButton) {
         proceed()
     }
+    
+    
     
     
     @objc func changeModeButtonTapped(_ button: UIButton) {
         changeMode()
     }
     
+    
+    
+    @objc func forgotPasswordButtonTapped(_ button: UIButton) {
+        let email = emailTextField.text!
+        if isEmailValid(email: email) {
+            client.requestPasswordRest(forEmail: email)
+            animateLoadingIndicator(shouldAppear: true)
+        } else {
+            animateBorder(forTextField: emailTextField)
+        }
+        
+    }
+    
+    
+    
     @objc func textFieldDidChange(_ textField: UITextField) {
         checkIfShouldProceed()
     }
+    
+    
     
 }
 
@@ -682,6 +773,7 @@ extension AuthorizationViewController: UITextFieldDelegate {
 
 extension AuthorizationViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        animateLoadingIndicator(shouldAppear: false)
         displayMessage(userMessage: error.localizedDescription)
     }
     
@@ -694,9 +786,19 @@ extension AuthorizationViewController: APIClientDelegate {
             appDelegate.tabBarController.refreshDataInsideControllers()
         }
         
+        animateLoadingIndicator(shouldAppear: false)
         dismiss(animated: true, completion: nil)
     }
+    
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {
         client.login(withCredentials: Credentials(email: user.email, password: user.password!))
+        animateLoadingIndicator(shouldAppear: false)
     }
+    
+    func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {
+        displayMessage(userMessage: "Request to the server has been sent. Resetting password is not actually implemented in the app right now.")
+//        currentMode = .resetPassword
+        animateLoadingIndicator(shouldAppear: false)
+    }
+    
 }
