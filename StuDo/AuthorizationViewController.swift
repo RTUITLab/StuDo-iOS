@@ -745,14 +745,18 @@ extension AuthorizationViewController: UITextFieldDelegate {
             if currentMode == .signUp {
                 checkPasswordTextField.becomeFirstResponder()
             } else {
-                // proceed to sign in
+                if checkIfShouldProceed() {
+                    proceed()
+                }
             }
         } else if textField === checkPasswordTextField {
             firstNameTextField.becomeFirstResponder()
         } else if textField === firstNameTextField {
             lastNameTextField.becomeFirstResponder()
         } else if textField === lastNameTextField {
-            // proceed to sign up
+            if checkIfShouldProceed() {
+                proceed()
+            }
         }
         
         
