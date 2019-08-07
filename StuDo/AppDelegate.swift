@@ -7,28 +7,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var tabBarController: TabBarController!
     
-    func setupMainVC() {
-        tabBarController = TabBarController()
-
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = tabBarController
-        window?.makeKeyAndVisible()
+    func presentInitialController(shouldAnimate: Bool) {
         
-        if GCIsUsingFakeData {
-            PersistentStore.shared.user = User(id: "fakeUserID", firstName: "Fake", lastName: "Tester", email: "test@mail.com", studentID: nil, password: nil)
-        } else if PersistentStore.shared.user == nil {
-//            let storyboard = UIStoryboard(name: "Authorization", bundle: nil)
-            
-//            let authVC = storyboard.instantiateViewController(withIdentifier: "CustomViewController")
+        if PersistentStore.shared.user == nil {
             let authVC = AuthorizationViewController()
-            
-            tabBarController.present(authVC, animated: false, completion: nil)
+            window!.rootViewController!.present(authVC, animated: shouldAnimate, completion: nil)
+        } else {
+            tabBarController = TabBarController()
+            window!.rootViewController!.present(tabBarController, animated: false, completion: nil)
         }
         
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        setupMainVC()
+        
+        let rootVC = UIViewController()
+        rootVC.view.backgroundColor = .white
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window!.rootViewController = rootVC
+        window!.makeKeyAndVisible()
+        
+        presentInitialController(shouldAnimate: false)
+        
         return true
     }
 }

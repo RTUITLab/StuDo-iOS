@@ -175,7 +175,9 @@ class AccountDetailViewController: UITableViewController {
             }
             
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.setupMainVC()
+                dismiss(animated: true) {
+                    appDelegate.presentInitialController(shouldAnimate: true)
+                }
             }
         }
         

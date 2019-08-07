@@ -654,10 +654,10 @@ class AuthorizationViewController: UIViewController {
     
     
     
-    func displayMessage(userMessage:String) -> Void {
-        let alertController = UIAlertController(title: "Alert", message: userMessage, preferredStyle: .alert)
+    func displayMessage(userMessage:String, title: String = "Alert") -> Void {
+        let alertController = UIAlertController(title: title, message: userMessage, preferredStyle: .alert)
         
-        let OkButton = UIAlertAction(title: "Okay", style: .cancel, handler: nil)
+        let OkButton = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(OkButton)
         
         self.present(alertController, animated: true, completion: nil)
@@ -782,16 +782,17 @@ extension AuthorizationViewController: APIClientDelegate {
         PersistentStore.shared.user = user
         PersistentStore.save()
         
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.tabBarController.refreshDataInsideControllers()
-        }
-        
         animateLoadingIndicator(shouldAppear: false)
-        dismiss(animated: true, completion: nil)
+        
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            dismiss(animated: true) {
+                appDelegate.presentInitialController(shouldAnimate: true)
+            }
+        }
     }
     
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {
-        client.login(withCredentials: Credentials(email: user.email, password: user.password!))
+        displayMessage(userMessage: "Please, confirm your email before signing in.", title: "Successfull registration!")
         animateLoadingIndicator(shouldAppear: false)
     }
     
