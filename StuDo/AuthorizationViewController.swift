@@ -31,11 +31,9 @@ class AuthorizationViewController: UIViewController {
     let containerView = UIView()
     let scrollView = UIScrollView()
     
-    let topInnerContainerView = UIView()
-    let bottomInnerContainerView = UIView()
-    
-    let credentialsStackView = UIStackView()
-    let controlStackView = UIStackView()
+    let credentialsContainerView = UIView()
+    let additionalInfoContainerView = UIView()
+    let buttonsContainerView = UIView()
     
     
     
@@ -53,10 +51,13 @@ class AuthorizationViewController: UIViewController {
     
     
     var containerViewHeightConstraint: NSLayoutConstraint!
-    var containerViewTopConstraint: NSLayoutConstraint!
+    var credentialsContainerHeightConstraint: NSLayoutConstraint!
+    var additionalInfoContainerHeightConstraint: NSLayoutConstraint!
     
     var initialContainerViewHeight: CGFloat!
-    
+    var credentialsContainerFullHeight: CGFloat!
+    var credentialsContainerShrunkHeight: CGFloat!
+    var additionalInfoContainerFullHeight: CGFloat!
     
     
     
@@ -142,13 +143,15 @@ class AuthorizationViewController: UIViewController {
         
         
         
-        let fieldHeight: CGFloat = 50
+        let fieldHeight: CGFloat = 44
         let stackViewSpacing: CGFloat = 24
         
-        let topInnerContainerInitialHeight: CGFloat = 2 * fieldHeight + 5 * stackViewSpacing
-        let bottomInnerContainerInitialHeight: CGFloat = 2 * fieldHeight + 3 * stackViewSpacing
+        credentialsContainerFullHeight = 2 * fieldHeight + 5 * stackViewSpacing
+        credentialsContainerShrunkHeight = 2 * fieldHeight + 2 * stackViewSpacing
+        additionalInfoContainerFullHeight = 3 * fieldHeight + 5 * stackViewSpacing
+        let buttonsContainerInitialHeight: CGFloat = 2 * fieldHeight + 3 * stackViewSpacing
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
-        initialContainerViewHeight = topInnerContainerInitialHeight + bottomInnerContainerInitialHeight + statusBarHeight
+        initialContainerViewHeight = credentialsContainerFullHeight + buttonsContainerInitialHeight + statusBarHeight
         
         
         
@@ -161,9 +164,6 @@ class AuthorizationViewController: UIViewController {
         
         containerViewHeightConstraint = containerView.heightAnchor.constraint(equalToConstant: initialContainerViewHeight)
         containerViewHeightConstraint.isActive = true
-        
-        containerViewTopConstraint = containerView.topAnchor.constraint(equalTo: view.topAnchor)
-        containerViewTopConstraint.isActive = false
         
         containerView.backgroundColor = .init(white: 1, alpha: 0.6)
         containerView.layer.cornerRadius = 8
@@ -190,20 +190,22 @@ class AuthorizationViewController: UIViewController {
         
         
         
-        scrollView.addSubview(topInnerContainerView)
-        topInnerContainerView.translatesAutoresizingMaskIntoConstraints = false
-        topInnerContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
-        topInnerContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
-        topInnerContainerView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0).isActive = true
-        topInnerContainerView.heightAnchor.constraint(equalToConstant: topInnerContainerInitialHeight).isActive = true
+        scrollView.addSubview(credentialsContainerView)
+        credentialsContainerView.translatesAutoresizingMaskIntoConstraints = false
+        credentialsContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
+        credentialsContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
+        credentialsContainerView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0).isActive = true
+        
+        credentialsContainerHeightConstraint = credentialsContainerView.heightAnchor.constraint(equalToConstant: credentialsContainerFullHeight)
+        credentialsContainerHeightConstraint.isActive = true
         
         
-        topInnerContainerView.addSubview(emailTextField)
+        credentialsContainerView.addSubview(emailTextField)
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
-        emailTextField.topAnchor.constraint(equalTo: topInnerContainerView.topAnchor, constant: stackViewSpacing).isActive = true
+        emailTextField.topAnchor.constraint(equalTo: credentialsContainerView.topAnchor, constant: stackViewSpacing).isActive = true
         emailTextField.heightAnchor.constraint(equalToConstant: fieldHeight).isActive = true
-        emailTextField.widthAnchor.constraint(equalTo: topInnerContainerView.widthAnchor, multiplier: 0.8).isActive = true
-        emailTextField.centerXAnchor.constraint(equalTo: topInnerContainerView.centerXAnchor).isActive = true
+        emailTextField.widthAnchor.constraint(equalTo: credentialsContainerView.widthAnchor, multiplier: 0.8).isActive = true
+        emailTextField.centerXAnchor.constraint(equalTo: credentialsContainerView.centerXAnchor).isActive = true
         
         emailTextField.borderStyle = .roundedRect
         emailTextField.textAlignment = .center
@@ -214,29 +216,30 @@ class AuthorizationViewController: UIViewController {
         emailTextField.returnKeyType = .next
         
         
-        topInnerContainerView.addSubview(passwordTextField)
+        credentialsContainerView.addSubview(passwordTextField)
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: stackViewSpacing).isActive = true
         passwordTextField.widthAnchor.constraint(equalTo: emailTextField.widthAnchor).isActive = true
         passwordTextField.heightAnchor.constraint(equalTo: emailTextField.heightAnchor).isActive = true
-        passwordTextField.centerXAnchor.constraint(equalTo: topInnerContainerView.centerXAnchor).isActive = true
+        passwordTextField.centerXAnchor.constraint(equalTo: credentialsContainerView.centerXAnchor).isActive = true
         
         
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.textAlignment = .center
         passwordTextField.placeholder = "Password"
         passwordTextField.isSecureTextEntry = true
-        
+        passwordTextField.textContentType = .password
+
         passwordTextField.autocorrectionType = .no
         passwordTextField.keyboardType = .asciiCapable
         passwordTextField.returnKeyType = .done
         
         
         
-        topInnerContainerView.addSubview(forgotPasswordButton)
+        credentialsContainerView.addSubview(forgotPasswordButton)
         forgotPasswordButton.translatesAutoresizingMaskIntoConstraints = false
         forgotPasswordButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: stackViewSpacing / 2).isActive = true
-        forgotPasswordButton.centerXAnchor.constraint(equalTo: topInnerContainerView.centerXAnchor, constant: 0).isActive = true
+        forgotPasswordButton.centerXAnchor.constraint(equalTo: credentialsContainerView.centerXAnchor, constant: 0).isActive = true
         
         forgotPasswordButton.setTitle("Forgot password?", for: .normal)
         forgotPasswordButton.setTitleColor(proceedColor, for: .normal)
@@ -249,21 +252,87 @@ class AuthorizationViewController: UIViewController {
         
         
         
-        scrollView.addSubview(bottomInnerContainerView)
-        bottomInnerContainerView.translatesAutoresizingMaskIntoConstraints = false
-        bottomInnerContainerView.leadingAnchor.constraint(equalTo: topInnerContainerView.leadingAnchor).isActive = true
-        bottomInnerContainerView.trailingAnchor.constraint(equalTo: topInnerContainerView.trailingAnchor).isActive = true
-        bottomInnerContainerView.topAnchor.constraint(equalTo: topInnerContainerView.bottomAnchor).isActive = true
-        bottomInnerContainerView.heightAnchor.constraint(equalToConstant: bottomInnerContainerInitialHeight).isActive = true
-        bottomInnerContainerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0).isActive = true
+        scrollView.addSubview(additionalInfoContainerView)
+        additionalInfoContainerView.translatesAutoresizingMaskIntoConstraints = false
+        additionalInfoContainerView.leadingAnchor.constraint(equalTo: credentialsContainerView.leadingAnchor).isActive = true
+        additionalInfoContainerView.trailingAnchor.constraint(equalTo: credentialsContainerView.trailingAnchor).isActive = true
+        additionalInfoContainerView.topAnchor.constraint(equalTo: credentialsContainerView.bottomAnchor).isActive = true
+        
+        additionalInfoContainerHeightConstraint = additionalInfoContainerView.heightAnchor.constraint(equalToConstant: 0)
+        additionalInfoContainerHeightConstraint.isActive = true
+        
+        additionalInfoContainerView.alpha = 0
         
         
-        bottomInnerContainerView.addSubview(proceedButtton)
+        additionalInfoContainerView.addSubview(checkPasswordTextField)
+        checkPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
+        checkPasswordTextField.topAnchor.constraint(equalTo: additionalInfoContainerView.topAnchor, constant: stackViewSpacing).isActive = true
+        checkPasswordTextField.heightAnchor.constraint(equalTo: emailTextField.heightAnchor).isActive = true
+        checkPasswordTextField.widthAnchor.constraint(equalTo: emailTextField.widthAnchor).isActive = true
+        checkPasswordTextField.centerXAnchor.constraint(equalTo: emailTextField.centerXAnchor).isActive = true
+        
+        checkPasswordTextField.borderStyle = .roundedRect
+        checkPasswordTextField.textAlignment = .center
+        checkPasswordTextField.placeholder = "Repeat Password"
+        checkPasswordTextField.isSecureTextEntry = true
+        checkPasswordTextField.textContentType = .password
+        
+        checkPasswordTextField.autocorrectionType = .no
+        checkPasswordTextField.keyboardType = .asciiCapable
+        checkPasswordTextField.returnKeyType = .next
+        
+        
+        
+        additionalInfoContainerView.addSubview(firstNameTextField)
+        firstNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        firstNameTextField.topAnchor.constraint(equalTo: checkPasswordTextField.bottomAnchor, constant: 2 * stackViewSpacing).isActive = true
+        firstNameTextField.heightAnchor.constraint(equalTo: emailTextField.heightAnchor).isActive = true
+        firstNameTextField.widthAnchor.constraint(equalTo: emailTextField.widthAnchor).isActive = true
+        firstNameTextField.centerXAnchor.constraint(equalTo: emailTextField.centerXAnchor).isActive = true
+        
+        firstNameTextField.borderStyle = .roundedRect
+        firstNameTextField.textAlignment = .center
+        firstNameTextField.placeholder = "First Name"
+        
+        firstNameTextField.autocorrectionType = .no
+        firstNameTextField.returnKeyType = .next
+        
+        
+        
+        additionalInfoContainerView.addSubview(lastNameTextField)
+        lastNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        lastNameTextField.topAnchor.constraint(equalTo: firstNameTextField.bottomAnchor, constant: stackViewSpacing).isActive = true
+        lastNameTextField.heightAnchor.constraint(equalTo: emailTextField.heightAnchor).isActive = true
+        lastNameTextField.widthAnchor.constraint(equalTo: emailTextField.widthAnchor).isActive = true
+        lastNameTextField.centerXAnchor.constraint(equalTo: emailTextField.centerXAnchor).isActive = true
+        
+        lastNameTextField.borderStyle = .roundedRect
+        lastNameTextField.textAlignment = .center
+        lastNameTextField.placeholder = "Last Name"
+        
+        lastNameTextField.autocorrectionType = .no
+        lastNameTextField.returnKeyType = .done
+        
+        
+        
+        
+        
+        
+        scrollView.addSubview(buttonsContainerView)
+        buttonsContainerView.translatesAutoresizingMaskIntoConstraints = false
+        buttonsContainerView.leadingAnchor.constraint(equalTo: credentialsContainerView.leadingAnchor).isActive = true
+        buttonsContainerView.trailingAnchor.constraint(equalTo: credentialsContainerView.trailingAnchor).isActive = true
+        buttonsContainerView.topAnchor.constraint(equalTo: additionalInfoContainerView.bottomAnchor).isActive = true
+        buttonsContainerView.heightAnchor.constraint(equalToConstant: buttonsContainerInitialHeight).isActive = true
+        buttonsContainerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0).isActive = true
+        
+        
+        buttonsContainerView.addSubview(proceedButtton)
         proceedButtton.translatesAutoresizingMaskIntoConstraints = false
-        proceedButtton.topAnchor.constraint(equalTo: bottomInnerContainerView.topAnchor, constant: stackViewSpacing).isActive = true
+        proceedButtton.topAnchor.constraint(equalTo: buttonsContainerView.topAnchor, constant: stackViewSpacing).isActive = true
         proceedButtton.widthAnchor.constraint(equalTo: emailTextField.widthAnchor).isActive = true
         proceedButtton.heightAnchor.constraint(equalTo: emailTextField.heightAnchor).isActive = true
-        proceedButtton.centerXAnchor.constraint(equalTo: topInnerContainerView.centerXAnchor).isActive = true
+        proceedButtton.centerXAnchor.constraint(equalTo: credentialsContainerView.centerXAnchor).isActive = true
         
         proceedButtton.setTitle("Sign In", for: .normal)
         proceedButtton.setTitleColor(.white, for: .normal)
@@ -274,10 +343,10 @@ class AuthorizationViewController: UIViewController {
         proceedButtton.layer.borderColor = proceedColor.cgColor
         
         
-        bottomInnerContainerView.addSubview(changeModeButton)
+        buttonsContainerView.addSubview(changeModeButton)
         changeModeButton.translatesAutoresizingMaskIntoConstraints = false
         changeModeButton.topAnchor.constraint(equalTo: proceedButtton.bottomAnchor, constant: stackViewSpacing).isActive = true
-        changeModeButton.centerXAnchor.constraint(equalTo: topInnerContainerView.centerXAnchor).isActive = true
+        changeModeButton.centerXAnchor.constraint(equalTo: credentialsContainerView.centerXAnchor).isActive = true
         changeModeButton.widthAnchor.constraint(equalTo: emailTextField.widthAnchor).isActive = true
         changeModeButton.heightAnchor.constraint(equalTo: emailTextField.heightAnchor).isActive = true
         
@@ -297,6 +366,23 @@ class AuthorizationViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        changeModeButton.addTarget(self, action: #selector(changeModeButtonTapped(_:)), for: .touchUpInside)
+        
+        
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        checkPasswordTextField.delegate = self
+        firstNameTextField.delegate = self
+        lastNameTextField.delegate = self
+        
+        emailTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        checkPasswordTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        firstNameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        lastNameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        checkIfShouldProceed()
     }
     
     
@@ -319,6 +405,8 @@ class AuthorizationViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         if isInitialSetup {
+            isInitialSetup = false
+            
             let freeSpace = view.frame.height - containerView.frame.height
             let offsetToFreeSpaceCenter = -freeSpace / 2 + logoImageView.frame.height / 2
             logoImageView.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: offsetToFreeSpaceCenter).isActive = true
@@ -342,23 +430,182 @@ class AuthorizationViewController: UIViewController {
     fileprivate func animateContentContainer(toFullscreen: Bool ) {
         self.isFullscreen = toFullscreen
         
-        containerViewTopConstraint.isActive = toFullscreen
-        
         
         containerViewHeightConstraint.constant = toFullscreen ? view.frame.height : initialContainerViewHeight
         
         containerView.setNeedsUpdateConstraints()
         scrollView.alwaysBounceVertical = toFullscreen
-//        scrollView.contentInsetAdjustmentBehavior = toFullscreen ? .always : .never
         
-        
-        UIView.animate(withDuration: 4) {
-            self.containerView.layoutIfNeeded()
+        UIView.animate(withDuration: 0.5) {
+            self.view.layoutIfNeeded()
             self.containerView.layer.cornerRadius = toFullscreen ? 0 : 8
             self.logoImageView.alpha = toFullscreen ? 0 : 1
             self.setNeedsStatusBarAppearanceUpdate()
         }
+        
     }
+    
+    fileprivate func animateShake(forTextField textField: UITextField) {
+        let animation = CAKeyframeAnimation()
+        animation.keyPath = "position.x"
+        animation.values = [0, 30, -30, 30, 0]
+        animation.keyTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        animation.duration = 1
+        textField.layer.add(animation, forKey: "shake")
+    }
+    
+    
+    
+    
+    
+    
+    
+    func checkIfShouldProceed() -> Bool {
+        var shouldProceed = true
+        
+        let email = emailTextField.text!
+        let password = passwordTextField.text!
+        
+        if email.isEmpty {
+            shouldProceed = false
+        } else {
+            let range = NSRange(location: 0, length: email.utf16.count)
+            let regex = try! NSRegularExpression(pattern: #".+@.+\..{2,}"#)
+            if regex.firstMatch(in: email, options: [], range: range) == nil {
+                shouldProceed = false
+            }
+        }
+        
+        if password.isEmpty || password.count < 6 {
+            shouldProceed = false
+        }
+        
+        if currentMode == .signUp {
+            let checkPassword = checkPasswordTextField.text!
+            let name = firstNameTextField.text!
+            let surname = lastNameTextField.text!
+            
+            if checkPassword.isEmpty || checkPassword != password {
+                shouldProceed = false
+            }
+            
+            if name.isEmpty {
+                shouldProceed = false
+            }
+            
+            if surname.isEmpty {
+                shouldProceed = false
+            }
+        }
+        
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            self.proceedButtton.alpha = shouldProceed ? 1 : 0.6
+        }) { _ in
+            self.proceedButtton.isEnabled = shouldProceed
+        }
+        
+        
+        return shouldProceed
+        
+    }
+    
+    
+    func proceed() {
+        let email = emailTextField.text!
+        let password = passwordTextField.text!
+        let name = firstNameTextField.text!
+        let surname = lastNameTextField.text!
+        
+        if currentMode == .signIn {
+            let credentials = Credentials(email: email, password: password)
+            client.login(withCredentials: credentials)
+        } else if currentMode == .signUp {
+            let newUser = User(id: nil, firstName: name, lastName: surname, email: email, studentID: nil, password: password)
+            client.register(user: newUser)
+        }
+    }
+    
+    
+    func changeMode() {
+        currentMode = (currentMode == .signIn) ? .signUp : .signIn
+        
+        let proceedInFullscreen = true
+        var forgotPasswordButtonAlpha: CGFloat = 1
+        var additionalInfoContentsAlpha: CGFloat = 0
+        
+        var proceedButtonTitle = "Sign In"
+        var changeModeButtonTitle = "Sign Up"
+        
+        if currentMode == .signIn {
+            additionalInfoContainerHeightConstraint.constant = 0
+            credentialsContainerHeightConstraint.constant = credentialsContainerFullHeight
+            
+            emailTextField.becomeFirstResponder()
+            
+            passwordTextField.returnKeyType = .done
+        } else if currentMode == .signUp {
+            additionalInfoContainerHeightConstraint.constant = additionalInfoContainerFullHeight
+            credentialsContainerHeightConstraint.constant = credentialsContainerShrunkHeight
+            
+            forgotPasswordButtonAlpha = 0
+            additionalInfoContentsAlpha = 1
+            
+            if let email = emailTextField.text, email.isEmpty {
+                emailTextField.becomeFirstResponder()
+            }
+            
+            checkPasswordTextField.text = ""
+            firstNameTextField.text = ""
+            lastNameTextField.text = ""
+            
+            proceedButtonTitle = "Sign Up"
+            changeModeButtonTitle = "Sign In"
+            
+            passwordTextField.returnKeyType = .next
+        }
+        
+        animateContentContainer(toFullscreen: proceedInFullscreen)
+        UIView.animate(withDuration: 0.6, animations: {
+            self.additionalInfoContainerView.alpha = additionalInfoContentsAlpha
+            self.forgotPasswordButton.alpha = forgotPasswordButtonAlpha
+        }, completion: { _ in
+            self.proceedButtton.setTitle(proceedButtonTitle, for: .normal)
+            self.changeModeButton.setTitle(changeModeButtonTitle, for: .normal)
+        })
+    }
+    
+    
+    
+    
+    
+    
+    func displayMessage(userMessage:String) -> Void {
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: "Ooops...", message: userMessage, preferredStyle: .alert)
+            let OkButton = UIAlertAction(title: "Ok", style: .default)
+            {
+                (action:UIAlertAction!) in
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
+            
+            alertController.addAction(OkButton)
+        }
+    }
+    
+    
+    
+}
+
+
+
+
+
+extension AuthorizationViewController {
+    
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
@@ -378,88 +625,57 @@ class AuthorizationViewController: UIViewController {
         }
     }
     
-    fileprivate func clearTextFields() {
-        firstNameTextField.text = ""
-        lastNameTextField.text = ""
-        emailTextField.text = ""
-        passwordTextField.text = ""
-        checkPasswordTextField.text = ""
-    }
     
-    @IBAction func indexChanged(_ sender: Any) {
-        //        switch segmented_control.selectedSegmentIndex {
-        //        case 0:
-        //            firstNameTextField.isHidden = false
-        //            lastNameTextField.isHidden = false
-        //            checkPasswordTextField.isHidden = false
-        //
-        //            clearTextFields()
-        //
-        //            break
-        //        case 1:
-        //            firstNameTextField.isHidden = true
-        //            lastNameTextField.isHidden = true
-        //            checkPasswordTextField.isHidden = true
-        //
-        //            clearTextFields()
-        //            break
-        //        default:
-        //            break
-        //        }
-        //
-        //        self.dismissKeyboard()
+    @IBAction func proceedButttonTapped(_ button: UIButton) {
+        proceed()
     }
     
     
-    @IBAction func proceedButttonTapped(_ sender: Any) {
-        
-        let login = emailTextField.text
-        let pass = passwordTextField.text
-        let pass_2 = checkPasswordTextField.text
-        let firstName = firstNameTextField.text
-        let lastName = lastNameTextField.text
-        
-        //        switch segmented_control.selectedSegmentIndex {
-        //        case 0:
-        //            if login == "" || pass == "" || pass_2 == "" || firstName == "" || lastName == "" {
-        //                displayMessage(userMessage: "Заполнены не все поля")
-        //                return
-        //            }
-        //            if pass != pass_2 {
-        //                displayMessage(userMessage: "Пароли не совпадают")
-        //                return
-        //            }
-        //            let user = User(id: nil, firstName: firstName!, lastName: lastName!, email: login!, studentID: nil, password: pass!)
-        //            client.register(user: user)
-        //            break
-        //        case 1:
-        //            if login == "" || pass == "" {
-        //                displayMessage(userMessage: "Заполнены не все поля")
-        //                return
-        //            }
-        //            client.login(withCredentials: Credentials(email: login!, password: pass!))
-        //            break
-        //        default:
-        //            break
-        //        }
-        
+    @objc func changeModeButtonTapped(_ button: UIButton) {
+        changeMode()
     }
     
-    func displayMessage(userMessage:String) -> Void {
-        DispatchQueue.main.async {
-            let alertController = UIAlertController(title: "Ooops...", message: userMessage, preferredStyle: .alert)
-            let OkButton = UIAlertAction(title: "Ok", style: .default)
-            {
-                (action:UIAlertAction!) in
-                DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: nil)
-                }
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        checkIfShouldProceed()
+    }
+    
+}
+
+
+
+
+
+
+extension AuthorizationViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField === emailTextField {
+            passwordTextField.becomeFirstResponder()
+        } else if textField === passwordTextField {
+            if currentMode == .signUp {
+                checkPasswordTextField.becomeFirstResponder()
+            } else {
+                // proceed to sign in
             }
-            
-            alertController.addAction(OkButton)
+        } else if textField === checkPasswordTextField {
+            firstNameTextField.becomeFirstResponder()
+        } else if textField === firstNameTextField {
+            lastNameTextField.becomeFirstResponder()
+        } else if textField === lastNameTextField {
+            // proceed to sign up
+        }
+        
+        
+        return false
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField === passwordTextField || textField === checkPasswordTextField {
+            textField.text = ""
         }
     }
 }
+
+
 
 
 
