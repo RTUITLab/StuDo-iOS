@@ -23,10 +23,14 @@ class FeedViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl = UIRefreshControl()
     
+    var shouldRefreshOnAppear: Bool = true
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        client.delegate = self
+
         tableView = UITableView(frame: view.frame, style: .plain)
         
         view.addSubview(tableView)
@@ -47,16 +51,15 @@ class FeedViewController: UIViewController {
         navigationItem.title = "Ads"
         navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.prefersLargeTitles = true
-        
-        if PersistentStore.shared.user != nil {
-            refreshAds()
-        }
 
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        if let selectedRow = tableView.indexPathForSelectedRow {
+    override func viewWillAppear(_ animated: Bool) {
+        if shouldRefreshOnAppear {
+            refreshAds()
+        } else if let selectedRow = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: selectedRow, animated: true)
+            shouldRefreshOnAppear = true
         }
     }
     
@@ -65,8 +68,7 @@ class FeedViewController: UIViewController {
             feedItems = DataMockup().getPrototypeAds(count: 4)
             tableView.reloadData()
         } else {
-            client.delegate = self
-            client.getAdds()
+            client.getAds()
         }
     }
 
@@ -91,9 +93,10 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedAd = feedItems[indexPath.row]
-        let detailVC = AdViewController(with: selectedAd)
+        var detailVC = AdViewController(with: selectedAd)
         detailVC.delegate = self
         
+        shouldRefreshOnAppear = false
         self.present(detailVC, animated: true, completion: nil)
     }
 }

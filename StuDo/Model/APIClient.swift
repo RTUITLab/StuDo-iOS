@@ -311,23 +311,29 @@ extension APIClient {
     
     
     
-    func getAdds() {
+    func getAds() {
         let request = APIRequest(method: .get, path: "ad")
         self.perform(secureRequest: request) { (result) in
             switch result {
             case .success(let response):
-                if let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
-                    
-                    var ads = [Ad]()
-                    for object in decodedJSON {
-                        let ad = try self.decodeAd(from: object)
-                        ads.append(ad)
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.delegate?.apiClient(self, didRecieveAds: ads)
-                    }
+                try self.decodeAds(from: response)
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
                 }
+            }
+        }
+    }
+    
+    
+    
+    
+    func getAds(forUserWithId userId: String) {
+        let request = APIRequest(method: .get, path: "ad/user/\(userId)")
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                try self.decodeAds(from: response, fullDecode: true)
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.delegate?.apiClient(self, didFailRequest: request, withError: error)
@@ -452,13 +458,33 @@ extension APIClient {
     
     
     
-    
-    
 }
 
 
 
 
 
-
+extension APIClient {
+    
+    
+    
+    fileprivate func decodeAds(from response: (APIResponse<Data?>), fullDecode: Bool = false ) throws {
+        guard let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+            throw APIError.decodingFailure
+        }
+        var ads = [Ad]()
+        for object in decodedJSON {
+            let ad = try self.decodeAd(from: object, fullDecode: fullDecode)
+            ads.append(ad)
+        }
+        
+        DispatchQueue.main.async {
+            self.delegate?.apiClient(self, didRecieveAds: ads)
+        }
+    }
+    
+    
+    
+    
+}
 

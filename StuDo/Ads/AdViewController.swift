@@ -27,7 +27,12 @@ class AdViewController: CardViewController {
         self.advertisement = advertisement
         if let ad = advertisement {
             nameTextField.text = ad.name
-            descriptionTextView.text = ad.description
+            
+            if let description = ad.description {
+                descriptionTextView.text = description
+            } else {
+                descriptionTextView.text = ad.shortDescription
+            }
         }
     }
     
@@ -35,10 +40,9 @@ class AdViewController: CardViewController {
     
     enum AdViewerMode {
         case viewing
-        case viewingAsOwner
         case editing
     }
-    var currentMode: AdViewerMode = .viewingAsOwner {
+    var currentMode: AdViewerMode = .viewing {
         didSet {
             if currentMode == .editing {
                 isFullscreen = true
@@ -46,6 +50,14 @@ class AdViewController: CardViewController {
             } else {
                 isFullscreen = false
                 title = nil
+            }
+        }
+    }
+    
+    var isViewerOwner: Bool {
+        didSet {
+            if isViewerOwner {
+                moreButton.isHidden = false
             }
         }
     }
@@ -71,9 +83,11 @@ class AdViewController: CardViewController {
     
     
     
-    init(with ad: Ad?) {
+    init(with ad: Ad?, isOwner: Bool = false) {
+        self.isViewerOwner = isOwner
+
         super.init()
-        
+
         client.delegate = self
         
         if let ad = ad {
@@ -115,54 +129,53 @@ class AdViewController: CardViewController {
         
         
         
-        if currentMode == .viewingAsOwner || currentMode == .editing {
-            let leftRightPadding: CGFloat = 16
-            
-            let moreButtonSize: CGFloat = 20
-            headerView.addSubview(moreButton)
-            moreButton.translatesAutoresizingMaskIntoConstraints = false
-            moreButton.widthAnchor.constraint(equalToConstant: moreButtonSize).isActive = true
-            moreButton.heightAnchor.constraint(equalToConstant: moreButtonSize).isActive = true
-            moreButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-            moreButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -leftRightPadding).isActive = true
-            
-            let moreButtonImage = #imageLiteral(resourceName: "three-dots-menu").withRenderingMode(.alwaysTemplate)
-            moreButton.setImage(moreButtonImage, for: .normal)
-            moreButton.tintColor = UIColor(red:0.690, green:0.690, blue:0.699, alpha:1.000)
-            moreButton.adjustsImageWhenHighlighted = false
-            
-            
-            let publishButtonSize: CGFloat = 28
-            headerView.addSubview(publishButton)
-            publishButton.translatesAutoresizingMaskIntoConstraints = false
-            publishButton.widthAnchor.constraint(equalToConstant: publishButtonSize).isActive = true
-            publishButton.heightAnchor.constraint(equalToConstant: publishButtonSize).isActive = true
-            publishButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
-            publishButton.centerXAnchor.constraint(equalTo: moreButton.centerXAnchor).isActive = true
-            
-            let publishButtonImage = #imageLiteral(resourceName: "publish-button").withRenderingMode(.alwaysTemplate)
-            publishButton.setImage(publishButtonImage, for: .normal)
-            publishButton.setImage(publishButtonImage, for: .disabled)
-            publishButton.adjustsImageWhenHighlighted = false
-            publishButton.alpha = 0
-            publishButton.isHidden = true
-            
-            
-            
-            let cancelEditingButtonSize: CGFloat = 24
-            headerView.addSubview(cancelEditingButton)
-            cancelEditingButton.translatesAutoresizingMaskIntoConstraints = false
-            cancelEditingButton.widthAnchor.constraint(equalToConstant: cancelEditingButtonSize).isActive = true
-            cancelEditingButton.heightAnchor.constraint(equalToConstant: cancelEditingButtonSize).isActive = true
-            cancelEditingButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
-            cancelEditingButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: leftRightPadding).isActive = true
-            
-            let cancelEditingButtonImage = #imageLiteral(resourceName: "cancel").withRenderingMode(.alwaysOriginal)
-            cancelEditingButton.setImage(cancelEditingButtonImage, for: .normal)
-            cancelEditingButton.alpha = 0
-            cancelEditingButton.isHidden = true
-
-        }
+        let leftRightPadding: CGFloat = 16
+        
+        let moreButtonSize: CGFloat = 20
+        headerView.addSubview(moreButton)
+        moreButton.translatesAutoresizingMaskIntoConstraints = false
+        moreButton.widthAnchor.constraint(equalToConstant: moreButtonSize).isActive = true
+        moreButton.heightAnchor.constraint(equalToConstant: moreButtonSize).isActive = true
+        moreButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        moreButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -leftRightPadding).isActive = true
+        
+        let moreButtonImage = #imageLiteral(resourceName: "three-dots-menu").withRenderingMode(.alwaysTemplate)
+        moreButton.setImage(moreButtonImage, for: .normal)
+        moreButton.tintColor = UIColor(red:0.690, green:0.690, blue:0.699, alpha:1.000)
+        moreButton.adjustsImageWhenHighlighted = false
+        moreButton.isHidden = true
+        
+        
+        let publishButtonSize: CGFloat = 28
+        headerView.addSubview(publishButton)
+        publishButton.translatesAutoresizingMaskIntoConstraints = false
+        publishButton.widthAnchor.constraint(equalToConstant: publishButtonSize).isActive = true
+        publishButton.heightAnchor.constraint(equalToConstant: publishButtonSize).isActive = true
+        publishButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
+        publishButton.centerXAnchor.constraint(equalTo: moreButton.centerXAnchor).isActive = true
+        
+        let publishButtonImage = #imageLiteral(resourceName: "publish-button").withRenderingMode(.alwaysTemplate)
+        publishButton.setImage(publishButtonImage, for: .normal)
+        publishButton.setImage(publishButtonImage, for: .disabled)
+        publishButton.adjustsImageWhenHighlighted = false
+        publishButton.alpha = 0
+        publishButton.isHidden = true
+        
+        
+        
+        let cancelEditingButtonSize: CGFloat = 24
+        headerView.addSubview(cancelEditingButton)
+        cancelEditingButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelEditingButton.widthAnchor.constraint(equalToConstant: cancelEditingButtonSize).isActive = true
+        cancelEditingButton.heightAnchor.constraint(equalToConstant: cancelEditingButtonSize).isActive = true
+        cancelEditingButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
+        cancelEditingButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: leftRightPadding).isActive = true
+        
+        let cancelEditingButtonImage = #imageLiteral(resourceName: "cancel").withRenderingMode(.alwaysOriginal)
+        cancelEditingButton.setImage(cancelEditingButtonImage, for: .normal)
+        cancelEditingButton.alpha = 0
+        cancelEditingButton.isHidden = true
+        
         
         
         
@@ -185,6 +198,13 @@ class AdViewController: CardViewController {
         descriptionTextView.isScrollEnabled = false
         descriptionTextView.font = .systemFont(ofSize: 18, weight: .light)
 
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if currentMode == .editing {
+            enableEditingMode()
+        }
     }
     
     
@@ -380,6 +400,11 @@ extension AdViewController {
 
 extension AdViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
+        
+        if let userId = ad.userId, userId == PersistentStore.shared.user!.id {
+            isViewerOwner = true
+        }
+        
         set(advertisement: ad)
     }
     
