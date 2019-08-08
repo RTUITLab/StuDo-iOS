@@ -9,7 +9,16 @@
 import UIKit
 
 
+protocol AdViewControllerDelegate: class {
+    func adViewController(_ adVC: AdViewController, didDeleteAd deletedAd: Ad)
+    func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad)
+}
+
+
+
 class AdViewController: CardViewController {
+    
+    weak var delegate: AdViewControllerDelegate?
     
     // MARK: Data & Logic
     
@@ -134,7 +143,6 @@ class AdViewController: CardViewController {
             let publishButtonImage = #imageLiteral(resourceName: "publish-button").withRenderingMode(.alwaysTemplate)
             publishButton.setImage(publishButtonImage, for: .normal)
             publishButton.setImage(publishButtonImage, for: .disabled)
-            publishButton.tintColor = UIColor(red:0.000, green:0.512, blue:0.870, alpha:1.000)
             publishButton.adjustsImageWhenHighlighted = false
             publishButton.alpha = 0
             publishButton.isHidden = true
@@ -164,9 +172,11 @@ class AdViewController: CardViewController {
         
         moreButton.addTarget(self, action: #selector(moreButtonPressed(_:)), for: .touchUpInside)
         cancelEditingButton.addTarget(self, action: #selector(cancelEditingButtonPressed(_:)), for: .touchUpInside)
+        publishButton.addTarget(self, action: #selector(publishButtonPressed(_:)), for: .touchUpInside)
         
         descriptionTextView.layoutManager.delegate = self
         descriptionTextView.delegate = self
+        nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         
         nameTextField.font = .systemFont(ofSize: 20, weight: .medium)
@@ -208,42 +218,44 @@ class AdViewController: CardViewController {
         }) { _ in
             self.moreButton.isHidden = true
         }
-        publishButton.isEnabled = false
-        
+        checkIfCanPublish(isInitialRun: true)
     }
     
-    
+    func disableEditingMode(completion: (() -> ())? ) {
+        currentMode = .viewing
+        
+        nameTextField.resignFirstResponder()
+        descriptionTextView.resignFirstResponder()
+        
+        nameTextField.isUserInteractionEnabled = false
+        descriptionTextView.isUserInteractionEnabled = false
+        
+        self.moreButton.isHidden = false
+        UIView.animate(withDuration: 0.3, animations: {
+            self.moreButton.alpha = 1
+            self.publishButton.alpha = 0
+            self.cancelEditingButton.alpha = 0
+        }) { _ in
+            self.publishButton.isHidden = true
+            self.cancelEditingButton.isHidden = true
+            
+            completion?()
+            
+            // wait for some time so that to let all text fields draw themselves and then adjust the layout of content
+            let waitTime = DispatchTime(uptimeNanoseconds: 100)
+            DispatchQueue.main.asyncAfter(deadline: waitTime, execute: {
+                self.adjustContentLayout()
+            })
+        }
+    }
     
     
     
     
     func cancelEditingAd() {
         func cancelEditing() {
-            currentMode = .viewing
-            
-            nameTextField.resignFirstResponder()
-            descriptionTextView.resignFirstResponder()
-            
-            nameTextField.isUserInteractionEnabled = false
-            descriptionTextView.isUserInteractionEnabled = false
-            
-            self.moreButton.isHidden = false
-            UIView.animate(withDuration: 0.3, animations: {
-                self.moreButton.alpha = 1
-                self.publishButton.alpha = 0
-                self.cancelEditingButton.alpha = 0
-            }) { _ in
-                self.publishButton.isHidden = true
-                self.cancelEditingButton.isHidden = true
-                self.nameTextField.resignFirstResponder()
-                
-                self.set(advertisement: self.advertisement)
-                
-                // wait for some time so that to let all text fields draw themselves and then adjust the layout of content
-                let waitTime = DispatchTime(uptimeNanoseconds: 100)
-                DispatchQueue.main.asyncAfter(deadline: waitTime, execute: {
-                    self.adjustContentLayout()
-                })
+            disableEditingMode {
+                self.set(advertisement: self.advertisement) // clears the unsaved state
             }
         }
         
@@ -278,8 +290,55 @@ class AdViewController: CardViewController {
         present(shouldProceedAlert, animated: true, completion: nil)
     }
     
+    func checkIfCanPublish(isInitialRun: Bool = false) {
+        var shouldAllowPublishing = true
+        
+        if isInitialRun {
+            shouldAllowPublishing = false
+        } else {
+            let title = nameTextField.text!
+            let description = descriptionTextView.text!
+            
+            if title.isEmpty {
+                shouldAllowPublishing = false
+            }
+            
+            if description.isEmpty {
+                shouldAllowPublishing = false
+            }
+        }
+        
+        if shouldAllowPublishing {
+            publishButton.isEnabled = true
+            publishButton.tintColor = UIColor(red:0.000, green:0.512, blue:0.870, alpha:1.000)
+        } else {
+            publishButton.isEnabled = false
+            publishButton.tintColor = UIColor(red:0.936, green:0.941, blue:0.950, alpha:1.000)
+        }
+    }
     
-
+    func publishCurrentAd() {
+        let title = nameTextField.text!
+        let description = descriptionTextView.text!
+        let shortDescription = description
+        
+        let beginTime = Date()
+        let endTime = Date().addingTimeInterval(TimeInterval(exactly: 60 * 60 * 60)!)
+        
+        if let oldAd = advertisement {
+            
+            let adToUpdate = Ad(id: oldAd.id, name: title, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
+            
+            client.replaceAd(with: adToUpdate)
+            
+        } else {
+            
+            // handle ad creation
+            
+        }
+        
+        
+    }
     
     
 }
@@ -310,6 +369,10 @@ extension AdViewController {
     @objc func cancelEditingButtonPressed(_ button: UIButton) {
         cancelEditingAd()
     }
+    
+    @objc func publishButtonPressed(_ button: UIButton) {
+        publishCurrentAd()
+    }
 }
 
 
@@ -320,11 +383,14 @@ extension AdViewController: APIClientDelegate {
         set(advertisement: ad)
     }
     
-    func apiClient(_ client: APIClient, didUpdateAdWithID: String) {
-        
+    func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {
+        set(advertisement: updatedAd)
+        disableEditingMode(completion: nil)
+        delegate?.adViewController(self, didUpdateAd: updatedAd)
     }
     
-    func apiClient(_ client: APIClient, didDeleteAdWithID: String) {
+    func apiClient(_ client: APIClient, didDeleteAdWithId: String) {
+        delegate?.adViewController(self, didDeleteAd: advertisement!)
         dismiss(animated: true, completion: nil)
     }
     
@@ -349,6 +415,14 @@ extension AdViewController: NSLayoutManagerDelegate {
 
 
 extension AdViewController: UITextViewDelegate {
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        checkIfCanPublish()
+    }
+    
+    
+    
+    
     func textViewDidChange(_ textView: UITextView) {
         if textView === descriptionTextView {
             let waitTime = DispatchTime(uptimeNanoseconds: 100)
@@ -356,5 +430,7 @@ extension AdViewController: UITextViewDelegate {
                 self.adjustContentLayout()
             })
         }
+        
+        checkIfCanPublish()
     }
 }

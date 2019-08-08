@@ -229,8 +229,8 @@ protocol APIClientDelegate: class {
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad])
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad)
-    func apiClient(_ client: APIClient, didUpdateAdWithID: String)
-    func apiClient(_ client: APIClient, didDeleteAdWithID: String)
+    func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad)
+    func apiClient(_ client: APIClient, didDeleteAdWithId: String)
     
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest)
 }
@@ -240,8 +240,8 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {}
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {}
-    func apiClient(_ client: APIClient, didUpdateAdWithID: String) {}
-    func apiClient(_ client: APIClient, didDeleteAdWithID: String) {}
+    func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
+    func apiClient(_ client: APIClient, didDeleteAdWithId: String) {}
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {}
 }
 
@@ -368,26 +368,35 @@ extension APIClient {
     
     func replaceAd(with ad: Ad) {
         
-        // TODO: Check if description is filled!
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-//        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
-//        let updateForm = AdUpdateForm(id: ad.id, name: ad.name, description: ad.fullDescription!, shortDescription: ad.shortDescription, beginTime: formatter.string(from: Date()), endTime: formatter.string(from: Date(timeIntervalSinceNow: 3600 * 2)))
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+        let beginTime = formatter.string(from: ad.beginTime)
+        let endTime = formatter.string(from: ad.endTime)
         
-//        if let request = try? APIRequest(method: .put, path: "ad", body: updateForm) {
-//            self.perform(secureRequest: request) { (result) in
-//                switch result {
-//                case .success:
-//                    DispatchQueue.main.async {
-//                        self.delegate?.apiClient(self, didUpdateAd: ad)
-//                    }
-//                case .failure(let error):
-//                    DispatchQueue.main.async {
-//                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
-//                    }
-//                }
-//            }
-//        }
+        let updateForm = AdUpdateForm(id: ad.id, name: ad.name, description: ad.description!, shortDescription: ad.shortDescription, beginTime: beginTime, endTime: endTime)
+        
+        if let request = try? APIRequest(method: .put, path: "ad", body: updateForm) {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success(let response):
+                    guard let data = response.body else { throw APIError.decodingFailure }
+                    
+                    if let adDictionary = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                        let updatedAd = try self.decodeAd(from: adDictionary, fullDecode: true)
+                        
+                        DispatchQueue.main.async {
+                            self.delegate?.apiClient(self, didUpdateAd: updatedAd)
+                        }
+                    }
+                    
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+        
     }
     
     
@@ -406,7 +415,7 @@ extension APIClient {
                 }
                 
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didDeleteAdWithID: deletedAdID)
+                    self.delegate?.apiClient(self, didDeleteAdWithId: deletedAdID)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {

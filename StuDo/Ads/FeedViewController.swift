@@ -54,6 +54,12 @@ class FeedViewController: UIViewController {
 
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        if let selectedRow = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: selectedRow, animated: true)
+        }
+    }
+    
     @objc func refreshAds() {
         if GCIsUsingFakeData {
             feedItems = DataMockup().getPrototypeAds(count: 4)
@@ -86,10 +92,37 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedAd = feedItems[indexPath.row]
         let detailVC = AdViewController(with: selectedAd)
+        detailVC.delegate = self
         
-        tableView.deselectRow(at: indexPath, animated: false)
         self.present(detailVC, animated: true, completion: nil)
     }
+}
+
+
+
+extension FeedViewController: AdViewControllerDelegate {
+    func adViewController(_ adVC: AdViewController, didDeleteAd deletedAd: Ad) {
+        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
+        
+        for indexPath in selectedRowsIndexPath {
+            if feedItems[indexPath.row].id == deletedAd.id {
+                feedItems.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
+    }
+    
+    func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad) {
+        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
+        
+        for indexPath in selectedRowsIndexPath {
+            if feedItems[indexPath.row].id == updatedAd.id {
+                feedItems[indexPath.row] = updatedAd
+                tableView.reloadRows(at: [indexPath], with: .fade)
+            }
+        }
+    }
+    
 }
 
 

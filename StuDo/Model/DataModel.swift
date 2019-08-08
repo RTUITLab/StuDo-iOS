@@ -139,6 +139,25 @@ struct Ad {
     let user: User?
     let organization: Organization?
     
+    
+    // initializer for ad creation and update
+    init(id: String, name: String, description: String, shortDescription: String, beginTime: Date, endTime: Date) {
+        self.id = id
+        self.name = name
+        self.description = description
+        self.shortDescription = shortDescription
+        self.beginTime = beginTime
+        self.endTime = endTime
+        
+        self.userName = nil
+        self.organizationName = nil
+        self.user = nil
+        self.userId = nil
+        self.organizationId = nil
+        self.organization = nil
+    }
+    
+    // initializer for ads fetched from the server
     init(id: String, name: String, description: String?, shortDescription: String, beginTime: String, endTime: String, userName: String?, organizationName: String? = nil, user: User? = nil, organization: Organization? = nil, userId: String? = nil, organizationId: String? = nil) {
         self.id = id
         
