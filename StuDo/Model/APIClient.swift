@@ -229,6 +229,8 @@ protocol APIClientDelegate: class {
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad])
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad)
+    
+    func apiClient(_ client: APIClient, didCreateAd newAd: Ad)
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad)
     func apiClient(_ client: APIClient, didDeleteAdWithId: String)
     
@@ -240,6 +242,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {}
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {}
+    func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
     func apiClient(_ client: APIClient, didDeleteAdWithId: String) {}
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {}
@@ -367,6 +370,42 @@ extension APIClient {
         }
     }
     
+    
+    
+    
+    func create(ad: Ad) {
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+        let beginTime = formatter.string(from: ad.beginTime)
+        let endTime = formatter.string(from: ad.endTime)
+        
+        
+        let createForm = AdCreateForm(name: ad.name, description: ad.description!, shortDescription: ad.shortDescription, beginTime: beginTime, endTime: endTime)
+        
+        if let request = try? APIRequest(method: .post, path: "ad", body: createForm) {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success(let response):
+                    guard let data = response.body else { throw APIError.decodingFailure }
+                    
+                    if let adDictionary = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                        let newAd = try self.decodeAd(from: adDictionary, fullDecode: true)
+                        
+                        DispatchQueue.main.async {
+                            self.delegate?.apiClient(self, didCreateAd: newAd)
+                        }
+                    }
+                    
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+        
+    }
     
     
     

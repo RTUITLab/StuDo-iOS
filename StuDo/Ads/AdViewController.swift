@@ -10,8 +10,15 @@ import UIKit
 
 
 protocol AdViewControllerDelegate: class {
+    func adViewController(_ adVC: AdViewController, didCreateAd createdAd: Ad)
     func adViewController(_ adVC: AdViewController, didDeleteAd deletedAd: Ad)
     func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad)
+}
+
+extension AdViewControllerDelegate {
+    func adViewController(_ adVC: AdViewController, didCreateAd createdAd: Ad) {}
+    func adViewController(_ adVC: AdViewController, didDeleteAd deletedAd: Ad) {}
+    func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad) {}
 }
 
 
@@ -42,17 +49,7 @@ class AdViewController: CardViewController {
         case viewing
         case editing
     }
-    var currentMode: AdViewerMode = .viewing {
-        didSet {
-            if currentMode == .editing {
-                isFullscreen = true
-                title = "Editing"
-            } else {
-                isFullscreen = false
-                title = nil
-            }
-        }
-    }
+    var currentMode: AdViewerMode = .viewing
     
     var isViewerOwner: Bool {
         didSet {
@@ -190,13 +187,18 @@ class AdViewController: CardViewController {
         descriptionTextView.layoutManager.delegate = self
         descriptionTextView.delegate = self
         nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        
+        nameTextField.delegate = self
         
         nameTextField.font = .systemFont(ofSize: 20, weight: .medium)
         nameTextField.placeholder = "Name for your advertisement"
+        nameTextField.returnKeyType = .next
+        nameTextField.autocapitalizationType = .sentences
 
         descriptionTextView.isScrollEnabled = false
         descriptionTextView.font = .systemFont(ofSize: 18, weight: .light)
+        descriptionTextView.returnKeyType = .default
+        descriptionTextView.autocapitalizationType = .sentences
+        
 
     }
     
@@ -225,6 +227,8 @@ class AdViewController: CardViewController {
     
     func enableEditingMode() {
         currentMode = .editing
+        isFullscreen = true
+        title = "Editing"
         
         nameTextField.isUserInteractionEnabled = true
         descriptionTextView.isUserInteractionEnabled = true
@@ -243,6 +247,8 @@ class AdViewController: CardViewController {
     
     func disableEditingMode(completion: (() -> ())? ) {
         currentMode = .viewing
+        isFullscreen = false
+        title = nil
         
         nameTextField.resignFirstResponder()
         descriptionTextView.resignFirstResponder()
@@ -352,9 +358,9 @@ class AdViewController: CardViewController {
             client.replaceAd(with: adToUpdate)
             
         } else {
+            let newAd = Ad(id: nil, name: title, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
             
-            // handle ad creation
-            
+            client.create(ad: newAd)
         }
         
         
@@ -408,6 +414,12 @@ extension AdViewController: APIClientDelegate {
         set(advertisement: ad)
     }
     
+    func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {
+        set(advertisement: newAd)
+        disableEditingMode(completion: nil)
+        delegate?.adViewController(self, didCreateAd: newAd)
+    }
+    
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {
         set(advertisement: updatedAd)
         disableEditingMode(completion: nil)
@@ -439,13 +451,18 @@ extension AdViewController: NSLayoutManagerDelegate {
 
 
 
-extension AdViewController: UITextViewDelegate {
+extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         checkIfCanPublish()
     }
     
-    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField === nameTextField {
+            descriptionTextView.becomeFirstResponder()
+        }
+        return false
+    }
     
     
     func textViewDidChange(_ textView: UITextView) {

@@ -123,7 +123,7 @@ struct Organization {
 
 
 struct Ad {
-    let id: String
+    let id: String!
     let name: String
     let description: String?
     let shortDescription: String
@@ -141,7 +141,7 @@ struct Ad {
     
     
     // initializer for ad creation and update
-    init(id: String, name: String, description: String, shortDescription: String, beginTime: Date, endTime: Date) {
+    init(id: String?, name: String, description: String, shortDescription: String, beginTime: Date, endTime: Date) {
         self.id = id
         self.name = name
         self.description = description
@@ -189,6 +189,15 @@ struct AdUpdateForm: Codable {
     let shortDescription: String
     let beginTime: String
     let endTime: String
+}
+
+struct AdCreateForm: Codable {
+    let name: String
+    let description: String
+    let shortDescription: String
+    let beginTime: String
+    let endTime: String
+    let organizationId: String? = nil
 }
 
 

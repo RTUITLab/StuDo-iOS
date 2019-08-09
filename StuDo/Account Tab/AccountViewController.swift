@@ -79,9 +79,9 @@ class AccountViewController: UIViewController {
     func presentAdViewer(for ad: Ad?) {
         let detailVC = AdViewController(with: ad)
         detailVC.delegate = self
-//        if ad == nil {
-//            detailVC.currentMode = .editing
-//        }
+        if ad == nil {
+            detailVC.currentMode = .editing
+        }
         
         self.present(detailVC, animated: true, completion: nil)
         shouldRefreshOnAppear = false
@@ -142,17 +142,16 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             
             header.sectionTitle = sectionInfo.rawValue
             
-            let title: String = "Add New"
             if sectionInfo == .myProfiles {
                 
                 header.actionButton.addTarget(self, action: #selector(newProfileButtonTapped(_:)), for: .touchUpInside)
+                header.actionButton.setTitle("New Profile", for: .normal)
 
             } else if sectionInfo == .myAds {
                 
                 header.actionButton.addTarget(self, action: #selector(newAdButtonTapped(_:)), for: .touchUpInside)
+                header.actionButton.setTitle("New Ad", for: .normal)
             }
-            
-            header.actionButton.setTitle(title, for: .normal)
             
             return header
         }
@@ -275,6 +274,13 @@ extension AccountViewController: AdViewControllerDelegate {
                 tableView.reloadRows(at: [indexPath], with: .fade)
             }
         }
+    }
+    
+    func adViewController(_ adVC: AdViewController, didCreateAd createdAd: Ad) {
+        ownAds.insert(createdAd, at: 0)
+        let myAdsSectionNumber = 2 // Change it later to more understandable constant
+        let indexPath = IndexPath(row: 0, section: myAdsSectionNumber)
+        tableView.insertRows(at: [indexPath], with: .top)
     }
     
 }
