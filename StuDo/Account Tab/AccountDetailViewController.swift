@@ -35,15 +35,11 @@ class AccountDetailViewController: UITableViewController {
     var editedLastName: String?
     var editedStudentID: String?
     
+    var nameTextField: UITextField!
+    var surnameTextField: UITextField!
+    var studentIdTextField: UITextField!
+    
     private var sections: [SectionName] = [.nameAndSurname, .studentId, .credentials, .logout]
-    
-    init() {
-        super.init(style: .grouped)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     var doneButton: UIBarButtonItem!
     
@@ -130,6 +126,16 @@ class AccountDetailViewController: UITableViewController {
             cell.surnameField.tag = TagsForTextField.surname.rawValue
             cell.nameField.addTarget(self, action: #selector(valueChanged(in:)), for: .editingChanged)
             cell.surnameField.addTarget(self, action: #selector(valueChanged(in:)), for: .editingChanged)
+            
+            cell.nameField.delegate = self
+            cell.nameField.returnKeyType = .next
+            cell.nameField.autocorrectionType = .no
+            nameTextField = cell.nameField
+            
+            cell.surnameField.delegate = self
+            cell.surnameField.returnKeyType = .next
+            cell.surnameField.autocorrectionType = .no
+            surnameTextField = cell.surnameField
 
             return cell
         } else if sectionInfo == .studentId {
@@ -138,6 +144,12 @@ class AccountDetailViewController: UITableViewController {
             
             cell.inputField.tag = TagsForTextField.studentID.rawValue
             cell.inputField.addTarget(self, action: #selector(valueChanged(in:)), for: .editingChanged)
+            
+            cell.inputField.clearButtonMode = .whileEditing
+            cell.inputField.delegate = self
+            cell.inputField.keyboardType = .numberPad
+            cell.inputField.returnKeyType = .done
+            studentIdTextField = cell.inputField
 
             return cell
         }
@@ -179,6 +191,14 @@ class AccountDetailViewController: UITableViewController {
                     appDelegate.presentInitialController(shouldAnimate: true)
                 }
             }
+        } else if sectionInfo == .credentials {
+            if indexPath.row == 0 {
+                let emailVC = EmailTableViewController(style: .grouped)
+                navigationController?.pushViewController(emailVC, animated: true)
+            } else if indexPath.row == 1 {
+                let passwordVC = PasswordTableViewController(style: .grouped)
+                navigationController?.pushViewController(passwordVC, animated: true)
+            }
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -195,4 +215,21 @@ class AccountDetailViewController: UITableViewController {
         }
     }
 
+}
+
+
+
+
+extension AccountDetailViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.tag == TagsForTextField.name.rawValue {
+            surnameTextField.becomeFirstResponder()
+        } else if textField.tag == TagsForTextField.surname.rawValue {
+            studentIdTextField.becomeFirstResponder()
+        } else if textField.tag == TagsForTextField.studentID.rawValue {
+            textField.resignFirstResponder()
+        }
+        
+        return false
+    }
 }

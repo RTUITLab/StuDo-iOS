@@ -85,10 +85,10 @@ class CurrentUserTableViewCell: UITableViewCell {
             surnameField.topAnchor.constraint(equalTo: separator.bottomAnchor, constant: distanceFromSeparator).isActive = true
             
             
+            nameField.clearButtonMode = .whileEditing
+            surnameField.clearButtonMode = .whileEditing
             
             nameField.placeholder = "First name"
-            nameField.becomeFirstResponder()
-            
             surnameField.placeholder = "Last name"
             
         }

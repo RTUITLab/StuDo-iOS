@@ -519,15 +519,11 @@ class AuthorizationViewController: UIViewController {
     
     
     fileprivate func isEmailValid(email: String) -> Bool {
-        guard !email.isEmpty else { return false }
-        
-        let range = NSRange(location: 0, length: email.utf16.count)
-        let regex = try! NSRegularExpression(pattern: #".+@.+\..{2,}"#)
-        if regex.firstMatch(in: email, options: [], range: range) == nil {
-            return false
-        }
-        
-        return true
+        return DataChecker.shared.isEmailValid(email)
+    }
+    
+    fileprivate func isPasswordValid(password: String) -> Bool {
+        return DataChecker.shared.isPasswordValid(password)
     }
     
     
@@ -541,7 +537,7 @@ class AuthorizationViewController: UIViewController {
             shouldProceed = false
         }
         
-        if password.isEmpty || password.count < 6 {
+        if !isPasswordValid(password: password) {
             shouldProceed = false
         }
         

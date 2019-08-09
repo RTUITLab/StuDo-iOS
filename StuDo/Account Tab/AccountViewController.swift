@@ -222,7 +222,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         let sectionInfo = sections[indexPath.section]
         
         if sectionInfo == .myAccount {
-            let detailVC = AccountDetailViewController()
+            let detailVC = AccountDetailViewController(style: .grouped)
             detailVC.hidesBottomBarWhenPushed = true
             detailVC.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(detailVC, animated: true)

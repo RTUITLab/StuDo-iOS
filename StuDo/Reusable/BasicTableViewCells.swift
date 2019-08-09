@@ -28,7 +28,7 @@ class TableViewCellWithInputField: UITableViewCell {
         
         contentView.addSubview(inputField)
         inputField.translatesAutoresizingMaskIntoConstraints = false
-        inputField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
+        inputField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         inputField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
         inputField.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 0).isActive = true
         inputField.heightAnchor.constraint(equalToConstant: 40).isActive = true

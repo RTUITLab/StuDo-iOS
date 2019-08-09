@@ -235,6 +235,7 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didDeleteAdWithId: String)
     
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest)
+    func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest)
 }
 
 extension APIClientDelegate {
@@ -246,6 +247,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
     func apiClient(_ client: APIClient, didDeleteAdWithId: String) {}
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {}
+    func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest) {}
 }
 
 
@@ -480,7 +482,7 @@ extension APIClient {
         if let request = try? APIRequest(method: .post, path: "user/password/reset", body: bodyDictionary) {
             self.perform(request) { [self] (result) in
                 switch result {
-                case .success(let response):
+                case .success:
                     DispatchQueue.main.async {
                         self.delegate?.apiClient(self, didSentPasswordResetRequest: request)
                     }
@@ -491,6 +493,33 @@ extension APIClient {
                 }
             }
         }
+    }
+    
+    
+    func changePassword(from currentPassword: String, to newPassword: String) {
+        let currentUser = PersistentStore.shared.user!
+        let credentialsDictionary = [
+            "Email": currentUser.email,
+            "OldPassword": currentPassword,
+            "NewPassword": newPassword
+        ]
+        
+        if let request = try? APIRequest(method: .post, path: "user/password/change", body: credentialsDictionary) {
+            self.perform(secureRequest: request) { [self] (result) in
+                switch result {
+                case .success:
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didChangePasswordWithRequest: request)
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+        
+        
     }
     
     
