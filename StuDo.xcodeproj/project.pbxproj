@@ -17,6 +17,7 @@
 		494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C64AA22C253AC0039740B /* AccountDetailViewController.swift */; };
 		49544FA522FB22240019A544 /* FadeAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */; };
 		495B27AF22C0145600AADD19 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */; };
+		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
 		49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77922D7397400C2661E /* AdTableViewCell.swift */; };
 		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
 		49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */; };
@@ -71,6 +72,7 @@
 		494C64AA22C253AC0039740B /* AccountDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailViewController.swift; sourceTree = "<group>"; };
 		49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
+		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		49A8F77922D7397400C2661E /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
 		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
 		49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				49D01F6D22F48388009A1D49 /* Model */,
 				49A216F822F60656009AD846 /* Reusable */,
 				493E8ACB228B4354004EC563 /* AppDelegate.swift */,
+				49A543C722FF06AB00A466EF /* RootViewController.swift */,
 				49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */,
 				49B1B37E228DD59600CA9EC7 /* ProfilesViewController.swift */,
 				49E2DB1522FDB4E20015DCD8 /* DataChecker.swift */,
@@ -365,6 +368,7 @@
 				494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */,
 				49BCE24A22F0AC1600C64C44 /* CardViewController.swift in Sources */,
 				49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */,
+				49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */,
 				49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */,
 				49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */,
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,

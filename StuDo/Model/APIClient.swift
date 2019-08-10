@@ -497,20 +497,25 @@ extension APIClient {
     
     func create(profile: Profile) {
         
-        if let request = try? APIRequest(method: .post, path: "user/resume", body: profile) {
+        let profileDictionary = [
+            "Name": profile.name,
+            "Description": profile.description
+        ]
+        
+        if let request = try? APIRequest(method: .post, path: "user/resume", body: profileDictionary) {
             self.perform(secureRequest: request) { (result) in
                 switch result {
                 case .success(let response):
                     guard let data = response.body else { throw APIError.decodingFailure }
-                    
+
                     // get the profile back here
-                    
+
                     let newProfile = Profile(name: profile.name, description: profile.description)
-                    
+
                     DispatchQueue.main.async {
                         self.delegate?.apiClient(self, didCreateProfile: newProfile)
                     }
-                    
+
                 case .failure(let error):
                     DispatchQueue.main.async {
                         self.delegate?.apiClient(self, didFailRequest: request, withError: error)

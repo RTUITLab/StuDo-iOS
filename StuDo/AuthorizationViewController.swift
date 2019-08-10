@@ -120,7 +120,7 @@ class AuthorizationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        gradientLayer.colors = [UIColor.red.cgColor, UIColor.green.cgColor]
+        gradientLayer.colors = colorSets[currentSet]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         gradientLayer.frame = view.bounds
@@ -130,8 +130,11 @@ class AuthorizationViewController: UIViewController {
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (_) in
             self.animateGradient()
         }
-        animateGradient()
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.animateGradient()
+        }
+    
         
         
         let logoSize: CGFloat = 180
@@ -784,11 +787,7 @@ extension AuthorizationViewController: APIClientDelegate {
         
         animateLoadingIndicator(shouldAppear: false)
         
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            dismiss(animated: true) {
-                appDelegate.presentInitialController(shouldAnimate: true)
-            }
-        }
+        RootViewController.main.login()
     }
     
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {

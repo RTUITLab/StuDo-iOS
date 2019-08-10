@@ -180,17 +180,7 @@ class AccountDetailViewController: UITableViewController {
         let sectionInfo = sections[indexPath.section]
         
         if sectionInfo == .logout {
-            PersistentStore.shared.user = nil
-            
-            if !GCIsUsingFakeData {
-                PersistentStore.save()
-            }
-            
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                dismiss(animated: true) {
-                    appDelegate.presentInitialController(shouldAnimate: true)
-                }
-            }
+            RootViewController.main.logout()
         } else if sectionInfo == .credentials {
             if indexPath.row == 0 {
                 let emailVC = EmailTableViewController(style: .grouped)
