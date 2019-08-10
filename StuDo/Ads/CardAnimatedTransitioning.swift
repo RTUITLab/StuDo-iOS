@@ -30,6 +30,11 @@ class CardAnimatedTransitioning: NSObject, UIViewControllerAnimatedTransitioning
         let cardView = isPresenting ? toView : fromView
         let cardVC = isPresenting ? toVC as! CardViewController : fromVC as! CardViewController
         
+        if isPresenting && cardVC.shouldAppearFullScreen == true {
+            cardVC.containerView.contentInset = .zero
+            cardVC.containerView.contentOffset = .zero
+        }
+        
         container.addSubview(toView)
         if isPresenting {
             if let snapshot = initialView.snapshotView(afterScreenUpdates: true) {

@@ -234,6 +234,10 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad)
     func apiClient(_ client: APIClient, didDeleteAdWithId: String)
     
+    func apiClient(_ client: APIClient, didCreateProfile newProfile: Profile)
+    func apiClient(_ client: APIClient, didUpdateProfile updatedProfile: Profile)
+    func apiClient(_ client: APIClient, didProfileAdWithId: String)
+    
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest)
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest)
 }
@@ -246,6 +250,9 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
     func apiClient(_ client: APIClient, didDeleteAdWithId: String) {}
+    func apiClient(_ client: APIClient, didCreateProfile newProfile: Profile) {}
+    func apiClient(_ client: APIClient, didUpdateProfile updatedProfile: Profile) {}
+    func apiClient(_ client: APIClient, didProfileAdWithId: String) {}
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest) {}
 }
@@ -260,6 +267,11 @@ extension APIClientDelegate {
 
 
 extension APIClient {
+    
+    
+    // ==========================
+    // Authorization requests
+    // ==========================
     
     func register(user: User) {
         if let request = try? APIRequest(method: .post, path: "auth/register", body: user.registerDictionaryFormat) {
@@ -312,6 +324,13 @@ extension APIClient {
     }
     
     
+    
+    
+    
+    
+    // ==========================
+    // Ad-related requests
+    // ==========================
     
     
     
@@ -447,11 +466,6 @@ extension APIClient {
     }
     
     
-    
-    
-    
-    
-    
     func deleteAd(withId id: String) {
         let request = APIRequest(method: .delete, path: "ad/\(id)")
         self.perform(secureRequest: request) { (result) in
@@ -474,6 +488,51 @@ extension APIClient {
     
     
     
+    
+    
+    // ==========================
+    // Profile-related requests
+    // ==========================
+    
+    
+    func create(profile: Profile) {
+        
+        if let request = try? APIRequest(method: .post, path: "user/resume", body: profile) {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success(let response):
+                    guard let data = response.body else { throw APIError.decodingFailure }
+                    
+                    // get the profile back here
+                    
+                    let newProfile = Profile(name: profile.name, description: profile.description)
+                    
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didCreateProfile: newProfile)
+                    }
+                    
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // ==========================
+    // User-related requests
+    // ==========================
     
     
     

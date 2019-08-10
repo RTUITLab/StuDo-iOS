@@ -20,7 +20,7 @@ struct PrivateAccountInfo {
     var ads: [Advertisement]?
 }
 
-struct Profile {
+struct ProfileMock {
     var associatedAccount: PublicAccountInfo? = nil
     let briefDescription: String
     let description: String
@@ -56,19 +56,6 @@ struct DataMockup {
             )
         }
         return ads
-    }
-    
-    func getPrototypePeople(count: Int) -> [Profile] {
-        var people = [Profile]()
-        for _ in 0..<count {
-            let briefDescription = profileDescriptionMockup[Int.random(in: 0..<profileDescriptionMockup.count)]
-            let description = descriptionMockup[Int.random(in: 0..<descriptionMockup.count)]
-
-            people.append(
-                Profile(associatedAccount: nil, briefDescription: briefDescription, description: description)
-            )
-        }
-        return people
     }
     
     var nameMockup = ["Igor", "Diana", "Misha", "Danil", "Ivan", "Alisa", "Anna"]

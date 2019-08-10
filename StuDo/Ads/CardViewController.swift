@@ -14,6 +14,7 @@ class CardViewController: UIViewController {
     
     private var defaultContainerInsets: UIEdgeInsets!
     
+    var shouldAppearFullScreen = false
     var isFullscreen = false {
         didSet {
             switch isFullscreen {
@@ -124,7 +125,6 @@ class CardViewController: UIViewController {
         
         horizontalHandle.layer.cornerRadius = handleHeight / 2
         horizontalHandle.backgroundColor = .black
-        
         
         
         headerView.addSubview(headerSeparator)

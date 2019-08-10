@@ -33,8 +33,6 @@ class ProfilesViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        people = DataMockup().getPrototypePeople(count: 33)
         
         tableView = UITableView(frame: view.frame, style: .plain)
         view.addSubview(tableView)
@@ -80,9 +78,7 @@ extension ProfilesViewController: UITableViewDataSource, UITableViewDelegate {
         } else {
             profile = people[indexPath.row]
         }
-        
-        cell.textLabel?.text = profile.briefDescription
-        
+                
         return cell
     }
     

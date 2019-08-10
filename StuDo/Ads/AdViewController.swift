@@ -59,6 +59,7 @@ class AdViewController: CardViewController {
         }
     }
     
+    private var shouldDisappearOnEditingCancellation = false
     
     // MARK: Visible properties
     
@@ -271,6 +272,9 @@ class AdViewController: CardViewController {
             let waitTime = DispatchTime(uptimeNanoseconds: 100)
             DispatchQueue.main.asyncAfter(deadline: waitTime, execute: {
                 self.adjustContentLayout()
+                if self.shouldDisappearOnEditingCancellation {
+                    self.dismiss(animated: true, completion: nil)
+                }
             })
         }
     }
@@ -287,9 +291,27 @@ class AdViewController: CardViewController {
         
         contentView.endEditing(true)
         
-        let shouldProceedAlert = UIAlertController(title: "Are you sure you want to cancel editing this ad? Unsaved changes will be discarded", message: nil, preferredStyle: .alert)
+        // If the ad is being created and no progress is made, dismiss the controller
         
-        let deleteAction = UIAlertAction(title: "Discard Changes", style: .destructive, handler: { _ in cancelEditing() } )
+        var alertMessage = "Are you sure you want to cancel editing this ad? Unsaved changes will be discarded."
+        var deleteActionMessage = "Discard Changes"
+        if advertisement == nil {
+            alertMessage = "Are you sure you don't want to finish creating the ad?"
+            deleteActionMessage = "Close Editor"
+            if nameTextField.text!.isEmpty && descriptionTextView.text!.isEmpty {
+                dismiss(animated: true, completion: nil)
+            }
+        }
+        
+        
+        let shouldProceedAlert = UIAlertController(title: alertMessage, message: nil, preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: deleteActionMessage, style: .destructive, handler: { _ in
+            if self.advertisement == nil {
+                self.shouldDisappearOnEditingCancellation = true
+            }
+            cancelEditing()
+        } )
         let cancelAction = UIAlertAction(title: "Return to Editor", style: .cancel, handler: nil)
         
         shouldProceedAlert.addAction(deleteAction)

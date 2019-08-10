@@ -203,6 +203,41 @@ struct AdCreateForm: Codable {
 
 
 
+
+struct Profile: Decodable {
+//    let id: String?
+    let name: String
+    let description: String
+    
+//    enum CodingKeys: String, CodingKey {
+////        case id
+//        case name
+//        case description
+//    }
+}
+
+extension Profile: Encodable {
+    
+//    init(name: String, description: String) {
+//        self.id = nil
+//        self.name = name
+//        self.description = description
+//    }
+    
+//    func encode(to encoder: Encoder) throws {
+//        var container = encoder.container(keyedBy: CodingKeys.self)
+////        if let id = id {
+////            try container.encode(id, forKey: .id)
+////        }
+//
+//        try container.encode(name, forKey: .name)
+//        try container.encode(description, forKey: .description)
+//    }
+}
+
+
+
+
 // MARK:- Decoding
 extension APIClient {
     func decode(userDictionary dictionary: [String: Any]) throws -> User {

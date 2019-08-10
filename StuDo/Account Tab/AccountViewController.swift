@@ -21,6 +21,11 @@ fileprivate enum SectionName: String {
     case logOut = "Log out"
 }
 
+fileprivate enum CellButtonTag: Int {
+    case newProfile = 1
+    case newAd = 2
+}
+
 class AccountViewController: UIViewController {
     
     var tableView: UITableView!
@@ -38,6 +43,8 @@ class AccountViewController: UIViewController {
         super.viewDidLoad()
         
         client.delegate = self
+        
+        view.backgroundColor = .white
         
         
         tableView = UITableView(frame: view.frame, style: .grouped)
@@ -68,12 +75,36 @@ class AccountViewController: UIViewController {
         }
     }
     
-    @objc func newProfileButtonTapped(_ button: UIButton) {
-        
+    @objc func cellButtonTapped(_ button: UIButton) {
+        if button.tag == CellButtonTag.newProfile.rawValue {
+            createNewProfile()
+        } else if button.tag == CellButtonTag.newAd.rawValue {
+            presentAdViewer(for: nil)
+        }
     }
     
-    @objc func newAdButtonTapped(_ button: UIButton) {
-        presentAdViewer(for: nil)
+    func createNewProfile() {
+        let alert = UIAlertController(title: "New Profile", message: nil, preferredStyle: .alert)
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "Name"
+        }
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "Description"
+        }
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            let name = alert!.textFields!.first!.text!
+            let description = alert!.textFields!.last!.text!
+            self.client.create(profile: Profile(name: name, description: description))
+            print("Name: \(name)")
+            print("Description: \(description)")
+        }))
+        
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     func presentAdViewer(for ad: Ad?) {
@@ -81,6 +112,7 @@ class AccountViewController: UIViewController {
         detailVC.delegate = self
         if ad == nil {
             detailVC.currentMode = .editing
+            detailVC.shouldAppearFullScreen = true
         }
         
         self.present(detailVC, animated: true, completion: nil)
@@ -93,7 +125,6 @@ class AccountViewController: UIViewController {
         if GCIsUsingFakeData {
             let mockup = DataMockup()
             ownAds = mockup.getPrototypeAds(count: 1, withUserId: "fakeUserID")
-            ownProfiles = mockup.getPrototypePeople(count: 2)
         } else {
             if tableView != nil {
                 client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
@@ -143,16 +174,15 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             header.sectionTitle = sectionInfo.rawValue
             
             if sectionInfo == .myProfiles {
-                
-                header.actionButton.addTarget(self, action: #selector(newProfileButtonTapped(_:)), for: .touchUpInside)
                 header.actionButton.setTitle("New Profile", for: .normal)
-
+                header.actionButton.tag = CellButtonTag.newProfile.rawValue
             } else if sectionInfo == .myAds {
-                
-                header.actionButton.addTarget(self, action: #selector(newAdButtonTapped(_:)), for: .touchUpInside)
                 header.actionButton.setTitle("New Ad", for: .normal)
+                header.actionButton.tag = CellButtonTag.newAd.rawValue
             }
             
+            header.actionButton.addTarget(self, action: #selector(cellButtonTapped(_:)), for: .touchUpInside)
+
             return header
         }
         
@@ -198,7 +228,6 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         } else if sectionInfo == .myProfiles {
             let cell = tableView.dequeueReusableCell(withIdentifier: profileCellID, for: indexPath)
-            cell.textLabel?.text = ownProfiles[indexPath.row].briefDescription
             return cell
         } else if sectionInfo == .myAds {
             let cell = tableView.dequeueReusableCell(withIdentifier: adCellID, for: indexPath) as! AdTableViewCell
