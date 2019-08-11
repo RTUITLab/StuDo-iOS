@@ -102,8 +102,9 @@ class RootViewController: UIViewController {
     
     
     func logout() {
-        PersistentStore.shared.user = nil
         
+        try? APIClient.deleteTokenFromKeychain()
+        PersistentStore.shared.user = nil
         if !GCIsUsingFakeData {
             PersistentStore.save()
         }

@@ -107,39 +107,47 @@ class APIClient {
     
     private let session = URLSession.shared
     private let baseURL = URL(string: "https://dev.studo.rtuitlab.ru/api/")!
-//    private let baseURL = URL(string: "http://65706bbf.ngrok.io/api/")!
+//    private let baseURL = URL(string: "https://e2f1478c.ngrok.io/api/")!
 
     
     weak var delegate: APIClientDelegate?
     
-    private let keychainTokenLabel: String = "tokenAccessData"
-    private var accessToken: String? = nil {
-        didSet {
-            do {
-                try saveAccessTokenToKeychain()
-            } catch {
-                
-            }
-        }
-    }
-    private func saveAccessTokenToKeychain() throws {
-        guard let tokenData = accessToken?.data(using: .utf8) else { return }
+    
+    
+    
+    
+    static private let keychainTokenLabel: String = "ru.rtuitlab.studo.tokenAccessData"
+    static private var accessToken: String?
+    static private var isInitialCall = true
+    
+    static private func searchTokenInKeychain(item: inout CFTypeRef?) throws {
         let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-                                    kSecAttrLabel as String: keychainTokenLabel,
-                                    kSecValueData as String: tokenData]
-        let status = SecItemAdd(query as CFDictionary, nil)
-        guard status == errSecSuccess else { throw KeychainError.unhandledError(status: status) }
-    }
-    private func restoreAccessTokenFromKeychain() throws -> String {
-        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-                                    kSecAttrLabel as String: keychainTokenLabel,
+                                    kSecAttrLabel as String: APIClient.keychainTokenLabel,
                                     kSecMatchLimit as String: kSecMatchLimitOne,
                                     kSecReturnAttributes as String: true,
                                     kSecReturnData as String: true]
-        var item: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &item)
         guard status != errSecItemNotFound else { throw KeychainError.noPassword }
         guard status == errSecSuccess else { throw KeychainError.unhandledError(status: status) }
+    }
+    
+    static private func saveAccessTokenToKeychain(accessToken: String) throws {
+        guard let tokenData = accessToken.data(using: .utf8) else { return }
+        
+        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+                                    kSecAttrLabel as String: keychainTokenLabel,
+                                    kSecValueData as String: tokenData]
+        
+        let status = SecItemAdd(query as CFDictionary, nil)
+        guard status == errSecSuccess else { throw KeychainError.unhandledError(status: status) }
+        APIClient.accessToken = accessToken
+        
+    }
+
+    static private func restoreAccessTokenFromKeychain() throws {
+        
+        var item: CFTypeRef?
+        try searchTokenInKeychain(item: &item)
         
         guard let existingItem = item as? [String : Any],
             let tokenData = existingItem[kSecValueData as String] as? Data,
@@ -147,16 +155,43 @@ class APIClient {
             else {
                 throw KeychainError.unexpectedPasswordData
         }
-        return token
+        
+        APIClient.accessToken = token
     }
     
+    
+    static func deleteTokenFromKeychain() throws {
+        var item: CFTypeRef?
+        try searchTokenInKeychain(item: &item)
+        
+        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+                                    kSecAttrLabel as String: APIClient.keychainTokenLabel]
+        var status = SecItemCopyMatching(query as CFDictionary, &item)
+        guard status != errSecItemNotFound else { throw KeychainError.noPassword }
+        guard status == errSecSuccess else { throw KeychainError.unhandledError(status: status) }
+        
+        status = SecItemDelete(query as CFDictionary)
+        guard status == errSecSuccess || status == errSecItemNotFound else { throw KeychainError.unhandledError(status: status) }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     init() {
-        if let accessToken = try? restoreAccessTokenFromKeychain() {
-            self.accessToken = accessToken
-        } else {
-            accessToken = nil
+        if APIClient.isInitialCall {
+            APIClient.isInitialCall = false
+            try? APIClient.restoreAccessTokenFromKeychain()
         }
     }
+    
+    
+    
+    
+    
     
     private func perform(_ request: APIRequest, _ completion: @escaping APIClientCompletion) {
         var urlComponents = URLComponents()
@@ -200,7 +235,7 @@ class APIClient {
     }
     
     private func perform(secureRequest request: APIRequest, _ completion: @escaping APIClientCompletion) {
-        guard let token = self.accessToken else { return }
+        guard let token = APIClient.accessToken else { return }
         
         let tokenHeader = HTTPHeader(field: "Authorization", value: "Bearer " + token)
         
@@ -308,7 +343,7 @@ extension APIClient {
                             throw APIError.decodingFailure
                         }
                         
-                        self.accessToken = accessToken
+                        try? APIClient.saveAccessTokenToKeychain(accessToken: accessToken)
                         let user = try self.decode(userDictionary: userDictionary)
                         DispatchQueue.main.async {
                             self.delegate?.apiClient(self, didFinishLoginRequest: request, andRecievedUser: user)
