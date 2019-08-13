@@ -16,7 +16,6 @@ fileprivate let accountHeaderID = "accountHeaderID"
 
 fileprivate enum SectionName: String {
     case myAccount
-    case myAds = "My ads"
     case myProfiles = "My profiles"
     case logOut = "Log out"
 }
@@ -32,12 +31,9 @@ class AccountViewController: UIViewController {
     
     var client = APIClient()
     
-    var ownAds = [Ad]()
     var ownProfiles = [Profile]()
     
-    var shouldRefreshOnAppear: Bool = true
-    
-    private var sections: [SectionName] = [.myAccount, .myProfiles, .myAds]
+    private var sections: [SectionName] = [.myAccount, .myProfiles]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,33 +49,48 @@ class AccountViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(CurrentUserTableViewCell.self, forCellReuseIdentifier: accountInfoCellID)
-        tableView.register(AdTableViewCell.self, forCellReuseIdentifier: adCellID)
         tableView.register(TableViewCellWithSubtitle.self, forCellReuseIdentifier: profileCellID)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: reusableCellID)
 
         tableView.register(AccountHeaderView.self, forHeaderFooterViewReuseIdentifier: accountHeaderID)
         
-        navigationItem.title = "My Account"
-        navigationItem.largeTitleDisplayMode = .automatic
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.title = "Account"
+        navigationItem.largeTitleDisplayMode = .never
+        
+        let currentUserId = PersistentStore.shared.user!.id!
+        client.getProfiles(forUserWithId: currentUserId)
         
     }
     
     
+    private var isShowingTabBar = false
+    
     override func viewWillAppear(_ animated: Bool) {
-        if shouldRefreshOnAppear {
-            refreshInfo()
-        } else if let selectedRow = tableView.indexPathForSelectedRow {
+        if let selectedRow = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: selectedRow, animated: true)
-            shouldRefreshOnAppear = true
+        }
+        if let tabBarController = tabBarController, tabBarController.isTabBarHidden() {
+            tabBarController.showTabBar()
+            isShowingTabBar = true
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if isShowingTabBar {
+            isShowingTabBar = false
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if isShowingTabBar {
+            isShowingTabBar = false
+            tabBarController?.hideTabBar()
         }
     }
     
     @objc func cellButtonTapped(_ button: UIButton) {
         if button.tag == CellButtonTag.newProfile.rawValue {
             presentProfileEditor(for: nil)
-        } else if button.tag == CellButtonTag.newAd.rawValue {
-            presentAdViewer(for: nil)
         }
     }
     
@@ -88,32 +99,17 @@ class AccountViewController: UIViewController {
         navigationController?.pushViewController(profileVC, animated: true)
     }
     
-    func presentAdViewer(for ad: Ad?) {
-        let detailVC = AdViewController(with: ad)
-        detailVC.delegate = self
-        if ad == nil {
-            detailVC.currentMode = .editing
-            detailVC.shouldAppearFullScreen = true
-        }
-        
-        self.present(detailVC, animated: true, completion: nil)
-        shouldRefreshOnAppear = false
-    }
-    
-    
-    
-    func refreshInfo() {
-        if GCIsUsingFakeData {
-            let mockup = DataMockup()
-            ownAds = mockup.getPrototypeAds(count: 1, withUserId: "fakeUserID")
-        } else {
-            if tableView != nil {
-                let currentUserId = PersistentStore.shared.user!.id!
-                client.getAds(forUserWithId: currentUserId)
-                client.getProfiles(forUserWithId: currentUserId)
-            }
-        }
-    }
+//    func presentAdViewer(for ad: Ad?) {
+//        let detailVC = AdViewController(with: ad)
+//        detailVC.delegate = self
+//        if ad == nil {
+//            detailVC.currentMode = .editing
+//            detailVC.shouldAppearFullScreen = true
+//        }
+//
+//        self.present(detailVC, animated: true, completion: nil)
+//        shouldRefreshOnAppear = false
+//    }
 
 }
 
@@ -145,11 +141,6 @@ extension AccountViewController: APIClientDelegate {
         
     }
     
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {
-        ownAds = ads
-        tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
-    }
-    
 }
 
 
@@ -179,10 +170,10 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let sectionInfo = sections[indexPath.section]
         
-        if sectionInfo == .myAds {
-            return 100
-        } else if sectionInfo == .myAccount{
+        if sectionInfo == .myAccount{
             return UITableView.automaticDimension
+        } else if sectionInfo == .myProfiles {
+            return 58
         } else {
             return 46
         }
@@ -191,7 +182,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionInfo = sections[section]
         
-        if sectionInfo == .myProfiles || sectionInfo == .myAds {
+        if sectionInfo == .myProfiles {
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: accountHeaderID) as! AccountHeaderView
             
             header.sectionTitle = sectionInfo.rawValue
@@ -199,9 +190,6 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             if sectionInfo == .myProfiles {
                 header.actionButton.setTitle("New Profile", for: .normal)
                 header.actionButton.tag = CellButtonTag.newProfile.rawValue
-            } else if sectionInfo == .myAds {
-                header.actionButton.setTitle("New Ad", for: .normal)
-                header.actionButton.tag = CellButtonTag.newAd.rawValue
             }
             
             header.actionButton.addTarget(self, action: #selector(cellButtonTapped(_:)), for: .touchUpInside)
@@ -213,12 +201,6 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let sectionInfo = sections[section]
-        
-        if sectionInfo == .myAds || sectionInfo == .myProfiles {
-            return 60
-        }
-        
         return 44
     }
     
@@ -231,8 +213,6 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         
         if sectionInfo == .myProfiles {
             return ownProfiles.count
-        } else if sectionInfo == .myAds {
-            return ownAds.count
         }
         
         return 1
@@ -255,12 +235,6 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             cell.textLabel?.text = profile.name
             cell.detailTextLabel?.text = profile.description
             return cell
-        } else if sectionInfo == .myAds {
-            let cell = tableView.dequeueReusableCell(withIdentifier: adCellID, for: indexPath) as! AdTableViewCell
-            let ad = ownAds[indexPath.row]
-            cell.titleLabel.text = ad.name
-            cell.shortDescriptionLabel.text = ad.shortDescription
-            return cell
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath)
@@ -278,13 +252,8 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         
         if sectionInfo == .myAccount {
             let detailVC = AccountDetailViewController(style: .grouped)
-            detailVC.hidesBottomBarWhenPushed = true
-            detailVC.navigationItem.largeTitleDisplayMode = .never
+//            detailVC.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(detailVC, animated: true)
-            tableView.deselectRow(at: indexPath, animated: true)
-        } else if sectionInfo == .myAds {
-            let selectedAd = ownAds[indexPath.row]
-            presentAdViewer(for: selectedAd)
         } else if sectionInfo == .myProfiles {
             let selectedProfile = ownProfiles[indexPath.row]
             presentProfileEditor(for: selectedProfile)
@@ -313,33 +282,33 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
 
 
 extension AccountViewController: AdViewControllerDelegate {
-    func adViewController(_ adVC: AdViewController, didDeleteAd deletedAd: Ad) {
-        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
-        
-        for indexPath in selectedRowsIndexPath {
-            if ownAds[indexPath.row].id == deletedAd.id {
-                ownAds.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-        }
-    }
-    
-    func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad) {
-        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
-        
-        for indexPath in selectedRowsIndexPath {
-            if ownAds[indexPath.row].id == updatedAd.id {
-                ownAds[indexPath.row] = updatedAd
-                tableView.reloadRows(at: [indexPath], with: .fade)
-            }
-        }
-    }
-    
-    func adViewController(_ adVC: AdViewController, didCreateAd createdAd: Ad) {
-        ownAds.insert(createdAd, at: 0)
-        let myAdsSectionNumber = 2 // Change it later to more understandable constant
-        let indexPath = IndexPath(row: 0, section: myAdsSectionNumber)
-        tableView.insertRows(at: [indexPath], with: .top)
-    }
+//    func adViewController(_ adVC: AdViewController, didDeleteAd deletedAd: Ad) {
+//        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
+//
+//        for indexPath in selectedRowsIndexPath {
+//            if ownAds[indexPath.row].id == deletedAd.id {
+//                ownAds.remove(at: indexPath.row)
+//                tableView.deleteRows(at: [indexPath], with: .fade)
+//            }
+//        }
+//    }
+//
+//    func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad) {
+//        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
+//
+//        for indexPath in selectedRowsIndexPath {
+//            if ownAds[indexPath.row].id == updatedAd.id {
+//                ownAds[indexPath.row] = updatedAd
+//                tableView.reloadRows(at: [indexPath], with: .fade)
+//            }
+//        }
+//    }
+//
+//    func adViewController(_ adVC: AdViewController, didCreateAd createdAd: Ad) {
+//        ownAds.insert(createdAd, at: 0)
+//        let myAdsSectionNumber = 2 // Change it later to more understandable constant
+//        let indexPath = IndexPath(row: 0, section: myAdsSectionNumber)
+//        tableView.insertRows(at: [indexPath], with: .top)
+//    }
     
 }

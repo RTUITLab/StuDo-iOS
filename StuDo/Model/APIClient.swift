@@ -113,8 +113,9 @@ class APIClient {
     weak var delegate: APIClientDelegate?
     
     
-    
-    
+
+    // Stored for migration issues
+//    static private let keychainTokenLabel: String = "tokenAccessData"
     
     static private let keychainTokenLabel: String = "ru.rtuitlab.studo.tokenAccessData"
     static private var accessToken: String?

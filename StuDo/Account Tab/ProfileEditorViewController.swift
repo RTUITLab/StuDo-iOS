@@ -34,6 +34,8 @@ class ProfileEditorViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tabBarController?.hideTabBar()
+        
         navigationItem.largeTitleDisplayMode = .never
         
         tableView.estimatedRowHeight = 44

@@ -46,6 +46,8 @@ class AccountDetailViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tabBarController?.hideTabBar()
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: usualStyleCellId)
         tableView.register(CurrentUserTableViewCell.self, forCellReuseIdentifier: currentUserCellId)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: value1styleCellID)
@@ -58,6 +60,10 @@ class AccountDetailViewController: UITableViewController {
         doneButton.isEnabled = false
         
         tableView.keyboardDismissMode = .interactive
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        view.endEditing(true)
     }
     
     @objc func doneButtonPressed(_ doneButton: UIBarButtonItem) {
