@@ -54,7 +54,7 @@ class AccountViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(CurrentUserTableViewCell.self, forCellReuseIdentifier: accountInfoCellID)
         tableView.register(AdTableViewCell.self, forCellReuseIdentifier: adCellID)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: profileCellID)
+        tableView.register(TableViewCellWithSubtitle.self, forCellReuseIdentifier: profileCellID)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: reusableCellID)
 
         tableView.register(AccountHeaderView.self, forHeaderFooterViewReuseIdentifier: accountHeaderID)
@@ -77,34 +77,15 @@ class AccountViewController: UIViewController {
     
     @objc func cellButtonTapped(_ button: UIButton) {
         if button.tag == CellButtonTag.newProfile.rawValue {
-            createNewProfile()
+            presentProfileEditor(for: nil)
         } else if button.tag == CellButtonTag.newAd.rawValue {
             presentAdViewer(for: nil)
         }
     }
     
-    func createNewProfile() {
-        let alert = UIAlertController(title: "New Profile", message: nil, preferredStyle: .alert)
-        
-        alert.addTextField { (textField) in
-            textField.placeholder = "Name"
-        }
-        
-        alert.addTextField { (textField) in
-            textField.placeholder = "Description"
-        }
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
-            let name = alert!.textFields!.first!.text!
-            let description = alert!.textFields!.last!.text!
-            self.client.create(profile: Profile(name: name, description: description))
-            print("Name: \(name)")
-            print("Description: \(description)")
-        }))
-        
-        
-        self.present(alert, animated: true, completion: nil)
+    func presentProfileEditor(for profile: Profile?) {
+        let profileVC = ProfileEditorViewController(profile: profile)
+        navigationController?.pushViewController(profileVC, animated: true)
     }
     
     func presentAdViewer(for ad: Ad?) {
@@ -127,7 +108,9 @@ class AccountViewController: UIViewController {
             ownAds = mockup.getPrototypeAds(count: 1, withUserId: "fakeUserID")
         } else {
             if tableView != nil {
-                client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
+                let currentUserId = PersistentStore.shared.user!.id!
+                client.getAds(forUserWithId: currentUserId)
+                client.getProfiles(forUserWithId: currentUserId)
             }
         }
     }
@@ -142,16 +125,56 @@ extension AccountViewController: APIClientDelegate {
         print("Account VC: \(error.localizedDescription)")
     }
     
+    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {
+        ownProfiles = profiles
+        tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+    }
+    
+    func apiClient(_ client: APIClient, didDeleteProfileWithId profileId: String) {
+        
+        var deletedIndex: Int = -1
+        for (index, profile) in ownProfiles.enumerated() {
+            if profile.id == profileId {
+                deletedIndex = index
+                break
+            }
+        }
+        
+        let _ = ownProfiles.remove(at: deletedIndex)
+        tableView.deleteRows(at: [IndexPath(row: deletedIndex, section: 1)], with: .automatic)
+        
+    }
+    
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {
         ownAds = ads
-        tableView.reloadData()
+        tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
     }
+    
 }
 
 
 
 
 extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let sectionInfo = sections[indexPath.section]
+        
+        if sectionInfo == .myProfiles {
+            return true
+        }
+        return false
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let sectionInfo = sections[indexPath.section]
+
+        if sectionInfo == .myProfiles && editingStyle == .delete {
+            let profileToRemove = ownProfiles[indexPath.row]
+            client.deleteProfile(withId: profileToRemove.id!)
+        }
+    }
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let sectionInfo = sections[indexPath.section]
@@ -228,6 +251,9 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         } else if sectionInfo == .myProfiles {
             let cell = tableView.dequeueReusableCell(withIdentifier: profileCellID, for: indexPath)
+            let profile = ownProfiles[indexPath.row]
+            cell.textLabel?.text = profile.name
+            cell.detailTextLabel?.text = profile.description
             return cell
         } else if sectionInfo == .myAds {
             let cell = tableView.dequeueReusableCell(withIdentifier: adCellID, for: indexPath) as! AdTableViewCell
@@ -255,9 +281,13 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             detailVC.hidesBottomBarWhenPushed = true
             detailVC.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(detailVC, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
         } else if sectionInfo == .myAds {
             let selectedAd = ownAds[indexPath.row]
             presentAdViewer(for: selectedAd)
+        } else if sectionInfo == .myProfiles {
+            let selectedProfile = ownProfiles[indexPath.row]
+            presentProfileEditor(for: selectedProfile)
         }
     }
     

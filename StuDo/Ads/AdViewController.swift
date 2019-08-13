@@ -448,7 +448,7 @@ extension AdViewController: APIClientDelegate {
         delegate?.adViewController(self, didUpdateAd: updatedAd)
     }
     
-    func apiClient(_ client: APIClient, didDeleteAdWithId: String) {
+    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {
         delegate?.adViewController(self, didDeleteAd: advertisement!)
         dismiss(animated: true, completion: nil)
     }

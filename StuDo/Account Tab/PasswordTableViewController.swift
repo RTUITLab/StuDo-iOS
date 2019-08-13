@@ -14,12 +14,12 @@ class PasswordTableViewController: UITableViewController, UITextFieldDelegate {
     
     let client = APIClient()
     
-    enum FieldType {
+    private enum FieldType {
         case oldPassword
         case newPassword
         case checkPassword
     }
-    let fieldPosition: [[FieldType]] = [[.oldPassword],[.newPassword, .checkPassword]]
+    private let fieldPosition: [[FieldType]] = [[.oldPassword],[.newPassword, .checkPassword]]
     
     var oldPasswordTextField: UITextField!
     var newPasswordTextField: UITextField!

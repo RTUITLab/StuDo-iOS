@@ -160,7 +160,7 @@ class APIClient {
     }
     
     
-    static func deleteTokenFromKeychain() throws {
+    static func deleteAccessTokenFromKeychain() throws {
         var item: CFTypeRef?
         try searchTokenInKeychain(item: &item)
         
@@ -267,11 +267,17 @@ protocol APIClientDelegate: class {
     
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad)
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad)
-    func apiClient(_ client: APIClient, didDeleteAdWithId: String)
+    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String)
+    
+    
+    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile])
+    func apiClient(_ client: APIClient, didRecieveProfile profile: Profile)
     
     func apiClient(_ client: APIClient, didCreateProfile newProfile: Profile)
     func apiClient(_ client: APIClient, didUpdateProfile updatedProfile: Profile)
-    func apiClient(_ client: APIClient, didProfileAdWithId: String)
+    func apiClient(_ client: APIClient, didDeleteProfileWithId profileID: String)
+    
+    
     
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest)
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest)
@@ -284,10 +290,12 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {}
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
-    func apiClient(_ client: APIClient, didDeleteAdWithId: String) {}
+    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {}
+    func apiClient(_ client: APIClient, didRecieveProfile profile: Profile) {}
+    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {}
     func apiClient(_ client: APIClient, didCreateProfile newProfile: Profile) {}
     func apiClient(_ client: APIClient, didUpdateProfile updatedProfile: Profile) {}
-    func apiClient(_ client: APIClient, didProfileAdWithId: String) {}
+    func apiClient(_ client: APIClient, didDeleteProfileWithId profileID: String) {}
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest) {}
 }
@@ -511,7 +519,7 @@ extension APIClient {
                 }
                 
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didDeleteAdWithId: deletedAdID)
+                    self.delegate?.apiClient(self, didDeleteAdWithId: id)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -530,25 +538,80 @@ extension APIClient {
     // ==========================
     
     
+    func getProfiles(forUserWithId userId: String) {
+        var request = APIRequest(method: .get, path: "user/resume/")
+        request.queryItems = [URLQueryItem(name: "userId", value: userId)]
+        
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                guard let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+                    throw APIError.decodingFailure
+                }
+                
+                var profiles = [Profile]()
+                for object in decodedJSON {
+                    let profile = try self.decodeProfile(from: object)
+                    profiles.append(profile)
+                }
+                
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didRecieveProfiles: profiles)
+                }
+                
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+
+    }
+    
+    
+    func getProfile(withId id: String) {
+        let request = APIRequest(method: .get, path: "user/resume/\(id)")
+        
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                guard let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                    throw APIError.decodingFailure
+                }
+                
+                let profile = try self.decodeProfile(from: decodedJSON)
+                
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didRecieveProfile: profile)
+                }
+                
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+        
+    }
+    
+    
+    
+    
+    
     func create(profile: Profile) {
         
-        let profileDictionary = [
-            "Name": profile.name,
-            "Description": profile.description
-        ]
-        
-        if let request = try? APIRequest(method: .post, path: "user/resume", body: profileDictionary) {
+        if let request = try? APIRequest(method: .post, path: "user/resume", body: profile) {
             self.perform(secureRequest: request) { (result) in
                 switch result {
                 case .success(let response):
-                    guard let data = response.body else { throw APIError.decodingFailure }
-
-                    // get the profile back here
-
-                    let newProfile = Profile(name: profile.name, description: profile.description)
+                    guard let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                        throw APIError.decodingFailure
+                    }
+                    
+                    let profile = try self.decodeProfile(from: decodedJSON)
 
                     DispatchQueue.main.async {
-                        self.delegate?.apiClient(self, didCreateProfile: newProfile)
+                        self.delegate?.apiClient(self, didCreateProfile: profile)
                     }
 
                 case .failure(let error):
@@ -563,7 +626,54 @@ extension APIClient {
     
     
     
+    func deleteProfile(withId id: String) {
+        let request = APIRequest(method: .delete, path: "user/resume/\(id)")
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                guard let data = response.body, let deletedProfileId = String(data: data, encoding: .utf8) else {
+                    throw APIError.decodingFailure
+                }
+                
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didDeleteProfileWithId: id)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+    }
     
+    
+    
+    func replaceProfile(with profile: Profile) {
+        
+        if let request = try? APIRequest(method: .put, path: "user/resume", body: profile) {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success(let response):
+                    
+                    guard let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                        throw APIError.decodingFailure
+                    }
+                    
+                    let profile = try self.decodeProfile(from: decodedJSON)
+                    
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didUpdateProfile: profile)
+                    }
+                    
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+        
+    }
     
     
     

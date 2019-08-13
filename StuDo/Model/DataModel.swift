@@ -205,34 +205,40 @@ struct AdCreateForm: Codable {
 
 
 struct Profile: Decodable {
-//    let id: String?
+    let id: String?
     let name: String
     let description: String
     
-//    enum CodingKeys: String, CodingKey {
-////        case id
-//        case name
-//        case description
-//    }
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case description
+    }
+    
+    init(id: String, name: String, description: String) {
+        self.id = id
+        self.name = name
+        self.description = description
+    }
 }
 
 extension Profile: Encodable {
     
-//    init(name: String, description: String) {
-//        self.id = nil
-//        self.name = name
-//        self.description = description
-//    }
+    init(name: String, description: String) {
+        self.id = nil
+        self.name = name
+        self.description = description
+    }
     
-//    func encode(to encoder: Encoder) throws {
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-////        if let id = id {
-////            try container.encode(id, forKey: .id)
-////        }
-//
-//        try container.encode(name, forKey: .name)
-//        try container.encode(description, forKey: .description)
-//    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        if let id = id {
+            try container.encode(id, forKey: .id)
+        }
+
+        try container.encode(name, forKey: .name)
+        try container.encode(description, forKey: .description)
+    }
 }
 
 
@@ -340,4 +346,31 @@ extension APIClient {
         return Ad(id: id, name: name, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: nil, organizationName: nil, user: user, organization: organization, userId: userId, organizationId: organizationId)
         
     }
+    
+    
+    
+    
+    func decodeProfile(from object: [String: Any]) throws ->  Profile  {
+        
+        let idField = "id"
+        guard let id = object[idField] as? String else {
+            throw APIError.decodingFailureWithField(idField)
+        }
+        
+        let nameField = "name"
+        guard let name = object[nameField] as? String else {
+            throw APIError.decodingFailureWithField(nameField)
+        }
+        
+        let descriptionField = "description"
+        guard let description = object[descriptionField] as? String else {
+            throw APIError.decodingFailureWithField(descriptionField)
+        }
+        
+        return Profile(id: id, name: name, description: description)
+    }
+    
+    
+    
+    
 }
