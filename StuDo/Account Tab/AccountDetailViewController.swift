@@ -55,7 +55,7 @@ class AccountDetailViewController: UITableViewController {
         
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: usualStyleHeaderFooterId)
         
-        doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed(_:)))
+        doneButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(doneButtonPressed(_:)))
         navigationItem.rightBarButtonItem = doneButton
         doneButton.isEnabled = false
         

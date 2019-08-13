@@ -57,8 +57,10 @@ class AccountViewController: UIViewController {
         navigationItem.title = "Account"
         navigationItem.largeTitleDisplayMode = .never
         
-        let currentUserId = PersistentStore.shared.user!.id!
-        client.getProfiles(forUserWithId: currentUserId)
+        if ownProfiles.isEmpty {
+            let currentUserId = PersistentStore.shared.user!.id!
+            client.getProfiles(forUserWithId: currentUserId)
+        }
         
     }
     
@@ -96,20 +98,9 @@ class AccountViewController: UIViewController {
     
     func presentProfileEditor(for profile: Profile?) {
         let profileVC = ProfileEditorViewController(profile: profile)
+        profileVC.delegate = self
         navigationController?.pushViewController(profileVC, animated: true)
     }
-    
-//    func presentAdViewer(for ad: Ad?) {
-//        let detailVC = AdViewController(with: ad)
-//        detailVC.delegate = self
-//        if ad == nil {
-//            detailVC.currentMode = .editing
-//            detailVC.shouldAppearFullScreen = true
-//        }
-//
-//        self.present(detailVC, animated: true, completion: nil)
-//        shouldRefreshOnAppear = false
-//    }
 
 }
 
@@ -252,7 +243,6 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         
         if sectionInfo == .myAccount {
             let detailVC = AccountDetailViewController(style: .grouped)
-//            detailVC.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(detailVC, animated: true)
         } else if sectionInfo == .myProfiles {
             let selectedProfile = ownProfiles[indexPath.row]
@@ -260,55 +250,53 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-//    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-//        let sectionInfo = sections[section]
-//
-//        if sectionInfo == .myAds {
-//            return "The active ads that you created."
-//        } else if sectionInfo == .myProfiles {
-//            return "The profiles you create help others find you by the skills you have. Add as many profiles as you like."
-//        }
-//
-//        return nil
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        return 70
-//    }
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        let sectionInfo = sections[section]
+
+        if sectionInfo == .myProfiles {
+            return "The profiles you create help others find you by the skills you have. Add as many profiles as you like."
+        }
+
+        return nil
+    }
+    
 }
 
 
 
 
 
-extension AccountViewController: AdViewControllerDelegate {
-//    func adViewController(_ adVC: AdViewController, didDeleteAd deletedAd: Ad) {
-//        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
-//
-//        for indexPath in selectedRowsIndexPath {
-//            if ownAds[indexPath.row].id == deletedAd.id {
-//                ownAds.remove(at: indexPath.row)
-//                tableView.deleteRows(at: [indexPath], with: .fade)
-//            }
-//        }
-//    }
-//
-//    func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad) {
-//        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
-//
-//        for indexPath in selectedRowsIndexPath {
-//            if ownAds[indexPath.row].id == updatedAd.id {
-//                ownAds[indexPath.row] = updatedAd
-//                tableView.reloadRows(at: [indexPath], with: .fade)
-//            }
-//        }
-//    }
-//
-//    func adViewController(_ adVC: AdViewController, didCreateAd createdAd: Ad) {
-//        ownAds.insert(createdAd, at: 0)
-//        let myAdsSectionNumber = 2 // Change it later to more understandable constant
-//        let indexPath = IndexPath(row: 0, section: myAdsSectionNumber)
-//        tableView.insertRows(at: [indexPath], with: .top)
-//    }
+
+
+extension AccountViewController: ProfileEditorVCDelegate {
+    func profileEditorViewController(_ profileVC: ProfileEditorViewController, didCreateProfile createdProfile: Profile) {
+        ownProfiles.append(createdProfile)
+        let lastItemIndex = ownProfiles.count - 1
+        let indexPath = IndexPath(row: lastItemIndex, section: 1)
+        tableView.insertRows(at: [indexPath], with: .top)
+    }
+    
+    func profileEditorViewController(_ profileVC: ProfileEditorViewController, didDeleteProfile deletedProfile: Profile) {
+        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
+        
+        for indexPath in selectedRowsIndexPath {
+            if ownProfiles[indexPath.row].id == deletedProfile.id {
+                ownProfiles.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
+    }
+    
+    func profileEditorViewController(_ profileVC: ProfileEditorViewController, didUpdateProfile updatedProfile: Profile) {
+        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
+        
+        for indexPath in selectedRowsIndexPath {
+            if ownProfiles[indexPath.row].id == updatedProfile.id {
+                ownProfiles[indexPath.row] = updatedProfile
+                tableView.reloadRows(at: [indexPath], with: .none)
+            }
+        }
+    }
+    
     
 }

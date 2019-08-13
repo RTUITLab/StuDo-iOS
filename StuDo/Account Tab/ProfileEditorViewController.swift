@@ -12,10 +12,26 @@ fileprivate let textFieldCellId = "textFieldCellId"
 fileprivate let textViewCellId = "textViewCellId"
 fileprivate let value1styleCellID = "value1styleCellID"
 
+
+
+protocol ProfileEditorVCDelegate: class {
+    func profileEditorViewController(_ profileVC: ProfileEditorViewController, didCreateProfile createdProfile: Profile)
+    func profileEditorViewController(_ profileVC: ProfileEditorViewController, didDeleteProfile deletedProfile: Profile)
+    func profileEditorViewController(_ profileVC: ProfileEditorViewController, didUpdateProfile updatedProfile: Profile)
+}
+
+
+
+
 class ProfileEditorViewController: UITableViewController {
+    
+    weak var delegate: ProfileEditorVCDelegate?
     
     var profile: Profile?
     let client = APIClient()
+    
+    private var nameInitialSetup = true
+    private var descriptionInitialSetup = true
     
     private var shouldBecomeFirstResponder = true
     private var shouldAllowDeletion = false
@@ -58,6 +74,7 @@ class ProfileEditorViewController: UITableViewController {
             shouldAllowDeletion = true
             shouldBecomeFirstResponder = false
             
+            self.profile = profile
             client.getProfile(withId: profile.id!)
         }
         
@@ -121,6 +138,11 @@ extension ProfileEditorViewController {
             nameTextField.returnKeyType = .next
             nameTextField.clearButtonMode = .whileEditing
             
+            if nameInitialSetup {
+                nameInitialSetup = false
+                nameTextField.text = profile?.name ?? ""
+            }
+            
             
             nameTextField.delegate = self
             nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -141,6 +163,11 @@ extension ProfileEditorViewController {
             descriptionTextView.autocapitalizationType = .sentences
             
             descriptionTextView.delegate = self
+            
+            if descriptionInitialSetup {
+                descriptionInitialSetup = false
+                descriptionTextView.text = profile?.description ?? ""
+            }
             
             cell.selectionStyle = .none
             
@@ -205,22 +232,6 @@ extension ProfileEditorViewController {
             let newProfile = Profile(name: name, description: description)
             client.create(profile: newProfile)
         }
-    }
-    
-    
-    fileprivate func displayAlert(title: String) {
-        
-        nameTextField.endEditing(true)
-        descriptionTextView.endEditing(true)
-        
-        let alertController = UIAlertController(title: title, message: nil, preferredStyle: .alert)
-        
-        let OkButton = UIAlertAction(title: "OK", style: .cancel) { _ in
-            self.navigationController?.popViewController(animated: true)
-        }
-        alertController.addAction(OkButton)
-        
-        self.present(alertController, animated: true, completion: nil)
     }
     
     
@@ -289,15 +300,18 @@ extension ProfileEditorViewController: APIClientDelegate {
     }
     
     func apiClient(_ client: APIClient, didCreateProfile newProfile: Profile) {
-        displayAlert(title: "Profile Created!")
+        delegate?.profileEditorViewController(self, didCreateProfile: newProfile)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func apiClient(_ client: APIClient, didDeleteProfileWithId profileID: String) {
-        displayAlert(title: "Profile Deleted!")
+        delegate?.profileEditorViewController(self, didDeleteProfile: profile!)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func apiClient(_ client: APIClient, didUpdateProfile updatedProfile: Profile) {
-        displayAlert(title: "Profile Updated!")
+        delegate?.profileEditorViewController(self, didUpdateProfile: updatedProfile)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func apiClient(_ client: APIClient, didRecieveProfile profile: Profile) {

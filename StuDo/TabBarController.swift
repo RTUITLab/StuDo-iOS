@@ -10,14 +10,21 @@ import UIKit
 
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
+    var client = APIClient()
+    
     var feedViewController: FeedViewController!
-    var profileViewController: AccountViewController!
+    var accountViewController: AccountViewController!
     
     let actionButtonSize: CGFloat = 58
     var actionButton = NewAdButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        client.delegate = self
+        
+        let currentUserId = PersistentStore.shared.user!.id!
+        client.getProfiles(forUserWithId: currentUserId)
         
         delegate = self
 
@@ -27,8 +34,8 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         
         let dummyController = DummyViewController()
         
-        profileViewController = AccountViewController()
-        let profileNavController = UINavigationController(rootViewController: profileViewController)
+        accountViewController = AccountViewController()
+        let profileNavController = UINavigationController(rootViewController: accountViewController)
         profileNavController.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "user_male"), selectedImage: nil)
         
         viewControllers = [feedNavController, dummyController, profileNavController]
@@ -81,7 +88,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         
         let offsetTransform = CGAffineTransform(translationX: 0, y: view.frame.height / 2)
         
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.6, animations: {
             self.tabBar.transform = offsetTransform
             self.actionButton.transform = offsetTransform
         }) { _ in
@@ -97,7 +104,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         self.tabBar.isHidden = false
         self.actionButton.isHidden = false
         
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.6) {
             self.tabBar.transform = .identity
             self.actionButton.transform = .identity
         }
@@ -116,3 +123,18 @@ extension UITabBarController {
 
 
 fileprivate class DummyViewController: UIViewController {}
+
+
+
+
+extension TabBarController: APIClientDelegate {
+    func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        print(error.localizedDescription)
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {
+        accountViewController.ownProfiles = profiles
+    }
+    
+    
+}
