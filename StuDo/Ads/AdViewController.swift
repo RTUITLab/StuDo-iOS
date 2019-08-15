@@ -139,7 +139,7 @@ class AdViewController: CardViewController {
         
         let moreButtonImage = #imageLiteral(resourceName: "three-dots-menu").withRenderingMode(.alwaysTemplate)
         moreButton.setImage(moreButtonImage, for: .normal)
-        moreButton.tintColor = UIColor(red:0.690, green:0.690, blue:0.699, alpha:1.000)
+        moreButton.tintColor = UIColor(red:0.815, green:0.819, blue:0.837, alpha:1.000)
         moreButton.adjustsImageWhenHighlighted = false
         moreButton.isHidden = true
         

@@ -36,7 +36,6 @@ class CardViewController: UIViewController {
         }
     }
     
-    
     private var visibleKeyboardHeight: CGFloat = 0
     var contentHeight: CGFloat {
         return 0
@@ -46,7 +45,8 @@ class CardViewController: UIViewController {
     private let containerFrameYOffset: CGFloat = UIApplication.shared.statusBarFrame.height
     private let cardTopOffset: CGFloat = 44
     
-    
+    private var previousContentOffset: CGFloat = CGFloat.leastNormalMagnitude
+    private var statusBarStyle: UIStatusBarStyle = .default
     
     let containerView = UIScrollView()
     let cardView = UIView()
@@ -78,6 +78,7 @@ class CardViewController: UIViewController {
         
         let cornerRadius: CGFloat = 8
         let initialYOffset: CGFloat = -view.frame.height + view.frame.height / 2
+        previousContentOffset = initialYOffset
         minimumContentHeight = view.frame.height - containerFrameYOffset
         
         defaultContainerInsets = UIEdgeInsets(top: view.frame.height, left: 0, bottom: 0, right: 0)
@@ -124,7 +125,7 @@ class CardViewController: UIViewController {
         horizontalHandle.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
         
         horizontalHandle.layer.cornerRadius = handleHeight / 2
-        horizontalHandle.backgroundColor = .black
+        horizontalHandle.backgroundColor = UIColor(red:0.815, green:0.819, blue:0.837, alpha:1.000)
         
         
         headerView.addSubview(headerSeparator)
@@ -199,6 +200,14 @@ class CardViewController: UIViewController {
         print("ContentSize: \(containerView.contentSize)")
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return statusBarStyle
+    }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .fade
+    }
+    
 }
 
 
@@ -213,6 +222,14 @@ extension CardViewController: UIScrollViewDelegate {
             print("====== currentOffset: \(offsetY); contentSize: \(containerView.contentSize.height), inset: \(containerView.contentInset)")
             if offsetY < -view.frame.height + view.frame.height / 3 {
                 self.dismiss(animated: true, completion: nil)
+            }
+            
+            if offsetY >= 0 && previousContentOffset < 0 {
+                statusBarStyle = .lightContent
+                setNeedsStatusBarAppearanceUpdate()
+            } else if offsetY < 0 && previousContentOffset >= 0 {
+                statusBarStyle = .default
+                setNeedsStatusBarAppearanceUpdate()
             }
             
             var separatorAnimationTime: TimeInterval = 0.3
@@ -245,6 +262,8 @@ extension CardViewController: UIScrollViewDelegate {
                 headerView.layer.shadowOpacity = headerShadowOpacity
                 headerView.layer.add(shadowOpacityAnimation, forKey: #keyPath(CALayer.shadowOpacity))
             }
+            
+            previousContentOffset = offsetY
             
         }
     }

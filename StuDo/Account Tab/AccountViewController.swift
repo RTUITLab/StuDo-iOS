@@ -179,7 +179,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             header.sectionTitle = sectionInfo.rawValue
             
             if sectionInfo == .myProfiles {
-                header.actionButton.setTitle("New Profile", for: .normal)
+                header.actionButton.setTitle("Add New", for: .normal)
                 header.actionButton.tag = CellButtonTag.newProfile.rawValue
             }
             

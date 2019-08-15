@@ -48,6 +48,7 @@ class EmailTableViewController: UITableViewController, UITextFieldDelegate {
         emailTextField.autocapitalizationType = .none
         emailTextField.returnKeyType = .done
         emailTextField.clearButtonMode = .whileEditing
+        emailTextField.autocorrectionType = .no
         
         emailTextField.delegate = self
         emailTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)

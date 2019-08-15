@@ -38,7 +38,9 @@ class FeedViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(AdTableViewCell.self, forCellReuseIdentifier: feedItemCellID)
-        tableView.rowHeight = 100
+        
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableView.automaticDimension
         
         refreshControl.addTarget(self, action: #selector(refreshAds), for: .valueChanged)
         
@@ -86,8 +88,7 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: feedItemCellID, for: indexPath) as! AdTableViewCell
-        cell.titleLabel.text = feedItems[indexPath.row].name
-        cell.shortDescriptionLabel.text = feedItems[indexPath.row].shortDescription
+        cell.set(ad: feedItems[indexPath.row])
         return cell
     }
     
