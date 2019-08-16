@@ -22,7 +22,9 @@ extension UserDefaults {
 }
 
 
-let kPersistentStoreUser = "com.StuDo.user"
+fileprivate let kPersistentStoreUser = "ru.rtuitlab.studo.user"
+fileprivate let kProfilePictureGradientIndex = "ru.rtuitlab.studo.profilePictureGradientIndex"
+fileprivate let kShouldRestoreProfilePicture = "ru.rtuitlab.studo.shouldRestoreProfilePicture"
 
 
 
@@ -30,6 +32,7 @@ struct PersistentStore {
     static var shared = PersistentStore()
     
     var user: User!
+    var profilePictureGradientIndex: Int?
     
     init() {
         let defaults = UserDefaults.standard
@@ -39,6 +42,12 @@ struct PersistentStore {
         } else {
             self.user = nil
         }
+        
+        if defaults.bool(forKey: kShouldRestoreProfilePicture) {
+            profilePictureGradientIndex = defaults.integer(forKey: kProfilePictureGradientIndex)
+        } else {
+            profilePictureGradientIndex = nil
+        }
     }
     
     static func save() {
@@ -47,6 +56,14 @@ struct PersistentStore {
         let shared = PersistentStore.shared
 
         defaults.set(object: shared.user?.userDefaultsFormat, forKey: kPersistentStoreUser)
+        
+        if let profilePictureIndex = shared.profilePictureGradientIndex {
+            defaults.set(profilePictureIndex, forKey: kProfilePictureGradientIndex)
+            defaults.set(true, forKey: kShouldRestoreProfilePicture)
+        } else {
+            defaults.set(false, forKey: kShouldRestoreProfilePicture)
+        }
     }
+    
 }
 

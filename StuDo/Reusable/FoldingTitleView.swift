@@ -14,6 +14,9 @@ protocol FoldingTitleViewDelegate: class {
 
 class FoldingTitleView: UIView {
     
+    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+
+    
     weak var delegate: FoldingTitleViewDelegate?
     
     let foldingAnimationDuration: TimeInterval = 0.5
@@ -39,6 +42,7 @@ class FoldingTitleView: UIView {
         }
         
         delegate?.foldingTitleView(self, didChangeState: currentState)
+        impactFeedback.impactOccurred()
 
     }
     

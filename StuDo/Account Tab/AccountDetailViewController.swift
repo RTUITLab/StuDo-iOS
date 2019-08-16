@@ -121,10 +121,12 @@ class AccountDetailViewController: UITableViewController {
         
         if sectionInfo == .nameAndSurname {
             let cell = tableView.dequeueReusableCell(withIdentifier: currentUserCellId, for: indexPath) as! CurrentUserTableViewCell
-            cell.profileImage.image = #imageLiteral(resourceName: "person")
+            
+            let currentUser = PersistentStore.shared.user!
+            cell.generateProfileImage(for: currentUser)
             cell.isEditingAlailable = true
-            cell.nameField.text = PersistentStore.shared.user.firstName
-            cell.surnameField.text = PersistentStore.shared.user.lastName
+            cell.nameField.text = currentUser.firstName
+            cell.surnameField.text = currentUser.lastName
             cell.setupCell()
             cell.selectionStyle = .none
             

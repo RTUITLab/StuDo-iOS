@@ -12,6 +12,8 @@ fileprivate let feedItemCellID = "feedItemCellID"
 
 class FeedViewController: UIViewController {
     
+    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+    
     // MARK: Data & Logic
     
     var feedItems = [Ad]()
@@ -117,6 +119,7 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         let detailVC = AdViewController(with: selectedAd)
         detailVC.delegate = self
         
+        impactFeedback.impactOccurred()
         shouldRefreshOnAppear = false
         self.present(detailVC, animated: true, completion: nil)
     }
@@ -208,7 +211,7 @@ extension FeedViewController: NavigationMenuDelegate {
         }
         
         titleView.changeState()
-        
+
     }
     
     

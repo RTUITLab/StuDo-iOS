@@ -215,7 +215,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: accountInfoCellID, for: indexPath) as! CurrentUserTableViewCell
             let user = PersistentStore.shared.user!
             cell.fullnameLabel.text = user.firstName + " " + user.lastName
-            cell.profileImage.image = #imageLiteral(resourceName: "person")
+            cell.generateProfileImage(for: user)
             cell.emailLabel.text = user.email
             cell.setupCell()
             cell.accessoryType = .disclosureIndicator

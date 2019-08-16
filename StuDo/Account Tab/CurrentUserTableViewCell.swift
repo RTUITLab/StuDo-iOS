@@ -18,11 +18,12 @@ class CurrentUserTableViewCell: UITableViewCell {
     
     var isEditingAlailable = false
     
+    private let profileLabel = UILabel()
+    private let profileImageHeightAndWidth: CGFloat = 60
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        let profileImageHeightAndWidth: CGFloat = 60
         
         contentView.addSubview(profileImage)
         profileImage.translatesAutoresizingMaskIntoConstraints = false
@@ -33,12 +34,21 @@ class CurrentUserTableViewCell: UITableViewCell {
         profileImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
         
         
-        profileImage.layer.borderWidth = 1
-        profileImage.layer.borderColor = UIColor(red:0.965, green:0.965, blue:0.965, alpha:1.000).cgColor
         profileImage.layer.masksToBounds = false
         profileImage.layer.cornerRadius = profileImageHeightAndWidth / 2
         profileImage.clipsToBounds = true
         profileImage.contentMode = .scaleAspectFill
+        
+        
+        contentView.addSubview(profileLabel)
+        profileLabel.translatesAutoresizingMaskIntoConstraints = false
+        profileLabel.centerXAnchor.constraint(equalTo: profileImage.centerXAnchor).isActive = true
+        profileLabel.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor).isActive = true
+        
+        profileLabel.font = .systemFont(ofSize: 20, weight: .bold)
+        profileLabel.textColor = .white
+        profileLabel.isHidden = false
+        
     }
     
     func setupCell() {
@@ -109,4 +119,47 @@ class CurrentUserTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+}
+
+
+
+
+fileprivate let orangeGradient = (UIColor(red:0.988, green:0.871, blue:0.541, alpha:1.000), UIColor(red:0.953, green:0.510, blue:0.506, alpha:1.000))
+fileprivate let pinkGradient = (UIColor(red:0.965, green:0.314, blue:0.627, alpha:1.000), UIColor(red:1.000, green:0.455, blue:0.475, alpha:1.000))
+fileprivate let ocyanGradient = (UIColor(red:0.102, green:0.906, blue:0.855, alpha:1.000), UIColor(red:0.357, green:0.502, blue:0.914, alpha:1.000))
+
+
+
+
+
+extension CurrentUserTableViewCell {
+    func generateProfileImage(for user: User) {
+        let gradientLayer = CAGradientLayer()
+        
+        let gradients = [orangeGradient, pinkGradient, ocyanGradient]
+        
+        
+        var gradientIndex: Int!
+        if let index = PersistentStore.shared.profilePictureGradientIndex {
+            gradientIndex = index
+        } else {
+            gradientIndex = Int.random(in: 0..<gradients.count)
+            PersistentStore.shared.profilePictureGradientIndex = gradientIndex
+            PersistentStore.save()
+        }
+        let gradient = gradients[gradientIndex]
+        
+        gradientLayer.colors = [gradient.0.cgColor, gradient.1.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: profileImageHeightAndWidth, height: profileImageHeightAndWidth)
+        
+        profileImage.layer.addSublayer(gradientLayer)
+        
+        
+        profileLabel.text = String(user.firstName.prefix(1)) + user.lastName.prefix(1)
+        profileLabel.isHidden = false
+        
+    }
 }
