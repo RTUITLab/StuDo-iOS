@@ -265,6 +265,7 @@ protocol APIClientDelegate: class {
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad])
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad)
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String)
     
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad)
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad)
@@ -288,6 +289,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {}
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String) {}
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {}
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
@@ -384,7 +386,10 @@ extension APIClient {
         self.perform(secureRequest: request) { (result) in
             switch result {
             case .success(let response):
-                try self.decodeAds(from: response)
+                let ads = try self.decodeAds(from: response)
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didRecieveAds: ads)
+                }
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.delegate?.apiClient(self, didFailRequest: request, withError: error)
@@ -401,7 +406,10 @@ extension APIClient {
         self.perform(secureRequest: request) { (result) in
             switch result {
             case .success(let response):
-                try self.decodeAds(from: response, fullDecode: true)
+                let ads = try self.decodeAds(from: response)
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didRecieveAds: ads, forUserWithId: userId)
+                }
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.delegate?.apiClient(self, didFailRequest: request, withError: error)
@@ -746,7 +754,7 @@ extension APIClient {
     
     
     
-    fileprivate func decodeAds(from response: (APIResponse<Data?>), fullDecode: Bool = false ) throws {
+    fileprivate func decodeAds(from response: (APIResponse<Data?>), fullDecode: Bool = false ) throws -> [Ad] {
         guard let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
             throw APIError.decodingFailure
         }
@@ -756,9 +764,7 @@ extension APIClient {
             ads.append(ad)
         }
         
-        DispatchQueue.main.async {
-            self.delegate?.apiClient(self, didRecieveAds: ads)
-        }
+        return ads
     }
     
     

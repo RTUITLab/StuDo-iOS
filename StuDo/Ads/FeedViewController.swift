@@ -16,6 +16,12 @@ class FeedViewController: UIViewController {
     
     var feedItems = [Ad]()
     var client = APIClient()
+    
+    enum FeedMode {
+        case allAds
+        case myAds
+    }
+    var currentMode: FeedMode = .allAds
         
     
     // MARK: Visible properties
@@ -24,6 +30,9 @@ class FeedViewController: UIViewController {
     let refreshControl = UIRefreshControl()
     
     var shouldRefreshOnAppear: Bool = true
+    
+    
+    var titleView = FoldingTitleView()
     
 
     override func viewDidLoad() {
@@ -50,11 +59,20 @@ class FeedViewController: UIViewController {
             tableView.backgroundView = refreshControl
         }
         
-//        navigationItem.title = "Ads"
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.titleView = FoldingTitleView()
+        
+        titleView.delegate = self
+        titleView.titleLabel.text = "News"
+        navigationItem.titleView = titleView
                 
         tableView.separatorStyle = .none
+        
+        if let tabBarVC = tabBarController as? TabBarController {
+            let navigationBarHeight = navigationController?.navigationBar.frame.height ?? 0
+            tabBarVC.priorityContentTopAnchor.constant = navigationBarHeight + 1
+            tabBarVC.navigationMenu.menuDelegate = self
+        }
+        
 
     }
     
@@ -69,11 +87,10 @@ class FeedViewController: UIViewController {
     }
     
     @objc func refreshAds() {
-        if GCIsUsingFakeData {
-            feedItems = DataMockup().getPrototypeAds(count: 4)
-            tableView.reloadData()
-        } else {
+        if currentMode == .allAds {
             client.getAds()
+        } else if currentMode == .myAds {
+            client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
         }
     }
 
@@ -97,7 +114,7 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedAd = feedItems[indexPath.row]
-        var detailVC = AdViewController(with: selectedAd)
+        let detailVC = AdViewController(with: selectedAd)
         detailVC.delegate = self
         
         shouldRefreshOnAppear = false
@@ -141,9 +158,57 @@ extension FeedViewController: APIClientDelegate {
     }
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {
-        feedItems = ads
-        tableView.reloadData()
-        refreshControl.endRefreshing()
+        if currentMode == .allAds {
+            feedItems = ads
+            tableView.reloadData()
+            refreshControl.endRefreshing()
+        }
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String) {
+        if currentMode == .myAds {
+            feedItems = ads
+            tableView.reloadData()
+            refreshControl.endRefreshing()
+        }
+    }
+    
+    
+}
+
+
+
+
+extension FeedViewController: FoldingTitleViewDelegate {
+    func foldingTitleView(_ foldingTitleView: FoldingTitleView, didChangeState newState: FoldingTitleView.FoldingTitleState) {
+        guard let tabBarVC = tabBarController as? TabBarController else { return }
+        
+        if newState == .unfolded {
+            tabBarVC.showNavigationMenu()
+        } else {
+            tabBarVC.hideNavigationMenu()
+        }
+    }
+    
+}
+
+
+
+
+extension FeedViewController: NavigationMenuDelegate {
+    func navigationMenu(_ navigationMenu: NavigationMenu, didChangeOption newOption: NavigationMenu.MenuItemName) {
+        if newOption == .allAds {
+            currentMode = .allAds
+            client.getAds()
+            titleView.titleLabel.text = "News"
+        } else if newOption == .myAds {
+            currentMode = .myAds
+            client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
+            titleView.titleLabel.text = "My Ads"
+        }
+        
+        titleView.changeState()
+        
     }
     
     

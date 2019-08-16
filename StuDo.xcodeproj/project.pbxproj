@@ -25,6 +25,8 @@
 		49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B382228DD75400CA9EC7 /* FeedViewController.swift */; };
 		49B1B385228DD8F000CA9EC7 /* DataMockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B384228DD8F000CA9EC7 /* DataMockup.swift */; };
 		49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BBB9982306BCC700883EB9 /* FoldingTitleView.swift */; };
+		49BBB99B2306E25600883EB9 /* NavigationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BBB99A2306E25600883EB9 /* NavigationMenu.swift */; };
+		49BBB99D2306E6B600883EB9 /* NavigationMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BBB99C2306E6B600883EB9 /* NavigationMenuCell.swift */; };
 		49BCE24A22F0AC1600C64C44 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BCE24922F0AC1600C64C44 /* CardViewController.swift */; };
 		49BCE24C22F0AC2100C64C44 /* CardAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */; };
 		49BCE24E22F31D4C00C64C44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49BCE24D22F31D4C00C64C44 /* Assets.xcassets */; };
@@ -82,6 +84,8 @@
 		49B1B382228DD75400CA9EC7 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		49B1B384228DD8F000CA9EC7 /* DataMockup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMockup.swift; sourceTree = "<group>"; };
 		49BBB9982306BCC700883EB9 /* FoldingTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldingTitleView.swift; sourceTree = "<group>"; };
+		49BBB99A2306E25600883EB9 /* NavigationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationMenu.swift; sourceTree = "<group>"; };
+		49BBB99C2306E6B600883EB9 /* NavigationMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationMenuCell.swift; sourceTree = "<group>"; };
 		49BCE24922F0AC1600C64C44 /* CardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
 		49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		49BCE24D22F31D4C00C64C44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -186,6 +190,9 @@
 			children = (
 				49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */,
 				49BBB9982306BCC700883EB9 /* FoldingTitleView.swift */,
+				49DEADCD2302EE440031B3DF /* NewAdButton.swift */,
+				49BBB99A2306E25600883EB9 /* NavigationMenu.swift */,
+				49BBB99C2306E6B600883EB9 /* NavigationMenuCell.swift */,
 				49E2DB0F22FDB22B0015DCD8 /* UITableViewExtension.swift */,
 				49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */,
 			);
@@ -214,7 +221,6 @@
 				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
 				49BCE24922F0AC1600C64C44 /* CardViewController.swift */,
 				49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */,
-				49DEADCD2302EE440031B3DF /* NewAdButton.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -359,6 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49BBB99B2306E25600883EB9 /* NavigationMenu.swift in Sources */,
 				49BCE24C22F0AC2100C64C44 /* CardAnimatedTransitioning.swift in Sources */,
 				49E2DB1422FDB3730015DCD8 /* EmailTableViewController.swift in Sources */,
 				49B1B385228DD8F000CA9EC7 /* DataMockup.swift in Sources */,
@@ -370,6 +377,7 @@
 				49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */,
 				49E2DB1022FDB22B0015DCD8 /* UITableViewExtension.swift in Sources */,
 				49DEADCE2302EE440031B3DF /* NewAdButton.swift in Sources */,
+				49BBB99D2306E6B600883EB9 /* NavigationMenuCell.swift in Sources */,
 				494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */,
 				49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */,
 				494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */,

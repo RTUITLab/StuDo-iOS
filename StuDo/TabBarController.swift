@@ -22,6 +22,13 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     let actionButtonSize: CGFloat = 58
     var actionButton = NewAdButton()
     
+    
+    var priorityContentTopAnchor: NSLayoutConstraint!
+    let navigationMenuContainer = UIView()
+    let dimView = UIView()
+    var navigationMenu = NavigationMenu()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,6 +65,41 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
                 
         actionButton.addTarget(self, action: #selector(actionButtonTapped(_:)), for: .touchUpInside)
         
+        
+        
+        
+        navigationMenuContainer.isHidden = true
+        
+        
+        view.addSubview(navigationMenuContainer)
+        navigationMenuContainer.translatesAutoresizingMaskIntoConstraints = false
+        navigationMenuContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        navigationMenuContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        navigationMenuContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        priorityContentTopAnchor = navigationMenuContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        priorityContentTopAnchor.isActive = true
+        
+        navigationMenuContainer.clipsToBounds = true
+        
+        
+        navigationMenuContainer.addSubview(dimView)
+        dimView.translatesAutoresizingMaskIntoConstraints = false
+        dimView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        dimView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        dimView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        dimView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+
+        dimView.backgroundColor = .init(white: 0, alpha: 0.7)
+        
+        
+        navigationMenuContainer.addSubview(navigationMenu)
+        let menuHeight = navigationMenu.calculatedMenuHeight
+        navigationMenu.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: menuHeight)
+        
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dimViewTapped(_:)))
+        dimView.addGestureRecognizer(tap)
 
     }
     
@@ -143,4 +185,34 @@ extension TabBarController: APIClientDelegate {
     }
     
     
+}
+
+
+
+
+
+extension TabBarController {
+    
+    @objc func dimViewTapped(_ tap: UITapGestureRecognizer) {
+        feedViewController.titleView.changeState()
+    }
+    
+    func showNavigationMenu() {
+        self.navigationMenuContainer.isHidden = false
+        navigationMenu.transform = CGAffineTransform(translationX: 0, y: -navigationMenu.calculatedMenuHeight)
+            
+        UIView.animate(withDuration: 0.3) {
+            self.dimView.alpha = 1
+            self.navigationMenu.transform = .identity
+        }
+    }
+    
+    func hideNavigationMenu() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.dimView.alpha = 0
+            self.navigationMenu.transform = CGAffineTransform(translationX: 0, y: -self.navigationMenu.calculatedMenuHeight)
+        }) { _ in
+            self.navigationMenuContainer.isHidden = true
+        }
+    }
 }

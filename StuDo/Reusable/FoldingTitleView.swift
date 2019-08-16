@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol FoldingTitleViewDelegate: class {
+    func foldingTitleView(_ foldingTitleView: FoldingTitleView, didChangeState newState: FoldingTitleView.FoldingTitleState)
+}
+
 class FoldingTitleView: UIView {
+    
+    weak var delegate: FoldingTitleViewDelegate?
     
     let foldingAnimationDuration: TimeInterval = 0.5
     private var shouldAllowChandingState = true
@@ -31,6 +37,9 @@ class FoldingTitleView: UIView {
         UIView.animate(withDuration: foldingAnimationDuration) {
             self.glyph.transform = destinationTransform
         }
+        
+        delegate?.foldingTitleView(self, didChangeState: currentState)
+
     }
     
     let containerView = UIView()
@@ -64,7 +73,6 @@ class FoldingTitleView: UIView {
         glyph.heightAnchor.constraint(equalTo: glyph.widthAnchor).isActive = true
 
         
-        titleLabel.text = "News"
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         
         glyph.image = #imageLiteral(resourceName: "expand arrow")
@@ -93,6 +101,7 @@ class FoldingTitleView: UIView {
         DispatchQueue.main.asyncAfter(deadline: .now() + foldingAnimationDuration) {
             self.shouldAllowChandingState = true
         }
+        
     }
     
 }
