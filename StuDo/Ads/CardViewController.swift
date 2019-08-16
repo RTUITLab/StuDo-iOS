@@ -201,6 +201,9 @@ class CardViewController: UIViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
+        if isFullscreen {
+            return .lightContent
+        }
         return statusBarStyle
     }
     
@@ -220,7 +223,7 @@ extension CardViewController: UIScrollViewDelegate {
         if scrollView === containerView {
             let offsetY = containerView.contentOffset.y
             print("====== currentOffset: \(offsetY); contentSize: \(containerView.contentSize.height), inset: \(containerView.contentInset)")
-            if offsetY < -view.frame.height + view.frame.height / 3 {
+            if offsetY < -view.frame.height + view.frame.height / 3 && !isFullscreen {
                 self.dismiss(animated: true, completion: nil)
             }
             

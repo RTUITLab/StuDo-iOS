@@ -50,18 +50,21 @@ class FeedViewController: UIViewController {
             tableView.backgroundView = refreshControl
         }
         
-        navigationItem.title = "Ads"
-        navigationItem.largeTitleDisplayMode = .automatic
-        navigationController?.navigationBar.prefersLargeTitles = true
+//        navigationItem.title = "Ads"
+        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.titleView = FoldingTitleView()
+                
+        tableView.separatorStyle = .none
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
         if shouldRefreshOnAppear {
+            shouldRefreshOnAppear = false
             refreshAds()
         } else if let selectedRow = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: selectedRow, animated: true)
-            shouldRefreshOnAppear = true
+//            shouldRefreshOnAppear = true
         }
     }
     

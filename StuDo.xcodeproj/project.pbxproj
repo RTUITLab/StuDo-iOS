@@ -24,6 +24,7 @@
 		49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */; };
 		49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B382228DD75400CA9EC7 /* FeedViewController.swift */; };
 		49B1B385228DD8F000CA9EC7 /* DataMockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B384228DD8F000CA9EC7 /* DataMockup.swift */; };
+		49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BBB9982306BCC700883EB9 /* FoldingTitleView.swift */; };
 		49BCE24A22F0AC1600C64C44 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BCE24922F0AC1600C64C44 /* CardViewController.swift */; };
 		49BCE24C22F0AC2100C64C44 /* CardAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */; };
 		49BCE24E22F31D4C00C64C44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49BCE24D22F31D4C00C64C44 /* Assets.xcassets */; };
@@ -80,6 +81,7 @@
 		49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		49B1B382228DD75400CA9EC7 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		49B1B384228DD8F000CA9EC7 /* DataMockup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMockup.swift; sourceTree = "<group>"; };
+		49BBB9982306BCC700883EB9 /* FoldingTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldingTitleView.swift; sourceTree = "<group>"; };
 		49BCE24922F0AC1600C64C44 /* CardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
 		49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		49BCE24D22F31D4C00C64C44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */,
+				49BBB9982306BCC700883EB9 /* FoldingTitleView.swift */,
 				49E2DB0F22FDB22B0015DCD8 /* UITableViewExtension.swift */,
 				49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */,
 			);
@@ -364,6 +367,7 @@
 				495B27AF22C0145600AADD19 /* AuthorizationViewController.swift in Sources */,
 				49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */,
 				49544FA522FB22240019A544 /* FadeAnimatedTransitioning.swift in Sources */,
+				49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */,
 				49E2DB1022FDB22B0015DCD8 /* UITableViewExtension.swift in Sources */,
 				49DEADCE2302EE440031B3DF /* NewAdButton.swift in Sources */,
 				494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */,

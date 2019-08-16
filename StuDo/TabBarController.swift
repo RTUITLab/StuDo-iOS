@@ -10,6 +10,10 @@ import UIKit
 
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
+    private let showHideAnimationDuration: TimeInterval = 0.35
+    
+    let hapticFeedback = UIImpactFeedbackGenerator(style: .heavy)
+    
     var client = APIClient()
     
     var feedViewController: FeedViewController!
@@ -73,6 +77,8 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     
     @objc func actionButtonTapped(_ button: UIButton) {
+        hapticFeedback.impactOccurred()
+        
         let newAdVC = AdViewController(with: nil, isOwner: true)
         newAdVC.currentMode = .editing
         newAdVC.shouldAppearFullScreen = true
@@ -88,7 +94,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         
         let offsetTransform = CGAffineTransform(translationX: 0, y: view.frame.height / 2)
         
-        UIView.animate(withDuration: 0.6, animations: {
+        UIView.animate(withDuration: showHideAnimationDuration, animations: {
             self.tabBar.transform = offsetTransform
             self.actionButton.transform = offsetTransform
         }) { _ in
@@ -104,7 +110,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         self.tabBar.isHidden = false
         self.actionButton.isHidden = false
         
-        UIView.animate(withDuration: 0.6) {
+        UIView.animate(withDuration: showHideAnimationDuration) {
             self.tabBar.transform = .identity
             self.actionButton.transform = .identity
         }

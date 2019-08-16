@@ -14,6 +14,8 @@ class AdTableViewCell: UITableViewCell {
     let descriptionTextView = UITextView()
     let additionalInfoLabel = UILabel()
     
+    let bottomSeparator = UIView()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -43,6 +45,18 @@ class AdTableViewCell: UITableViewCell {
         
         
         
+        contentView.addSubview(bottomSeparator)
+        bottomSeparator.translatesAutoresizingMaskIntoConstraints = false
+        bottomSeparator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        bottomSeparator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        bottomSeparator.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        bottomSeparator.heightAnchor.constraint(equalToConstant: 0.8).isActive = true
+        
+        bottomSeparator.backgroundColor = UIColor(red:0.820, green:0.820, blue:0.820, alpha:1.000)
+        
+        
+        
+        
         
         titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
         
@@ -54,21 +68,12 @@ class AdTableViewCell: UITableViewCell {
         additionalInfoLabel.textColor = UIColor(red:0.467, green:0.467, blue:0.471, alpha:1.000)
         additionalInfoLabel.font = .systemFont(ofSize: 17, weight: .regular)
         
+        selectionStyle = .none
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     
