@@ -36,6 +36,7 @@ class CardAnimatedTransitioning: NSObject, UIViewControllerAnimatedTransitioning
         }
         
         container.addSubview(toView)
+        toView.frame = UIScreen.main.bounds
         if isPresenting {
             if let snapshot = initialView.snapshotView(afterScreenUpdates: true) {
                 container.addSubview(snapshot)

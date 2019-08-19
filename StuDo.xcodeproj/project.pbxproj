@@ -17,6 +17,8 @@
 		494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C64AA22C253AC0039740B /* AccountDetailViewController.swift */; };
 		49544FA522FB22240019A544 /* FadeAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */; };
 		495B27AF22C0145600AADD19 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */; };
+		49713C5E230B081D00E65807 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49713C5D230B081D00E65807 /* AboutViewController.swift */; };
+		49713C60230B093300E65807 /* AboutHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49713C5F230B093300E65807 /* AboutHeaderView.swift */; };
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
 		49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77922D7397400C2661E /* AdTableViewCell.swift */; };
 		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
@@ -76,6 +78,8 @@
 		494C64AA22C253AC0039740B /* AccountDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailViewController.swift; sourceTree = "<group>"; };
 		49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
+		49713C5D230B081D00E65807 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		49713C5F230B093300E65807 /* AboutHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutHeaderView.swift; sourceTree = "<group>"; };
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		49A8F77922D7397400C2661E /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
 		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
@@ -156,6 +160,8 @@
 				493E8ACB228B4354004EC563 /* AppDelegate.swift */,
 				49A543C722FF06AB00A466EF /* RootViewController.swift */,
 				49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */,
+				49713C5D230B081D00E65807 /* AboutViewController.swift */,
+				49713C5F230B093300E65807 /* AboutHeaderView.swift */,
 				49E2DB1522FDB4E20015DCD8 /* DataChecker.swift */,
 				494C64A822C24B0E0039740B /* PersistentStore.swift */,
 				49C85B2622D8D06300578F39 /* GlobalConstants.swift */,
@@ -383,6 +389,7 @@
 				494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */,
 				49BCE24A22F0AC1600C64C44 /* CardViewController.swift in Sources */,
 				49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */,
+				49713C5E230B081D00E65807 /* AboutViewController.swift in Sources */,
 				49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */,
 				49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */,
 				49DEADCC2301F9390031B3DF /* ProfileEditorViewController.swift in Sources */,
@@ -390,6 +397,7 @@
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,
 				49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */,
 				493C5A5022A189370032AB6E /* APIClient.swift in Sources */,
+				49713C60230B093300E65807 /* AboutHeaderView.swift in Sources */,
 				49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */,
 				493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */,
 				49C85B2522D8C2E800578F39 /* BasicTableViewCells.swift in Sources */,

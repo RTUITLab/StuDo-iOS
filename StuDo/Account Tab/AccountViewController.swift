@@ -17,7 +17,8 @@ fileprivate let accountHeaderID = "accountHeaderID"
 fileprivate enum SectionName: String {
     case myAccount
     case myProfiles = "My profiles"
-    case logOut = "Log out"
+    case organizations = "Organizations"
+    case about = "About the app"
 }
 
 fileprivate enum CellButtonTag: Int {
@@ -33,7 +34,7 @@ class AccountViewController: UIViewController {
     
     var ownProfiles = [Profile]()
     
-    private var sections: [SectionName] = [.myAccount, .myProfiles]
+    private var sections: [SectionName] = [.myAccount, .myProfiles, .organizations, .about]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -192,7 +193,18 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44
+        let sectionInfo = sections[section]
+
+        if sectionInfo == .myAccount {
+            if #available(iOS 13.0, *) {
+                return 0
+            } else {
+                return 37
+            }
+        } else if sectionInfo == .myProfiles {
+            return 44
+        }
+        return UITableView.automaticDimension
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -232,9 +244,6 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         cell.textLabel?.text = sectionInfo.rawValue
         cell.accessoryType = .disclosureIndicator
         
-        if sectionInfo == .logOut {
-            cell.textLabel?.textColor = .red
-        }
         return cell
     }
     
@@ -247,6 +256,11 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         } else if sectionInfo == .myProfiles {
             let selectedProfile = ownProfiles[indexPath.row]
             presentProfileEditor(for: selectedProfile)
+        } else if sectionInfo == .organizations {
+            
+        } else if sectionInfo == .about {
+            let aboutVC = AboutViewController(style: .grouped)
+            navigationController?.pushViewController(aboutVC, animated: true)
         }
     }
     
