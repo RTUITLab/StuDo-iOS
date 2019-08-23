@@ -24,9 +24,15 @@ extension UserDefaults {
 
 
 
+enum PersistentStoreNotification: String, NotificationName {
+    case languageDidChange
+    case themeDidChange
+}
 
 
-struct PersistentStore {
+
+
+class PersistentStore: NSObject {
     static var shared = PersistentStore()
     
     private let currentUserKey = "ru.rtuitlab.studo.user"
@@ -57,6 +63,16 @@ struct PersistentStore {
     var currentLanguage: StuDoAvailableLanguage {
         didSet {
             UserDefaults.standard.set(currentLanguage.rawValue, forKey: currentLanguageKey)
+            NotificationCenter.default.post(name: PersistentStoreNotification.languageDidChange.name, object: nil)
+        }
+    }
+    
+    
+    
+    private let currentThemeKey = "ru.rtuitlab.studo.currentTheme"
+    var currentTheme: StuDoAvailableThemes {
+        didSet {
+            UserDefaults.standard.set(currentTheme.rawValue, forKey: currentThemeKey)
         }
     }
     
@@ -65,7 +81,7 @@ struct PersistentStore {
     
     
     
-    init() {
+    override init() {
         
         
         let defaults = UserDefaults.standard
@@ -92,6 +108,11 @@ struct PersistentStore {
         }
         
         
+        if let storedTheme = defaults.string(forKey: currentThemeKey) {
+            currentTheme = StuDoAvailableThemes(rawValue: storedTheme)!
+        } else {
+            currentTheme = .blue
+        }
         
     }
     

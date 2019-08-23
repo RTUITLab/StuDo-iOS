@@ -46,6 +46,8 @@ class NavigationMenu: UITableView {
         
         rowHeight = menuItemHeight
         
+        NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -68,7 +70,13 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
         let cell = dequeueReusableCell(withIdentifier: navigationMenuCellId, for: indexPath) as! NavigationMenuCell
         
         let currentMenuItem = menuItems[indexPath.row]
-        cell.textLabel?.text = currentMenuItem.rawValue
+        
+        if currentMenuItem == .allAds {
+            cell.textLabel?.text = Localizer.string(for: .navigationMenuAllAds)
+        } else if currentMenuItem == .myAds {
+            cell.textLabel?.text = Localizer.string(for: .navigationMenuMyAds)
+        }
+        
         
         if currentMenuItem == selectedOption {
             cell.tickGlyph.alpha = 1
@@ -115,5 +123,13 @@ class NavigationMenuCell: ListItemCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+
+
+extension NavigationMenu {
+    @objc func languageDidChange(notification: Notification) {
+        reloadData()
     }
 }

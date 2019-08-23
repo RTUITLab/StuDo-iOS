@@ -64,7 +64,7 @@ class FeedViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         
         titleView.delegate = self
-        titleView.titleLabel.text = "News"
+        titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
         navigationItem.titleView = titleView
                 
         tableView.separatorStyle = .none
@@ -75,6 +75,7 @@ class FeedViewController: UIViewController {
             tabBarVC.navigationMenu.menuDelegate = self
         }
         
+        NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
 
     }
     
@@ -189,7 +190,9 @@ extension FeedViewController: FoldingTitleViewDelegate {
         if newState == .unfolded {
             tabBarVC.showNavigationMenu()
         } else {
-            tabBarVC.hideNavigationMenu()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                tabBarVC.hideNavigationMenu()
+            }
         }
     }
     
@@ -203,11 +206,11 @@ extension FeedViewController: NavigationMenuDelegate {
         if newOption == .allAds {
             currentMode = .allAds
             client.getAds()
-            titleView.titleLabel.text = "News"
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
         } else if newOption == .myAds {
             currentMode = .myAds
             client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
-            titleView.titleLabel.text = "My Ads"
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleMyAds)
         }
         
         titleView.changeState()
@@ -215,4 +218,19 @@ extension FeedViewController: NavigationMenuDelegate {
     }
     
     
+}
+
+
+
+
+
+extension FeedViewController {
+    @objc func languageDidChange(notification: Notification) {
+        switch currentMode {
+        case .allAds:
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
+        case .myAds:
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleMyAds)
+        }
+    }
 }

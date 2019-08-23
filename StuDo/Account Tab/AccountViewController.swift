@@ -224,7 +224,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
 
         if sectionInfo == .myAccount {
             return 0
-        } else if sectionInfo == .myProfiles || sectionInfo == .organizations {
+        } else if sectionInfo == .myProfiles {
             return 44
         }
         

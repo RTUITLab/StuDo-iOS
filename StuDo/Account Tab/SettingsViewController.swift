@@ -28,6 +28,10 @@ class SettingsViewController: UITableViewController {
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: cellWithAccessoryType)
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
 
     // MARK: - Table view data source
 
@@ -43,8 +47,16 @@ class SettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellWithAccessoryType, for: indexPath)
         
+        let info = infoPositions[indexPath.section][indexPath.row]
+        
         cell.accessoryType = .disclosureIndicator
-        cell.textLabel?.text = infoPositions[indexPath.section][indexPath.row].rawValue
+        cell.textLabel?.text = info.rawValue
+        
+        if info == .language {
+            cell.detailTextLabel?.text = PersistentStore.shared.currentLanguage.rawValue
+        } else if info == .theme {
+            cell.detailTextLabel?.text = PersistentStore.shared.currentTheme.rawValue
+        }
 
         return cell
     }
@@ -55,11 +67,9 @@ class SettingsViewController: UITableViewController {
         
         if info == .language {
             let languageVC = LanguageListViewController(style: .plain)
-            languageVC.view.backgroundColor = .white
             navigationController?.pushViewController(languageVC, animated: true)
         } else if info == .theme {
-            let detailVC = UIViewController()
-            detailVC.view.backgroundColor = .white
+            let detailVC = ThemesListViewController(style: .plain)
             navigationController?.pushViewController(detailVC, animated: true)
         }
         

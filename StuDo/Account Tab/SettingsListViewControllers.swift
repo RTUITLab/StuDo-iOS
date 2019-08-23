@@ -129,3 +129,37 @@ class LanguageListViewController: SettingsListViewController<StuDoAvailableLangu
     }
     
 }
+
+
+
+
+
+
+
+class ThemesListViewController: SettingsListViewController<StuDoAvailableThemes> {
+    
+    override init(style: UITableView.Style) {
+        super.init(style: style)
+        
+        var themes = [StuDoAvailableThemes]()
+        StuDoAvailableThemes.allCases.forEach {
+            themes.append($0)
+        }
+        listItems.append(themes)
+        
+        currentItem = PersistentStore.shared.currentTheme
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        super.tableView(tableView, didSelectRowAt: indexPath)
+        
+        let selectedTheme = listItems[indexPath.section][indexPath.row]
+        PersistentStore.shared.currentTheme = selectedTheme
+    }
+    
+}

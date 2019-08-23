@@ -10,7 +10,17 @@
 enum StuDoAvailableLanguage: String {
     case English = "English"
     case Russian = "Русский"
-    case German = "Deutsch"
+//    case German = "Deutsch"
 }
 
 extension StuDoAvailableLanguage: CaseIterable {}
+
+
+
+enum StuDoAvailableThemes: String {
+    case blue = "Blue"
+    case red = "Red"
+    case greed = "Green"
+}
+
+extension StuDoAvailableThemes: CaseIterable {}
