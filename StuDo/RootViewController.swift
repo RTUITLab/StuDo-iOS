@@ -103,12 +103,7 @@ class RootViewController: UIViewController {
     
     func logout() {
         
-        try? APIClient.deleteAccessTokenFromKeychain()
-        PersistentStore.shared.user = nil
-        PersistentStore.shared.profilePictureGradientIndex = nil
-        if !GCIsUsingFakeData {
-            PersistentStore.save()
-        }
+        PersistentStore.cleanUserRelatedPersistentData()
         
         view.layer.addSublayer(gradientLayer)
 

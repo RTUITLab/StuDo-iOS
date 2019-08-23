@@ -98,3 +98,22 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
     
     
 }
+
+
+
+
+
+
+class NavigationMenuCell: ListItemCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        let tickImage = #imageLiteral(resourceName: "tick").withRenderingMode(.alwaysTemplate)
+        tickGlyph.image = tickImage
+        tickGlyph.tintColor = UIColor(red:0.002, green:0.477, blue:0.999, alpha:1.000)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}

@@ -22,48 +22,96 @@ extension UserDefaults {
 }
 
 
-fileprivate let kPersistentStoreUser = "ru.rtuitlab.studo.user"
-fileprivate let kProfilePictureGradientIndex = "ru.rtuitlab.studo.profilePictureGradientIndex"
-fileprivate let kShouldRestoreProfilePicture = "ru.rtuitlab.studo.shouldRestoreProfilePicture"
+
 
 
 
 struct PersistentStore {
     static var shared = PersistentStore()
     
-    var user: User!
-    var profilePictureGradientIndex: Int?
+    private let currentUserKey = "ru.rtuitlab.studo.user"
+    var user: User! {
+        didSet {
+            UserDefaults.standard.set(object: user?.userDefaultsFormat, forKey: currentUserKey)
+        }
+    }
+    
+    
+    fileprivate let pofilePictureGradientIndexKey = "ru.rtuitlab.studo.profilePictureGradientIndex"
+    fileprivate let shouldRestoreProfilePictureKey = "ru.rtuitlab.studo.shouldRestoreProfilePicture"
+    var profilePictureGradientIndex: Int? {
+        didSet {
+            let defaults = UserDefaults.standard
+            
+            if let profilePictureIndex = profilePictureGradientIndex {
+                defaults.set(profilePictureIndex, forKey: pofilePictureGradientIndexKey)
+                defaults.set(true, forKey: shouldRestoreProfilePictureKey)
+            } else {
+                defaults.set(false, forKey: shouldRestoreProfilePictureKey)
+            }
+        }
+    }
+    
+    
+    private let currentLanguageKey = "ru.rtuitlab.studo.currentLanguage"
+    var currentLanguage: StuDoAvailableLanguage {
+        didSet {
+            UserDefaults.standard.set(currentLanguage.rawValue, forKey: currentLanguageKey)
+        }
+    }
+    
+    
+    
+    
+    
     
     init() {
+        
+        
         let defaults = UserDefaults.standard
         
-        if let userDictionary = defaults.object([String: String].self, with: kPersistentStoreUser), let user = User(fromUserDefaultsDictionary: userDictionary) {
+        
+        if let userDictionary = defaults.object([String: String].self, with: currentUserKey), let user = User(fromUserDefaultsDictionary: userDictionary) {
             self.user = user
         } else {
             self.user = nil
         }
         
-        if defaults.bool(forKey: kShouldRestoreProfilePicture) {
-            profilePictureGradientIndex = defaults.integer(forKey: kProfilePictureGradientIndex)
+        
+        if defaults.bool(forKey: shouldRestoreProfilePictureKey) {
+            profilePictureGradientIndex = defaults.integer(forKey: pofilePictureGradientIndexKey)
         } else {
             profilePictureGradientIndex = nil
         }
+        
+        
+        if let storedLanguage = defaults.string(forKey: currentLanguageKey) {
+            currentLanguage = StuDoAvailableLanguage(rawValue: storedLanguage)!
+        } else {
+            currentLanguage = .English
+        }
+        
+        
+        
     }
     
-    static func save() {
-        let defaults = UserDefaults.standard
+    
+    
+    
+    
+    
+    
+    
+    
+    static func cleanUserRelatedPersistentData() {
         
-        let shared = PersistentStore.shared
-
-        defaults.set(object: shared.user?.userDefaultsFormat, forKey: kPersistentStoreUser)
+        try? APIClient.deleteAccessTokenFromKeychain()
+        PersistentStore.shared.user = nil
+        PersistentStore.shared.profilePictureGradientIndex = nil
         
-        if let profilePictureIndex = shared.profilePictureGradientIndex {
-            defaults.set(profilePictureIndex, forKey: kProfilePictureGradientIndex)
-            defaults.set(true, forKey: kShouldRestoreProfilePicture)
-        } else {
-            defaults.set(false, forKey: kShouldRestoreProfilePicture)
-        }
     }
+    
+    
     
 }
 

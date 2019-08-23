@@ -146,7 +146,6 @@ extension CurrentUserTableViewCell {
         } else {
             gradientIndex = Int.random(in: 0..<gradients.count)
             PersistentStore.shared.profilePictureGradientIndex = gradientIndex
-            PersistentStore.save()
         }
         let gradient = gradients[gradientIndex]
         

@@ -1,5 +1,5 @@
 //
-//  NavigationMenuCell.swift
+//  ListItemCell.swift
 //  StuDo
 //
 //  Created by Andrew on 8/16/19.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NavigationMenuCell: UITableViewCell {
+class ListItemCell: UITableViewCell {
     
     let tickGlyph = UIImageView()
     let dimView = UIView()
@@ -23,9 +23,6 @@ class NavigationMenuCell: UITableViewCell {
         tickGlyph.widthAnchor.constraint(equalToConstant: 24).isActive = true
         tickGlyph.heightAnchor.constraint(equalTo: tickGlyph.widthAnchor).isActive = true
         
-        let tickImage = #imageLiteral(resourceName: "tick").withRenderingMode(.alwaysTemplate)
-        tickGlyph.image = tickImage
-        tickGlyph.tintColor = UIColor(red:0.002, green:0.477, blue:0.999, alpha:1.000)
         
         tickGlyph.alpha = 0
         

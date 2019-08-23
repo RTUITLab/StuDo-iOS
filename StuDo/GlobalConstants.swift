@@ -6,8 +6,11 @@
 //  Copyright © 2019 Andrew. All rights reserved.
 //
 
-import Foundation
 
-// CG for Global Constant
+enum StuDoAvailableLanguage: String {
+    case English = "English"
+    case Russian = "Русский"
+    case German = "Deutsch"
+}
 
-let GCIsUsingFakeData = false
+extension StuDoAvailableLanguage: CaseIterable {}

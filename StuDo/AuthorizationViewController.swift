@@ -783,7 +783,6 @@ extension AuthorizationViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {
         
         PersistentStore.shared.user = user
-        PersistentStore.save()
         
         animateLoadingIndicator(shouldAppear: false)
         

@@ -13,12 +13,14 @@ fileprivate let profileCellID = "profileCellID"
 fileprivate let adCellID = "adCellID"
 fileprivate let reusableCellID = "reusableCellID"
 fileprivate let accountHeaderID = "accountHeaderID"
+fileprivate let standartFooterID = "standartFooterID"
+
 
 fileprivate enum SectionName: String {
     case myAccount
     case myProfiles = "My profiles"
     case organizations = "Organizations"
-    case about = "About the app"
+    case settingsAbout = "Settings & About"
 }
 
 fileprivate enum CellButtonTag: Int {
@@ -34,7 +36,7 @@ class AccountViewController: UIViewController {
     
     var ownProfiles = [Profile]()
     
-    private var sections: [SectionName] = [.myAccount, .myProfiles, .organizations, .about]
+    private var sections: [SectionName] = [.myAccount, .myProfiles, .organizations, .settingsAbout]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +56,7 @@ class AccountViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: reusableCellID)
 
         tableView.register(AccountHeaderView.self, forHeaderFooterViewReuseIdentifier: accountHeaderID)
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: standartFooterID)
         
         navigationItem.title = "Account"
         navigationItem.largeTitleDisplayMode = .never
@@ -171,6 +174,12 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    
+    
+    
+
+    
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionInfo = sections[section]
         
@@ -192,20 +201,51 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         return nil
     }
     
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: standartFooterID)
+        
+        let sectionInfo = sections[section]
+        if sectionInfo == .myProfiles {
+            footer?.textLabel?.text = "The profiles you create help others find you by the skills you have. Add as many profiles as you like."
+        }
+        
+        return footer
+    }
+    
+    
+    
+    
+    
+    
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let sectionInfo = sections[section]
 
         if sectionInfo == .myAccount {
-            if #available(iOS 13.0, *) {
-                return 0
-            } else {
-                return 37
-            }
-        } else if sectionInfo == .myProfiles {
+            return 0
+        } else if sectionInfo == .myProfiles || sectionInfo == .organizations {
             return 44
         }
+        
         return UITableView.automaticDimension
     }
+    
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        
+        let sectionInfo = sections[section]
+        if sectionInfo == .myAccount {
+            return 28
+        }
+        
+        return UITableView.automaticDimension
+    }
+    
+    
+    
+    
+    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
@@ -216,6 +256,8 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         
         if sectionInfo == .myProfiles {
             return ownProfiles.count
+        } else if sectionInfo == .settingsAbout {
+            return 2
         }
         
         return 1
@@ -244,6 +286,11 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         cell.textLabel?.text = sectionInfo.rawValue
         cell.accessoryType = .disclosureIndicator
         
+        if sectionInfo == .settingsAbout {
+            let labelText = indexPath.row == 0 ? "App settings" : "About the app"
+            cell.textLabel?.text = labelText
+        }
+        
         return cell
     }
     
@@ -258,21 +305,18 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             presentProfileEditor(for: selectedProfile)
         } else if sectionInfo == .organizations {
             
-        } else if sectionInfo == .about {
-            let aboutVC = AboutViewController(style: .grouped)
-            navigationController?.pushViewController(aboutVC, animated: true)
+        } else if sectionInfo == .settingsAbout {
+            if indexPath.row == 0 {
+                let settingsVC = SettingsViewController(style: .grouped)
+                navigationController?.pushViewController(settingsVC, animated: true)
+            } else if indexPath.row == 1 {
+                let aboutVC = AboutViewController(style: .grouped)
+                navigationController?.pushViewController(aboutVC, animated: true)
+            }
         }
     }
     
-    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        let sectionInfo = sections[section]
-
-        if sectionInfo == .myProfiles {
-            return "The profiles you create help others find you by the skills you have. Add as many profiles as you like."
-        }
-
-        return nil
-    }
+    
     
 }
 
