@@ -10,12 +10,89 @@ import UIKit
 
 enum LozalizerString: String {
     
+    case done
+    case save
+    case back
+    case okay
+    case cancel
+    case delete
+    
     case feedTitleMyAds
     case feedTitleAllAds
     
     case navigationMenuAllAds
     case navigationMenuMyAds
     
+    case accountTitle
+    case accountMyProfiles
+    case accountAddNewProfile
+    case accountProfileSectionDescription
+    case accountOrganizations
+    case accountSettings
+    case accountAbout
+    
+    case settingsTitle
+    case settingsLanguage
+    case settingsAccentColor
+    
+    case aboutTitle
+    case aboutVersion
+    case aboutFeedback
+    case aboutRate
+    case aboutRTULab
+    
+    case accountDetailFirstName
+    case accountDetailLastName
+    case accountDetailNameSectionDescription
+    case accountDetailStudentID
+    case accountDetailEmail
+    case accountDetailPassword
+    case accountDetailLogout
+    
+    case emailChangeSectionHeader
+    case emailChangeSectionDescription
+    case emailChangeAlertMessage
+    
+    case passwordCurrentSectionHeader
+    case passwordEnterCurrent
+    case passwordNewSectionHeader
+    case passwordEnterNew
+    case passwordRepeatNew
+    case passwordNewSectionDescription
+    case passwordChangeAlertTitle
+    case passwordChangeAlertMessage
+    
+    case profileNameSectionHeader
+    case profileNamePlaceholder
+    case profileNameSectionFooter
+    case profileDescriptionSectionHeader
+    case profileDescriptionSectionFooter
+    
+    case authEmail
+    case authPassword
+    case authRepeatPassword
+    case authForgotPassword
+    case authName
+    case authSurname
+    case authSignIn
+    case authSignUp
+    case authRegistrationAlertTitle
+    case authRegistrationAlertMessage
+    case authPasswordRestorationAlertMessage
+    
+    case adEditorFindPeople
+    case adEditorEditAd
+    case adEditorDeleteAd
+    case adEditorDeleteAlertMessage
+    case adEditorCancelCreatingAlertMessage
+    case adEditorCancelEditingAlertMessage
+    case adEditorDiscardChanges
+    case adEditorCancelAdCreation
+    case adEditorReturnToEditor
+    case adEditorEditingModeTitle
+    case adEditorCreationModeTitle
+    case adEditorNamePlaceholder
+    case adEditorDescriptionPlaceholder
 }
 
 class Localizer: NSObject {

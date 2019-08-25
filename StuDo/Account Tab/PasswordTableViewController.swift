@@ -34,7 +34,7 @@ class PasswordTableViewController: UITableViewController, UITextFieldDelegate {
         
         tableView.register(TableViewCellWithInputField.self, forCellReuseIdentifier: textFieldCellId)
         
-        doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped(_:)))
+        doneButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(doneButtonTapped(_:)))
         navigationItem.rightBarButtonItem = doneButton
         doneButton.isEnabled = false
     }
@@ -44,9 +44,9 @@ class PasswordTableViewController: UITableViewController, UITextFieldDelegate {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         var headerTitle: String?
         if section == 0 {
-            headerTitle = "Current password"
+            headerTitle = Localizer.string(for: .passwordCurrentSectionHeader)
         } else if section == 1 {
-            headerTitle = "New password"
+            headerTitle = Localizer.string(for: .passwordNewSectionHeader)
         }
         
         return headerTitle
@@ -55,7 +55,7 @@ class PasswordTableViewController: UITableViewController, UITextFieldDelegate {
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         var footerTitle: String?
         if section == 1 {
-            footerTitle = "You password must be at least 6 characters long."
+            footerTitle = Localizer.string(for: .passwordNewSectionDescription)
         }
         
         return footerTitle
@@ -78,7 +78,7 @@ class PasswordTableViewController: UITableViewController, UITextFieldDelegate {
         case .oldPassword:
             
             oldPasswordTextField = cell.inputField
-            oldPasswordTextField.placeholder = "Enter your current password"
+            oldPasswordTextField.placeholder = Localizer.string(for: .passwordEnterCurrent)
             oldPasswordTextField.returnKeyType = .next
             
             oldPasswordTextField.becomeFirstResponder()
@@ -86,13 +86,13 @@ class PasswordTableViewController: UITableViewController, UITextFieldDelegate {
         case .newPassword:
             
             newPasswordTextField = cell.inputField
-            newPasswordTextField.placeholder = "Enter new password"
+            newPasswordTextField.placeholder = Localizer.string(for: .passwordEnterNew)
             newPasswordTextField.returnKeyType = .next
             
         case .checkPassword:
             
             checkPasswordTextField = cell.inputField
-            checkPasswordTextField.placeholder = "Repeat your new password"
+            checkPasswordTextField.placeholder = Localizer.string(for: .passwordRepeatNew)
             checkPasswordTextField.returnKeyType = .done
         }
         
@@ -170,9 +170,9 @@ extension PasswordTableViewController: APIClientDelegate {
     }
     
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest) {
-        let alertController = UIAlertController(title: "Password Changed!", message: "You changed your password successfully.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: Localizer.string(for: .passwordChangeAlertTitle), message: Localizer.string(for: .passwordChangeAlertMessage), preferredStyle: .alert)
         
-        let OkButton = UIAlertAction(title: "OK", style: .cancel) { _ in
+        let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel) { _ in
             self.navigationController?.popViewController(animated: true)
         }
         alertController.addAction(OkButton)

@@ -14,12 +14,12 @@ class AboutHeaderView: UITableViewHeaderFooterView {
     let versionLabel = UILabel()
 
     func setVersion(_ version: String) {
-        let attributedString = NSMutableAttributedString(string: "Version ", attributes: [
+        let attributedString = NSMutableAttributedString(string: Localizer.string(for: .aboutVersion), attributes: [
             .foregroundColor: UIColor.lightGray,
             .font: UIFont.systemFont(ofSize: 16, weight: .regular)
             ])
         
-        let versionNumberString = NSAttributedString(string: "\(version)", attributes: [
+        let versionNumberString = NSAttributedString(string: " \(version)", attributes: [
             .foregroundColor: UIColor.lightGray,
             .font: UIFont.systemFont(ofSize: 16, weight: .bold)
             ])

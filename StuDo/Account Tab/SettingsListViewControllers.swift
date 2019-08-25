@@ -126,6 +126,11 @@ class LanguageListViewController: SettingsListViewController<StuDoAvailableLangu
         
         let selectedLanguage = listItems[indexPath.section][indexPath.row]
         PersistentStore.shared.currentLanguage = selectedLanguage
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.navigationController?.popViewController(animated: true)
+        }
+        
     }
     
 }

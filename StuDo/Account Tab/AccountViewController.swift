@@ -58,7 +58,7 @@ class AccountViewController: UIViewController {
         tableView.register(AccountHeaderView.self, forHeaderFooterViewReuseIdentifier: accountHeaderID)
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: standartFooterID)
         
-        navigationItem.title = "Account"
+        navigationItem.title = Localizer.string(for: .accountTitle)
         navigationItem.largeTitleDisplayMode = .never
         
         if ownProfiles.isEmpty {
@@ -66,6 +66,13 @@ class AccountViewController: UIViewController {
             client.getProfiles(forUserWithId: currentUserId)
         }
         
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(_:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
+        
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     
@@ -186,10 +193,10 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         if sectionInfo == .myProfiles {
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: accountHeaderID) as! AccountHeaderView
             
-            header.sectionTitle = sectionInfo.rawValue
+            header.sectionTitle = Localizer.string(for: .accountMyProfiles)
             
             if sectionInfo == .myProfiles {
-                header.actionButton.setTitle("Add New", for: .normal)
+                header.actionButton.setTitle(Localizer.string(for: .accountAddNewProfile), for: .normal)
                 header.actionButton.tag = CellButtonTag.newProfile.rawValue
             }
             
@@ -207,7 +214,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         
         let sectionInfo = sections[section]
         if sectionInfo == .myProfiles {
-            footer?.textLabel?.text = "The profiles you create help others find you by the skills you have. Add as many profiles as you like."
+            footer?.textLabel?.text = Localizer.string(for: .accountProfileSectionDescription)
         }
         
         return footer
@@ -283,12 +290,16 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath)
-        cell.textLabel?.text = sectionInfo.rawValue
         cell.accessoryType = .disclosureIndicator
         
-        if sectionInfo == .settingsAbout {
-            let labelText = indexPath.row == 0 ? "App settings" : "About the app"
-            cell.textLabel?.text = labelText
+        if sectionInfo == .organizations {
+            cell.textLabel?.text = Localizer.string(for: .accountOrganizations)
+        } else if sectionInfo == .settingsAbout {
+            if indexPath.row == 0 {
+                cell.textLabel?.text = Localizer.string(for: .accountSettings)
+            } else if indexPath.row == 1 {
+                cell.textLabel?.text = Localizer.string(for: .accountAbout)
+            }
         }
         
         return cell
@@ -357,4 +368,15 @@ extension AccountViewController: ProfileEditorVCDelegate {
     }
     
     
+}
+
+
+
+
+
+extension AccountViewController {
+    @objc func languageDidChange(_ nofication: Notification) {
+        tableView.reloadData()
+        navigationItem.title = Localizer.string(for: .accountTitle)
+    }
 }

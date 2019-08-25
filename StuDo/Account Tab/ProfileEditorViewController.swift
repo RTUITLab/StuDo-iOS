@@ -61,7 +61,7 @@ class ProfileEditorViewController: UITableViewController {
         tableView.register(TableViewCellWithTextViewInput.self, forCellReuseIdentifier: textViewCellId)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: value1styleCellID)
         
-        saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTapped(_:)))
+        saveButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(saveButtonTapped(_:)))
         navigationItem.rightBarButtonItem = saveButton
         saveButton.isEnabled = false
     }
@@ -98,18 +98,18 @@ extension ProfileEditorViewController {
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         if section == 0 {
-            return "Brief name for your profile."
+            return Localizer.string(for: .profileNameSectionFooter)
         } else if section == 1 {
-            return "Describe shortly how you can help others."
+            return Localizer.string(for: .profileDescriptionSectionFooter)
         }
         return nil
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
-            return "Profile name"
+            return Localizer.string(for: .profileNameSectionHeader)
         } else if section == 1 {
-            return "Profile description"
+            return Localizer.string(for: .profileDescriptionSectionHeader)
         }
         return nil
     }
@@ -133,7 +133,7 @@ extension ProfileEditorViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: textFieldCellId, for: indexPath) as! TableViewCellWithInputField
             
             nameTextField = cell.inputField
-            nameTextField.placeholder = "Name"
+            nameTextField.placeholder = Localizer.string(for: .profileNamePlaceholder)
             nameTextField.autocapitalizationType = .sentences
             nameTextField.returnKeyType = .next
             nameTextField.clearButtonMode = .whileEditing

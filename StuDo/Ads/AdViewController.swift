@@ -191,7 +191,7 @@ class AdViewController: CardViewController {
         nameTextField.delegate = self
         
         nameTextField.font = .systemFont(ofSize: 20, weight: .medium)
-        nameTextField.placeholder = "Name for your advertisement"
+        nameTextField.placeholder = Localizer.string(for: .adEditorNamePlaceholder)
         nameTextField.returnKeyType = .next
         nameTextField.autocapitalizationType = .sentences
 
@@ -229,7 +229,12 @@ class AdViewController: CardViewController {
     func enableEditingMode() {
         currentMode = .editing
         isFullscreen = true
-        title = "Editing"
+        
+        if advertisement == nil {
+            title = Localizer.string(for: .adEditorCreationModeTitle)
+        } else {
+            title = Localizer.string(for: .adEditorEditingModeTitle)
+        }
         
         nameTextField.isUserInteractionEnabled = true
         descriptionTextView.isUserInteractionEnabled = true
@@ -293,11 +298,11 @@ class AdViewController: CardViewController {
         
         // If the ad is being created and no progress is made, dismiss the controller
         
-        var alertMessage = "Are you sure you want to cancel editing this ad? Unsaved changes will be discarded."
-        var deleteActionMessage = "Discard Changes"
+        var alertMessage = Localizer.string(for: .adEditorCancelEditingAlertMessage)
+        var deleteActionMessage = Localizer.string(for: .adEditorDiscardChanges)
         if advertisement == nil {
-            alertMessage = "Are you sure you don't want to finish creating the ad?"
-            deleteActionMessage = "Close Editor"
+            alertMessage = Localizer.string(for: .adEditorCancelCreatingAlertMessage)
+            deleteActionMessage = Localizer.string(for: .adEditorCancelAdCreation)
             if nameTextField.text!.isEmpty && descriptionTextView.text!.isEmpty {
                 dismiss(animated: true, completion: nil)
             }
@@ -312,7 +317,7 @@ class AdViewController: CardViewController {
             }
             cancelEditing()
         } )
-        let cancelAction = UIAlertAction(title: "Return to Editor", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Localizer.string(for: .adEditorReturnToEditor), style: .cancel, handler: nil)
         
         shouldProceedAlert.addAction(deleteAction)
         shouldProceedAlert.addAction(cancelAction)
@@ -327,10 +332,10 @@ class AdViewController: CardViewController {
             client.deleteAd(withId: advertisement!.id)
         }
         
-        let shouldProceedAlert = UIAlertController(title: "Are you sure you want to delete this ad? This cannot be undone.", message: nil, preferredStyle: .alert)
+        let shouldProceedAlert = UIAlertController(title: Localizer.string(for: .adEditorDeleteAlertMessage), message: nil, preferredStyle: .alert)
         
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: { _ in deleteAd() } )
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: Localizer.string(for: .delete), style: .destructive, handler: { _ in deleteAd() } )
+        let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
         
         shouldProceedAlert.addAction(deleteAction)
         shouldProceedAlert.addAction(cancelAction)
@@ -400,10 +405,10 @@ extension AdViewController {
     @objc func moreButtonPressed(_ button: UIButton) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let inviteAction = UIAlertAction(title: "Invite People", style: .default, handler: nil)
-        let editAction = UIAlertAction(title: "Edit Ad", style: .default, handler: { _ in self.enableEditingMode() } )
-        let deleteAction = UIAlertAction(title: "Delete Ad", style: .destructive, handler: { _ in self.deleteCurrentAd() } )
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let inviteAction = UIAlertAction(title: Localizer.string(for: .adEditorFindPeople), style: .default, handler: nil)
+        let editAction = UIAlertAction(title: Localizer.string(for: .adEditorEditAd), style: .default, handler: { _ in self.enableEditingMode() } )
+        let deleteAction = UIAlertAction(title: Localizer.string(for: .adEditorDeleteAd), style: .destructive, handler: { _ in self.deleteCurrentAd() } )
+        let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
 
         actionSheet.addAction(inviteAction)
         actionSheet.addAction(editAction)

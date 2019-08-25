@@ -98,8 +98,8 @@ class CurrentUserTableViewCell: UITableViewCell {
             nameField.clearButtonMode = .whileEditing
             surnameField.clearButtonMode = .whileEditing
             
-            nameField.placeholder = "First name"
-            surnameField.placeholder = "Last name"
+            nameField.placeholder = Localizer.string(for: .accountDetailFirstName)
+            surnameField.placeholder = Localizer.string(for: .accountDetailLastName)
             
         }
     }

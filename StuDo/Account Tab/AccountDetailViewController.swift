@@ -55,11 +55,16 @@ class AccountDetailViewController: UITableViewController {
         
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: usualStyleHeaderFooterId)
         
-        doneButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(doneButtonPressed(_:)))
+        doneButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(doneButtonPressed(_:)))
         navigationItem.rightBarButtonItem = doneButton
         doneButton.isEnabled = false
         
         tableView.keyboardDismissMode = .interactive
+        
+        title = Localizer.string(for: .back)
+        navigationItem.titleView = UIView()
+        
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -100,7 +105,7 @@ class AccountDetailViewController: UITableViewController {
         
         switch sectionInfo {
         case .nameAndSurname:
-            return "Edit your name and surname."
+            return Localizer.string(for: .accountDetailNameSectionDescription)
         default:
             return nil
         }
@@ -148,7 +153,7 @@ class AccountDetailViewController: UITableViewController {
             return cell
         } else if sectionInfo == .studentId {
             let cell = tableView.dequeueReusableCell(withIdentifier: inputFieldCellID, for: indexPath) as! TableViewCellWithInputField
-            cell.inputField.placeholder = "Your student ID"
+            cell.inputField.placeholder = Localizer.string(for: .accountDetailStudentID)
             
             cell.inputField.tag = TagsForTextField.studentID.rawValue
             cell.inputField.addTarget(self, action: #selector(valueChanged(in:)), for: .editingChanged)
@@ -168,14 +173,14 @@ class AccountDetailViewController: UITableViewController {
         
         switch sectionInfo {
         case .logout:
-            cell.textLabel?.text = "Log out"
+            cell.textLabel?.text = Localizer.string(for: .accountDetailLogout)
             cell.textLabel?.textColor = .red
         case .credentials:
             if indexPath.row == 0 {
-                cell.textLabel?.text = "Change email"
+                cell.textLabel?.text = Localizer.string(for: .accountDetailEmail)
                 cell.detailTextLabel?.text = PersistentStore.shared.user!.email
             } else {
-                cell.textLabel?.text = "Change password"
+                cell.textLabel?.text = Localizer.string(for: .accountDetailPassword)
             }
         default:
             break

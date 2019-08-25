@@ -22,11 +22,16 @@ class SettingsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Settings"
+        navigationItem.title = Localizer.string(for: .settingsTitle)
         tabBarController?.hideTabBar()
         
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: cellWithAccessoryType)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,11 +55,12 @@ class SettingsViewController: UITableViewController {
         let info = infoPositions[indexPath.section][indexPath.row]
         
         cell.accessoryType = .disclosureIndicator
-        cell.textLabel?.text = info.rawValue
         
         if info == .language {
+            cell.textLabel?.text = Localizer.string(for: .settingsLanguage)
             cell.detailTextLabel?.text = PersistentStore.shared.currentLanguage.rawValue
         } else if info == .theme {
+            cell.textLabel?.text = Localizer.string(for: .settingsAccentColor)
             cell.detailTextLabel?.text = PersistentStore.shared.currentTheme.rawValue
         }
 
@@ -75,4 +81,13 @@ class SettingsViewController: UITableViewController {
         
     }
 
+}
+
+
+
+
+extension SettingsViewController {
+    @objc func languageDidChange(notification: Notification) {
+        navigationItem.title = Localizer.string(for: .settingsTitle)
+    }
 }

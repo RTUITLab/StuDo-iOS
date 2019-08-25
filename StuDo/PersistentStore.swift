@@ -100,11 +100,16 @@ class PersistentStore: NSObject {
             profilePictureGradientIndex = nil
         }
         
-        
         if let storedLanguage = defaults.string(forKey: currentLanguageKey) {
             currentLanguage = StuDoAvailableLanguage(rawValue: storedLanguage)!
         } else {
-            currentLanguage = .English
+            let locale = Locale.preferredLanguages.first
+            if locale == "ru" {
+                currentLanguage = .Russian
+            } else {
+                currentLanguage = .English
+            }
+            UserDefaults.standard.set(currentLanguage.rawValue, forKey: currentLanguageKey)
         }
         
         

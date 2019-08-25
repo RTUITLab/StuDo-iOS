@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>done</key>
+    <string>Done</string>
+    <key>save</key>
+    <string>Save</string>
+    <key>back</key>
+    <string>Back</string>
+    <key>okay</key>
+    <string>OK</string>
+    <key>cancel</key>
+    <string>Cancel</string>
+    <key>delete</key>
+    <string>Delete</string>
+    
+	<key>feedTitleAllAds</key>
+	<string>News</string>
+	<key>feedTitleMyAds</key>
+	<string>My Ads</string>
+    
+	<key>navigationMenuAllAds</key>
+	<string>All news</string>
+	<key>navigationMenuMyAds</key>
+	<string>Only my ads</string>
+    
+    <key>accountTitle</key>
+    <string>Account</string>
+    <key>accountMyProfiles</key>
+    <string>My profiles</string>
+    <key>accountAddNewProfile</key>
+    <string>Add New</string>
+    <key>accountProfileSectionDescription</key>
+    <string>The profiles you create help others find you by the skills you have. Add as many profiles as you like.</string>
+    <key>accountOrganizations</key>
+    <string>Organizations</string>
+    <key>accountSettings</key>
+    <string>App settings</string>
+    <key>accountAbout</key>
+    <string>About the app</string>
+    
+    <key>settingsTitle</key>
+    <string>Settings</string>
+    <key>settingsLanguage</key>
+    <string>Current language</string>
+    <key>settingsAccentColor</key>
+    <string>Accent color</string>
+    
+    <key>aboutTitle</key>
+    <string>About</string>
+    <key>aboutVersion</key>
+    <string>Version</string>
+    <key>aboutFeedback</key>
+    <string>Submit feedback</string>
+    <key>aboutRate</key>
+    <string>Rate on App Store</string>
+    <key>aboutRTULab</key>
+    <string>RTU IT Lab</string>
+    
+    <key>accountDetailFirstName</key>
+    <string>Name</string>
+    <key>accountDetailLastName</key>
+    <string>Surname</string>
+    <key>accountDetailNameSectionDescription</key>
+    <string>Edit your name and surname.</string>
+    <key>accountDetailStudentID</key>
+    <string>Your student ID</string>
+    <key>accountDetailEmail</key>
+    <string>Change email</string>
+    <key>accountDetailPassword</key>
+    <string>Change password</string>
+    <key>accountDetailLogout</key>
+    <string>Log out</string>
+    
+    
+    <key>emailChangeSectionHeader</key>
+    <string>New email address</string>
+    <key>emailChangeSectionDescription</key>
+    <string>We'll send you a confirmation link.</string>
+    <key>emailChangeAlertMessage</key>
+    <string>Email change is not yet implemented in the app.</string>
+    
+    <key>passwordCurrentSectionHeader</key>
+    <string>Current password</string>
+    <key>passwordEnterCurrent</key>
+    <string>Enter your current password</string>
+    <key>passwordNewSectionHeader</key>
+    <string>New password</string>
+    <key>passwordEnterNew</key>
+    <string>Enter new password</string>
+    <key>passwordRepeatNew</key>
+    <string>Repeat your new password</string>
+    <key>passwordNewSectionDescription</key>
+    <string>You password must be at least 6 characters long.</string>
+    <key>passwordChangeAlertTitle</key>
+    <string>Password Changed!</string>
+    <key>passwordChangeAlertMessage</key>
+    <string>You changed your password successfully.</string>
+    
+    <key>profileNameSectionHeader</key>
+    <string>Profile name</string>
+    <key>profileNamePlaceholder</key>
+    <string>Name</string>
+    <key>profileNameSectionFooter</key>
+    <string>Brief name for your profile.</string>
+    <key>profileDescriptionSectionHeader</key>
+    <string>Profile description</string>
+    <key>profileDescriptionSectionFooter</key>
+    <string>Describe shortly how you can help others.</string>
+    
+    <key>authEmail</key>
+    <string>Email</string>
+    <key>authPassword</key>
+    <string>Password</string>
+    <key>authRepeatPassword</key>
+    <string>Repeat password</string>
+    <key>authForgotPassword</key>
+    <string>Forgot password?</string>
+    <key>authName</key>
+    <string>Name</string>
+    <key>authSurname</key>
+    <string>Surname</string>
+    <key>authSignIn</key>
+    <string>Sign In</string>
+    <key>authSignUp</key>
+    <string>Sign Up</string>
+    <key>authRegistrationAlertTitle</key>
+    <string>Successfull registration!</string>
+    <key>authRegistrationAlertMessage</key>
+    <string>Please, confirm your email before signing in.</string>
+    <key>authPasswordRestorationAlertMessage</key>
+    <string>We send a message to your email. Please follow the insructions.</string>
+    
+    <key>adEditorFindPeople</key>
+    <string>Invite People</string>
+    <key>adEditorEditAd</key>
+    <string>Edit Ad</string>
+    <key>adEditorDeleteAd</key>
+    <string>Delete Ad</string>
+    <key>adEditorDeleteAlertMessage</key>
+    <string>Are you sure you want to delete this ad? This cannot be undone.</string>
+    <key>adEditorCancelCreatingAlertMessage</key>
+    <string>Are you sure you don't want to finish creating the ad?</string>
+    <key>adEditorCancelEditingAlertMessage</key>
+    <string>Are you sure you want to cancel editing this ad? Unsaved changes will be discarded.</string>
+    <key>adEditorDiscardChanges</key>
+    <string>Discard changes</string>
+    <key>adEditorCancelAdCreation</key>
+    <string>Close editor</string>
+    <key>adEditorReturnToEditor</key>
+    <string>Return to Editor</string>
+    <key>adEditorEditingModeTitle</key>
+    <string>Editing</string>
+    <key>adEditorCreationModeTitle</key>
+    <string>New Ad</string>
+    <key>adEditorNamePlaceholder</key>
+    <string>Name for your advertisement</string>
+    <key>adEditorDescriptionPlaceholder</key>
+    <string>The text for your ad. The first paragraph will be used as short description.</string>
+    
+</dict>
+</plist>

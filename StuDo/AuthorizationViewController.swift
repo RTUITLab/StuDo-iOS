@@ -217,7 +217,7 @@ class AuthorizationViewController: UIViewController {
         
         emailTextField.borderStyle = .roundedRect
         emailTextField.textAlignment = .center
-        emailTextField.placeholder = "Email"
+        emailTextField.placeholder = Localizer.string(for: .authEmail)
         
         emailTextField.autocorrectionType = .no
         emailTextField.keyboardType = .emailAddress
@@ -235,7 +235,7 @@ class AuthorizationViewController: UIViewController {
         
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.textAlignment = .center
-        passwordTextField.placeholder = "Password"
+        passwordTextField.placeholder = Localizer.string(for: .authPassword)
         passwordTextField.isSecureTextEntry = true
         passwordTextField.textContentType = .password
 
@@ -250,7 +250,7 @@ class AuthorizationViewController: UIViewController {
         forgotPasswordButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: stackViewSpacing / 2).isActive = true
         forgotPasswordButton.centerXAnchor.constraint(equalTo: credentialsContainerView.centerXAnchor, constant: 0).isActive = true
         
-        forgotPasswordButton.setTitle("Forgot password?", for: .normal)
+        forgotPasswordButton.setTitle(Localizer.string(for: .authForgotPassword), for: .normal)
         forgotPasswordButton.setTitleColor(proceedColor, for: .normal)
         forgotPasswordButton.setTitleColor(proceedColor.withAlphaComponent(0.6), for: .highlighted)
 
@@ -282,7 +282,7 @@ class AuthorizationViewController: UIViewController {
         
         checkPasswordTextField.borderStyle = .roundedRect
         checkPasswordTextField.textAlignment = .center
-        checkPasswordTextField.placeholder = "Repeat Password"
+        checkPasswordTextField.placeholder = Localizer.string(for: .authRepeatPassword)
         checkPasswordTextField.isSecureTextEntry = true
         checkPasswordTextField.textContentType = .password
         
@@ -301,7 +301,7 @@ class AuthorizationViewController: UIViewController {
         
         firstNameTextField.borderStyle = .roundedRect
         firstNameTextField.textAlignment = .center
-        firstNameTextField.placeholder = "First Name"
+        firstNameTextField.placeholder = Localizer.string(for: .authName)
         
         firstNameTextField.autocorrectionType = .no
         firstNameTextField.returnKeyType = .next
@@ -317,7 +317,7 @@ class AuthorizationViewController: UIViewController {
         
         lastNameTextField.borderStyle = .roundedRect
         lastNameTextField.textAlignment = .center
-        lastNameTextField.placeholder = "Last Name"
+        lastNameTextField.placeholder = Localizer.string(for: .authSurname)
         
         lastNameTextField.autocorrectionType = .no
         lastNameTextField.returnKeyType = .done
@@ -343,7 +343,7 @@ class AuthorizationViewController: UIViewController {
         proceedButtton.heightAnchor.constraint(equalTo: emailTextField.heightAnchor).isActive = true
         proceedButtton.centerXAnchor.constraint(equalTo: credentialsContainerView.centerXAnchor).isActive = true
         
-        proceedButtton.setTitle("Sign In", for: .normal)
+        proceedButtton.setTitle(Localizer.string(for: .authSignIn), for: .normal)
         proceedButtton.setTitleColor(.white, for: .normal)
         proceedButtton.layer.borderWidth = 2
         proceedButtton.layer.cornerRadius = 8
@@ -359,7 +359,7 @@ class AuthorizationViewController: UIViewController {
         changeModeButton.widthAnchor.constraint(equalTo: emailTextField.widthAnchor).isActive = true
         changeModeButton.heightAnchor.constraint(equalTo: emailTextField.heightAnchor).isActive = true
         
-        changeModeButton.setTitle("Sign Up", for: .normal)
+        changeModeButton.setTitle(Localizer.string(for: .authSignUp), for: .normal)
         changeModeButton.setTitleColor(modeColor, for: .normal)
         changeModeButton.layer.borderWidth = 2
         changeModeButton.layer.cornerRadius = 8
@@ -607,8 +607,8 @@ class AuthorizationViewController: UIViewController {
         var forgotPasswordButtonAlpha: CGFloat = 1
         var additionalInfoContentsAlpha: CGFloat = 0
         
-        var proceedButtonTitle = "Sign In"
-        var changeModeButtonTitle = "Sign Up"
+        var proceedButtonTitle = Localizer.string(for: .authSignIn)
+        var changeModeButtonTitle = Localizer.string(for: .authSignUp)
         
         if currentMode == .signIn {
             additionalInfoContainerHeightConstraint.constant = 0
@@ -632,8 +632,8 @@ class AuthorizationViewController: UIViewController {
             firstNameTextField.text = ""
             lastNameTextField.text = ""
             
-            proceedButtonTitle = "Sign Up"
-            changeModeButtonTitle = "Sign In"
+            proceedButtonTitle = Localizer.string(for: .authSignUp)
+            changeModeButtonTitle = Localizer.string(for: .authSignIn)
             
             passwordTextField.returnKeyType = .next
         }
@@ -653,10 +653,10 @@ class AuthorizationViewController: UIViewController {
     
     
     
-    func displayMessage(userMessage:String, title: String = "Alert") -> Void {
+    func displayMessage(userMessage:String, title: String? = nil) -> Void {
         let alertController = UIAlertController(title: title, message: userMessage, preferredStyle: .alert)
         
-        let OkButton = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel, handler: nil)
         alertController.addAction(OkButton)
         
         self.present(alertController, animated: true, completion: nil)
@@ -790,13 +790,12 @@ extension AuthorizationViewController: APIClientDelegate {
     }
     
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {
-        displayMessage(userMessage: "Please, confirm your email before signing in.", title: "Successfull registration!")
+        displayMessage(userMessage: Localizer.string(for: .authRegistrationAlertMessage), title: Localizer.string(for: .authRegistrationAlertTitle))
         animateLoadingIndicator(shouldAppear: false)
     }
     
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {
-        displayMessage(userMessage: "Request to the server has been sent. Resetting password is not actually implemented in the app right now.")
-//        currentMode = .resetPassword
+        displayMessage(userMessage: Localizer.string(for: .authPasswordRestorationAlertMessage))
         animateLoadingIndicator(shouldAppear: false)
     }
     

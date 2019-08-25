@@ -180,11 +180,7 @@
 				495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */,
 				49D76A7B231050A8002B22D4 /* Localizer.swift */,
 				49D76A81231059B9002B22D4 /* NotificationHandling.swift */,
-				49BCE24D22F31D4C00C64C44 /* Assets.xcassets */,
-				493E8AD4228B4356004EC563 /* LaunchScreen.storyboard */,
-				493E8AD7228B4356004EC563 /* Info.plist */,
-				49D76A7F231053D2002B22D4 /* EnglishStrings.plist */,
-				49D76A8323105F64002B22D4 /* RussianStrings.plist */,
+				496F527F23111E080021A195 /* Support files */,
 			);
 			path = StuDo;
 			sourceTree = "<group>";
@@ -205,6 +201,18 @@
 				493E8AED228B4357004EC563 /* Info.plist */,
 			);
 			path = StuDoUITests;
+			sourceTree = "<group>";
+		};
+		496F527F23111E080021A195 /* Support files */ = {
+			isa = PBXGroup;
+			children = (
+				49BCE24D22F31D4C00C64C44 /* Assets.xcassets */,
+				493E8AD4228B4356004EC563 /* LaunchScreen.storyboard */,
+				493E8AD7228B4356004EC563 /* Info.plist */,
+				49D76A7F231053D2002B22D4 /* EnglishStrings.plist */,
+				49D76A8323105F64002B22D4 /* RussianStrings.plist */,
+			);
+			path = "Support files";
 			sourceTree = "<group>";
 		};
 		49A216F822F60656009AD846 /* Reusable */ = {
@@ -594,7 +602,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RMT8Q82SET;
-				INFOPLIST_FILE = StuDo/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/StuDo/Support files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -613,7 +621,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RMT8Q82SET;
-				INFOPLIST_FILE = StuDo/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/StuDo/Support files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

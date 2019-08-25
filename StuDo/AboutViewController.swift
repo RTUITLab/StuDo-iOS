@@ -35,7 +35,7 @@ class AboutViewController: UITableViewController {
         tableView.register(AboutHeaderView.self, forHeaderFooterViewReuseIdentifier: aboutHeaderViewID)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: cellValue1Style)
         
-        navigationItem.title = "About"
+        navigationItem.title = Localizer.string(for: .aboutTitle)
         
     }
 
@@ -58,7 +58,14 @@ class AboutViewController: UITableViewController {
         
         let info = infoPosition[indexPath.section][indexPath.row]
         cell.accessoryType = .disclosureIndicator
-        cell.textLabel?.text = info.rawValue
+        
+        if info == .feedback {
+            cell.textLabel?.text = Localizer.string(for: .aboutFeedback)
+        } else if info == .rate {
+            cell.textLabel?.text = Localizer.string(for: .aboutRate)
+        } else if info == .vkLink {
+            cell.textLabel?.text = Localizer.string(for: .aboutRTULab)
+        }
         
         return cell
     }

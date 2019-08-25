@@ -20,7 +20,8 @@ class EmailTableViewController: UITableViewController, UITextFieldDelegate {
         
         tableView.register(TableViewCellWithInputField.self, forCellReuseIdentifier: textFieldCellId)
 
-        doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped(_:)))
+        doneButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(doneButtonTapped(_:)))
+
         navigationItem.rightBarButtonItem = doneButton
         doneButton.isEnabled = false
     }
@@ -28,11 +29,11 @@ class EmailTableViewController: UITableViewController, UITextFieldDelegate {
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return "We'll send you a confirmation link."
+        return Localizer.string(for: .emailChangeSectionDescription)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "New email address"
+        return Localizer.string(for: .emailChangeSectionHeader)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -62,9 +63,9 @@ class EmailTableViewController: UITableViewController, UITextFieldDelegate {
     
     func changeEmail() {
         // Save the new email address
-        let alertController = UIAlertController(title: "Alert", message: "Email change is not yet implemented in the app.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: nil, message: Localizer.string(for: .emailChangeAlertMessage), preferredStyle: .alert)
         
-        let OkButton = UIAlertAction(title: "OK", style: .cancel) { _ in
+        let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel) { _ in
             self.navigationController?.popViewController(animated: true)
         }
         alertController.addAction(OkButton)

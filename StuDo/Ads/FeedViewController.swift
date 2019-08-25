@@ -36,6 +36,9 @@ class FeedViewController: UIViewController {
     
     var titleView = FoldingTitleView()
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
