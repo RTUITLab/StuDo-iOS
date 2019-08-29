@@ -548,8 +548,8 @@ extension APIClient {
     
     
     func getProfiles(forUserWithId userId: String) {
-        var request = APIRequest(method: .get, path: "user/resume/")
-        request.queryItems = [URLQueryItem(name: "userId", value: userId)]
+        var request = APIRequest(method: .get, path: "resumes/user/\(userId)")
+//        request.queryItems = [URLQueryItem(name: "userId", value: userId)]
         
         self.perform(secureRequest: request) { (result) in
             switch result {
@@ -579,7 +579,7 @@ extension APIClient {
     
     
     func getProfile(withId id: String) {
-        let request = APIRequest(method: .get, path: "user/resume/\(id)")
+        let request = APIRequest(method: .get, path: "resumes/\(id)")
         
         self.perform(secureRequest: request) { (result) in
             switch result {
@@ -609,7 +609,7 @@ extension APIClient {
     
     func create(profile: Profile) {
         
-        if let request = try? APIRequest(method: .post, path: "user/resume", body: profile) {
+        if let request = try? APIRequest(method: .post, path: "resumes", body: profile) {
             self.perform(secureRequest: request) { (result) in
                 switch result {
                 case .success(let response):
@@ -636,7 +636,7 @@ extension APIClient {
     
     
     func deleteProfile(withId id: String) {
-        let request = APIRequest(method: .delete, path: "user/resume/\(id)")
+        let request = APIRequest(method: .delete, path: "resumes/\(id)")
         self.perform(secureRequest: request) { (result) in
             switch result {
             case .success(let response):
@@ -659,7 +659,7 @@ extension APIClient {
     
     func replaceProfile(with profile: Profile) {
         
-        if let request = try? APIRequest(method: .put, path: "user/resume", body: profile) {
+        if let request = try? APIRequest(method: .put, path: "resumes", body: profile) {
             self.perform(secureRequest: request) { (result) in
                 switch result {
                 case .success(let response):
