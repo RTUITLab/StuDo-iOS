@@ -12,11 +12,15 @@ fileprivate let textFieldCellId = "textFieldCellId"
 
 class EmailTableViewController: UITableViewController, UITextFieldDelegate {
     
+    let client = APIClient()
+    
     var emailTextField: UITextField!
     var doneButton: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        client.delegate = self
         
         tableView.register(TableViewCellWithInputField.self, forCellReuseIdentifier: textFieldCellId)
 
@@ -62,15 +66,7 @@ class EmailTableViewController: UITableViewController, UITextFieldDelegate {
     
     
     func changeEmail() {
-        // Save the new email address
-        let alertController = UIAlertController(title: nil, message: Localizer.string(for: .emailChangeAlertMessage), preferredStyle: .alert)
-        
-        let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel) { _ in
-            self.navigationController?.popViewController(animated: true)
-        }
-        alertController.addAction(OkButton)
-        
-        self.present(alertController, animated: true, completion: nil)
+        client.changeEmail(to: emailTextField.text!)
     }
     
     
@@ -92,4 +88,25 @@ class EmailTableViewController: UITableViewController, UITextFieldDelegate {
         return false
     }
 
+}
+
+
+
+
+extension EmailTableViewController: APIClientDelegate {
+    func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        print(error.localizedDescription)
+    }
+    
+    func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest) {
+        
+        let alertController = UIAlertController(title: nil, message: Localizer.string(for: .emailChangeAlertMessage), preferredStyle: .alert)
+        
+        let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel) { _ in
+            self.navigationController?.popViewController(animated: true)
+        }
+        alertController.addAction(OkButton)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
 }

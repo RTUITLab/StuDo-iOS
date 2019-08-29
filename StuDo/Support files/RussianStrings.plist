@@ -2,31 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>done</key>
-    <string>Готово</string>
-    <key>save</key>
-    <string>Сохранить</string>
-    <key>back</key>
-    <string>Назад</string>
-    <key>okay</key>
-    <string>Хорошо</string>
-    <key>cancel</key>
-    <string>Отменить</string>
-    <key>delete</key>
-    <string>Удалить</string>
-    
+	<key>done</key>
+	<string>Готово</string>
+	<key>save</key>
+	<string>Сохранить</string>
+	<key>back</key>
+	<string>Назад</string>
+	<key>okay</key>
+	<string>Хорошо</string>
+	<key>cancel</key>
+	<string>Отменить</string>
+	<key>delete</key>
+	<string>Удалить</string>
 	<key>feedTitleAllAds</key>
 	<string>Объявления</string>
 	<key>feedTitleMyAds</key>
 	<string>Мои объявления</string>
-    
 	<key>navigationMenuAllAds</key>
 	<string>Все объявления</string>
 	<key>navigationMenuMyAds</key>
 	<string>Только мои объявления</string>
-    
-    <key>accountTitle</key>
-    <string>Аккаунт</string>
+	<key>accountTitle</key>
+	<string>Аккаунт</string>
 	<key>accountMyProfiles</key>
 	<string>Мои резюме</string>
 	<key>accountAddNewProfile</key>
@@ -39,124 +36,115 @@
 	<string>Настройки</string>
 	<key>accountAbout</key>
 	<string>О приложении</string>
-    
-    <key>settingsTitle</key>
-    <string>Настройки</string>
-    <key>settingsLanguage</key>
-    <string>Язык приложения</string>
-    <key>settingsAccentColor</key>
-    <string>Основной цвет</string>
-    
-    <key>aboutTitle</key>
-    <string>О приложении</string>
-    <key>aboutVersion</key>
-    <string>Версия</string>
-    <key>aboutFeedback</key>
-    <string>Отправить фидбек</string>
-    <key>aboutRate</key>
-    <string>Оценить в App Store</string>
-    <key>aboutRTULab</key>
-    <string>Сообщество RTU IT Lab</string>
-    
-    <key>accountDetailFirstName</key>
-    <string>Имя</string>
-    <key>accountDetailLastName</key>
-    <string>Фамилия</string>
-    <key>accountDetailNameSectionDescription</key>
-    <string>Вы можете редактировать своё имя и фамилию.</string>
-    <key>accountDetailStudentID</key>
-    <string>Номер студенческого билета</string>
-    <key>accountDetailEmail</key>
-    <string>Изменить e-mail</string>
-    <key>accountDetailPassword</key>
-    <string>Изменить пароль</string>
-    <key>accountDetailLogout</key>
-    <string>Выйти из приложения</string>
-    
-    <key>emailChangeSectionHeader</key>
-    <string>Новый e-mail</string>
-    <key>emailChangeSectionDescription</key>
-    <string>Мы отправим вам ссылку для подтверждения на данный e-mail.</string>
-    <key>emailChangeAlertMessage</key>
-    <string>Email change is not yet implemented in the app.</string>
-    
-    <key>passwordCurrentSectionHeader</key>
-    <string>Действующий пароль</string>
-    <key>passwordEnterCurrent</key>
-    <string>Введите свой пароль</string>
-    <key>passwordNewSectionHeader</key>
-    <string>Новый пароль</string>
-    <key>passwordEnterNew</key>
-    <string>Введите новый пароль</string>
-    <key>passwordRepeatNew</key>
-    <string>Введите новый пароль ещё раз</string>
-    <key>passwordNewSectionDescription</key>
-    <string>Ваш пароль должен иметь длину не менее 6 символов.</string>
-    <key>passwordChangeAlertTitle</key>
-    <string>Пароль изменён!</string>
-    <key>passwordChangeAlertMessage</key>
-    <string>Вы успешно изменили свой пароль.</string>
-    
-    <key>profileNameSectionHeader</key>
-    <string>Название</string>
-    <key>profileNamePlaceholder</key>
-    <string></string>
-    <key>profileNameSectionFooter</key>
-    <string>Кратко озаглавьте Ваше резюме.</string>
-    <key>profileDescriptionSectionHeader</key>
-    <string>Описание</string>
-    <key>profileDescriptionSectionFooter</key>
-    <string>Опишите в нескольких предложениях, чем Вы могли бы помочь другим в данном качестве.</string>
-    
-    <key>authEmail</key>
-    <string>E-mail</string>
-    <key>authPassword</key>
-    <string>Пароль</string>
-    <key>authRepeatPassword</key>
-    <string>Повторите пароль</string>
-    <key>authForgotPassword</key>
-    <string>Забыли пароль?</string>
-    <key>authName</key>
-    <string>Имя</string>
-    <key>authSurname</key>
-    <string>Фамилия</string>
-    <key>authSignIn</key>
-    <string>Войти</string>
-    <key>authSignUp</key>
-    <string>Зарегистрироваться</string>
-    <key>authRegistrationAlertTitle</key>
-    <string>Успешная регистрация!</string>
-    <key>authRegistrationAlertMessage</key>
-    <string>Мы отправили письмо на Ваш e-mail. Пожалуйста, подтвердите Ваш адрес, прежде чем заходить в аккаунт.</string>
-    <key>authPasswordRestorationAlertMessage</key>
-    <string>Для восстановления пароля следуйте инструкциям, отправленным на Ваш почтовый адрес.</string>
-    
-    <key>adEditorFindPeople</key>
-    <string>Пригласить людей</string>
-    <key>adEditorEditAd</key>
-    <string>Редактировать</string>
-    <key>adEditorDeleteAd</key>
-    <string>Удалить объявление</string>
-    <key>adEditorDeleteAlertMessage</key>
-    <string>Вы уверены, что хотите удалить данное объявление? Объявление будет навсегда утеряно.</string>
-    <key>adEditorCancelCreatingAlertMessage</key>
-    <string>Вы уверены, что не хотите сохранять данное объявление?</string>
-    <key>adEditorCancelEditingAlertMessage</key>
-    <string>Вы уверены, что хотите отменить редактирование данного объявления? Несохранённые изменения будут утеряны.</string>
-    <key>adEditorDiscardChanges</key>
-    <string>Отменить изменения</string>
-    <key>adEditorCancelAdCreation</key>
-    <string>Закрыть редактор</string>
-    <key>adEditorReturnToEditor</key>
-    <string>Вернуться</string>
-    <key>adEditorEditingModeTitle</key>
-    <string>Редактирование</string>
-    <key>adEditorCreationModeTitle</key>
-    <string>Новое объявление</string>
-    <key>adEditorNamePlaceholder</key>
-    <string>Заголовок</string>
-    <key>adEditorDescriptionPlaceholder</key>
-    <string>Текст Вашего объявления. Первый параграф будет использоваться в качестве краткого описания.</string>
-    
+	<key>settingsTitle</key>
+	<string>Настройки</string>
+	<key>settingsLanguage</key>
+	<string>Язык приложения</string>
+	<key>settingsAccentColor</key>
+	<string>Основной цвет</string>
+	<key>aboutTitle</key>
+	<string>О приложении</string>
+	<key>aboutVersion</key>
+	<string>Версия</string>
+	<key>aboutFeedback</key>
+	<string>Отправить фидбек</string>
+	<key>aboutRate</key>
+	<string>Оценить в App Store</string>
+	<key>aboutRTULab</key>
+	<string>Сообщество RTU IT Lab</string>
+	<key>accountDetailFirstName</key>
+	<string>Имя</string>
+	<key>accountDetailLastName</key>
+	<string>Фамилия</string>
+	<key>accountDetailNameSectionDescription</key>
+	<string>Вы можете редактировать своё имя и фамилию.</string>
+	<key>accountDetailStudentID</key>
+	<string>Номер студенческого билета</string>
+	<key>accountDetailEmail</key>
+	<string>Изменить e-mail</string>
+	<key>accountDetailPassword</key>
+	<string>Изменить пароль</string>
+	<key>accountDetailLogout</key>
+	<string>Выйти из приложения</string>
+	<key>emailChangeSectionHeader</key>
+	<string>Новый e-mail</string>
+	<key>emailChangeSectionDescription</key>
+	<string>Мы отправим вам ссылку для подтверждения на данный e-mail.</string>
+	<key>emailChangeAlertMessage</key>
+	<string>На Ваш новый e-mail отправлена ссылка подтверждения. После подверждения за Вашим аккаунтом будет закреплён новый адрес.</string>
+	<key>passwordCurrentSectionHeader</key>
+	<string>Действующий пароль</string>
+	<key>passwordEnterCurrent</key>
+	<string>Введите свой пароль</string>
+	<key>passwordNewSectionHeader</key>
+	<string>Новый пароль</string>
+	<key>passwordEnterNew</key>
+	<string>Введите новый пароль</string>
+	<key>passwordRepeatNew</key>
+	<string>Введите новый пароль ещё раз</string>
+	<key>passwordNewSectionDescription</key>
+	<string>Ваш пароль должен иметь длину не менее 6 символов.</string>
+	<key>passwordChangeAlertTitle</key>
+	<string>Пароль изменён!</string>
+	<key>passwordChangeAlertMessage</key>
+	<string>Вы успешно изменили свой пароль.</string>
+	<key>profileNameSectionHeader</key>
+	<string>Название</string>
+	<key>profileNamePlaceholder</key>
+	<string></string>
+	<key>profileNameSectionFooter</key>
+	<string>Кратко озаглавьте Ваше резюме.</string>
+	<key>profileDescriptionSectionHeader</key>
+	<string>Описание</string>
+	<key>profileDescriptionSectionFooter</key>
+	<string>Опишите в нескольких предложениях, чем Вы могли бы помочь другим в данном качестве.</string>
+	<key>authEmail</key>
+	<string>E-mail</string>
+	<key>authPassword</key>
+	<string>Пароль</string>
+	<key>authRepeatPassword</key>
+	<string>Повторите пароль</string>
+	<key>authForgotPassword</key>
+	<string>Забыли пароль?</string>
+	<key>authName</key>
+	<string>Имя</string>
+	<key>authSurname</key>
+	<string>Фамилия</string>
+	<key>authSignIn</key>
+	<string>Войти</string>
+	<key>authSignUp</key>
+	<string>Зарегистрироваться</string>
+	<key>authRegistrationAlertTitle</key>
+	<string>Успешная регистрация!</string>
+	<key>authRegistrationAlertMessage</key>
+	<string>Мы отправили письмо на Ваш e-mail. Пожалуйста, подтвердите Ваш адрес, прежде чем заходить в аккаунт.</string>
+	<key>authPasswordRestorationAlertMessage</key>
+	<string>Для восстановления пароля следуйте инструкциям, отправленным на Ваш почтовый адрес.</string>
+	<key>adEditorFindPeople</key>
+	<string>Пригласить людей</string>
+	<key>adEditorEditAd</key>
+	<string>Редактировать</string>
+	<key>adEditorDeleteAd</key>
+	<string>Удалить объявление</string>
+	<key>adEditorDeleteAlertMessage</key>
+	<string>Вы уверены, что хотите удалить данное объявление? Объявление будет навсегда утеряно.</string>
+	<key>adEditorCancelCreatingAlertMessage</key>
+	<string>Вы уверены, что не хотите сохранять данное объявление?</string>
+	<key>adEditorCancelEditingAlertMessage</key>
+	<string>Вы уверены, что хотите отменить редактирование данного объявления? Несохранённые изменения будут утеряны.</string>
+	<key>adEditorDiscardChanges</key>
+	<string>Отменить изменения</string>
+	<key>adEditorCancelAdCreation</key>
+	<string>Закрыть редактор</string>
+	<key>adEditorReturnToEditor</key>
+	<string>Вернуться</string>
+	<key>adEditorEditingModeTitle</key>
+	<string>Редактирование</string>
+	<key>adEditorCreationModeTitle</key>
+	<string>Новое объявление</string>
+	<key>adEditorNamePlaceholder</key>
+	<string>Заголовок</string>
+	<key>adEditorDescriptionPlaceholder</key>
+	<string>Текст Вашего объявления. Первый параграф будет использоваться в качестве краткого описания.</string>
 </dict>
 </plist>

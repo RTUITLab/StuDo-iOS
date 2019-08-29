@@ -255,7 +255,7 @@ class APIClient {
 
 
 
-// MARK:- StuDo API Requests
+// MARK: - Delegate
 
 protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error)
@@ -283,6 +283,9 @@ protocol APIClientDelegate: class {
     
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest)
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest)
+    
+    func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest)
+    func apiClient(_ client: APIClient, didChangeUserInfoWithRequest: APIRequest)
 }
 
 extension APIClientDelegate {
@@ -301,6 +304,8 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didDeleteProfileWithId profileID: String) {}
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest) {}
+    func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest) {}
+    func apiClient(_ client: APIClient, didChangeUserInfoWithRequest: APIRequest) {}
 }
 
 
@@ -316,7 +321,7 @@ extension APIClient {
     
     
     // ==========================
-    // Authorization requests
+    // MARK: - Authorization requests
     // ==========================
     
     func register(user: User) {
@@ -375,7 +380,7 @@ extension APIClient {
     
     
     // ==========================
-    // Ad-related requests
+    // MARK: - Ad-related requests
     // ==========================
     
     
@@ -543,13 +548,12 @@ extension APIClient {
     
     
     // ==========================
-    // Profile-related requests
+    // MARK: - Profile-related requests
     // ==========================
     
     
     func getProfiles(forUserWithId userId: String) {
         var request = APIRequest(method: .get, path: "resumes/user/\(userId)")
-//        request.queryItems = [URLQueryItem(name: "userId", value: userId)]
         
         self.perform(secureRequest: request) { (result) in
             switch result {
@@ -690,7 +694,7 @@ extension APIClient {
     
     
     // ==========================
-    // User-related requests
+    // MARK: - User-related requests
     // ==========================
     
     
@@ -740,6 +744,59 @@ extension APIClient {
         
     }
     
+    
+    
+    
+    func changeEmail(to newEmail: String) {
+        let currentUser = PersistentStore.shared.user!
+        let emailRequestDictionary = [
+            "id": currentUser.id!,
+            "oldEmail": currentUser.email,
+            "newEmail": newEmail
+        ]
+        
+        if let request = try? APIRequest(method: .post, path: "user/change/email", body: emailRequestDictionary) {
+            self.perform(secureRequest: request) { [self] result in
+                switch result {
+                    case .success:
+                        DispatchQueue.main.async {
+                            self.delegate?.apiClient(self, didChangeEmailWithRequest: request)
+                        }
+                    case .failure(let error):
+                        DispatchQueue.main.async {
+                            self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    func changeUserInfo(to newInfo: (firstName: String, lastName: String, studentID: String)) {
+        let currentUser = PersistentStore.shared.user!
+        let userInfoRequestDictionary = [
+            "id": currentUser.id!,
+            "firstname": newInfo.firstName,
+            "surname": newInfo.lastName,
+            "studentCardNumber": newInfo.studentID
+        ]
+        
+        if let request = try? APIRequest(method: .post, path: "user/change/info", body: userInfoRequestDictionary) {
+            self.perform(secureRequest: request) { [self] result in
+                switch result {
+                case .success:
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didChangePasswordWithRequest: request)
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+    }
     
     
     
