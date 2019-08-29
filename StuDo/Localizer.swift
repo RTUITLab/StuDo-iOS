@@ -48,6 +48,8 @@ enum LozalizerString: String {
     case accountDetailEmail
     case accountDetailPassword
     case accountDetailLogout
+    case accountDetailChangeAlertMessage
+    case accountDetailChangeAlertCancel
     
     case emailChangeSectionHeader
     case emailChangeSectionDescription

@@ -66,6 +66,10 @@
 	<string>Изменить пароль</string>
 	<key>accountDetailLogout</key>
 	<string>Выйти из приложения</string>
+	<key>accountDetailChangeAlertMessage</key>
+	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
+	<key>accountDetailChangeAlertCancel</key>
+	<string>Не сохранять</string>
 	<key>emailChangeSectionHeader</key>
 	<string>Новый e-mail</string>
 	<key>emailChangeSectionDescription</key>

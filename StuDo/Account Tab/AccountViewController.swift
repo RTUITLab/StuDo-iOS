@@ -310,6 +310,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         
         if sectionInfo == .myAccount {
             let detailVC = AccountDetailViewController(style: .grouped)
+            detailVC.accountViewController = self
             navigationController?.pushViewController(detailVC, animated: true)
         } else if sectionInfo == .myProfiles {
             let selectedProfile = ownProfiles[indexPath.row]

@@ -66,6 +66,10 @@
 	<string>Change password</string>
 	<key>accountDetailLogout</key>
 	<string>Log out</string>
+	<key>accountDetailChangeAlertMessage</key>
+	<string>You changed your personal info. Would you like to save the change?</string>
+	<key>accountDetailChangeAlertCancel</key>
+	<string>Don&apos;t save</string>
 	<key>emailChangeSectionHeader</key>
 	<string>New email address</string>
 	<key>emailChangeSectionDescription</key>

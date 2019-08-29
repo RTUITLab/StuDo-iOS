@@ -285,10 +285,14 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest)
     
     func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest)
-    func apiClient(_ client: APIClient, didChangeUserInfoWithRequest: APIRequest)
+    func apiClient(_ client: APIClient, didChangeUserInfo newUserInfo: (firstName: String, lastName: String, studentID: String))
 }
 
 extension APIClientDelegate {
+    func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        print(error.localizedDescription)
+    }
+
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {}
@@ -305,7 +309,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest) {}
-    func apiClient(_ client: APIClient, didChangeUserInfoWithRequest: APIRequest) {}
+    func apiClient(_ client: APIClient, didChangeUserInfo newUserInfo: (firstName: String, lastName: String, studentID: String)) {}
 }
 
 
@@ -787,7 +791,7 @@ extension APIClient {
                 switch result {
                 case .success:
                     DispatchQueue.main.async {
-                        self.delegate?.apiClient(self, didChangePasswordWithRequest: request)
+                        self.delegate?.apiClient(self, didChangeUserInfo: newInfo)
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
