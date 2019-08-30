@@ -58,15 +58,15 @@ class AdTableViewCell: UITableViewCell {
         
         
         
-        titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
+        titleLabel.font = .preferredFont(forTextStyle: .headline)
         
         descriptionTextView.isUserInteractionEnabled = false
-        descriptionTextView.font = .systemFont(ofSize: 17, weight: .regular)
+        descriptionTextView.font = .preferredFont(forTextStyle: .body)
         descriptionTextView.isScrollEnabled = false
         descriptionTextView.layoutManager.delegate = self
         
         additionalInfoLabel.textColor = UIColor(red:0.467, green:0.467, blue:0.471, alpha:1.000)
-        additionalInfoLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        additionalInfoLabel.font = .preferredFont(forTextStyle: .footnote)
         
         selectionStyle = .none
         

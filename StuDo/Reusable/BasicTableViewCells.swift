@@ -40,9 +40,10 @@ class TableViewCellWithInputField: UITableViewCell {
         inputField.translatesAutoresizingMaskIntoConstraints = false
         inputField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         inputField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
-        inputField.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        inputField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        inputField.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        inputField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
+        inputField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
+        
+        inputField.font = .preferredFont(forTextStyle: .body)
         
     }
     
@@ -71,7 +72,7 @@ class TableViewCellWithTextViewInput: UITableViewCell {
         
         textViewInput.isScrollEnabled = false
         
-        textViewInput.font = .systemFont(ofSize: 16, weight: .regular)
+        textViewInput.font = .preferredFont(forTextStyle: .body)
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -37,6 +37,9 @@ class PasswordTableViewController: UITableViewController, UITextFieldDelegate {
         doneButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(doneButtonTapped(_:)))
         navigationItem.rightBarButtonItem = doneButton
         doneButton.isEnabled = false
+        
+        tableView.rowHeight = UITableView.automaticDimension
+
     }
     
     // MARK: - Table view data source

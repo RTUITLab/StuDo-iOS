@@ -28,6 +28,8 @@ class EmailTableViewController: UITableViewController, UITextFieldDelegate {
 
         navigationItem.rightBarButtonItem = doneButton
         doneButton.isEnabled = false
+        
+        tableView.rowHeight = UITableView.automaticDimension
     }
 
     // MARK: - Table view data source

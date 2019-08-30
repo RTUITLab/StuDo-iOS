@@ -77,7 +77,7 @@ class FoldingTitleView: UIView {
         glyph.heightAnchor.constraint(equalTo: glyph.widthAnchor).isActive = true
 
         
-        titleLabel.font = .preferredFont(forTextStyle: .headline)
+        titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         
         glyph.image = #imageLiteral(resourceName: "expand arrow")
         glyph.contentMode = .scaleAspectFit

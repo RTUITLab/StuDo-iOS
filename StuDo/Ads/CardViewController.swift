@@ -235,6 +235,16 @@ extension CardViewController: UIScrollViewDelegate {
                 setNeedsStatusBarAppearanceUpdate()
             }
             
+            if offsetY > 0 && previousContentOffset <= 0 {
+                UIView.animate(withDuration: 0.3) {
+                    self.horizontalHandle.alpha = 0
+                }
+            } else if offsetY <= 0 && previousContentOffset > 0 {
+                UIView.animate(withDuration: 0.3) {
+                    self.horizontalHandle.alpha = 1
+                }
+            }
+            
             var separatorAnimationTime: TimeInterval = 0.3
             var headerShadowAnimationTime: TimeInterval = 0.8
             

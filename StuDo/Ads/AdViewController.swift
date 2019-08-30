@@ -65,6 +65,7 @@ class AdViewController: CardViewController {
     
     let nameTextField = UITextField()
     let descriptionTextView = UITextView()
+    let descriptionPlaceholderLabel = UILabel()
     
     let moreButton = UIButton()
     let publishButton = UIButton()
@@ -91,6 +92,9 @@ class AdViewController: CardViewController {
         if let ad = ad {
             set(advertisement: ad)
             client.getAd(withId: ad.id)
+            descriptionPlaceholderLabel.isHidden = true
+        } else {
+            descriptionPlaceholderLabel.isHidden = false
         }
         
     }
@@ -124,6 +128,16 @@ class AdViewController: CardViewController {
         descriptionTextView.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor, constant: -4).isActive = true
         descriptionTextView.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
         descriptionTextView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: horizontalSpace).isActive = true
+        
+        
+        
+        contentView.addSubview(descriptionPlaceholderLabel)
+        descriptionPlaceholderLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionPlaceholderLabel.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor).isActive = true
+        descriptionPlaceholderLabel.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
+        descriptionPlaceholderLabel.topAnchor.constraint(equalTo: descriptionTextView.topAnchor, constant: 7).isActive = true
+        
+        
         
         
         
@@ -178,6 +192,9 @@ class AdViewController: CardViewController {
         
         
         
+        
+        
+        
         nameTextField.isUserInteractionEnabled = false
         descriptionTextView.isUserInteractionEnabled = false
         
@@ -190,15 +207,22 @@ class AdViewController: CardViewController {
         nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         nameTextField.delegate = self
         
-        nameTextField.font = .systemFont(ofSize: 20, weight: .medium)
+        nameTextField.font = .preferredFont(forTextStyle: .headline)
         nameTextField.placeholder = Localizer.string(for: .adEditorNamePlaceholder)
         nameTextField.returnKeyType = .next
         nameTextField.autocapitalizationType = .sentences
 
         descriptionTextView.isScrollEnabled = false
-        descriptionTextView.font = .systemFont(ofSize: 18, weight: .light)
+        descriptionTextView.font = .preferredFont(forTextStyle: .body)
         descriptionTextView.returnKeyType = .default
         descriptionTextView.autocapitalizationType = .sentences
+        
+        
+        
+        descriptionPlaceholderLabel.text = Localizer.string(for: .adEditorDescriptionPlaceholder)
+        descriptionPlaceholderLabel.textColor = .lightGray
+        descriptionPlaceholderLabel.font = .preferredFont(forTextStyle: .body)
+        descriptionPlaceholderLabel.numberOfLines = 3
         
 
     }
@@ -374,7 +398,13 @@ class AdViewController: CardViewController {
     func publishCurrentAd() {
         let title = nameTextField.text!
         let description = descriptionTextView.text!
-        let shortDescription = description
+        var shortDescription: String!
+        
+        if let firstParagraph = description.components(separatedBy: CharacterSet.newlines).first {
+            shortDescription = firstParagraph
+        } else {
+            shortDescription = description
+        }
         
         let beginTime = Date()
         let endTime = Date().addingTimeInterval(TimeInterval(exactly: 60 * 60 * 60)!)
@@ -506,6 +536,11 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         if textView === descriptionTextView {
+            if textView.text != "" {
+                descriptionPlaceholderLabel.isHidden = true
+            } else {
+                descriptionPlaceholderLabel.isHidden = false
+            }
             let waitTime = DispatchTime(uptimeNanoseconds: 100)
             DispatchQueue.main.asyncAfter(deadline: waitTime, execute: {
                 self.adjustContentLayout()

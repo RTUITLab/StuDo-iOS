@@ -251,12 +251,13 @@ class AccountDetailViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let sectionInfo = sections[indexPath.section]
         
-        switch sectionInfo {
-        case .nameAndSurname:
-            return UITableView.automaticDimension
-        default:
-            return 46
-        }
+//        switch sectionInfo {
+//        case .nameAndSurname:
+//        default:
+//            return 46
+//        }
+        
+        return UITableView.automaticDimension
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
