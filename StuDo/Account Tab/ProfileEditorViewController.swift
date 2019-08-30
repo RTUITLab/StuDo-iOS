@@ -192,6 +192,7 @@ extension ProfileEditorViewController {
         
         if sectionInfo == .deleteAction {
             client.deleteProfile(withId: profile!.id!)
+            RootViewController.startLoadingIndicator()
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -225,6 +226,7 @@ extension ProfileEditorViewController {
         let name = nameTextField.text!
         let description = descriptionTextView.text!
         
+        RootViewController.startLoadingIndicator()
         if let profile = profile {
             let updatedProfile = Profile(id: profile.id!, name: name, description: description)
             client.replaceProfile(with: updatedProfile)
@@ -296,22 +298,29 @@ extension ProfileEditorViewController: UITextFieldDelegate, UITextViewDelegate {
 
 extension ProfileEditorViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        RootViewController.stopLoadingIndicator(with: .fail)
         print(error.localizedDescription)
     }
     
     func apiClient(_ client: APIClient, didCreateProfile newProfile: Profile) {
-        delegate?.profileEditorViewController(self, didCreateProfile: newProfile)
-        self.navigationController?.popViewController(animated: true)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.delegate?.profileEditorViewController(self, didCreateProfile: newProfile)
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     func apiClient(_ client: APIClient, didDeleteProfileWithId profileID: String) {
-        delegate?.profileEditorViewController(self, didDeleteProfile: profile!)
-        self.navigationController?.popViewController(animated: true)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.delegate?.profileEditorViewController(self, didDeleteProfile: self.profile!)
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     func apiClient(_ client: APIClient, didUpdateProfile updatedProfile: Profile) {
-        delegate?.profileEditorViewController(self, didUpdateProfile: updatedProfile)
-        self.navigationController?.popViewController(animated: true)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.delegate?.profileEditorViewController(self, didUpdateProfile: updatedProfile)
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     func apiClient(_ client: APIClient, didRecieveProfile profile: Profile) {

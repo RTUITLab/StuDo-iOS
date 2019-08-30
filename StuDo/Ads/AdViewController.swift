@@ -330,6 +330,7 @@ class AdViewController: CardViewController {
     func deleteCurrentAd() {
         func deleteAd() {
             client.deleteAd(withId: advertisement!.id)
+            RootViewController.startLoadingIndicator()
         }
         
         let shouldProceedAlert = UIAlertController(title: Localizer.string(for: .adEditorDeleteAlertMessage), message: nil, preferredStyle: .alert)
@@ -378,6 +379,8 @@ class AdViewController: CardViewController {
         let beginTime = Date()
         let endTime = Date().addingTimeInterval(TimeInterval(exactly: 60 * 60 * 60)!)
         
+        RootViewController.startLoadingIndicator()
+
         if let oldAd = advertisement {
             
             let adToUpdate = Ad(id: oldAd.id, name: title, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
@@ -443,23 +446,32 @@ extension AdViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {
         set(advertisement: newAd)
-        disableEditingMode(completion: nil)
         delegate?.adViewController(self, didCreateAd: newAd)
+        
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.disableEditingMode(completion: nil)
+        }
     }
     
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {
         set(advertisement: updatedAd)
-        disableEditingMode(completion: nil)
         delegate?.adViewController(self, didUpdateAd: updatedAd)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.disableEditingMode(completion: nil)
+        }
     }
     
     func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {
         delegate?.adViewController(self, didDeleteAd: advertisement!)
-        dismiss(animated: true, completion: nil)
+        
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         print(error.localizedDescription)
+        RootViewController.stopLoadingIndicator(with: .fail)
     }
     
     

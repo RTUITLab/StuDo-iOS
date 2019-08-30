@@ -67,6 +67,7 @@ class EmailTableViewController: UITableViewController, UITextFieldDelegate {
     
     func changeEmail() {
         client.changeEmail(to: emailTextField.text!)
+        RootViewController.startLoadingIndicator()
     }
     
     
@@ -96,17 +97,20 @@ class EmailTableViewController: UITableViewController, UITextFieldDelegate {
 extension EmailTableViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         print(error.localizedDescription)
+        RootViewController.stopLoadingIndicator(with: .fail)
     }
     
     func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest) {
         
-        let alertController = UIAlertController(title: nil, message: Localizer.string(for: .emailChangeAlertMessage), preferredStyle: .alert)
-        
-        let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel) { _ in
-            self.navigationController?.popViewController(animated: true)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            let alertController = UIAlertController(title: nil, message: Localizer.string(for: .emailChangeAlertMessage), preferredStyle: .alert)
+            
+            let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel) { _ in
+            }
+            alertController.addAction(OkButton)
+            
+            self.present(alertController, animated: true, completion: nil)
         }
-        alertController.addAction(OkButton)
         
-        self.present(alertController, animated: true, completion: nil)
     }
 }

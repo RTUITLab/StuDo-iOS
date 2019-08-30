@@ -48,6 +48,7 @@
 		49E2DB1422FDB3730015DCD8 /* EmailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E2DB1322FDB3730015DCD8 /* EmailTableViewController.swift */; };
 		49E2DB1622FDB4E20015DCD8 /* DataChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E2DB1522FDB4E20015DCD8 /* DataChecker.swift */; };
 		49E2DB1822FDBD1E0015DCD8 /* PasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E2DB1722FDBD1E0015DCD8 /* PasswordTableViewController.swift */; };
+		49E61DD523185CB1007BC4FF /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E61DD423185CB1007BC4FF /* LoadingIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +116,7 @@
 		49E2DB1322FDB3730015DCD8 /* EmailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailTableViewController.swift; sourceTree = "<group>"; };
 		49E2DB1522FDB4E20015DCD8 /* DataChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataChecker.swift; sourceTree = "<group>"; };
 		49E2DB1722FDBD1E0015DCD8 /* PasswordTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordTableViewController.swift; sourceTree = "<group>"; };
+		49E61DD423185CB1007BC4FF /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 				495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */,
 				49D76A7B231050A8002B22D4 /* Localizer.swift */,
 				49D76A81231059B9002B22D4 /* NotificationHandling.swift */,
+				49E61DD423185CB1007BC4FF /* LoadingIndicator.swift */,
 				496F527F23111E080021A195 /* Support files */,
 			);
 			path = StuDo;
@@ -399,6 +402,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49E61DD523185CB1007BC4FF /* LoadingIndicator.swift in Sources */,
 				49BBB99B2306E25600883EB9 /* NavigationMenu.swift in Sources */,
 				49D76A82231059B9002B22D4 /* NotificationHandling.swift in Sources */,
 				49BCE24C22F0AC2100C64C44 /* CardAnimatedTransitioning.swift in Sources */,

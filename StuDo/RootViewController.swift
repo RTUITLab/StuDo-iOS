@@ -10,6 +10,9 @@ import UIKit
 
 class RootViewController: UIViewController {
     
+    var isInitialSetup = true
+    let loadingIndicator = LoadingIndicator()
+    
     private var mainController: TabBarController!
     private var authorizationController: AuthorizationViewController!
     
@@ -54,6 +57,25 @@ class RootViewController: UIViewController {
             self.proceed()
         }
         
+        
+
+    }
+    
+    override func viewDidLayoutSubviews() {
+        if isInitialSetup {
+            isInitialSetup = false
+            
+            if let appWindow = UIApplication.shared.delegate?.window! {
+                appWindow.addSubview(loadingIndicator)
+                loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+                let loadingIndicatorSize: CGFloat = 60
+                loadingIndicator.heightAnchor.constraint(equalToConstant: loadingIndicatorSize).isActive = true
+                loadingIndicator.widthAnchor.constraint(greaterThanOrEqualToConstant: loadingIndicatorSize).isActive = true
+                loadingIndicator.centerXAnchor.constraint(equalTo: appWindow.centerXAnchor, constant: 0).isActive = true
+                loadingIndicator.centerYAnchor.constraint(equalTo: appWindow.centerYAnchor, constant: -loadingIndicatorSize / 2).isActive = true
+            }
+            
+        }
     }
     
     
@@ -142,4 +164,21 @@ extension RootViewController: UIViewControllerTransitioningDelegate {
     }
     
     
+}
+
+
+
+
+extension RootViewController {
+    
+    static func startLoadingIndicator() {
+        if let appWindow = UIApplication.shared.delegate?.window! {
+            appWindow.bringSubviewToFront(RootViewController.main.loadingIndicator)
+        }
+        RootViewController.main.loadingIndicator.startIndicator()
+    }
+    
+    static func stopLoadingIndicator(with stopReason: LoadingIndicator.StopIndicatorType, completion: (() -> ())? = nil) {
+        RootViewController.main.loadingIndicator.stopIndicator(with: stopReason, completion: completion)
+    }
 }

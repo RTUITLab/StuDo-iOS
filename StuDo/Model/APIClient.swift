@@ -725,7 +725,7 @@ extension APIClient {
     func changePassword(from currentPassword: String, to newPassword: String) {
         let currentUser = PersistentStore.shared.user!
         let credentialsDictionary = [
-            "Email": currentUser.email,
+            "Id": currentUser.id!,
             "OldPassword": currentPassword,
             "NewPassword": newPassword
         ]

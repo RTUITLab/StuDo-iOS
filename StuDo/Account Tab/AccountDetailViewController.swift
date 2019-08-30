@@ -80,7 +80,7 @@ class AccountDetailViewController: UITableViewController {
         let currentUser = PersistentStore.shared.user!
         
         client.changeUserInfo(to: (firstName: editedName ?? currentUser.firstName, lastName: editedLastName ?? currentUser.lastName, studentID: editedStudentID ?? currentUser.studentID ?? ""))
-        doneButton.isEnabled = false
+        RootViewController.startLoadingIndicator()
     }
     
     @objc func doneButtonPressed(_ doneButton: UIBarButtonItem) {
@@ -293,13 +293,23 @@ extension AccountDetailViewController: UITextFieldDelegate {
 
 
 extension AccountDetailViewController: APIClientDelegate {
+    
+    func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        RootViewController.stopLoadingIndicator(with: .fail)
+        doneButton.isEnabled = true
+    }
+    
     func apiClient(_ client: APIClient, didChangeUserInfo newUserInfo: (firstName: String, lastName: String, studentID: String)) {
         let cUser = PersistentStore.shared.user! // currentUser
         PersistentStore.shared.user = User(id: cUser.id, firstName: newUserInfo.firstName, lastName: newUserInfo.lastName, email: cUser.email, studentID: newUserInfo.studentID, password: nil)
         
-        if navigationController?.visibleViewController === self {
-            navigationController?.popViewController(animated: true)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            if self.navigationController?.visibleViewController === self {
+                self.navigationController?.popViewController(animated: true)
+            }
         }
+        
+        doneButton.isEnabled = false
         
         accountViewController.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
 

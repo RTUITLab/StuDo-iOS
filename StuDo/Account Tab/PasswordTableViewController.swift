@@ -136,6 +136,7 @@ class PasswordTableViewController: UITableViewController, UITextFieldDelegate {
         let newPassword = newPasswordTextField.text!
         
         client.changePassword(from: oldPassword, to: newPassword)
+        RootViewController.startLoadingIndicator()
     }
     
     
@@ -166,17 +167,21 @@ class PasswordTableViewController: UITableViewController, UITextFieldDelegate {
 
 extension PasswordTableViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        RootViewController.stopLoadingIndicator(with: .fail)
         print(error.localizedDescription)
     }
     
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest) {
-        let alertController = UIAlertController(title: Localizer.string(for: .passwordChangeAlertTitle), message: Localizer.string(for: .passwordChangeAlertMessage), preferredStyle: .alert)
-        
-        let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel) { _ in
-            self.navigationController?.popViewController(animated: true)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            let alertController = UIAlertController(title: Localizer.string(for: .passwordChangeAlertTitle), message: Localizer.string(for: .passwordChangeAlertMessage), preferredStyle: .alert)
+            
+            let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel) { _ in
+                self.navigationController?.popViewController(animated: true)
+            }
+            alertController.addAction(OkButton)
+            
+            self.present(alertController, animated: true, completion: nil)
         }
-        alertController.addAction(OkButton)
         
-        self.present(alertController, animated: true, completion: nil)
     }
 }

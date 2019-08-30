@@ -37,10 +37,6 @@ class AuthorizationViewController: UIViewController {
     let buttonsContainerView = UIView()
     
     
-    let indicatorContainerView = UIView()
-    let loadingIndicator = UIActivityIndicatorView(style: .gray)
-    
-    
     
     let firstNameTextField = UITextField()
     let lastNameTextField = UITextField()
@@ -367,28 +363,6 @@ class AuthorizationViewController: UIViewController {
         
         
         
-        
-        let indicatorViewSize: CGFloat = 70
-        view.addSubview(indicatorContainerView)
-        indicatorContainerView.translatesAutoresizingMaskIntoConstraints = false
-        indicatorContainerView.widthAnchor.constraint(equalToConstant: indicatorViewSize).isActive = true
-        indicatorContainerView.heightAnchor.constraint(equalToConstant: indicatorViewSize).isActive = true
-        indicatorContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        indicatorContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -indicatorViewSize).isActive = true
-        
-        indicatorContainerView.alpha = 0
-        indicatorContainerView.backgroundColor = UIColor.white.withAlphaComponent(0.8)
-        indicatorContainerView.layer.cornerRadius = 8
-        
-        
-        indicatorContainerView.addSubview(loadingIndicator)
-        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
-        loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -indicatorViewSize).isActive = true
-        
-        
-        
-        
         client.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -503,20 +477,6 @@ class AuthorizationViewController: UIViewController {
         
     }
     
-    fileprivate func animateLoadingIndicator(shouldAppear: Bool) {
-        let alpha: CGFloat = shouldAppear ? 1 : 0
-        
-        if shouldAppear {
-            loadingIndicator.startAnimating()
-        } else {
-            loadingIndicator.stopAnimating()
-        }
-        
-        UIView.animate(withDuration: 0.5, animations: {
-            self.indicatorContainerView.alpha = alpha
-        }, completion: nil)
-    }
-    
     
     
     
@@ -595,7 +555,7 @@ class AuthorizationViewController: UIViewController {
             client.register(user: newUser)
         }
         
-        animateLoadingIndicator(shouldAppear: true)
+        RootViewController.startLoadingIndicator()
 
     }
     
@@ -714,7 +674,7 @@ extension AuthorizationViewController {
         let email = emailTextField.text!
         if isEmailValid(email: email) {
             client.requestPasswordRest(forEmail: email)
-            animateLoadingIndicator(shouldAppear: true)
+            RootViewController.startLoadingIndicator()
         } else {
             animateBorder(forTextField: emailTextField)
         }
@@ -776,27 +736,31 @@ extension AuthorizationViewController: UITextFieldDelegate {
 
 extension AuthorizationViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
-        animateLoadingIndicator(shouldAppear: false)
-        displayMessage(userMessage: error.localizedDescription)
+        RootViewController.stopLoadingIndicator(with: .fail) {
+            self.displayMessage(userMessage: error.localizedDescription)
+        }
     }
     
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {
         
         PersistentStore.shared.user = user
         
-        animateLoadingIndicator(shouldAppear: false)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            RootViewController.main.login()
+        }
         
-        RootViewController.main.login()
     }
     
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {
-        displayMessage(userMessage: Localizer.string(for: .authRegistrationAlertMessage), title: Localizer.string(for: .authRegistrationAlertTitle))
-        animateLoadingIndicator(shouldAppear: false)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.displayMessage(userMessage: Localizer.string(for: .authRegistrationAlertMessage), title: Localizer.string(for: .authRegistrationAlertTitle))
+        }
     }
     
     func apiClient(_ client: APIClient, didSentPasswordResetRequest: APIRequest) {
-        displayMessage(userMessage: Localizer.string(for: .authPasswordRestorationAlertMessage))
-        animateLoadingIndicator(shouldAppear: false)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.displayMessage(userMessage: Localizer.string(for: .authPasswordRestorationAlertMessage))
+        }
     }
     
 }
