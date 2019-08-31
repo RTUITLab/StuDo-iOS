@@ -76,7 +76,7 @@ class AdViewController: CardViewController {
     let nameTextFieldHeight: CGFloat = 20
     
     override var contentHeight: CGFloat {
-        let calculatedHeight = headerView.frame.height + nameTextFieldHeight + descriptionTextView.frame.height + view.safeAreaInsets.bottom
+        let calculatedHeight = headerView.frame.height + nameTextFieldHeight + descriptionTextView.frame.height + view.safeAreaInsets.bottom + 500
         return calculatedHeight
     }
     

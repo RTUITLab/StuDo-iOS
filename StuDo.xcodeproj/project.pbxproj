@@ -49,6 +49,7 @@
 		49E2DB1622FDB4E20015DCD8 /* DataChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E2DB1522FDB4E20015DCD8 /* DataChecker.swift */; };
 		49E2DB1822FDBD1E0015DCD8 /* PasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E2DB1722FDBD1E0015DCD8 /* PasswordTableViewController.swift */; };
 		49E61DD523185CB1007BC4FF /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E61DD423185CB1007BC4FF /* LoadingIndicator.swift */; };
+		49E61DD9231A564C007BC4FF /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E61DD8231A564C007BC4FF /* UIFontExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +118,7 @@
 		49E2DB1522FDB4E20015DCD8 /* DataChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataChecker.swift; sourceTree = "<group>"; };
 		49E2DB1722FDBD1E0015DCD8 /* PasswordTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordTableViewController.swift; sourceTree = "<group>"; };
 		49E61DD423185CB1007BC4FF /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
+		49E61DD8231A564C007BC4FF /* UIFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +229,7 @@
 				49BBB99A2306E25600883EB9 /* NavigationMenu.swift */,
 				49BBB99C2306E6B600883EB9 /* ListItemCell.swift */,
 				49E2DB0F22FDB22B0015DCD8 /* UITableViewExtension.swift */,
+				49E61DD8231A564C007BC4FF /* UIFontExtension.swift */,
 				49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */,
 			);
 			path = Reusable;
@@ -407,6 +410,7 @@
 				49D76A82231059B9002B22D4 /* NotificationHandling.swift in Sources */,
 				49BCE24C22F0AC2100C64C44 /* CardAnimatedTransitioning.swift in Sources */,
 				49E2DB1422FDB3730015DCD8 /* EmailTableViewController.swift in Sources */,
+				49E61DD9231A564C007BC4FF /* UIFontExtension.swift in Sources */,
 				49B1B385228DD8F000CA9EC7 /* DataMockup.swift in Sources */,
 				49E2DB1622FDB4E20015DCD8 /* DataChecker.swift in Sources */,
 				4928D43622A3ED9700F4D703 /* DataModel.swift in Sources */,

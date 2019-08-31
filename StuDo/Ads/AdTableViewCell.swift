@@ -82,10 +82,46 @@ class AdTableViewCell: UITableViewCell {
         descriptionTextView.text = ad.shortDescription
         
         let formatter = DateFormatter()
-        formatter.locale = Locale.current
-        formatter.dateFormat = "MMM d, h:mm a"
         
-        additionalInfoLabel.text = formatter.string(from: ad.beginTime)
+        let currentLanguage = PersistentStore.shared.currentLanguage
+        var currentLocale = Locale.current
+        if currentLanguage == .English {
+            currentLocale = Locale(identifier: "en")
+        } else if currentLanguage == .Russian {
+            currentLocale = Locale(identifier: "ru")
+        }
+        formatter.locale = currentLocale
+        
+        
+        var dateFormat = "MMM d, H:mm"
+        if currentLanguage == .English {
+            dateFormat = "MMM d, h:mm a"
+        }
+        formatter.dateFormat = dateFormat
+        
+        
+        let timeString = formatter.string(from: ad.beginTime)
+        
+        var creator: String!
+        if let userName = ad.userName {
+            creator = userName
+        } else if let organizationName = ad.organizationName {
+            creator = organizationName
+        }
+        
+        let additionalLabelFontStyle: UIFont.TextStyle = .caption2
+        
+        let attributedString = NSMutableAttributedString(string: timeString, attributes: [
+            .font: UIFont.preferredFont(forTextStyle: additionalLabelFontStyle)
+            ])
+        attributedString.append(NSAttributedString(string: " ‧ ", attributes: [
+            NSAttributedString.Key.font: UIFont.preferredFont(for: additionalLabelFontStyle, weight: .bold)
+            ]))
+        attributedString.append(NSAttributedString(string: creator, attributes: [
+            .font : UIFont.preferredFont(for: additionalLabelFontStyle, weight: .semibold)
+            ]))
+            
+        additionalInfoLabel.attributedText = attributedString
     }
 
 }

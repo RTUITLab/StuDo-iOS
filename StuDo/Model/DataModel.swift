@@ -292,9 +292,7 @@ extension APIClient {
         
         if fullDecode == false {
             let userNameField = "userName"
-            guard let userName = object[userNameField] as? String else {
-                throw APIError.decodingFailureWithField(userNameField)
-            }
+            let userName = object[userNameField] as? String
             
             let organizationNameField = "organizationName"
             let organizationName = object[organizationNameField] as? String

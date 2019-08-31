@@ -229,6 +229,7 @@ extension FeedViewController: NavigationMenuDelegate {
 
 extension FeedViewController {
     @objc func languageDidChange(notification: Notification) {
+        tableView.reloadData()
         switch currentMode {
         case .allAds:
             titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
