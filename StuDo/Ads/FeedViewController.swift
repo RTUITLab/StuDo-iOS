@@ -74,7 +74,7 @@ class FeedViewController: UIViewController {
         
         if let tabBarVC = tabBarController as? TabBarController {
             let navigationBarHeight = navigationController?.navigationBar.frame.height ?? 0
-            tabBarVC.priorityContentTopAnchor.constant = navigationBarHeight + 1
+            tabBarVC.priorityContentTopAnchor.constant = navigationBarHeight
             tabBarVC.navigationMenu.menuDelegate = self
         }
         

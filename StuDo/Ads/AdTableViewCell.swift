@@ -52,7 +52,7 @@ class AdTableViewCell: UITableViewCell {
         bottomSeparator.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         bottomSeparator.heightAnchor.constraint(equalToConstant: 0.8).isActive = true
         
-        bottomSeparator.backgroundColor = UIColor(red:0.820, green:0.820, blue:0.820, alpha:1.000)
+        bottomSeparator.backgroundColor = UIColor(red:0.940, green:0.940, blue:0.940, alpha:1.000)
         
         
         
@@ -80,48 +80,7 @@ class AdTableViewCell: UITableViewCell {
     func set(ad: Ad) {
         titleLabel.text = ad.name
         descriptionTextView.text = ad.shortDescription
-        
-        let formatter = DateFormatter()
-        
-        let currentLanguage = PersistentStore.shared.currentLanguage
-        var currentLocale = Locale.current
-        if currentLanguage == .English {
-            currentLocale = Locale(identifier: "en")
-        } else if currentLanguage == .Russian {
-            currentLocale = Locale(identifier: "ru")
-        }
-        formatter.locale = currentLocale
-        
-        
-        var dateFormat = "MMM d, H:mm"
-        if currentLanguage == .English {
-            dateFormat = "MMM d, h:mm a"
-        }
-        formatter.dateFormat = dateFormat
-        
-        
-        let timeString = formatter.string(from: ad.beginTime)
-        
-        var creator: String!
-        if let userName = ad.userName {
-            creator = userName
-        } else if let organizationName = ad.organizationName {
-            creator = organizationName
-        }
-        
-        let additionalLabelFontStyle: UIFont.TextStyle = .caption2
-        
-        let attributedString = NSMutableAttributedString(string: timeString, attributes: [
-            .font: UIFont.preferredFont(forTextStyle: additionalLabelFontStyle)
-            ])
-        attributedString.append(NSAttributedString(string: " ‧ ", attributes: [
-            NSAttributedString.Key.font: UIFont.preferredFont(for: additionalLabelFontStyle, weight: .bold)
-            ]))
-        attributedString.append(NSAttributedString(string: creator, attributes: [
-            .font : UIFont.preferredFont(for: additionalLabelFontStyle, weight: .semibold)
-            ]))
-            
-        additionalInfoLabel.attributedText = attributedString
+        additionalInfoLabel.attributedText = TextFormatter.additionalInfoAttributedString(for: ad)
     }
 
 }

@@ -50,6 +50,7 @@
 		49E2DB1822FDBD1E0015DCD8 /* PasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E2DB1722FDBD1E0015DCD8 /* PasswordTableViewController.swift */; };
 		49E61DD523185CB1007BC4FF /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E61DD423185CB1007BC4FF /* LoadingIndicator.swift */; };
 		49E61DD9231A564C007BC4FF /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E61DD8231A564C007BC4FF /* UIFontExtension.swift */; };
+		49E61DDB231A5C69007BC4FF /* TextFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E61DDA231A5C69007BC4FF /* TextFormatter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +120,7 @@
 		49E2DB1722FDBD1E0015DCD8 /* PasswordTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordTableViewController.swift; sourceTree = "<group>"; };
 		49E61DD423185CB1007BC4FF /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		49E61DD8231A564C007BC4FF /* UIFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
+		49E61DDA231A5C69007BC4FF /* TextFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormatter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +185,7 @@
 				49C85B2622D8D06300578F39 /* GlobalConstants.swift */,
 				495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */,
 				49D76A7B231050A8002B22D4 /* Localizer.swift */,
+				49E61DDA231A5C69007BC4FF /* TextFormatter.swift */,
 				49D76A81231059B9002B22D4 /* NotificationHandling.swift */,
 				49E61DD423185CB1007BC4FF /* LoadingIndicator.swift */,
 				496F527F23111E080021A195 /* Support files */,
@@ -422,6 +425,7 @@
 				49E2DB1022FDB22B0015DCD8 /* UITableViewExtension.swift in Sources */,
 				49DEADCE2302EE440031B3DF /* NewAdButton.swift in Sources */,
 				49BBB99D2306E6B600883EB9 /* ListItemCell.swift in Sources */,
+				49E61DDB231A5C69007BC4FF /* TextFormatter.swift in Sources */,
 				494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */,
 				49D76A7C231050A8002B22D4 /* Localizer.swift in Sources */,
 				49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */,

@@ -36,9 +36,19 @@ class AdViewController: CardViewController {
             nameTextField.text = ad.name
             
             if let description = ad.description {
-                descriptionTextView.text = description
+                if description.contains(ad.shortDescription) {
+                    descriptionTextView.text = description
+                } else {
+                    descriptionTextView.text = ad.shortDescription + "\n\n" + description
+                }
             } else {
                 descriptionTextView.text = ad.shortDescription
+            }
+            
+            additionalInfoLabel.attributedText = TextFormatter.additionalInfoAttributedString(for: ad, style: .body)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.adjustContentLayout()
             }
         }
     }
@@ -66,6 +76,7 @@ class AdViewController: CardViewController {
     let nameTextField = UITextField()
     let descriptionTextView = UITextView()
     let descriptionPlaceholderLabel = UILabel()
+    let additionalInfoLabel = UILabel()
     
     let moreButton = UIButton()
     let publishButton = UIButton()
@@ -76,7 +87,11 @@ class AdViewController: CardViewController {
     let nameTextFieldHeight: CGFloat = 20
     
     override var contentHeight: CGFloat {
-        let calculatedHeight = headerView.frame.height + nameTextFieldHeight + descriptionTextView.frame.height + view.safeAreaInsets.bottom + 500
+        var additionalHeight: CGFloat = 8
+        if currentMode == .viewing {
+            additionalHeight = additionalInfoLabel.frame.height * 3
+        }
+        let calculatedHeight = headerView.frame.height + nameTextFieldHeight + descriptionTextView.frame.height + view.safeAreaInsets.bottom + additionalHeight
         return calculatedHeight
     }
     
@@ -96,6 +111,8 @@ class AdViewController: CardViewController {
         } else {
             descriptionPlaceholderLabel.isHidden = false
         }
+        
+        additionalInfoLabel.textColor = UIColor(red:0.467, green:0.467, blue:0.471, alpha:1.000)
         
     }
     
@@ -138,6 +155,11 @@ class AdViewController: CardViewController {
         descriptionPlaceholderLabel.topAnchor.constraint(equalTo: descriptionTextView.topAnchor, constant: 7).isActive = true
         
         
+        contentView.addSubview(additionalInfoLabel)
+        additionalInfoLabel.translatesAutoresizingMaskIntoConstraints = false
+        additionalInfoLabel.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor).isActive = true
+        additionalInfoLabel.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
+        additionalInfoLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 7).isActive = true
         
         
         
@@ -262,6 +284,7 @@ class AdViewController: CardViewController {
         
         nameTextField.isUserInteractionEnabled = true
         descriptionTextView.isUserInteractionEnabled = true
+        additionalInfoLabel.isHidden = true
         
         self.publishButton.isHidden = false
         self.cancelEditingButton.isHidden = false
@@ -285,6 +308,7 @@ class AdViewController: CardViewController {
         
         nameTextField.isUserInteractionEnabled = false
         descriptionTextView.isUserInteractionEnabled = false
+        additionalInfoLabel.isHidden = false
         
         self.moreButton.isHidden = false
         UIView.animate(withDuration: 0.3, animations: {
@@ -513,7 +537,7 @@ extension AdViewController: APIClientDelegate {
 
 extension AdViewController: NSLayoutManagerDelegate {
     func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
-        return 10
+        return 6
     }
 }
 
