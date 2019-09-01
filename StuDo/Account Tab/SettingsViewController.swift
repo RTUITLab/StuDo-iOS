@@ -61,7 +61,9 @@ class SettingsViewController: UITableViewController {
             cell.detailTextLabel?.text = PersistentStore.shared.currentLanguage.rawValue
         } else if info == .theme {
             cell.textLabel?.text = Localizer.string(for: .settingsAccentColor)
-            cell.detailTextLabel?.text = PersistentStore.shared.currentTheme.rawValue
+            if let stringRawValue = LozalizerString(rawValue: PersistentStore.shared.currentTheme.rawValue) {
+                cell.detailTextLabel?.text = Localizer.string(for: stringRawValue)
+            }
         }
 
         return cell

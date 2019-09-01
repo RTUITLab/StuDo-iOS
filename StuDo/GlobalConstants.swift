@@ -18,9 +18,14 @@ extension StuDoAvailableLanguage: CaseIterable {}
 
 
 enum StuDoAvailableThemes: String {
-    case blue = "Blue"
-    case red = "Red"
-    case greed = "Green"
+    case red = "redThemeName"
+    case orange = "orangeThemeName"
+    case yellow = "yellowThemeName"
+    case green = "greenThemeName"
+    case tealBlue = "tealBlueThemeName"
+    case blue = "blueThemeName"
+    case purple = "purpleThemeName"
+    case pink = "pinkThemeName"
 }
 
 extension StuDoAvailableThemes: CaseIterable {}

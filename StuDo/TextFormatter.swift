@@ -17,7 +17,7 @@ class TextFormatter {
         } else if let organizationName = ad.organizationName {
             creator = organizationName
         } else if let user = ad.user {
-            creator = user.firstName + user.lastName
+            creator = user.firstName + " " + user.lastName
         }
         #warning("When organization handling is implemented, get organization's name")
         

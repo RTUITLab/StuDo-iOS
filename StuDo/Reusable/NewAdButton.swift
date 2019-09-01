@@ -25,7 +25,7 @@ class NewAdButton: UIButton {
     init() {
         super.init(frame: .zero)
         
-        backgroundColor = UIColor(red:0.002, green:0.477, blue:0.999, alpha:1.000)
+        backgroundColor = .globalTintColor
         
         let plusImageSize: CGFloat = 38
         addSubview(plusImageView)
@@ -39,10 +39,24 @@ class NewAdButton: UIButton {
         plusImageView.image = image
         plusImageView.tintColor = .white
         
+        NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange(notification:)), name: PersistentStoreNotification.themeDidChange.name, object: nil)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
+}
+
+
+
+extension NewAdButton {
+    @objc func themeDidChange(notification: NSNotification) {
+        backgroundColor = .globalTintColor
+    }
 }

@@ -17,6 +17,15 @@ enum LozalizerString: String {
     case cancel
     case delete
     
+    case redThemeName
+    case orangeThemeName
+    case yellowThemeName
+    case greenThemeName
+    case tealBlueThemeName
+    case blueThemeName
+    case purpleThemeName
+    case pinkThemeName
+    
     case feedTitleMyAds
     case feedTitleAllAds
     

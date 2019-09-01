@@ -38,8 +38,10 @@ class AccountHeaderView: UITableViewHeaderFooterView {
         sectionTitleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         sectionTitleLabel.textColor = UIColor(red:0.631, green:0.631, blue:0.631, alpha:1.000)
         
-        actionButton.setTitleColor(UIColor(red:0.231, green:0.535, blue:0.992, alpha:1.000), for: .normal)
-        actionButton.setTitleColor(UIColor(red:0.231, green:0.535, blue:0.992, alpha:0.500), for: .highlighted)
+        actionButton.setTitleColor(.globalTintColor, for: .normal)
+        actionButton.setTitleColor(UIColor.globalTintColor.withAlphaComponent(0.5), for: .highlighted)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange(notification:)), name: PersistentStoreNotification.themeDidChange.name, object: nil)
 
     }
     
@@ -47,4 +49,13 @@ class AccountHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+
+
+extension AccountHeaderView {
+    @objc func themeDidChange(notification: Notification) {
+        actionButton.setTitleColor(.globalTintColor, for: .normal)
+        actionButton.setTitleColor(UIColor.globalTintColor.withAlphaComponent(0.5), for: .highlighted)
+    }
 }

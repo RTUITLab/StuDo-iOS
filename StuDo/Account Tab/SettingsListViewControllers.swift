@@ -34,7 +34,11 @@ class SettingsListViewController<ListItem: RawRepresentable>: UITableViewControl
         
         let listItem = listItems[indexPath.section][indexPath.row]
         if let listItemStringValue = listItem.rawValue as? String {
-            cell.textLabel?.text = listItemStringValue
+            if let localizerString = LozalizerString(rawValue: listItemStringValue) {
+                cell.textLabel?.text = Localizer.string(for: localizerString)
+            } else {
+                cell.textLabel?.text = listItemStringValue
+            }
             
             if let currentItemStringValue = currentItem.rawValue as? String {
                 if listItemStringValue == currentItemStringValue {
@@ -82,7 +86,7 @@ class SettingsListItemCell: ListItemCell {
         
         let tickImage = #imageLiteral(resourceName: "check").withRenderingMode(.alwaysTemplate)
         tickGlyph.image = tickImage
-        tickGlyph.tintColor = UIColor(red:0.002, green:0.477, blue:0.999, alpha:1.000)
+        tickGlyph.tintColor = .globalTintColor
         
         let scale: CGFloat = 0.74
         tickGlyph.transform = .init(scaleX: scale, y: scale)
@@ -165,6 +169,19 @@ class ThemesListViewController: SettingsListViewController<StuDoAvailableThemes>
         
         let selectedTheme = listItems[indexPath.section][indexPath.row]
         PersistentStore.shared.currentTheme = selectedTheme
+        
+        let currentTintColor: UIColor = .tintColor(for: selectedTheme)
+        navigationController?.navigationBar.tintColor = currentTintColor
+        
+        let cell = tableView.cellForRow(at: indexPath) as! SettingsListItemCell
+        cell.tickGlyph.tintColor = currentTintColor
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        cell.imageView?.image = #imageLiteral(resourceName: "circle").withRenderingMode(.alwaysTemplate)
+        cell.imageView?.tintColor = .tintColor(for: listItems[indexPath.section][indexPath.row])
+        return cell
     }
     
 }

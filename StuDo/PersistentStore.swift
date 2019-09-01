@@ -73,6 +73,9 @@ class PersistentStore: NSObject {
     var currentTheme: StuDoAvailableThemes {
         didSet {
             UserDefaults.standard.set(currentTheme.rawValue, forKey: currentThemeKey)
+            NotificationCenter.default.post(name: PersistentStoreNotification.themeDidChange.name, object: nil)
+            
+            UINavigationBar.appearance().tintColor = .globalTintColor
         }
     }
     

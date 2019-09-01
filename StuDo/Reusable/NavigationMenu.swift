@@ -47,7 +47,8 @@ class NavigationMenu: UITableView {
         rowHeight = menuItemHeight
         
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange(notification:)), name: PersistentStoreNotification.themeDidChange.name, object: nil)
+
     }
     
     deinit {
@@ -81,6 +82,7 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
             cell.textLabel?.text = Localizer.string(for: .navigationMenuMyAds)
         }
         
+        cell.tickGlyph.tintColor = .globalTintColor
         
         if currentMenuItem == selectedOption {
             cell.tickGlyph.alpha = 1
@@ -122,7 +124,6 @@ class NavigationMenuCell: ListItemCell {
         
         let tickImage = #imageLiteral(resourceName: "tick").withRenderingMode(.alwaysTemplate)
         tickGlyph.image = tickImage
-        tickGlyph.tintColor = UIColor(red:0.002, green:0.477, blue:0.999, alpha:1.000)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -134,6 +135,10 @@ class NavigationMenuCell: ListItemCell {
 
 extension NavigationMenu {
     @objc func languageDidChange(notification: Notification) {
+        reloadData()
+    }
+    
+    @objc func themeDidChange(notification: Notification) {
         reloadData()
     }
 }
