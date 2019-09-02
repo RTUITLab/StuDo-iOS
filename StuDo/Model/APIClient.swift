@@ -457,10 +457,8 @@ extension APIClient {
     
     func create(ad: Ad) {
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
-        let beginTime = formatter.string(from: ad.beginTime)
-        let endTime = formatter.string(from: ad.endTime)
+        let beginTime = DateFormatter.iso8601StringFromDate(ad.beginTime)
+        let endTime = DateFormatter.iso8601StringFromDate(ad.endTime)
         
         
         let createForm = AdCreateForm(name: ad.name, description: ad.description!, shortDescription: ad.shortDescription, beginTime: beginTime, endTime: endTime)
@@ -495,10 +493,8 @@ extension APIClient {
     
     func replaceAd(with ad: Ad) {
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
-        let beginTime = formatter.string(from: ad.beginTime)
-        let endTime = formatter.string(from: ad.endTime)
+        let beginTime = DateFormatter.iso8601StringFromDate(ad.beginTime)
+        let endTime = DateFormatter.iso8601StringFromDate(ad.endTime)
         
         let updateForm = AdUpdateForm(id: ad.id, name: ad.name, description: ad.description!, shortDescription: ad.shortDescription, beginTime: beginTime, endTime: endTime)
         

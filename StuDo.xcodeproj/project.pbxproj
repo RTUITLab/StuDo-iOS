@@ -20,6 +20,7 @@
 		495B27AF22C0145600AADD19 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */; };
 		49713C5E230B081D00E65807 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49713C5D230B081D00E65807 /* AboutViewController.swift */; };
 		49713C60230B093300E65807 /* AboutHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49713C5F230B093300E65807 /* AboutHeaderView.swift */; };
+		4973AD20231D4A0300B4B578 /* DateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD1F231D4A0300B4B578 /* DateFormatterExtension.swift */; };
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
 		49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77922D7397400C2661E /* AdTableViewCell.swift */; };
 		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
@@ -94,6 +95,7 @@
 		495B27AE22C0145600AADD19 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 		49713C5D230B081D00E65807 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		49713C5F230B093300E65807 /* AboutHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutHeaderView.swift; sourceTree = "<group>"; };
+		4973AD1F231D4A0300B4B578 /* DateFormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterExtension.swift; sourceTree = "<group>"; };
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		49A8F77922D7397400C2661E /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
 		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				49BBB99A2306E25600883EB9 /* NavigationMenu.swift */,
 				49BBB99C2306E6B600883EB9 /* ListItemCell.swift */,
 				49E2DB0F22FDB22B0015DCD8 /* UITableViewExtension.swift */,
+				4973AD1F231D4A0300B4B578 /* DateFormatterExtension.swift */,
 				49E61DD8231A564C007BC4FF /* UIFontExtension.swift */,
 				491DCA8B231C089D00A78111 /* UIColorExtension.swift */,
 				49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */,
@@ -420,6 +423,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4973AD20231D4A0300B4B578 /* DateFormatterExtension.swift in Sources */,
 				49E61DD523185CB1007BC4FF /* LoadingIndicator.swift in Sources */,
 				49BBB99B2306E25600883EB9 /* NavigationMenu.swift in Sources */,
 				49D76A82231059B9002B22D4 /* NotificationHandling.swift in Sources */,

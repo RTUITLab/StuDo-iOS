@@ -30,6 +30,11 @@ class DatePickerController: UIViewController, DimmableController {
     }
     
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    
     
     
     

@@ -174,11 +174,9 @@ struct Ad {
         self.organizationId = organizationId
         self.organization = organization
         
-        let isoFormatter = DateFormatter()
-        isoFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
         
-        self.beginTime = isoFormatter.date(from: beginTime)!
-        self.endTime = isoFormatter.date(from: endTime)!
+        self.beginTime = DateFormatter.dateFromISO8601String(beginTime)
+        self.endTime = DateFormatter.dateFromISO8601String(endTime)
     }
 }
 

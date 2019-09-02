@@ -47,6 +47,7 @@ class AdViewController: CardViewController {
             
             additionalInfoLabel.attributedText = TextFormatter.additionalInfoAttributedString(for: ad, style: .body)
             beginDateButton.date = ad.beginTime
+            endDateButton.date = ad.endTime
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.adjustContentLayout()
