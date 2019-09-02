@@ -116,8 +116,8 @@ class PersistentStore: NSObject {
         }
         
         
-        if let storedTheme = defaults.string(forKey: currentThemeKey) {
-            currentTheme = StuDoAvailableThemes(rawValue: storedTheme)!
+        if let storedTheme = defaults.string(forKey: currentThemeKey), let theme = StuDoAvailableThemes(rawValue: storedTheme) {
+            currentTheme = theme
         } else {
             currentTheme = .blue
         }

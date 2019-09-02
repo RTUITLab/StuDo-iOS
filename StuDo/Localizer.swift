@@ -104,6 +104,9 @@ enum LozalizerString: String {
     case adEditorCreationModeTitle
     case adEditorNamePlaceholder
     case adEditorDescriptionPlaceholder
+    case adEditorBeginDateLabel
+    case adEditorEndDateLabel
+    case adEditorDurationLabel
 }
 
 class Localizer: NSObject {

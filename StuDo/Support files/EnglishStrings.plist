@@ -14,24 +14,22 @@
 	<string>Cancel</string>
 	<key>delete</key>
 	<string>Delete</string>
-    
-    <key>redThemeName</key>
-    <string>Red</string>
-    <key>orangeThemeName</key>
-    <string>Orange</string>
-    <key>yellowThemeName</key>
-    <string>Yellow</string>
-    <key>greenThemeName</key>
-    <string>Green</string>
-    <key>tealBlueThemeName</key>
-    <string>Teal Blue</string>
-    <key>blueThemeName</key>
-    <string>Blue</string>
-    <key>purpleThemeName</key>
-    <string>Purple</string>
-    <key>pinkThemeName</key>
-    <string>Pink</string>
-    
+	<key>redThemeName</key>
+	<string>Red</string>
+	<key>orangeThemeName</key>
+	<string>Orange</string>
+	<key>yellowThemeName</key>
+	<string>Yellow</string>
+	<key>greenThemeName</key>
+	<string>Green</string>
+	<key>tealBlueThemeName</key>
+	<string>Teal Blue</string>
+	<key>blueThemeName</key>
+	<string>Blue</string>
+	<key>purpleThemeName</key>
+	<string>Purple</string>
+	<key>pinkThemeName</key>
+	<string>Pink</string>
 	<key>feedTitleAllAds</key>
 	<string>News</string>
 	<key>feedTitleMyAds</key>
@@ -168,5 +166,11 @@
 	<string>Name for your advertisement</string>
 	<key>adEditorDescriptionPlaceholder</key>
 	<string>The text for your ad. The first paragraph will be used as short description.</string>
+	<key>adEditorBeginDateLabel</key>
+	<string>Begin Date</string>
+	<key>adEditorEndDateLabel</key>
+	<string>End Date</string>
+	<key>adEditorDurationLabel</key>
+	<string>Duration</string>
 </dict>
 </plist>

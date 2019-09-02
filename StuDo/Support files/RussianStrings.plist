@@ -14,24 +14,22 @@
 	<string>Отменить</string>
 	<key>delete</key>
 	<string>Удалить</string>
-    <key>redThemeName</key>
-    <string>Красный</string>
-    <key>orangeThemeName</key>
-    <string>Оранжевый</string>
-    <key>yellowThemeName</key>
-    <string>Жёлтый</string>
-    <key>greenThemeName</key>
-    <string>Зелёный</string>
-    <key>tealBlueThemeName</key>
-    <string>Голубой</string>
-    <key>blueThemeName</key>
-    <string>Синий</string>
-    <key>purpleThemeName</key>
-    <string>Фиолетовый</string>
-    <key>pinkThemeName</key>
-    <string>Розовый</string>
-    
-    
+	<key>redThemeName</key>
+	<string>Красный</string>
+	<key>orangeThemeName</key>
+	<string>Оранжевый</string>
+	<key>yellowThemeName</key>
+	<string>Жёлтый</string>
+	<key>greenThemeName</key>
+	<string>Зелёный</string>
+	<key>tealBlueThemeName</key>
+	<string>Голубой</string>
+	<key>blueThemeName</key>
+	<string>Синий</string>
+	<key>purpleThemeName</key>
+	<string>Фиолетовый</string>
+	<key>pinkThemeName</key>
+	<string>Розовый</string>
 	<key>feedTitleAllAds</key>
 	<string>Объявления</string>
 	<key>feedTitleMyAds</key>
@@ -168,5 +166,11 @@
 	<string>Заголовок</string>
 	<key>adEditorDescriptionPlaceholder</key>
 	<string>Текст Вашего объявления. Первый параграф будет использоваться в качестве краткого описания.</string>
+	<key>adEditorBeginDateLabel</key>
+	<string>Дата начала</string>
+	<key>adEditorEndDateLabel</key>
+	<string>Актуально до</string>
+	<key>adEditorDurationLabel</key>
+	<string>Продолжительность</string>
 </dict>
 </plist>

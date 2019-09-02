@@ -23,6 +23,7 @@
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
 		49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77922D7397400C2661E /* AdTableViewCell.swift */; };
 		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
+		49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF624231C1C4200AA3FCB /* DateButton.swift */; };
 		49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */; };
 		49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */; };
 		49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B382228DD75400CA9EC7 /* FeedViewController.swift */; };
@@ -94,6 +95,7 @@
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		49A8F77922D7397400C2661E /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
 		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
+		49ADF624231C1C4200AA3FCB /* DateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateButton.swift; sourceTree = "<group>"; };
 		49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		49B1B382228DD75400CA9EC7 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
 				49BCE24922F0AC1600C64C44 /* CardViewController.swift */,
 				49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */,
+				49ADF624231C1C4200AA3FCB /* DateButton.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -440,6 +443,7 @@
 				49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */,
 				49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */,
 				49DEADCC2301F9390031B3DF /* ProfileEditorViewController.swift in Sources */,
+				49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */,
 				49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */,
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,
 				49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */,

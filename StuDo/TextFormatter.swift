@@ -9,17 +9,8 @@
 import UIKit
 
 class TextFormatter {
-    static func additionalInfoAttributedString(for ad: Ad, style: UIFont.TextStyle = .caption2) -> NSAttributedString {
-        
-        var creator: String!
-        if let userName = ad.userName {
-            creator = userName
-        } else if let organizationName = ad.organizationName {
-            creator = organizationName
-        } else if let user = ad.user {
-            creator = user.firstName + " " + user.lastName
-        }
-        #warning("When organization handling is implemented, get organization's name")
+    
+    static func mediumString(from date: Date) -> String {
         
         let currentLanguage = PersistentStore.shared.currentLanguage
         var currentLocale = Locale.current
@@ -38,10 +29,23 @@ class TextFormatter {
         formatter.locale = currentLocale
         formatter.dateFormat = dateFormat
         
+        return formatter.string(from: date)
+    }
+    
+    
+    static func additionalInfoAttributedString(for ad: Ad, style: UIFont.TextStyle = .caption2) -> NSAttributedString {
         
+        var creator: String!
+        if let userName = ad.userName {
+            creator = userName
+        } else if let organizationName = ad.organizationName {
+            creator = organizationName
+        } else if let user = ad.user {
+            creator = user.firstName + " " + user.lastName
+        }
+        #warning("When organization handling is implemented, get organization's name")
         
-        
-        let timeString = formatter.string(from: ad.beginTime)
+        let timeString = TextFormatter.mediumString(from: ad.beginTime)
         
         
         let attributedString = NSMutableAttributedString(string: timeString, attributes: [

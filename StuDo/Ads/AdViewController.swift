@@ -46,6 +46,7 @@ class AdViewController: CardViewController {
             }
             
             additionalInfoLabel.attributedText = TextFormatter.additionalInfoAttributedString(for: ad, style: .body)
+            beginDateButton.date = ad.beginTime
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.adjustContentLayout()
@@ -77,20 +78,28 @@ class AdViewController: CardViewController {
     let descriptionTextView = UITextView()
     let descriptionPlaceholderLabel = UILabel()
     let additionalInfoLabel = UILabel()
+    let beginDateButton: DateButton!
+    let endDateButton: DateButton!
     
     let moreButton = UIButton()
     let publishButton = UIButton()
     let cancelEditingButton = UIButton()
     
     
-    
+    let beginDateButtonTopPadding: CGFloat = 12
     let nameTextFieldHeight: CGFloat = 20
     
+    var dateButtonBottomConstraint: NSLayoutConstraint!
+    var dateButtonTopConstraint: NSLayoutConstraint!
+    
     override var contentHeight: CGFloat {
-        var additionalHeight: CGFloat = 8
+        var additionalHeight: CGFloat!
         if currentMode == .viewing {
             additionalHeight = additionalInfoLabel.frame.height * 3
+        } else {
+            additionalHeight = beginDateButton.frame.height + beginDateButtonTopPadding + 25
         }
+        
         let calculatedHeight = headerView.frame.height + nameTextFieldHeight + descriptionTextView.frame.height + view.safeAreaInsets.bottom + additionalHeight
         return calculatedHeight
     }
@@ -99,6 +108,9 @@ class AdViewController: CardViewController {
     
     init(with ad: Ad?, isOwner: Bool = false) {
         self.isViewerOwner = isOwner
+        
+        self.beginDateButton = DateButton(name: Localizer.string(for: .adEditorBeginDateLabel))
+        self.endDateButton = DateButton(name: Localizer.string(for: .adEditorEndDateLabel))
 
         super.init()
 
@@ -160,6 +172,36 @@ class AdViewController: CardViewController {
         additionalInfoLabel.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor).isActive = true
         additionalInfoLabel.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
         additionalInfoLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 7).isActive = true
+        
+        contentView.addSubview(beginDateButton)
+        beginDateButton.translatesAutoresizingMaskIntoConstraints = false
+        beginDateButton.leadingAnchor.constraint(equalTo: additionalInfoLabel.leadingAnchor).isActive = true
+        
+        dateButtonTopConstraint = beginDateButton.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: beginDateButtonTopPadding)
+        
+        dateButtonBottomConstraint = beginDateButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -52)
+        dateButtonBottomConstraint.isActive = true
+        
+        
+
+        beginDateButton.isHidden = true
+        beginDateButton.alpha = 0
+        
+        contentView.addSubview(endDateButton)
+        endDateButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        let endDateButtonLeadingConstraint = endDateButton.leadingAnchor.constraint(equalTo: beginDateButton.trailingAnchor, constant: 16)
+        endDateButtonLeadingConstraint.priority = .defaultLow
+        endDateButtonLeadingConstraint.isActive = true
+        
+        endDateButton.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16).isActive = true
+        endDateButton.centerYAnchor.constraint(equalTo: beginDateButton.centerYAnchor).isActive = true
+        
+        endDateButton.isHidden = true
+        endDateButton.alpha = 0
+        
+        
+        
         
         
         
@@ -257,6 +299,23 @@ class AdViewController: CardViewController {
     }
     
     
+    override func adjustContentLayout() {
+        super.adjustContentLayout()
+        guard dateButtonTopConstraint != nil else { return }
+        
+        if descriptionTextView.frame.maxY >= beginDateButton.frame.minX {
+            dateButtonBottomConstraint.isActive = true
+            dateButtonTopConstraint.isActive = false
+        } else {
+            dateButtonBottomConstraint.isActive = false
+            dateButtonTopConstraint.isActive = true
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     
     
     
@@ -286,12 +345,16 @@ class AdViewController: CardViewController {
         descriptionTextView.isUserInteractionEnabled = true
         additionalInfoLabel.isHidden = true
         
-        self.publishButton.isHidden = false
-        self.cancelEditingButton.isHidden = false
+        beginDateButton.isHidden = false
+        endDateButton.isHidden = false
+        publishButton.isHidden = false
+        cancelEditingButton.isHidden = false
         UIView.animate(withDuration: 0.3, animations: {
             self.moreButton.alpha = 0
             self.publishButton.alpha = 1
             self.cancelEditingButton.alpha = 1
+            self.beginDateButton.alpha = 1
+            self.endDateButton.alpha = 1
         }) { _ in
             self.moreButton.isHidden = true
         }
@@ -315,10 +378,14 @@ class AdViewController: CardViewController {
             self.moreButton.alpha = 1
             self.publishButton.alpha = 0
             self.cancelEditingButton.alpha = 0
+            self.beginDateButton.alpha = 0
+            self.endDateButton.alpha = 0
         }) { _ in
             self.publishButton.isHidden = true
             self.cancelEditingButton.isHidden = true
-            
+            self.beginDateButton.isHidden = true
+            self.endDateButton.isHidden = true
+
             completion?()
             
             // wait for some time so that to let all text fields draw themselves and then adjust the layout of content
@@ -412,7 +479,7 @@ class AdViewController: CardViewController {
         
         if shouldAllowPublishing {
             publishButton.isEnabled = true
-            publishButton.tintColor = UIColor(red:0.000, green:0.512, blue:0.870, alpha:1.000)
+            publishButton.tintColor = .globalTintColor
         } else {
             publishButton.isEnabled = false
             publishButton.tintColor = UIColor(red:0.936, green:0.941, blue:0.950, alpha:1.000)
