@@ -24,6 +24,8 @@
 		49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77922D7397400C2661E /* AdTableViewCell.swift */; };
 		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
 		49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF624231C1C4200AA3FCB /* DateButton.swift */; };
+		49ADF627231CF3A100AA3FCB /* DatePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF626231CF3A100AA3FCB /* DatePickerController.swift */; };
+		49ADF629231CF4BD00AA3FCB /* SlideUpTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF628231CF4BD00AA3FCB /* SlideUpTransition.swift */; };
 		49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */; };
 		49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */; };
 		49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B382228DD75400CA9EC7 /* FeedViewController.swift */; };
@@ -96,6 +98,8 @@
 		49A8F77922D7397400C2661E /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
 		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
 		49ADF624231C1C4200AA3FCB /* DateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateButton.swift; sourceTree = "<group>"; };
+		49ADF626231CF3A100AA3FCB /* DatePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerController.swift; sourceTree = "<group>"; };
+		49ADF628231CF4BD00AA3FCB /* SlideUpTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpTransition.swift; sourceTree = "<group>"; };
 		49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		49B1B382228DD75400CA9EC7 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
@@ -230,6 +234,8 @@
 		49A216F822F60656009AD846 /* Reusable */ = {
 			isa = PBXGroup;
 			children = (
+				49ADF626231CF3A100AA3FCB /* DatePickerController.swift */,
+				49ADF628231CF4BD00AA3FCB /* SlideUpTransition.swift */,
 				49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */,
 				49BBB9982306BCC700883EB9 /* FoldingTitleView.swift */,
 				49DEADCD2302EE440031B3DF /* NewAdButton.swift */,
@@ -421,7 +427,9 @@
 				49E2DB1422FDB3730015DCD8 /* EmailTableViewController.swift in Sources */,
 				49E61DD9231A564C007BC4FF /* UIFontExtension.swift in Sources */,
 				49B1B385228DD8F000CA9EC7 /* DataMockup.swift in Sources */,
+				49ADF627231CF3A100AA3FCB /* DatePickerController.swift in Sources */,
 				49E2DB1622FDB4E20015DCD8 /* DataChecker.swift in Sources */,
+				49ADF629231CF4BD00AA3FCB /* SlideUpTransition.swift in Sources */,
 				4928D43622A3ED9700F4D703 /* DataModel.swift in Sources */,
 				495B27AF22C0145600AADD19 /* AuthorizationViewController.swift in Sources */,
 				49D76A7723102B26002B22D4 /* SettingsViewController.swift in Sources */,

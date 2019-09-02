@@ -201,6 +201,10 @@ class AdViewController: CardViewController {
         endDateButton.alpha = 0
         
         
+        beginDateButton.addTarget(self, action: #selector(beginDateButtonPressed(_:)), for: .touchUpInside)
+        endDateButton.addTarget(self, action: #selector(endDateButtonPressed(_:)), for: .touchUpInside)
+
+        
         
         
         
@@ -526,6 +530,24 @@ class AdViewController: CardViewController {
 
 
 extension AdViewController {
+    
+    @objc func beginDateButtonPressed(_ button: UIButton) {
+        let datePickerVC = DatePickerController()
+        datePickerVC.doneCompletionHandler = { [weak self] in
+            self?.beginDateButton.date = datePickerVC.datePicker.date
+        }
+        present(datePickerVC, animated: true, completion: nil)
+    }
+    
+    @objc func endDateButtonPressed(_ button: UIButton) {
+        let datePickerVC = DatePickerController()
+        datePickerVC.doneCompletionHandler = { [weak self] in
+            self?.endDateButton.date = datePickerVC.datePicker.date
+        }
+        present(datePickerVC, animated: true, completion: nil)
+    }
+    
+    
     @objc func moreButtonPressed(_ button: UIButton) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
