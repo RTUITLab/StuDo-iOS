@@ -67,6 +67,10 @@ class DatePickerController: UIViewController, DimmableController {
         datePicker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
+        
+        datePicker.locale = Localizer.currentLocale
+        
+        
         contentView.addSubview(headerView)
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true

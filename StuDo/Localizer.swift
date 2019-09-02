@@ -111,6 +111,14 @@ enum LozalizerString: String {
 
 class Localizer: NSObject {
     
+    static var currentLocale: Locale {
+        let currentLanguage = PersistentStore.shared.currentLanguage
+        if currentLanguage == .Russian {
+            return Locale(identifier: "ru")
+        }
+        return Locale(identifier: "en")
+    }
+    
     private static func getLocalizedStrings(for: StuDoAvailableLanguage) -> [String: String] {
         
         var languageName = "English"

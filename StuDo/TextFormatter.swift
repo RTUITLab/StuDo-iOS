@@ -13,12 +13,7 @@ class TextFormatter {
     static func mediumString(from date: Date) -> String {
         
         let currentLanguage = PersistentStore.shared.currentLanguage
-        var currentLocale = Locale.current
-        if currentLanguage == .English {
-            currentLocale = Locale(identifier: "en")
-        } else if currentLanguage == .Russian {
-            currentLocale = Locale(identifier: "ru")
-        }
+        var currentLocale = Localizer.currentLocale
         
         var dateFormat = "MMM d, H:mm"
         if currentLanguage == .English {

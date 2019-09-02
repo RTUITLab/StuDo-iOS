@@ -362,7 +362,12 @@ class AdViewController: CardViewController {
         }) { _ in
             self.moreButton.isHidden = true
         }
-        checkIfCanPublish(isInitialRun: true)
+        
+        if publishButton.isHidden {
+            checkIfCanPublish(isInitialRun: true) // if the user enters the editing mode initially, not allow publishing till the data's been changed
+        } else {
+            checkIfCanPublish() // if the user returns from the subcontroller, check the data fully
+        }
     }
     
     func disableEditingMode(completion: (() -> ())? ) {
@@ -479,6 +484,10 @@ class AdViewController: CardViewController {
             if description.isEmpty {
                 shouldAllowPublishing = false
             }
+            
+            if beginDateButton.date == nil || endDateButton.date == nil {
+                shouldAllowPublishing = false
+            }
         }
         
         if shouldAllowPublishing {
@@ -501,8 +510,8 @@ class AdViewController: CardViewController {
             shortDescription = description
         }
         
-        let beginTime = Date()
-        let endTime = Date().addingTimeInterval(TimeInterval(exactly: 60 * 60 * 60)!)
+        let beginTime = beginDateButton.date!
+        let endTime = endDateButton.date!
         
         RootViewController.startLoadingIndicator()
 
@@ -533,16 +542,32 @@ extension AdViewController {
     
     @objc func beginDateButtonPressed(_ button: UIButton) {
         let datePickerVC = DatePickerController()
+        datePickerVC.datePicker.minimumDate = Date()
         datePickerVC.doneCompletionHandler = { [weak self] in
-            self?.beginDateButton.date = datePickerVC.datePicker.date
+            let beginDate = datePickerVC.datePicker.date
+            self?.beginDateButton.date = beginDate
+            if let endDate = self?.endDateButton.date, endDate.compare(beginDate) == .orderedAscending {
+                self?.endDateButton.date = nil
+            }
         }
         present(datePickerVC, animated: true, completion: nil)
     }
     
     @objc func endDateButtonPressed(_ button: UIButton) {
         let datePickerVC = DatePickerController()
+        
+        if beginDateButton.date == nil {
+            datePickerVC.datePicker.minimumDate = Date()
+        } else {
+            datePickerVC.datePicker.minimumDate = beginDateButton.date
+        }
+        
         datePickerVC.doneCompletionHandler = { [weak self] in
-            self?.endDateButton.date = datePickerVC.datePicker.date
+            let endDate = datePickerVC.datePicker.date
+            self?.endDateButton.date = endDate
+            if let beginDate = self?.beginDateButton.date, beginDate.compare(endDate) == .orderedDescending {
+                self?.beginDateButton.date = nil
+            }
         }
         present(datePickerVC, animated: true, completion: nil)
     }
