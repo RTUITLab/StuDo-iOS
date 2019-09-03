@@ -16,6 +16,7 @@ enum LozalizerString: String {
     case okay
     case cancel
     case delete
+    case edit
     
     case redThemeName
     case orangeThemeName
@@ -114,6 +115,9 @@ enum LozalizerString: String {
     case organizationDescriptionPlaceholder
     case organizationMembersHeaderTitle
     case organizationAdmin
+    case organizationJoin
+    case organizationLeave
+    case organizationDeletionAlertMessage
 }
 
 class Localizer: NSObject {

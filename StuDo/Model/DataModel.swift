@@ -115,13 +115,46 @@ struct Credentials: Codable {
 
 
 
-struct Organization {
+struct Organization: Encodable {
     let id: String!
     let name: String
     let description: String
-    let creatorId: String
+    let creatorId: String!
     let creator: User?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case description
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        if id != nil {
+            try container.encode(id, forKey: .id)
+        }
+        
+        try container.encode(name, forKey: .name)
+        try container.encode(description, forKey: .description)
+        
+    }
 }
+
+
+extension Organization {
+    init(id: String?, name: String, description: String) {
+        self.id = id
+        self.name = name
+        self.description = description
+        
+        self.creatorId = nil
+        self.creator = nil
+    }
+}
+
+
+
 
 
 struct OrganizationMember {

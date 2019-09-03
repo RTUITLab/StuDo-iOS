@@ -15,7 +15,7 @@ class OrganizationListController: UITableViewController {
     let client = APIClient()
     
     var organizations = [Organization]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,11 +23,28 @@ class OrganizationListController: UITableViewController {
         
         tableView.register(TableViewCellWithSubtitle.self, forCellReuseIdentifier: organizationCellId)
         
+        refreshControl = UIRefreshControl()
+        refreshControl!.addTarget(self, action: #selector(refreshOrganizationList), for: .valueChanged)
+        
         client.delegate = self
         
-        client.getOrganizations()
+        title = Localizer.string(for: .back)
+        navigationItem.titleView = UIView()
 
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        refreshOrganizationList()
+    }
+    
+    
+    @objc func refreshOrganizationList() {
+        refreshControl?.endRefreshing()
+        client.getOrganizations()
+    }
+    
+    
+    
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1

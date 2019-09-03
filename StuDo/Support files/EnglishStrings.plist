@@ -14,6 +14,8 @@
 	<string>Cancel</string>
 	<key>delete</key>
 	<string>Delete</string>
+	<key>edit</key>
+	<string>Edit</string>
 	<key>redThemeName</key>
 	<string>Red</string>
 	<key>orangeThemeName</key>
@@ -172,19 +174,23 @@
 	<string>End Date</string>
 	<key>adEditorDurationLabel</key>
 	<string>Duration</string>
-    
-    <key>organizationListTitle</key>
-    <string>Groups</string>
-    <key>organizationInfoHeaderTitle</key>
-    <string>Group Info</string>
-    <key>organizationNamePlaceholder</key>
-    <string>Name</string>
-    <key>organizationDescriptionPlaceholder</key>
-    <string>Description</string>
-    <key>organizationMembersHeaderTitle</key>
-    <string>Members</string>
-    <key>organizationAdmin</key>
-    <string>Admin</string>
-    
+	<key>organizationListTitle</key>
+	<string>Groups</string>
+	<key>organizationInfoHeaderTitle</key>
+	<string>Group Info</string>
+	<key>organizationNamePlaceholder</key>
+	<string>Name</string>
+	<key>organizationDescriptionPlaceholder</key>
+	<string>Description</string>
+	<key>organizationMembersHeaderTitle</key>
+	<string>Members</string>
+	<key>organizationAdmin</key>
+	<string>Admin</string>
+	<key>organizationJoin</key>
+	<string>Join group</string>
+	<key>organizationLeave</key>
+	<string>Leave group</string>
+	<key>organizationDeletionAlertMessage</key>
+	<string>Are you sure you want to delete this group? This cannot be undone.</string>
 </dict>
 </plist>

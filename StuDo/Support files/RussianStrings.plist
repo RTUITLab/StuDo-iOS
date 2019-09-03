@@ -14,6 +14,8 @@
 	<string>Отменить</string>
 	<key>delete</key>
 	<string>Удалить</string>
+	<key>edit</key>
+	<string>Изм.</string>
 	<key>redThemeName</key>
 	<string>Красный</string>
 	<key>orangeThemeName</key>
@@ -172,19 +174,23 @@
 	<string>Актуально до</string>
 	<key>adEditorDurationLabel</key>
 	<string>Продолжительность</string>
-    
-    <key>organizationListTitle</key>
-    <string>Группы</string>
-    <key>organizationInfoHeaderTitle</key>
-    <string>Информация о группе</string>
-    <key>organizationNamePlaceholder</key>
-    <string>Название</string>
-    <key>organizationDescriptionPlaceholder</key>
-    <string>Описание</string>
-    <key>organizationMembersHeaderTitle</key>
-    <string>Участники</string>
-    <key>organizationAdmin</key>
-    <string>Создатель</string>
-    
+	<key>organizationListTitle</key>
+	<string>Группы</string>
+	<key>organizationInfoHeaderTitle</key>
+	<string>Информация о группе</string>
+	<key>organizationNamePlaceholder</key>
+	<string>Название</string>
+	<key>organizationDescriptionPlaceholder</key>
+	<string>Описание</string>
+	<key>organizationMembersHeaderTitle</key>
+	<string>Участники</string>
+	<key>organizationAdmin</key>
+	<string>Создатель</string>
+    <key>organizationJoin</key>
+    <string>Вступить в группу</string>
+    <key>organizationLeave</key>
+    <string>Покинуть группу</string>
+    <key>organizationDeletionAlertMessage</key>
+    <string>Вы уверены, что хотите удалить данную группу? Это действие необратимо.</string>
 </dict>
 </plist>

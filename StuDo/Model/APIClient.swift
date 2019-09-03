@@ -293,6 +293,8 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization])
     func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization)
     func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember])
+    func apiClient(_ client: APIClient, didUpdateOrganization updatedOrganization: Organization)
+    func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String)
 }
 
 extension APIClientDelegate {
@@ -320,6 +322,8 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization]) {}
     func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {}
     func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember]) {}
+    func apiClient(_ client: APIClient, didUpdateOrganization updatedOrganization: Organization) {}
+    func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String) {}
 }
 
 
@@ -615,6 +619,50 @@ extension APIClient {
                 }
             }
         }
+    }
+    
+    
+    func deleteOrganization(withId id: String) {
+        let request = APIRequest(method: .delete, path: "organization/\(id)")
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                guard let data = response.body, let deletedOrganizationId = String(data: data, encoding: .utf8) else {
+                    throw APIError.decodingFailure
+                }
+                
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didDeleteOrganizationWithId: deletedOrganizationId)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+    }
+    
+    func replaceOrganization(with organization: Organization) {
+        
+        if let request = try? APIRequest(method: .put, path: "organization", body: organization) {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success(let response):
+                    if let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                        let updatedOrganization = try self.decodeOrganization(from: decodedJSON, fullDecode: true)
+                        
+                        DispatchQueue.main.async {
+                            self.delegate?.apiClient(self, didUpdateOrganization: updatedOrganization)
+                        }
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+        
     }
     
     
