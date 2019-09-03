@@ -218,6 +218,8 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         let sectionInfo = sections[section]
         if sectionInfo == .myProfiles {
             footer?.textLabel?.text = Localizer.string(for: .accountProfileSectionDescription)
+        } else if sectionInfo == .organizations {
+            footer?.textLabel?.text = Localizer.string(for: .accountOrganizationsSectionDescription)
         }
         
         return footer

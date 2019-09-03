@@ -542,7 +542,7 @@ class AdViewController: CardViewController {
 extension AdViewController {
     
     @objc func beginDateButtonPressed(_ button: UIButton) {
-        let datePickerVC = DatePickerController()
+        let datePickerVC = DatePickerController(title: Localizer.string(for: .adEditorBeginDateLabel))
         datePickerVC.datePicker.minimumDate = Date()
         datePickerVC.doneCompletionHandler = { [weak self] in
             let beginDate = datePickerVC.datePicker.date
@@ -555,7 +555,7 @@ extension AdViewController {
     }
     
     @objc func endDateButtonPressed(_ button: UIButton) {
-        let datePickerVC = DatePickerController()
+        let datePickerVC = DatePickerController(title: Localizer.string(for: .adEditorEndDateLabel))
         
         if beginDateButton.date == nil {
             datePickerVC.datePicker.minimumDate = Date()

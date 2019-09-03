@@ -17,12 +17,14 @@ class DatePickerController: UIViewController, DimmableController {
     var dimView: UIView!
     var contentView: UIView!
     
-    init() {
+    init(title: String = "") {
         self.dimView = UIView()
         self.contentView = UIView()
         
         super.init(nibName: nil, bundle: nil)
         transitioningDelegate = self
+        
+        titleLabel.text = title
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -40,6 +42,7 @@ class DatePickerController: UIViewController, DimmableController {
     
     let cancelButton = UIButton()
     let doneButton = UIButton()
+    let titleLabel = UILabel()
     
     let datePicker = UIDatePicker()
     let headerView = UIView()
@@ -81,7 +84,7 @@ class DatePickerController: UIViewController, DimmableController {
         headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         headerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -8).isActive = true
-        headerView.bottomAnchor.constraint(equalTo: datePicker.topAnchor).isActive = true
+        headerView.bottomAnchor.constraint(equalTo: datePicker.topAnchor, constant: 16).isActive = true
         headerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         headerView.backgroundColor = .white
@@ -92,7 +95,7 @@ class DatePickerController: UIViewController, DimmableController {
         
         
         
-        let buttonLeftRightPadding: CGFloat = 20
+        let buttonLeftRightPadding: CGFloat = 0
         
         headerView.addSubview(cancelButton)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
@@ -117,6 +120,28 @@ class DatePickerController: UIViewController, DimmableController {
         
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped(_:)), for: .touchUpInside)
         doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
+        
+        cancelButton.titleLabel?.font = .systemFont(ofSize: 16)
+        doneButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        
+        
+        
+
+        headerView.addSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        let titleLeftRightPadding: CGFloat = 8
+        titleLabel.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: titleLeftRightPadding).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: doneButton.leadingAnchor, constant: -titleLeftRightPadding).isActive = true
+
+        let titleCenterXConstraint = titleLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor)
+        titleCenterXConstraint.priority = .defaultLow
+        titleCenterXConstraint.isActive = true
+
+        titleLabel.font = .systemFont(ofSize: 14, weight: .semibold)
+        titleLabel.textColor = .darkGray
+        
+        
         
         
         

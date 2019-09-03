@@ -50,6 +50,8 @@
 	<string>Резюме помогут другим найти Вас по Вашим навыкам. Вы можете добавить неограниченное количество резюме.</string>
 	<key>accountOrganizations</key>
 	<string>Организации</string>
+	<key>accountOrganizationsSectionDescription</key>
+	<string>Вы можете присоединиться к различным организациям и получить право публиковать объявления от имени организации.</string>
 	<key>accountSettings</key>
 	<string>Настройки</string>
 	<key>accountAbout</key>
@@ -186,11 +188,11 @@
 	<string>Участники</string>
 	<key>organizationAdmin</key>
 	<string>Создатель</string>
-    <key>organizationJoin</key>
-    <string>Вступить в группу</string>
-    <key>organizationLeave</key>
-    <string>Покинуть группу</string>
-    <key>organizationDeletionAlertMessage</key>
-    <string>Вы уверены, что хотите удалить данную группу? Это действие необратимо.</string>
+	<key>organizationJoin</key>
+	<string>Вступить в группу</string>
+	<key>organizationLeave</key>
+	<string>Покинуть группу</string>
+	<key>organizationDeletionAlertMessage</key>
+	<string>Вы уверены, что хотите удалить данную группу? Это действие необратимо.</string>
 </dict>
 </plist>

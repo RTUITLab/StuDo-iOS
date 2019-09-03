@@ -49,7 +49,9 @@
 	<key>accountProfileSectionDescription</key>
 	<string>The profiles you create help others find you by the skills you have. Add as many profiles as you like.</string>
 	<key>accountOrganizations</key>
-	<string>Organizations</string>
+	<string>Groups</string>
+	<key>accountOrganizationsSectionDescription</key>
+	<string>You can join different groups and get the right to publish ads on behalf of group&apos;s name.</string>
 	<key>accountSettings</key>
 	<string>App settings</string>
 	<key>accountAbout</key>

@@ -38,6 +38,7 @@ enum LozalizerString: String {
     case accountAddNewProfile
     case accountProfileSectionDescription
     case accountOrganizations
+    case accountOrganizationsSectionDescription
     case accountSettings
     case accountAbout
     
