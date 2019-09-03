@@ -57,6 +57,11 @@ class TableViewCellWithInputField: UITableViewCell {
 
 class TableViewCellWithTextViewInput: UITableViewCell {
     
+    /**
+     - Important: Placeholder handling (i.e. appearing and disappearing on appropriate time) must be implemented in the **parent controller**!
+     */
+    let placeholderLabel = UILabel()
+    
     let textViewInput = UITextView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -69,6 +74,16 @@ class TableViewCellWithTextViewInput: UITableViewCell {
         textViewInput.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
         textViewInput.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
         textViewInput.heightAnchor.constraint(greaterThanOrEqualToConstant: 44 * 2).isActive = true
+        
+        contentView.addSubview(placeholderLabel)
+        placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
+        placeholderLabel.leadingAnchor.constraint(equalTo: textViewInput.leadingAnchor, constant: 4).isActive = true
+        placeholderLabel.topAnchor.constraint(equalTo: textViewInput.topAnchor, constant: 7).isActive = true
+        
+        placeholderLabel.font = .preferredFont(forTextStyle: .body)
+        placeholderLabel.textColor = UIColor(red:0.781, green:0.780, blue:0.802, alpha:1.000)
+        
+        placeholderLabel.isHidden = true
         
         textViewInput.isScrollEnabled = false
         

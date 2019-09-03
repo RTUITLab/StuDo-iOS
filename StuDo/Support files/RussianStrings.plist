@@ -172,5 +172,19 @@
 	<string>Актуально до</string>
 	<key>adEditorDurationLabel</key>
 	<string>Продолжительность</string>
+    
+    <key>organizationListTitle</key>
+    <string>Группы</string>
+    <key>organizationInfoHeaderTitle</key>
+    <string>Информация о группе</string>
+    <key>organizationNamePlaceholder</key>
+    <string>Название</string>
+    <key>organizationDescriptionPlaceholder</key>
+    <string>Описание</string>
+    <key>organizationMembersHeaderTitle</key>
+    <string>Участники</string>
+    <key>organizationAdmin</key>
+    <string>Создатель</string>
+    
 </dict>
 </plist>

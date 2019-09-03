@@ -172,5 +172,19 @@
 	<string>End Date</string>
 	<key>adEditorDurationLabel</key>
 	<string>Duration</string>
+    
+    <key>organizationListTitle</key>
+    <string>Groups</string>
+    <key>organizationInfoHeaderTitle</key>
+    <string>Group Info</string>
+    <key>organizationNamePlaceholder</key>
+    <string>Name</string>
+    <key>organizationDescriptionPlaceholder</key>
+    <string>Description</string>
+    <key>organizationMembersHeaderTitle</key>
+    <string>Members</string>
+    <key>organizationAdmin</key>
+    <string>Admin</string>
+    
 </dict>
 </plist>

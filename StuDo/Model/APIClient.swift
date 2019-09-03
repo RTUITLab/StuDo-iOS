@@ -58,6 +58,7 @@ enum APIError: Error {
     case wrongResponseStatus(Int)
     case decodingFailure
     case decodingFailureWithField(String)
+    case decodingFailureWithFieldAndValue(String, String)
 }
 
 extension APIError: LocalizedError {
@@ -73,6 +74,8 @@ extension APIError: LocalizedError {
             return NSLocalizedString("Server responded with the error status code: \(status)", comment: "")
         case .decodingFailureWithField(let field):
             return NSLocalizedString("Cannot decode the following field: \(field)", comment: "")
+        case .decodingFailureWithFieldAndValue(let field, let value):
+            return NSLocalizedString("Cannot decode the value '\(value)' in field '\(field)'", comment: "")
         }
     }
 }
@@ -259,7 +262,7 @@ class APIClient {
 
 protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error)
-
+    
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User)
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User)
     
@@ -286,13 +289,17 @@ protocol APIClientDelegate: class {
     
     func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest)
     func apiClient(_ client: APIClient, didChangeUserInfo newUserInfo: (firstName: String, lastName: String, studentID: String))
+    
+    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization])
+    func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization)
+    func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember])
 }
 
 extension APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         print(error.localizedDescription)
     }
-
+    
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {}
@@ -310,6 +317,9 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangeUserInfo newUserInfo: (firstName: String, lastName: String, studentID: String)) {}
+    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization]) {}
+    func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {}
+    func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember]) {}
 }
 
 
@@ -542,6 +552,71 @@ extension APIClient {
             }
         }
     }
+    
+    
+    
+    
+    // ==========================
+    // MARK: - Organization-related requests
+    // ==========================
+    
+    
+    func getOrganizations() {
+        let request = APIRequest(method: .get, path: "organization")
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                let organizations = try self.decodeOrganizations(from: response)
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didRecieveOrganizations: organizations)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+    }
+    
+    
+    
+    func getOrganization(withId id: String) {
+        let request = APIRequest(method: .get, path: "organization/\(id)")
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                if let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    let organization = try self.decodeOrganization(from: decodedJSON, fullDecode: true)
+                    
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didRecieveOrganization: organization)
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+    }
+    
+    func getMembers(forOrganizationWithId id: String) {
+        let request = APIRequest(method: .get, path: "organization/members/\(id)")
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                let members = try self.decodeOrganizationMembers(from: response)
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didRecieveOrganizationMembers: members)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+    }
+    
     
     
     
@@ -822,6 +897,34 @@ extension APIClient {
         }
         
         return ads
+    }
+    
+    
+    fileprivate func decodeOrganizations(from response: (APIResponse<Data?>), fullDecode: Bool = false ) throws -> [Organization] {
+        guard let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+            throw APIError.decodingFailure
+        }
+        var organizations = [Organization]()
+        for object in decodedJSON {
+            let organization = try self.decodeOrganization(from: object, fullDecode: fullDecode)
+            organizations.append(organization)
+        }
+        
+        return organizations
+    }
+    
+    
+    fileprivate func decodeOrganizationMembers(from response: (APIResponse<Data?>)) throws -> [OrganizationMember] {
+        guard let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+            throw APIError.decodingFailure
+        }
+        var organizationMembers = [OrganizationMember]()
+        for object in decodedJSON {
+            let member = try self.decodeOrganizationMember(from: object)
+            organizationMembers.append(member)
+        }
+        
+        return organizationMembers
     }
     
     

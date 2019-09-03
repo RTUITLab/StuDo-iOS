@@ -107,6 +107,13 @@ enum LozalizerString: String {
     case adEditorBeginDateLabel
     case adEditorEndDateLabel
     case adEditorDurationLabel
+    
+    case organizationListTitle
+    case organizationInfoHeaderTitle
+    case organizationNamePlaceholder
+    case organizationDescriptionPlaceholder
+    case organizationMembersHeaderTitle
+    case organizationAdmin
 }
 
 class Localizer: NSObject {

@@ -116,9 +116,26 @@ struct Credentials: Codable {
 
 
 struct Organization {
-    
+    let id: String!
+    let name: String
+    let description: String
+    let creatorId: String
+    let creator: User?
 }
 
+
+struct OrganizationMember {
+    let user: User
+    let rights: [OrganizationMemberRight]
+}
+
+enum OrganizationMemberRight: String {
+    case canEditMembers = "CanEditMembers"
+    case canEditRights = "CanEditRights"
+    case canEditAd = "CanEditAd"
+    case canEditOrganizationInformation = "CanEditOrganizationInformation"
+    case canDeleteOrganization = "CanDeleteOrganization"
+}
 
 
 
@@ -364,6 +381,78 @@ extension APIClient {
         }
         
         return Profile(id: id, name: name, description: description)
+    }
+    
+    
+    
+    
+    func decodeOrganization(from object: [String: Any], fullDecode: Bool = false) throws -> Organization {
+        
+        let idField = "id"
+        guard let id = object[idField] as? String else {
+            throw APIError.decodingFailureWithField(idField)
+        }
+        
+        let nameField = "name"
+        guard let name = object[nameField] as? String else {
+            throw APIError.decodingFailureWithField(nameField)
+        }
+        
+        let descriptionField = "description"
+        guard let description = object[descriptionField] as? String else {
+            throw APIError.decodingFailureWithField(descriptionField)
+        }
+        
+        let creatorIdField = "creatorId"
+        guard let creatorId = object[creatorIdField] as? String else {
+            throw APIError.decodingFailureWithField(creatorIdField)
+        }
+        
+        
+        if fullDecode {
+            let descriptionField = "creator"
+            guard let creatorDictionary = object[descriptionField] as? [String: Any] else {
+                throw APIError.decodingFailureWithField(descriptionField)
+            }
+            
+            let creator = try self.decode(userDictionary: creatorDictionary)
+            
+            return Organization(id: id, name: name, description: description, creatorId: creatorId, creator: creator)
+        } else {
+            return Organization(id: id, name: name, description: description, creatorId: creatorId, creator: nil)
+        }
+        
+    }
+    
+    
+    func decodeOrganizationMember(from object: [String: Any], fullDecode: Bool = false) throws -> OrganizationMember {
+        
+        let userField = "user"
+        guard let userDictionary = object[userField] as? [String: Any] else {
+            throw APIError.decodingFailureWithField(userField)
+        }
+        
+        let user = try self.decode(userDictionary: userDictionary)
+        
+        let organizationRightsField = "organizationRights"
+        guard let organizationRightsArray = object[organizationRightsField] as? [[String: String]] else {
+            throw APIError.decodingFailureWithField(organizationRightsField)
+        }
+        
+        var userRights = [OrganizationMemberRight]()
+        for right in organizationRightsArray {
+            let rightNameField = "rightName"
+            guard let rightName = right[rightNameField] as? String else {
+                throw APIError.decodingFailureWithField(rightNameField)
+            }
+            guard let rightValue = OrganizationMemberRight.init(rawValue: rightName) else {
+                throw APIError.decodingFailureWithFieldAndValue(rightNameField, rightName)
+            }
+            userRights.append(rightValue)
+        }
+        
+        return OrganizationMember(user: user, rights: userRights)
+        
     }
     
     

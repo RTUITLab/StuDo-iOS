@@ -197,7 +197,6 @@ class CardViewController: UIViewController {
         cardView.frame = CGRect(origin: .zero, size: cardViewSize)
         contentView.frame = CGRect(origin: CGPoint(x: 0, y: cardTopOffset), size: contentSize)
         
-        print("ContentSize: \(containerView.contentSize)")
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -222,7 +221,6 @@ extension CardViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView === containerView {
             let offsetY = containerView.contentOffset.y
-            print("====== currentOffset: \(offsetY); contentSize: \(containerView.contentSize.height), inset: \(containerView.contentInset)")
             if offsetY < -view.frame.height + view.frame.height / 3 && !isFullscreen {
                 self.dismiss(animated: true, completion: nil)
             }

@@ -319,7 +319,8 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             let selectedProfile = ownProfiles[indexPath.row]
             presentProfileEditor(for: selectedProfile)
         } else if sectionInfo == .organizations {
-            
+            let organizationsVC = OrganizationListController(style: .plain)
+            navigationController?.pushViewController(organizationsVC, animated: true)
         } else if sectionInfo == .settingsAbout {
             if indexPath.row == 0 {
                 let settingsVC = SettingsViewController(style: .grouped)
