@@ -16,6 +16,8 @@
 	<string>Delete</string>
 	<key>edit</key>
 	<string>Edit</string>
+	<key>create</key>
+	<string>Create</string>
 	<key>redThemeName</key>
 	<string>Red</string>
 	<key>orangeThemeName</key>
@@ -179,7 +181,7 @@
 	<key>organizationListTitle</key>
 	<string>Groups</string>
 	<key>organizationInfoHeaderTitle</key>
-	<string>Group Info</string>
+	<string>Main Info</string>
 	<key>organizationNamePlaceholder</key>
 	<string>Name</string>
 	<key>organizationDescriptionPlaceholder</key>

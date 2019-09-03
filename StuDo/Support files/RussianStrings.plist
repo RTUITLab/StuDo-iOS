@@ -16,6 +16,8 @@
 	<string>Удалить</string>
 	<key>edit</key>
 	<string>Изм.</string>
+	<key>create</key>
+	<string>Создать</string>
 	<key>redThemeName</key>
 	<string>Красный</string>
 	<key>orangeThemeName</key>
@@ -177,9 +179,9 @@
 	<key>adEditorDurationLabel</key>
 	<string>Продолжительность</string>
 	<key>organizationListTitle</key>
-	<string>Группы</string>
+	<string>Организации</string>
 	<key>organizationInfoHeaderTitle</key>
-	<string>Информация о группе</string>
+	<string>Основная информация</string>
 	<key>organizationNamePlaceholder</key>
 	<string>Название</string>
 	<key>organizationDescriptionPlaceholder</key>

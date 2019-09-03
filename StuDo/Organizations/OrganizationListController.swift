@@ -30,6 +30,8 @@ class OrganizationListController: UITableViewController {
         
         title = Localizer.string(for: .back)
         navigationItem.titleView = UIView()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createOrganizationButtonTapped(_:)))
 
     }
     
@@ -80,5 +82,13 @@ extension OrganizationListController: APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization]) {
         self.organizations = organizations
         tableView.reloadData()
+    }
+}
+
+
+extension OrganizationListController {
+    @objc func createOrganizationButtonTapped(_ button: UIBarButtonItem) {
+        let organizationVC = OrganizationViewController(organization: nil)
+        navigationController?.pushViewController(organizationVC, animated: true)
     }
 }

@@ -37,7 +37,8 @@ class OrganizationViewController: UITableViewController {
     let client = APIClient()
     
     var editButton: UIBarButtonItem!
-    var doneButton: UIBarButtonItem!
+    var doneButton: UIBarButtonItem?
+    var createButton: UIBarButtonItem?
     
     var userCanEditOrganizationInfo = false
     
@@ -62,6 +63,10 @@ class OrganizationViewController: UITableViewController {
             if organization.creatorId == PersistentStore.shared.user.id! {
                 userCanEditOrganizationInfo = true
             }
+        } else {
+            createButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(createButtonTapped(_:)))
+            createButton!.isEnabled = false
+            navigationItem.rightBarButtonItem = createButton
         }
     }
     
@@ -129,6 +134,17 @@ class OrganizationViewController: UITableViewController {
         descriptionTextView.text = organization.description
     }
     
+    func checkIfCanPublish() {
+        let name = nameTextField.text!
+        let description = descriptionTextView.text!
+        
+        if name.isEmpty || description.isEmpty {
+            createButton?.isEnabled = false
+        } else {
+            createButton?.isEnabled = true
+        }
+    }
+    
     
     
     
@@ -136,6 +152,10 @@ class OrganizationViewController: UITableViewController {
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if currentOrganization == nil {
+            return 1
+        }
+        
         if isEditingModeEnabled {
             return infoPositionsEditing.count
         }
@@ -189,6 +209,10 @@ class OrganizationViewController: UITableViewController {
             nameTextField.text = currentOrganization?.name
             
             nameTextField.font = .preferredFont(for: .body, weight: .semibold)
+            nameTextField.returnKeyType = .continue
+            
+            nameTextField.delegate = self
+            nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
             
             if currentOrganization != nil {
                 nameTextField.isUserInteractionEnabled = false
@@ -266,6 +290,22 @@ extension OrganizationViewController: UITextViewDelegate {
             } else {
                 descriptionPlaceholderLabel.isHidden = true
             }
+            checkIfCanPublish()
+        }
+    }
+}
+
+extension OrganizationViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField === nameTextField {
+            descriptionTextView.becomeFirstResponder()
+        }
+        return true
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        if textField === nameTextField {
+            checkIfCanPublish()
         }
     }
 }
@@ -296,6 +336,16 @@ extension OrganizationViewController: APIClientDelegate {
         set(organization: updatedOrganization)
         RootViewController.stopLoadingIndicator(with: .success)
     }
+    
+    func apiClient(_ client: APIClient, didCreateOrganization newOrganization: Organization) {
+        createButton = nil
+        navigationItem.rightBarButtonItem = editButton
+        set(organization: newOrganization)
+        RootViewController.stopLoadingIndicator(with: .success)
+        
+        nameTextField.isUserInteractionEnabled = false
+        descriptionTextView.isUserInteractionEnabled = false
+    }
 }
 
 
@@ -320,6 +370,11 @@ extension OrganizationViewController {
     
     @objc func doneButtonTapped(_ button: UIBarButtonItem) {
         switchMode(toEditing: false)
+    }
+    
+    @objc func createButtonTapped(_ button: UIBarButtonItem) {
+        client.create(organization: Organization(id: nil, name: nameTextField!.text!, description: descriptionTextView!.text!))
+        RootViewController.startLoadingIndicator()
     }
     
 }
