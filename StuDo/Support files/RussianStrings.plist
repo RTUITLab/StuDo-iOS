@@ -18,6 +18,8 @@
 	<string>Изм.</string>
 	<key>create</key>
 	<string>Создать</string>
+	<key>search</key>
+	<string>Поиск</string>
 	<key>redThemeName</key>
 	<string>Красный</string>
 	<key>orangeThemeName</key>

@@ -18,6 +18,8 @@
 	<string>Edit</string>
 	<key>create</key>
 	<string>Create</string>
+	<key>search</key>
+	<string>Search</string>
 	<key>redThemeName</key>
 	<string>Red</string>
 	<key>orangeThemeName</key>

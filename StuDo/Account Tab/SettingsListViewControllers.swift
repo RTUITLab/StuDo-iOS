@@ -19,6 +19,7 @@ class SettingsListViewController<ListItem: RawRepresentable>: UITableViewControl
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(SettingsListItemCell.self, forCellReuseIdentifier: listCellIdentifier)
+        tableView.tableFooterView = UIView()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {

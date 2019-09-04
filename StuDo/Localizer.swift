@@ -18,6 +18,7 @@ enum LozalizerString: String {
     case delete
     case edit
     case create
+    case search
     
     case redThemeName
     case orangeThemeName
