@@ -108,6 +108,9 @@ extension EmailTableViewController: APIClientDelegate {
             let alertController = UIAlertController(title: nil, message: Localizer.string(for: .emailChangeAlertMessage), preferredStyle: .alert)
             
             let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel) { _ in
+                if self.navigationController?.visibleViewController === self {
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
             alertController.addAction(OkButton)
             

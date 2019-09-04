@@ -180,6 +180,8 @@
 	<string>End Date</string>
 	<key>adEditorDurationLabel</key>
 	<string>Duration</string>
+	<key>adEditorPublishAdAlertMessage</key>
+	<string>Publish this ad as</string>
 	<key>organizationListTitle</key>
 	<string>Groups</string>
 	<key>organizationInfoHeaderTitle</key>

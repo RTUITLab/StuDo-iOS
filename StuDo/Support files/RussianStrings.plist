@@ -19,7 +19,7 @@
 	<key>create</key>
 	<string>Создать</string>
 	<key>search</key>
-	<string>Поиск</string>
+	<string>Найти</string>
 	<key>redThemeName</key>
 	<string>Красный</string>
 	<key>orangeThemeName</key>
@@ -180,6 +180,8 @@
 	<string>Актуально до</string>
 	<key>adEditorDurationLabel</key>
 	<string>Продолжительность</string>
+	<key>adEditorPublishAdAlertMessage</key>
+	<string>Опубликовать объявление от имени</string>
 	<key>organizationListTitle</key>
 	<string>Организации</string>
 	<key>organizationInfoHeaderTitle</key>

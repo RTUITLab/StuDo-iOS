@@ -296,6 +296,9 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didCreateOrganization newOrganization: Organization)
     func apiClient(_ client: APIClient, didUpdateOrganization updatedOrganization: Organization)
     func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String)
+    
+    func apiClient(_ client: APIClient, didRecieveUser user: User)
+
 }
 
 extension APIClientDelegate {
@@ -326,6 +329,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didCreateOrganization newOrganization: Organization) {}
     func apiClient(_ client: APIClient, didUpdateOrganization updatedOrganization: Organization) {}
     func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String) {}
+    func apiClient(_ client: APIClient, didRecieveUser user: User) {}
 }
 
 
@@ -846,6 +850,27 @@ extension APIClient {
     // ==========================
     // MARK: - User-related requests
     // ==========================
+    
+    
+    func getUser(id: String) {
+        let request = APIRequest(method: .get, path: "user/\(id)")
+        self.perform(secureRequest: request) { [self] (result) in
+            switch result {
+            case .success(let response):
+                if let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    let user = try self.decode(userDictionary: decodedJSON)
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didRecieveUser: user)
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+    }
+    
     
     
     

@@ -10,6 +10,8 @@ import UIKit
 
 class LoadingIndicator: UIView {
     
+    let hapticFeedback = UINotificationFeedbackGenerator()
+    
     var isInitialLayout = true
     
     let indicatorContainer = UIView()
@@ -135,6 +137,7 @@ class LoadingIndicator: UIView {
     
     
     func startIndicator() {
+        hapticFeedback.prepare()
         
         isHidden = false
         
@@ -160,11 +163,14 @@ class LoadingIndicator: UIView {
     
     func stopIndicator(with stopReason: StopIndicatorType, completion: (() -> ())? = nil) {
         
+        var feedback: UINotificationFeedbackGenerator.FeedbackType
         switch stopReason {
         case .success:
             doneImageView.image = #imageLiteral(resourceName: "loading-indicator-done").withRenderingMode(.alwaysTemplate)
+            feedback = .success
         case .fail:
             doneImageView.image = #imageLiteral(resourceName: "loading-indicator-error").withRenderingMode(.alwaysTemplate)
+            feedback = .error
         }
         
         doneImageView.isHidden = false
@@ -175,6 +181,7 @@ class LoadingIndicator: UIView {
         }) { _ in
             self.indicatorContainer.isHidden = true
             self.indicatorContainer.layer.removeAllAnimations()
+            self.hapticFeedback.notificationOccurred(feedback)
         }
         
         UIView.animate(withDuration: 0.3, delay: 0.5, options: .curveLinear, animations: {

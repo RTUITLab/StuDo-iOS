@@ -92,6 +92,7 @@ class AccountViewController: UIViewController {
         if isShowingTabBar {
             isShowingTabBar = false
         }
+        client.getUser(id: PersistentStore.shared.user!.id!)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -141,6 +142,12 @@ extension AccountViewController: APIClientDelegate {
         let _ = ownProfiles.remove(at: deletedIndex)
         tableView.deleteRows(at: [IndexPath(row: deletedIndex, section: 1)], with: .automatic)
         
+    }
+    
+    
+    func apiClient(_ client: APIClient, didRecieveUser user: User) {
+        PersistentStore.shared.user = user
+        tableView.reloadSections(IndexSet(integer: 0), with: .none)
     }
     
 }

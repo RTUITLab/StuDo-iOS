@@ -179,7 +179,9 @@ extension PasswordTableViewController: APIClientDelegate {
             let alertController = UIAlertController(title: Localizer.string(for: .passwordChangeAlertTitle), message: Localizer.string(for: .passwordChangeAlertMessage), preferredStyle: .alert)
             
             let OkButton = UIAlertAction(title: Localizer.string(for: .okay), style: .cancel) { _ in
-                self.navigationController?.popViewController(animated: true)
+                if self.navigationController?.visibleViewController === self {
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
             alertController.addAction(OkButton)
             

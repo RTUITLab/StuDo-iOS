@@ -111,6 +111,7 @@ enum LozalizerString: String {
     case adEditorBeginDateLabel
     case adEditorEndDateLabel
     case adEditorDurationLabel
+    case adEditorPublishAdAlertMessage
     
     case organizationListTitle
     case organizationInfoHeaderTitle
