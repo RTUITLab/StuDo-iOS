@@ -168,6 +168,7 @@ enum OrganizationMemberRight: String {
     case canEditAd = "CanEditAd"
     case canEditOrganizationInformation = "CanEditOrganizationInformation"
     case canDeleteOrganization = "CanDeleteOrganization"
+    case member = "Member"
 }
 
 

@@ -125,6 +125,8 @@ class OrganizationViewController: UITableViewController {
     
     
     fileprivate func set(organization: Organization) {
+        currentOrganization = organization
+        
         nameTextField.text = organization.name
         if organization.description.isEmpty {
             descriptionPlaceholderLabel.isHidden = false
@@ -342,6 +344,9 @@ extension OrganizationViewController: APIClientDelegate {
         navigationItem.rightBarButtonItem = editButton
         set(organization: newOrganization)
         RootViewController.stopLoadingIndicator(with: .success)
+        
+        tableView.insertSections(IndexSet(integer: 1), with: .fade)
+        client.getMembers(forOrganizationWithId: newOrganization.id)
         
         nameTextField.isUserInteractionEnabled = false
         descriptionTextView.isUserInteractionEnabled = false
