@@ -40,7 +40,6 @@ class OrganizationListController: UITableViewController {
         
         title = Localizer.string(for: .back)
         navigationItem.titleView = UIView()
-        navigationItem.hidesSearchBarWhenScrolling = false
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createOrganizationButtonTapped(_:)))
         
@@ -56,7 +55,6 @@ class OrganizationListController: UITableViewController {
         }
         
         searchController.searchBar.placeholder = Localizer.string(for: .search)
-
     }
     
     override func viewWillAppear(_ animated: Bool) {

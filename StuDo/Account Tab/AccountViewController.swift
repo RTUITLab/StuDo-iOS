@@ -37,6 +37,8 @@ class AccountViewController: UIViewController {
     var ownProfiles = [Profile]()
     
     private var sections: [SectionName] = [.myAccount, .myProfiles, .organizations, .settingsAbout]
+    
+    var emailLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -147,7 +149,7 @@ extension AccountViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didRecieveUser user: User) {
         PersistentStore.shared.user = user
-        tableView.reloadSections(IndexSet(integer: 0), with: .none)
+        emailLabel.text = user.email
     }
     
 }
@@ -290,6 +292,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             cell.fullnameLabel.text = user.firstName + " " + user.lastName
             cell.generateProfileImage(for: user)
             cell.emailLabel.text = user.email
+            emailLabel = cell.emailLabel
             cell.setupCell()
             cell.accessoryType = .disclosureIndicator
             return cell

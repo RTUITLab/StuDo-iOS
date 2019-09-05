@@ -24,15 +24,17 @@ class OrganizationViewController: UITableViewController {
     var descriptionPlaceholderLabel: UILabel!
     var descriptionTextView: UITextView!
     
-    enum InfoUnit {
+    enum InfoUnit: String {
         case name
         case description
         case members
         case delete
+        case join
     }
     
-    let infoPositions: [[InfoUnit]] = [[.name, .description], [.members]]
-    let infoPositionsEditing: [[InfoUnit]] = [[.name, .description], [.members], [.delete]]
+    let infoPositionsNotMember: [[InfoUnit]] = [[.name, .description, .join], [.members]]
+    let infoPositionsMember: [[InfoUnit]] = [[.name, .description], [.members]]
+    let infoPositionsEditing: [[InfoUnit]] = [[.name, .description, .delete], [.members]]
 
     let client = APIClient()
     
@@ -45,6 +47,34 @@ class OrganizationViewController: UITableViewController {
     var isEditingModeEnabled: Bool = false
     
     var creatorCellRow: Int!
+    
+    enum UserState {
+        case member
+        case notMember
+        case unknown
+    }
+    var currentUserState: UserState = .unknown
+        
+        
+    var canUserEditMembers = false
+    var currentUserAsMember: OrganizationMember? = nil {
+        didSet {
+            guard let member = currentUserAsMember else {
+                navigationItem.rightBarButtonItem = nil
+                canUserEditMembers = false
+                return
+            }
+            
+            if member.rights.contains(.canEditOrganizationInformation) {
+                navigationItem.rightBarButtonItem = editButton
+            } else {
+                navigationItem.rightBarButtonItem = nil
+            }
+            
+            canUserEditMembers = member.rights.contains(.canEditMembers)
+            
+        }
+    }
     
     
     init(organization: Organization? = nil) {
@@ -59,10 +89,6 @@ class OrganizationViewController: UITableViewController {
         if let organization = organization {
             client.getOrganization(withId: organization.id)
             client.getMembers(forOrganizationWithId: organization.id)
-            
-            if organization.creatorId == PersistentStore.shared.user.id! {
-                userCanEditOrganizationInfo = true
-            }
         } else {
             createButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(createButtonTapped(_:)))
             createButton!.isEnabled = false
@@ -89,10 +115,6 @@ class OrganizationViewController: UITableViewController {
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: userCellId)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: actionCellId)
         
-        if userCanEditOrganizationInfo {
-            navigationItem.rightBarButtonItem = editButton
-        }
-        
     }
     
     
@@ -105,11 +127,11 @@ class OrganizationViewController: UITableViewController {
         
         if toEditing {
             navigationItem.rightBarButtonItem = doneButton
-            tableView.insertSections(IndexSet(integer: 2), with: .fade)
+            tableView.insertRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
         } else {
             navigationItem.rightBarButtonItem = editButton
-            tableView.deleteSections(IndexSet(integer: 2), with: .fade)
-            
+            tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+
             if let editedName = nameTextField.text, let editedDescription = descriptionTextView.text {
                 if editedName != currentOrganization!.name || editedDescription != currentOrganization!.description {
                     client.replaceOrganization(with: Organization(id: currentOrganization!.id, name: nameTextField.text ?? "", description: descriptionTextView.text ?? ""))
@@ -157,19 +179,25 @@ class OrganizationViewController: UITableViewController {
         if currentOrganization == nil {
             return 1
         }
+        if currentUserState == .notMember {
+            return infoPositionsNotMember.count
+        }
         
         if isEditingModeEnabled {
             return infoPositionsEditing.count
         }
-        return infoPositions.count
+        return infoPositionsMember.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var sectionPositions: [InfoUnit]!
-        if isEditingModeEnabled {
+        
+        if currentUserState == .notMember {
+            sectionPositions = infoPositionsNotMember[section]
+        } else if isEditingModeEnabled {
             sectionPositions = infoPositionsEditing[section]
         } else {
-            sectionPositions = infoPositions[section]
+            sectionPositions = infoPositionsMember[section]
         }
         
         if sectionPositions.first! == .members {
@@ -251,6 +279,9 @@ class OrganizationViewController: UITableViewController {
         if info == .delete {
             cell.textLabel?.textColor = .red
             cell.textLabel?.text = Localizer.string(for: .delete)
+        } else if info == .join {
+            cell.textLabel?.textColor = .globalTintColor
+            cell.textLabel?.text = Localizer.string(for: .organizationJoin)
         }
         
         return cell
@@ -258,7 +289,7 @@ class OrganizationViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let info = getInfo(for: indexPath)
-        if info == .members, indexPath.row != creatorCellRow {
+        if canUserEditMembers && info == .members, indexPath.row != creatorCellRow {
             return true
         }
         return false
@@ -279,6 +310,7 @@ class OrganizationViewController: UITableViewController {
             
             present(alert, animated: true, completion: nil)
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
@@ -293,6 +325,7 @@ extension OrganizationViewController: UITextViewDelegate {
                 descriptionPlaceholderLabel.isHidden = true
             }
             checkIfCanPublish()
+            updateTableViewLayout(toFit: descriptionTextView)
         }
     }
 }
@@ -326,7 +359,25 @@ extension OrganizationViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember]) {
         organizationMembers = members
-        tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+        for member in members {
+            if member.user.id == PersistentStore.shared.user.id! {
+                currentUserAsMember = member
+            }
+        }
+        
+        if currentUserAsMember == nil {
+            currentUserState = .notMember
+            tableView.beginUpdates()
+            tableView.insertRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+            tableView.endUpdates()
+        } else {
+            tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+        }
+        
+        
+        
+        
     }
     
     func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String) {
@@ -357,10 +408,13 @@ extension OrganizationViewController: APIClientDelegate {
 
 extension OrganizationViewController {
     fileprivate func getInfo(for indexPath: IndexPath) -> InfoUnit {
+        if currentUserState == .notMember {
+            return infoPositionsNotMember[indexPath.section][indexPath.row]
+        }
         if isEditingModeEnabled {
             return infoPositionsEditing[indexPath.section][indexPath.row]
         } else {
-            return infoPositions[indexPath.section][indexPath.row]
+            return infoPositionsMember[indexPath.section][indexPath.row]
         }
     }
 }
@@ -382,4 +436,23 @@ extension OrganizationViewController {
         RootViewController.startLoadingIndicator()
     }
     
+}
+
+
+
+extension OrganizationViewController {
+    fileprivate func updateTableViewLayout(toFit textView: UITextView) {
+        let actualHeight = textView.frame.size.height
+        let calculatedHeight = textView.sizeThatFits(textView.frame.size).height
+        
+        if actualHeight != calculatedHeight {
+            
+            UIView.setAnimationsEnabled(false)
+            
+            tableView.beginUpdates()
+            tableView.endUpdates()
+            
+            UIView.setAnimationsEnabled(true)
+        }
+    }
 }
