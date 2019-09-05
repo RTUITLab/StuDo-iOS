@@ -37,8 +37,9 @@ class TextFormatter {
             creator = organizationName
         } else if let user = ad.user {
             creator = user.firstName + " " + user.lastName
+        } else if let organization = ad.organization {
+            creator = organization.name
         }
-        #warning("When organization handling is implemented, get organization's name")
         
         let timeString = TextFormatter.mediumString(from: ad.beginTime)
         

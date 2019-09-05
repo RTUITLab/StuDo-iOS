@@ -361,27 +361,27 @@ extension APIClient {
         let organizationIdField = "organizationId"
         let organizationId = object[organizationIdField] as? String
         
+        var organization: Organization?
         
         let organizationField = "organization"
-        let organizationDictionary = object[organizationField] as? [String: Any]
-        
-        let organization: Organization? = nil
+        if let organizationDictionary = object[organizationField] as? [String: Any] {
+            organization = try decodeOrganization(from: organizationDictionary)
+        }
         
         
         
         
         let userIdField = "userId"
-        guard let userId = object[userIdField] as? String? else {
-            throw APIError.decodingFailureWithField(userIdField)
-        }
+        let userId = object[userIdField] as? String
+        
+        var user: User?
         
         let userField = "user"
-        guard let userDictionary = object[userField] as? [String: Any] else {
-            throw APIError.decodingFailureWithField(userField)
+        if let userDictionary = object[userField] as? [String: Any] {
+            user = try decode(userDictionary: userDictionary)
         }
         
-        let user = try decode(userDictionary: userDictionary)
-        
+
         
         
         
