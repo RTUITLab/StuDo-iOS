@@ -14,6 +14,7 @@ class OrganizationListController: UITableViewController {
     
     let client = APIClient()
     
+    var myOrganizations = [Organization]()
     var organizations = [Organization]()
     var organizationsDictionary = [String: [Organization]]()
     var organizationsSectionTitles = [String]()
@@ -24,6 +25,15 @@ class OrganizationListController: UITableViewController {
     var isSearchModeActive = false
     var filteredResults = [Organization]()
     
+    enum PresentationMode {
+        case allOrganizations
+        case myOrganizations
+    }
+    var currentMode: PresentationMode = .allOrganizations {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +65,13 @@ class OrganizationListController: UITableViewController {
         }
         
         searchController.searchBar.placeholder = Localizer.string(for: .search)
+        
+        
+        let segmentedControl = UISegmentedControl(items: [Localizer.string(for: .organizationTitleAllOrganizations), Localizer.string(for: .organizationTitleMyOrganizations)])
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+        segmentedControl.selectedSegmentIndex = 0
+        navigationItem.titleView = segmentedControl
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,8 +80,8 @@ class OrganizationListController: UITableViewController {
     
     
     @objc func refreshOrganizationList() {
-        refreshControl?.endRefreshing()
         client.getOrganizations()
+        client.getOrganizations([.isMember])
     }
     
     
@@ -110,6 +127,8 @@ class OrganizationListController: UITableViewController {
     fileprivate func organization(for indexPath: IndexPath) -> Organization {
         if isSearchModeActive {
             return filteredResults[indexPath.row]
+        } else if currentMode == .myOrganizations {
+            return myOrganizations[indexPath.row]
         }
         let currentSectionKey = organizationsSectionTitles[indexPath.section]
         let currentOrganization = organizationsDictionary[currentSectionKey]![indexPath.row]
@@ -121,7 +140,7 @@ class OrganizationListController: UITableViewController {
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if isSearchModeActive {
+        if isSearchModeActive || currentMode == .myOrganizations {
             return 1
         }
         return organizationsSectionTitles.count
@@ -130,7 +149,10 @@ class OrganizationListController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearchModeActive {
             return filteredResults.count
+        } else if currentMode == .myOrganizations {
+            return myOrganizations.count
         }
+        
         let currentSectionKey = organizationsSectionTitles[section]
         return organizationsDictionary[currentSectionKey]!.count
     }
@@ -154,14 +176,14 @@ class OrganizationListController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if isSearchModeActive {
+        if isSearchModeActive || currentMode == .myOrganizations {
             return nil
         }
         return organizationsSectionTitles[section]
     }
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        if isSearchModeActive {
+        if isSearchModeActive || currentMode == .myOrganizations {
             return nil
         }
         return organizationsSectionTitles
@@ -177,8 +199,20 @@ class OrganizationListController: UITableViewController {
 
 extension OrganizationListController: APIClientDelegate {
     
-    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization]) {
-        setData(organizations)
+    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {
+        if let options = options {
+            for item in options {
+                switch item {
+                case .isMember:
+                    myOrganizations = organizations
+                default:
+                    break
+                }
+            }
+            tableView.reloadData()
+        } else {
+            setData(organizations)
+        }
     }
 }
 
@@ -187,6 +221,15 @@ extension OrganizationListController {
     @objc func createOrganizationButtonTapped(_ button: UIBarButtonItem) {
         let organizationVC = OrganizationViewController(organization: nil)
         navigationController?.pushViewController(organizationVC, animated: true)
+    }
+    
+    @objc func segmentedControlValueChanged(_ control: UISegmentedControl) {
+        switch control.selectedSegmentIndex {
+        case 1:
+            currentMode = .myOrganizations
+        default:
+            currentMode = .allOrganizations
+        }
     }
 }
 

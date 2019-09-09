@@ -182,6 +182,10 @@
 	<string>Duration</string>
 	<key>adEditorPublishAdAlertMessage</key>
 	<string>Publish this ad as</string>
+	<key>organizationTitleAllOrganizations</key>
+	<string>All Groups</string>
+	<key>organizationTitleMyOrganizations</key>
+	<string>Only mine</string>
 	<key>organizationListTitle</key>
 	<string>Groups</string>
 	<key>organizationInfoHeaderTitle</key>

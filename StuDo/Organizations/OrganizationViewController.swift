@@ -117,6 +117,13 @@ class OrganizationViewController: UITableViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if currentOrganization == nil {
+            nameTextField.becomeFirstResponder()
+        }
+    }
+    
     
     
     func switchMode(toEditing: Bool) {

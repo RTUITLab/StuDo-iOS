@@ -113,6 +113,8 @@ enum LozalizerString: String {
     case adEditorDurationLabel
     case adEditorPublishAdAlertMessage
     
+    case organizationTitleAllOrganizations
+    case organizationTitleMyOrganizations
     case organizationListTitle
     case organizationInfoHeaderTitle
     case organizationNamePlaceholder

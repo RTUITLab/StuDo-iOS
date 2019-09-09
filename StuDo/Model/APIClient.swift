@@ -290,7 +290,7 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest)
     func apiClient(_ client: APIClient, didChangeUserInfo newUserInfo: (firstName: String, lastName: String, studentID: String))
     
-    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization])
+    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?)
     func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization)
     func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember])
     func apiClient(_ client: APIClient, didCreateOrganization newOrganization: Organization)
@@ -323,7 +323,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangeUserInfo newUserInfo: (firstName: String, lastName: String, studentID: String)) {}
-    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization]) {}
+    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {}
     func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {}
     func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember]) {}
     func apiClient(_ client: APIClient, didCreateOrganization newOrganization: Organization) {}
@@ -570,15 +570,28 @@ extension APIClient {
     // MARK: - Organization-related requests
     // ==========================
     
+    enum OrganizationRequestOption: String {
+        case canPublish
+        case isMember = "member"
+    }
     
-    func getOrganizations() {
-        let request = APIRequest(method: .get, path: "organization")
+    func getOrganizations(_ filterItems: [OrganizationRequestOption]? = nil) {
+        var request = APIRequest(method: .get, path: "organization")
+        
+        if let filterItems = filterItems, !filterItems.isEmpty {
+            var queries = [URLQueryItem]()
+            for item in filterItems {
+                queries.append(URLQueryItem(name: item.rawValue, value: "true"))
+            }
+            request.queryItems = queries
+        }
+        
         self.perform(secureRequest: request) { (result) in
             switch result {
             case .success(let response):
                 let organizations = try self.decodeOrganizations(from: response)
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveOrganizations: organizations)
+                    self.delegate?.apiClient(self, didRecieveOrganizations: organizations, withOptions: filterItems)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {

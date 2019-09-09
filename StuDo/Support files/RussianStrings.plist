@@ -182,6 +182,10 @@
 	<string>Продолжительность</string>
 	<key>adEditorPublishAdAlertMessage</key>
 	<string>Опубликовать объявление от имени</string>
+	<key>organizationTitleAllOrganizations</key>
+	<string>Все организации</string>
+	<key>organizationTitleMyOrganizations</key>
+	<string>Только мои</string>
 	<key>organizationListTitle</key>
 	<string>Организации</string>
 	<key>organizationInfoHeaderTitle</key>
