@@ -44,6 +44,8 @@
 	<string>All news</string>
 	<key>navigationMenuMyAds</key>
 	<string>Only my ads</string>
+	<key>navigationMenuOrganizationAds</key>
+	<string>My organization&apos;s ads</string>
 	<key>accountTitle</key>
 	<string>Account</string>
 	<key>accountMyProfiles</key>

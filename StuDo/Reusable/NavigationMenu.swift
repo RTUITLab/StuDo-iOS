@@ -17,6 +17,8 @@ protocol NavigationMenuDelegate: class {
 
 
 fileprivate let navigationMenuCellId = "navigationMenuCellId"
+fileprivate let navigationMenuHeaderId = "navigationMenuHeaderId"
+
 
 class NavigationMenu: UITableView {
     
@@ -28,9 +30,31 @@ class NavigationMenu: UITableView {
     private(set) var selectedOption: MenuItemName = .allAds
     var previouslySelectedOptionIndexPath: IndexPath!
     
+    var maxHeight: CGFloat = -1
     let menuItemHeight: CGFloat = 60
+    let headerHeight: CGFloat = 38
     var calculatedMenuHeight: CGFloat {
-        return min(CGFloat(menuItems.count) * menuItemHeight,  menuItemHeight * 6)
+        var numberOfRows = 2
+        var additionalHeight: CGFloat = 0
+        if menuItems.count > 1, let organizations = menuItems.last {
+            numberOfRows += organizations.count
+            additionalHeight = headerHeight
+        }
+        var fullHeight = CGFloat(numberOfRows) * menuItemHeight + additionalHeight
+        
+        let heightLimit = UIScreen.main.bounds.height * 0.8
+        if fullHeight < heightLimit {
+            return fullHeight
+        } else {
+            if maxHeight < 0 {
+                var maxHeight: CGFloat = headerHeight
+                while maxHeight + menuItemHeight < heightLimit {
+                    maxHeight += heightLimit
+                }
+                self.maxHeight = maxHeight
+            }
+            return maxHeight
+        }
     }
     
     enum MenuItemName: Equatable {
@@ -38,15 +62,19 @@ class NavigationMenu: UITableView {
         case myAds
         case organization(String, String)
     }
-    private let defaultMenuItems: [MenuItemName] = [.allAds, .myAds]
+    private let defaultMenuItems: [[MenuItemName]] = [[.allAds, .myAds]]
     private lazy var menuItems = {
         return defaultMenuItems
     }()
     
     func set(organizations: [Organization]) {
         menuItems = defaultMenuItems
+        var orgMenuItems = [MenuItemName]()
         for org in organizations {
-            menuItems.append(.organization(org.id, org.name))
+            orgMenuItems.append(.organization(org.id, org.name))
+        }
+        if !orgMenuItems.isEmpty {
+            menuItems.append(orgMenuItems)
         }
         reloadData()
     }
@@ -56,6 +84,7 @@ class NavigationMenu: UITableView {
         super.init(frame: .zero, style: .plain)
         
         register(NavigationMenuCell.self, forCellReuseIdentifier: navigationMenuCellId)
+        register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: navigationMenuHeaderId)
         
         delegate = self
         dataSource = self
@@ -80,9 +109,12 @@ class NavigationMenu: UITableView {
 
 extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return menuItems.count
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menuItems.count
+        return menuItems[section].count
     }
     
     
@@ -90,7 +122,7 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueReusableCell(withIdentifier: navigationMenuCellId, for: indexPath) as! NavigationMenuCell
         
-        let currentMenuItem = menuItems[indexPath.row]
+        let currentMenuItem = menuItems[indexPath.section][indexPath.row]
         
         switch currentMenuItem {
         case .allAds:
@@ -126,8 +158,28 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
         }
         
         previouslySelectedOptionIndexPath = indexPath
-        selectedOption = menuItems[indexPath.row]
+        selectedOption = menuItems[indexPath.section][indexPath.row]
         menuDelegate?.navigationMenu(self, didChangeOption: selectedOption)
+    }
+    
+    
+    
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 1 {
+            return headerHeight
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 1 {
+            let header = dequeueReusableHeaderFooterView(withIdentifier: navigationMenuHeaderId)!
+            header.backgroundView = UIView()
+            header.textLabel?.text = Localizer.string(for: .navigationMenuOrganizationAds)
+            return header
+        }
+        return nil
     }
     
     

@@ -44,6 +44,8 @@
 	<string>Все объявления</string>
 	<key>navigationMenuMyAds</key>
 	<string>Только мои объявления</string>
+	<key>navigationMenuOrganizationAds</key>
+	<string>Объявления организаций</string>
 	<key>accountTitle</key>
 	<string>Аккаунт</string>
 	<key>accountMyProfiles</key>

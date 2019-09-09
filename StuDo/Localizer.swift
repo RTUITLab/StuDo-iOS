@@ -34,6 +34,7 @@ enum LozalizerString: String {
     
     case navigationMenuAllAds
     case navigationMenuMyAds
+    case navigationMenuOrganizationAds
     
     case accountTitle
     case accountMyProfiles
