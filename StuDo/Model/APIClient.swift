@@ -669,9 +669,7 @@ extension APIClient {
         self.perform(secureRequest: request) { (result) in
             switch result {
             case .success(let response):
-                guard let data = response.body, let deletedOrganizationId = String(data: data, encoding: .utf8) else {
-                    throw APIError.decodingFailure
-                }
+                let deletedOrganizationId = try self.decodeString(from: response)
                 
                 DispatchQueue.main.async {
                     self.delegate?.apiClient(self, didDeleteOrganizationWithId: deletedOrganizationId)
@@ -1019,6 +1017,29 @@ extension APIClient {
 
 
 extension APIClient {
+    
+    fileprivate func decodeString(from response: (APIResponse<Data?>), inQuotes: Bool = true) throws -> String {
+        
+        guard let data = response.body, let resultString = String(data: data, encoding: .utf8) else {
+            throw APIError.decodingFailure
+        }
+        
+        if inQuotes {
+            let regex = try NSRegularExpression(pattern: "\"(.*)\"", options: NSRegularExpression.Options.caseInsensitive)
+            let matches = regex.matches(in: resultString, options: [], range: NSRange(location: 0, length: resultString.utf16.count))
+            
+            if let match = matches.first {
+                let range = match.range(at:1)
+                if let swiftRange = Range(range, in: resultString) {
+                    let textInsideQuotes = resultString[swiftRange]
+                    return String(textInsideQuotes)
+                }
+            }
+        }
+        
+        return resultString
+        
+    }
     
     
     

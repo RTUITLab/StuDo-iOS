@@ -16,6 +16,11 @@ fileprivate let actionCellId = "actionCellId"
 
 class OrganizationViewController: UITableViewController {
     
+    static let organizationIdKey = "organizationIdKey"
+    enum OrganizationNotifications: String, NotificationName {
+        case userDidDeleteOrganization
+    }
+    
     var organizationMembers = [OrganizationMember]()
     
     var currentOrganization: Organization? = nil
@@ -358,6 +363,7 @@ extension OrganizationViewController: UITextFieldDelegate {
 extension OrganizationViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         RootViewController.stopLoadingIndicator(with: .fail)
+        print(error.localizedDescription)
     }
     
     func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {
@@ -390,6 +396,7 @@ extension OrganizationViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String) {
         RootViewController.stopLoadingIndicator(with: .success)
         navigationController?.popViewController(animated: true)
+        NotificationCenter.default.post(name: OrganizationViewController.OrganizationNotifications.userDidDeleteOrganization.name, object: nil, userInfo: [OrganizationViewController.organizationIdKey: organizationId])
     }
     
     func apiClient(_ client: APIClient, didUpdateOrganization updatedOrganization: Organization) {

@@ -77,20 +77,21 @@ class FeedViewController: UIViewController {
             let navigationBarHeight = navigationController?.navigationBar.frame.height ?? 0
             tabBarVC.priorityContentTopAnchor.constant = navigationBarHeight
             tabBarVC.navigationMenu.menuDelegate = self
-            client.getOrganizations([.canPublish])
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
+        
+        let userDeletedOrganizationName = OrganizationViewController.OrganizationNotifications.userDidDeleteOrganization.name
+        NotificationCenter.default.addObserver(self, selector: #selector(userDidDeleteOrganization(notification:)), name: userDeletedOrganizationName, object: nil)
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if shouldRefreshOnAppear {
-            shouldRefreshOnAppear = false
-            refreshAds()
-        } else if let selectedRow = tableView.indexPathForSelectedRow {
+        if let selectedRow = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: selectedRow, animated: true)
-//            shouldRefreshOnAppear = true
+        } else {
+            client.getOrganizations([.canPublish])
+            refreshAds()
         }
     }
     
@@ -195,7 +196,7 @@ extension FeedViewController: APIClientDelegate {
                         tabBarVC.navigationMenu.set(organizations: organizations)
                         
                         let menuHeight = tabBarVC.navigationMenu.calculatedMenuHeight
-                        tabBarVC.navigationMenu.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: menuHeight)
+                        tabBarVC.navigationMenu.frame.size = CGSize(width: view.frame.width, height: menuHeight)
                     default:
                         break
                     }
@@ -276,6 +277,21 @@ extension FeedViewController {
             titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
         case .myAds:
             titleView.titleLabel.text = Localizer.string(for: .feedTitleMyAds)
+        default:
+            break
+        }
+    }
+    
+    @objc func userDidDeleteOrganization(notification: Notification) {
+        guard let userInfo = notification.userInfo, let deletedOrganizationId = userInfo[OrganizationViewController.organizationIdKey] as? String else { return }
+        switch currentMode {
+        case .organization(let id):
+            if deletedOrganizationId == id {
+                if let tabBarVC = tabBarController as? TabBarController {
+                    titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
+                    tabBarVC.navigationMenu.resetSelectedOption()
+                }
+            }
         default:
             break
         }

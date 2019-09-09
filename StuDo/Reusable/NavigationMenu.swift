@@ -22,6 +22,9 @@ class NavigationMenu: UITableView {
     
     weak var menuDelegate: NavigationMenuDelegate?
     
+    func resetSelectedOption() {
+        selectedOption = .allAds
+    }
     private(set) var selectedOption: MenuItemName = .allAds
     var previouslySelectedOptionIndexPath: IndexPath!
     

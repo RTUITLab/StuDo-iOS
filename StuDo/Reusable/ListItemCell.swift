@@ -53,11 +53,20 @@ class ListItemCell: UITableViewCell {
         }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
+    fileprivate func removeDim() {
         UIView.animate(withDuration: 0.2, delay: 0.2, options: .curveLinear, animations: {
             self.dimView.alpha = 0
         }, completion: nil)
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        removeDim()
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        removeDim()
     }
     
     override func prepareForReuse() {

@@ -199,10 +199,10 @@
 	<key>organizationAdmin</key>
 	<string>Создатель</string>
 	<key>organizationJoin</key>
-	<string>Вступить в группу</string>
+	<string>Вступить в организацию</string>
 	<key>organizationLeave</key>
-	<string>Покинуть группу</string>
+	<string>Покинуть организацию</string>
 	<key>organizationDeletionAlertMessage</key>
-	<string>Вы уверены, что хотите удалить данную группу? Это действие необратимо.</string>
+	<string>Вы уверены, что хотите удалить данную организацию? Это действие необратимо.</string>
 </dict>
 </plist>
