@@ -19,9 +19,10 @@ class FeedViewController: UIViewController {
     var feedItems = [Ad]()
     var client = APIClient()
     
-    enum FeedMode {
+    enum FeedMode: Equatable {
         case allAds
         case myAds
+        case organization(String)
     }
     var currentMode: FeedMode = .allAds
         
@@ -76,6 +77,7 @@ class FeedViewController: UIViewController {
             let navigationBarHeight = navigationController?.navigationBar.frame.height ?? 0
             tabBarVC.priorityContentTopAnchor.constant = navigationBarHeight
             tabBarVC.navigationMenu.menuDelegate = self
+            client.getOrganizations([.canPublish])
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
@@ -93,10 +95,14 @@ class FeedViewController: UIViewController {
     }
     
     @objc func refreshAds() {
-        if currentMode == .allAds {
+        switch currentMode {
+        case .allAds:
             client.getAds()
-        } else if currentMode == .myAds {
+        case .myAds:
             client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
+        case .organization(let id):
+            client.getAds(forOrganizationWithId: id)
+            break
         }
     }
 
@@ -180,6 +186,36 @@ extension FeedViewController: APIClientDelegate {
         }
     }
     
+    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {
+        if let tabBarVC = tabBarController as? TabBarController {
+            if let options = options {
+                for item in options {
+                    switch item {
+                    case .canPublish:
+                        tabBarVC.navigationMenu.set(organizations: organizations)
+                        
+                        let menuHeight = tabBarVC.navigationMenu.calculatedMenuHeight
+                        tabBarVC.navigationMenu.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: menuHeight)
+                    default:
+                        break
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String) {
+        switch currentMode {
+        case .organization(_):
+            feedItems = ads
+            tableView.reloadData()
+            refreshControl.endRefreshing()
+        default:
+            break
+        }
+    }
+    
     
 }
 
@@ -206,14 +242,19 @@ extension FeedViewController: FoldingTitleViewDelegate {
 
 extension FeedViewController: NavigationMenuDelegate {
     func navigationMenu(_ navigationMenu: NavigationMenu, didChangeOption newOption: NavigationMenu.MenuItemName) {
-        if newOption == .allAds {
+        switch newOption {
+        case .allAds:
             currentMode = .allAds
             client.getAds()
             titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
-        } else if newOption == .myAds {
+        case .myAds:
             currentMode = .myAds
             client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
             titleView.titleLabel.text = Localizer.string(for: .feedTitleMyAds)
+        case .organization(let id, let name):
+            currentMode = .organization(id)
+            titleView.titleLabel.text = name
+            client.getAds(forOrganizationWithId: id)
         }
         
         titleView.changeState()
@@ -235,6 +276,8 @@ extension FeedViewController {
             titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
         case .myAds:
             titleView.titleLabel.text = Localizer.string(for: .feedTitleMyAds)
+        default:
+            break
         }
     }
 }

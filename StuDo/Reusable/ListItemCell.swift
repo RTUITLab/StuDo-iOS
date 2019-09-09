@@ -60,5 +60,10 @@ class ListItemCell: UITableViewCell {
         }, completion: nil)
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        dimView.alpha = 0
+    }
+    
 
 }

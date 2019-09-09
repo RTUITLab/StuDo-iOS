@@ -27,14 +27,27 @@ class NavigationMenu: UITableView {
     
     let menuItemHeight: CGFloat = 60
     var calculatedMenuHeight: CGFloat {
-        return CGFloat(menuItems.count) * menuItemHeight
+        return min(CGFloat(menuItems.count) * menuItemHeight,  menuItemHeight * 6)
     }
     
-    enum MenuItemName: String {
-        case allAds = "All news"
-        case myAds = "Only my ads"
+    enum MenuItemName: Equatable {
+        case allAds
+        case myAds
+        case organization(String, String)
     }
-    let menuItems: [MenuItemName] = [.allAds, .myAds]
+    private let defaultMenuItems: [MenuItemName] = [.allAds, .myAds]
+    private lazy var menuItems = {
+        return defaultMenuItems
+    }()
+    
+    func set(organizations: [Organization]) {
+        menuItems = defaultMenuItems
+        for org in organizations {
+            menuItems.append(.organization(org.id, org.name))
+        }
+        reloadData()
+    }
+    
 
     init() {
         super.init(frame: .zero, style: .plain)
@@ -76,10 +89,13 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
         
         let currentMenuItem = menuItems[indexPath.row]
         
-        if currentMenuItem == .allAds {
+        switch currentMenuItem {
+        case .allAds:
             cell.textLabel?.text = Localizer.string(for: .navigationMenuAllAds)
-        } else if currentMenuItem == .myAds {
+        case .myAds:
             cell.textLabel?.text = Localizer.string(for: .navigationMenuMyAds)
+        case .organization(_, let name):
+            cell.textLabel?.text = name
         }
         
         cell.tickGlyph.tintColor = .globalTintColor
@@ -87,6 +103,8 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
         if currentMenuItem == selectedOption {
             cell.tickGlyph.alpha = 1
             previouslySelectedOptionIndexPath = indexPath
+        } else {
+            cell.tickGlyph.alpha = 0
         }
         
         return cell
@@ -96,11 +114,11 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath != previouslySelectedOptionIndexPath else { return }
         
-        let oldCell = tableView.cellForRow(at: previouslySelectedOptionIndexPath) as! NavigationMenuCell
+        let oldCell = tableView.cellForRow(at: previouslySelectedOptionIndexPath) as? NavigationMenuCell
         guard let newCell = tableView.cellForRow(at: indexPath) as? NavigationMenuCell else { return }
         
         UIView.animate(withDuration: 0.2) {
-            oldCell.tickGlyph.alpha = 0
+            oldCell?.tickGlyph.alpha = 0
             newCell.tickGlyph.alpha = 1
         }
         

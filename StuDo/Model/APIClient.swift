@@ -269,7 +269,8 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad])
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad)
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String)
-    
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String)
+
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad)
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad)
     func apiClient(_ client: APIClient, didDeleteAdWithId adId: String)
@@ -310,6 +311,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {}
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String) {}
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String) {}
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {}
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
@@ -438,6 +440,27 @@ extension APIClient {
                 let ads = try self.decodeAds(from: response)
                 DispatchQueue.main.async {
                     self.delegate?.apiClient(self, didRecieveAds: ads, forUserWithId: userId)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    func getAds(forOrganizationWithId organizationId: String) {
+        let request = APIRequest(method: .get, path: "ad/organization/\(organizationId)")
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                let ads = try self.decodeAds(from: response)
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didRecieveAds: ads, forOrganizationWithId: organizationId)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
