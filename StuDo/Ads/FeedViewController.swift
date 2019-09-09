@@ -37,6 +37,7 @@ class FeedViewController: UIViewController {
     
     var titleView = FoldingTitleView()
     let placeholderView = UIView()
+    let noAdsTitleLabel = UILabel()
     let noAdsDescriptionLabel = UILabel()
     
     deinit {
@@ -99,7 +100,6 @@ class FeedViewController: UIViewController {
         placeholderView.isHidden = true
         
         
-        let noAdsTitleLabel = UILabel()
         
         placeholderView.addSubview(noAdsTitleLabel)
         noAdsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -333,6 +333,7 @@ extension FeedViewController {
         default:
             break
         }
+        noAdsTitleLabel.text = Localizer.string(for: .feedNoAdsTitle)
     }
     
     @objc func userDidDeleteOrganization(notification: Notification) {
