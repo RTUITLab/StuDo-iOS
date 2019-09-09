@@ -36,6 +36,8 @@ class FeedViewController: UIViewController {
     
     
     var titleView = FoldingTitleView()
+    let placeholderView = UIView()
+    let noAdsDescriptionLabel = UILabel()
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -83,7 +85,43 @@ class FeedViewController: UIViewController {
         
         let userDeletedOrganizationName = OrganizationViewController.OrganizationNotifications.userDidDeleteOrganization.name
         NotificationCenter.default.addObserver(self, selector: #selector(userDidDeleteOrganization(notification:)), name: userDeletedOrganizationName, object: nil)
+        
+        
+        
+        
+        view.addSubview(placeholderView)
+        placeholderView.translatesAutoresizingMaskIntoConstraints = false
+        placeholderView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        placeholderView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        placeholderView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        placeholderView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
+        placeholderView.isHidden = true
+        
+        
+        let noAdsTitleLabel = UILabel()
+        
+        placeholderView.addSubview(noAdsTitleLabel)
+        noAdsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        noAdsTitleLabel.centerXAnchor.constraint(equalTo: placeholderView.centerXAnchor).isActive = true
+        noAdsTitleLabel.centerYAnchor.constraint(equalTo: placeholderView.centerYAnchor, constant: -80).isActive = true
+        noAdsTitleLabel.widthAnchor.constraint(equalTo: placeholderView.widthAnchor, multiplier: 0.9).isActive = true
+        
+        placeholderView.addSubview(noAdsDescriptionLabel)
+        noAdsDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        noAdsDescriptionLabel.centerXAnchor.constraint(equalTo: noAdsTitleLabel.centerXAnchor).isActive = true
+        noAdsDescriptionLabel.topAnchor.constraint(equalTo: noAdsTitleLabel.bottomAnchor, constant: 15).isActive = true
+        noAdsDescriptionLabel.widthAnchor.constraint(equalTo: placeholderView.widthAnchor, multiplier: 0.9).isActive = true
+        
+        
+        noAdsTitleLabel.textAlignment = .center
+        noAdsTitleLabel.text = Localizer.string(for: .feedNoAdsTitle)
+        noAdsTitleLabel.font = .preferredFont(forTextStyle: .headline)
+        
+        noAdsDescriptionLabel.textAlignment = .center
+        noAdsDescriptionLabel.font = .preferredFont(for: .subheadline, weight: .medium)
+        noAdsDescriptionLabel.textColor = .lightGray
+        noAdsDescriptionLabel.numberOfLines = 3
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -171,9 +209,24 @@ extension FeedViewController: APIClientDelegate {
         refreshControl.endRefreshing()
     }
     
+    fileprivate func setAds(_ ads: [Ad]) {
+        feedItems = ads
+        
+        switch currentMode {
+        case .allAds:
+            noAdsDescriptionLabel.text = Localizer.string(for: .feedNoAdsDescription)
+        case .myAds:
+            noAdsDescriptionLabel.text = Localizer.string(for: .feedNoOwnAdsDescription)
+        case .organization:
+            noAdsDescriptionLabel.text = Localizer.string(for: .feedNoOrganizationAdsDescription)
+        }
+        
+        placeholderView.isHidden = !feedItems.isEmpty
+    }
+    
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {
         if currentMode == .allAds {
-            feedItems = ads
+            setAds(ads)
             tableView.reloadData()
             refreshControl.endRefreshing()
         }
@@ -181,7 +234,7 @@ extension FeedViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String) {
         if currentMode == .myAds {
-            feedItems = ads
+            setAds(ads)
             tableView.reloadData()
             refreshControl.endRefreshing()
         }
@@ -209,7 +262,7 @@ extension FeedViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String) {
         switch currentMode {
         case .organization(_):
-            feedItems = ads
+            setAds(ads)
             tableView.reloadData()
             refreshControl.endRefreshing()
         default:

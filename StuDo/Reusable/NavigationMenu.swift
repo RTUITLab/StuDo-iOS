@@ -49,7 +49,7 @@ class NavigationMenu: UITableView {
             if maxHeight < 0 {
                 var maxHeight: CGFloat = headerHeight
                 while maxHeight + menuItemHeight < heightLimit {
-                    maxHeight += heightLimit
+                    maxHeight += menuItemHeight
                 }
                 self.maxHeight = maxHeight
             }
@@ -176,6 +176,7 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
         if section == 1 {
             let header = dequeueReusableHeaderFooterView(withIdentifier: navigationMenuHeaderId)!
             header.backgroundView = UIView()
+            header.backgroundView?.backgroundColor = .white
             header.textLabel?.text = Localizer.string(for: .navigationMenuOrganizationAds)
             return header
         }

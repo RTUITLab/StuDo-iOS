@@ -40,6 +40,14 @@
 	<string>Объявления</string>
 	<key>feedTitleMyAds</key>
 	<string>Мои объявления</string>
+    <key>feedNoAdsTitle</key>
+    <string>Нет объявлений.</string>
+    <key>feedNoAdsDescription</key>
+    <string>Никто ещё не опубликовал ни одного объявления. Будьте первым!</string>
+    <key>feedNoOwnAdsDescription</key>
+    <string>Публикуемые Вами объявления появятся здесь.</string>
+    <key>feedNoOrganizationAdsDescription</key>
+    <string>Вы имеете право публиковать объявления от имени данной организации.</string>
 	<key>navigationMenuAllAds</key>
 	<string>Все объявления</string>
 	<key>navigationMenuMyAds</key>
