@@ -208,6 +208,22 @@ struct Ad {
         self.organization = nil
     }
     
+    init(organizationId: String, name: String, description: String, shortDescription: String, beginTime: Date, endTime: Date) {
+        self.organizationId = organizationId
+        self.name = name
+        self.description = description
+        self.shortDescription = shortDescription
+        self.beginTime = beginTime
+        self.endTime = endTime
+        
+        self.id = nil
+        self.userName = nil
+        self.organizationName = nil
+        self.user = nil
+        self.userId = nil
+        self.organization = nil
+    }
+    
     // initializer for ads fetched from the server
     init(id: String, name: String, description: String?, shortDescription: String, beginTime: String, endTime: String, userName: String?, organizationName: String? = nil, user: User? = nil, organization: Organization? = nil, userId: String? = nil, organizationId: String? = nil) {
         self.id = id
@@ -246,7 +262,7 @@ struct AdCreateForm: Codable {
     let shortDescription: String
     let beginTime: String
     let endTime: String
-    let organizationId: String? = nil
+    let organizationId: String?
 }
 
 

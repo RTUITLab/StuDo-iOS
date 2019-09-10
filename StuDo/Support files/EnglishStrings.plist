@@ -40,14 +40,14 @@
 	<string>News</string>
 	<key>feedTitleMyAds</key>
 	<string>My Ads</string>
-    <key>feedNoAdsTitle</key>
-    <string>No ads to display.</string>
-    <key>feedNoAdsDescription</key>
-    <string>No one has published ads yet. Be the first!</string>
-    <key>feedNoOwnAdsDescription</key>
-    <string>The adds you'll publish will appear hear.</string>
-    <key>feedNoOrganizationAdsDescription</key>
-    <string>You have the right to publish on behalf of this group.</string>
+	<key>feedNoAdsTitle</key>
+	<string>No ads to display.</string>
+	<key>feedNoAdsDescription</key>
+	<string>No one has published ads yet. Be the first!</string>
+	<key>feedNoOwnAdsDescription</key>
+	<string>The adds you&apos;ll publish will appear hear.</string>
+	<key>feedNoOrganizationAdsDescription</key>
+	<string>You have the right to publish on behalf of this group.</string>
 	<key>navigationMenuAllAds</key>
 	<string>All news</string>
 	<key>navigationMenuMyAds</key>

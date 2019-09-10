@@ -504,7 +504,7 @@ extension APIClient {
         let endTime = DateFormatter.iso8601StringFromDate(ad.endTime)
         
         
-        let createForm = AdCreateForm(name: ad.name, description: ad.description!, shortDescription: ad.shortDescription, beginTime: beginTime, endTime: endTime)
+        let createForm = AdCreateForm(name: ad.name, description: ad.description!, shortDescription: ad.shortDescription, beginTime: beginTime, endTime: endTime, organizationId: ad.organizationId)
         
         if let request = try? APIRequest(method: .post, path: "ad", body: createForm) {
             self.perform(secureRequest: request) { (result) in

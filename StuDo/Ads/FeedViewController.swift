@@ -104,7 +104,7 @@ class FeedViewController: UIViewController {
         placeholderView.addSubview(noAdsTitleLabel)
         noAdsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         noAdsTitleLabel.centerXAnchor.constraint(equalTo: placeholderView.centerXAnchor).isActive = true
-        noAdsTitleLabel.centerYAnchor.constraint(equalTo: placeholderView.centerYAnchor, constant: -80).isActive = true
+        noAdsTitleLabel.centerYAnchor.constraint(equalTo: placeholderView.centerYAnchor, constant: -50).isActive = true
         noAdsTitleLabel.widthAnchor.constraint(equalTo: placeholderView.widthAnchor, multiplier: 0.9).isActive = true
         
         placeholderView.addSubview(noAdsDescriptionLabel)
@@ -346,6 +346,7 @@ extension FeedViewController {
                     tabBarVC.navigationMenu.resetSelectedOption()
                 }
             }
+            currentMode = .allAds
         default:
             break
         }

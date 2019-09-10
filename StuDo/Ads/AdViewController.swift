@@ -29,6 +29,9 @@ class AdViewController: CardViewController {
     
     // MARK: Data & Logic
     
+    var publishableOrganizations: [Organization]?
+    var publisherOrganizationId: String?
+    
     private var advertisement: Ad?
     func set(advertisement: Ad?) {
         self.advertisement = advertisement
@@ -142,6 +145,8 @@ class AdViewController: CardViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        client.getOrganizations([.canPublish])
         
         let horizontalSpace: CGFloat = 8
         
@@ -514,18 +519,58 @@ class AdViewController: CardViewController {
         let beginTime = beginDateButton.date!
         let endTime = endDateButton.date!
         
-        RootViewController.startLoadingIndicator()
 
         if let oldAd = advertisement {
             
             let adToUpdate = Ad(id: oldAd.id, name: title, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
             
             client.replaceAd(with: adToUpdate)
+            RootViewController.startLoadingIndicator()
             
         } else {
-            let newAd = Ad(id: nil, name: title, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
+            func createAd() {
+                var newAd: Ad!
+                if let organizationId = publisherOrganizationId {
+                    newAd = Ad(organizationId: organizationId, name: title, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
+                } else {
+                    newAd = Ad(id: nil, name: title, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
+                }
+                client.create(ad: newAd)
+                RootViewController.startLoadingIndicator()
+            }
             
-            client.create(ad: newAd)
+            if let organizations = publishableOrganizations, !organizations.isEmpty {
+
+
+                let alert = UIAlertController(title: Localizer.string(for: .adEditorPublishAdAlertMessage), message: nil, preferredStyle: .actionSheet)
+                
+                let currentUser = PersistentStore.shared.user!
+                let meAction = UIAlertAction(title: "\(currentUser.firstName) \(currentUser.lastName)" , style: .default) { _ in
+                    createAd()
+                }
+                alert.addAction(meAction)
+                alert.preferredAction = meAction
+                
+                
+                    for organization in organizations {
+                        let action = UIAlertAction(title: "\(organization.name)" , style: .default) { _ in
+                            self.publisherOrganizationId = organization.id
+                            createAd()
+                        }
+                        alert.addAction(action)
+                    }
+                
+                
+                let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
+                alert.addAction(cancelAction)
+                
+                present(alert, animated: true, completion: nil)
+                
+            } else {
+                createAd()
+            }
+            
+            
         }
         
         
@@ -608,6 +653,20 @@ extension AdViewController: APIClientDelegate {
         
         if let userId = ad.userId, userId == PersistentStore.shared.user!.id {
             isViewerOwner = true
+        } else if let organizationId = ad.organizationId {
+            func checkIfUserCanPublishInCurrentOrganization() {
+                if let organizations = publishableOrganizations {
+                    for organization in organizations {
+                        if organizationId == organization.id {
+                            isViewerOwner = true
+                            break
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: checkIfUserCanPublishInCurrentOrganization)
+                }
+            }
+            checkIfUserCanPublishInCurrentOrganization()
         }
         
         set(advertisement: ad)
@@ -641,6 +700,10 @@ extension AdViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         print(error.localizedDescription)
         RootViewController.stopLoadingIndicator(with: .fail)
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {
+        publishableOrganizations = organizations
     }
     
     
