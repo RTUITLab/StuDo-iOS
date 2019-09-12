@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		491DCA8C231C089D00A78111 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DCA8B231C089D00A78111 /* UIColorExtension.swift */; };
 		4928D43622A3ED9700F4D703 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4928D43522A3ED9700F4D703 /* DataModel.swift */; };
+		4933A91D232A667F00A09646 /* AdTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4933A91C232A667F00A09646 /* AdTableViewCell.xib */; };
+		4933A91F232A6A0300A09646 /* TextViewNoPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4933A91E232A6A0300A09646 /* TextViewNoPadding.swift */; };
+		4933A921232A6C2800A09646 /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4933A920232A6C2800A09646 /* AdTableViewCell.swift */; };
 		493C5A5022A189370032AB6E /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C5A4F22A189370032AB6E /* APIClient.swift */; };
 		493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8ACB228B4354004EC563 /* AppDelegate.swift */; };
 		493E8AD6228B4356004EC563 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 493E8AD4228B4356004EC563 /* LaunchScreen.storyboard */; };
@@ -24,7 +27,6 @@
 		4973AD23231D50DF00B4B578 /* OrganizationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD22231D50DF00B4B578 /* OrganizationListController.swift */; };
 		4973AD25231D58DD00B4B578 /* OrganizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */; };
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
-		49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77922D7397400C2661E /* AdTableViewCell.swift */; };
 		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
 		49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF624231C1C4200AA3FCB /* DateButton.swift */; };
 		49ADF627231CF3A100AA3FCB /* DatePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF626231CF3A100AA3FCB /* DatePickerController.swift */; };
@@ -80,6 +82,9 @@
 /* Begin PBXFileReference section */
 		491DCA8B231C089D00A78111 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		4928D43522A3ED9700F4D703 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		4933A91C232A667F00A09646 /* AdTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdTableViewCell.xib; sourceTree = "<group>"; };
+		4933A91E232A6A0300A09646 /* TextViewNoPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewNoPadding.swift; sourceTree = "<group>"; };
+		4933A920232A6C2800A09646 /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
 		493C5A4F22A189370032AB6E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		493E8AC8228B4354004EC563 /* StuDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StuDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		493E8ACB228B4354004EC563 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -101,7 +106,6 @@
 		4973AD22231D50DF00B4B578 /* OrganizationListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationListController.swift; sourceTree = "<group>"; };
 		4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationViewController.swift; sourceTree = "<group>"; };
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		49A8F77922D7397400C2661E /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
 		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
 		49ADF624231C1C4200AA3FCB /* DateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateButton.swift; sourceTree = "<group>"; };
 		49ADF626231CF3A100AA3FCB /* DatePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerController.swift; sourceTree = "<group>"; };
@@ -262,6 +266,7 @@
 				49E61DD8231A564C007BC4FF /* UIFontExtension.swift */,
 				491DCA8B231C089D00A78111 /* UIColorExtension.swift */,
 				49C85B2422D8C2E800578F39 /* BasicTableViewCells.swift */,
+				4933A91E232A6A0300A09646 /* TextViewNoPadding.swift */,
 			);
 			path = Reusable;
 			sourceTree = "<group>";
@@ -286,7 +291,8 @@
 			isa = PBXGroup;
 			children = (
 				49B1B382228DD75400CA9EC7 /* FeedViewController.swift */,
-				49A8F77922D7397400C2661E /* AdTableViewCell.swift */,
+				4933A920232A6C2800A09646 /* AdTableViewCell.swift */,
+				4933A91C232A667F00A09646 /* AdTableViewCell.xib */,
 				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
 				49BCE24922F0AC1600C64C44 /* CardViewController.swift */,
 				49BCE24B22F0AC2100C64C44 /* CardAnimatedTransitioning.swift */,
@@ -409,6 +415,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4933A91D232A667F00A09646 /* AdTableViewCell.xib in Resources */,
 				49BCE24E22F31D4C00C64C44 /* Assets.xcassets in Resources */,
 				49D76A8423105F64002B22D4 /* RussianStrings.plist in Resources */,
 				49D76A80231053D2002B22D4 /* EnglishStrings.plist in Resources */,
@@ -441,6 +448,7 @@
 				49E61DD523185CB1007BC4FF /* LoadingIndicator.swift in Sources */,
 				49BBB99B2306E25600883EB9 /* NavigationMenu.swift in Sources */,
 				49D76A82231059B9002B22D4 /* NotificationHandling.swift in Sources */,
+				4933A91F232A6A0300A09646 /* TextViewNoPadding.swift in Sources */,
 				49BCE24C22F0AC2100C64C44 /* CardAnimatedTransitioning.swift in Sources */,
 				49E2DB1422FDB3730015DCD8 /* EmailTableViewController.swift in Sources */,
 				49E61DD9231A564C007BC4FF /* UIFontExtension.swift in Sources */,
@@ -458,6 +466,7 @@
 				49E2DB1022FDB22B0015DCD8 /* UITableViewExtension.swift in Sources */,
 				49DEADCE2302EE440031B3DF /* NewAdButton.swift in Sources */,
 				49BBB99D2306E6B600883EB9 /* ListItemCell.swift in Sources */,
+				4933A921232A6C2800A09646 /* AdTableViewCell.swift in Sources */,
 				49E61DDB231A5C69007BC4FF /* TextFormatter.swift in Sources */,
 				494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */,
 				49D76A7C231050A8002B22D4 /* Localizer.swift in Sources */,
@@ -468,7 +477,6 @@
 				49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */,
 				49713C5E230B081D00E65807 /* AboutViewController.swift in Sources */,
 				49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */,
-				49A8F77A22D7397400C2661E /* AdTableViewCell.swift in Sources */,
 				49DEADCC2301F9390031B3DF /* ProfileEditorViewController.swift in Sources */,
 				49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */,
 				49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */,

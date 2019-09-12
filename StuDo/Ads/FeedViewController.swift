@@ -55,9 +55,9 @@ class FeedViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(AdTableViewCell.self, forCellReuseIdentifier: feedItemCellID)
+        tableView.register(UINib(nibName: "AdTableViewCell", bundle: nil), forCellReuseIdentifier: feedItemCellID)
         
-        tableView.estimatedRowHeight = 100
+        tableView.estimatedRowHeight = 140
         tableView.rowHeight = UITableView.automaticDimension
         
         refreshControl.addTarget(self, action: #selector(refreshAds), for: .valueChanged)
@@ -74,7 +74,8 @@ class FeedViewController: UIViewController {
         titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
         navigationItem.titleView = titleView
                 
-        tableView.separatorStyle = .none
+        tableView.separatorInset = .zero
+        tableView.tableFooterView = UIView()
         
         if let tabBarVC = tabBarController as? TabBarController {
             let navigationBarHeight = navigationController?.navigationBar.frame.height ?? 0
@@ -159,7 +160,13 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: feedItemCellID, for: indexPath) as! AdTableViewCell
-        cell.set(ad: feedItems[indexPath.row])
+        
+        let currentAd = feedItems[indexPath.row]
+        cell.titleLabel.text = currentAd.name
+        cell.creatorLabel.text = Localizer.string(for: .feedPublishedBy) + " " + currentAd.creatorName
+        cell.descriptionTextView.text = currentAd.shortDescription
+        cell.dateLabel.text = currentAd.dateRange
+        
         return cell
     }
     

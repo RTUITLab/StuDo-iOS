@@ -245,6 +245,52 @@ struct Ad {
         self.beginTime = DateFormatter.dateFromISO8601String(beginTime)
         self.endTime = DateFormatter.dateFromISO8601String(endTime)
     }
+    
+}
+
+
+extension Ad {
+    var creatorName: String {
+        var creator: String!
+        if let userName = self.userName {
+            creator = userName
+        } else if let organizationName = self.organizationName {
+            creator = organizationName
+        } else if let user = self.user {
+            creator = user.firstName + " " + user.lastName
+        } else if let organization = self.organization {
+            creator = organization.name
+        }
+        return creator
+    }
+    
+    var dateRange: String {
+        let calendar = Calendar.current
+        
+        let intervalFormatter = DateIntervalFormatter()
+        intervalFormatter.locale = Localizer.currentLocale
+        
+        var dateString = ""
+        if calendar.isDate(beginTime, inSameDayAs: endTime) {
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Localizer.currentLocale
+            dateFormatter.dateStyle = .medium
+            dateFormatter.timeStyle = .none
+            
+            dateString = dateFormatter.string(from: beginTime) + " "
+            
+            intervalFormatter.dateStyle = .none
+            intervalFormatter.timeStyle = .short
+        } else {
+            intervalFormatter.dateStyle = .medium
+            intervalFormatter.timeStyle = .none
+        }
+        
+        let dateRangeString = dateString + intervalFormatter.string(from: beginTime, to: endTime)
+        print(dateRangeString)
+        return dateRangeString.replacingOccurrences(of: "—", with: " – ")
+    }
 }
 
 struct AdUpdateForm: Codable {

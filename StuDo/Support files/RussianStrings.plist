@@ -34,6 +34,8 @@
 	<string>Введите свой пароль</string>
 	<key>accountOrganizations</key>
 	<string>Организации</string>
+    <key>feedPublishedBy</key>
+    <string>Опубликовал(-а)</string>
 	<key>accountDetailChangeAlertCancel</key>
 	<string>Не сохранять</string>
 	<key>organizationLeave</key>
