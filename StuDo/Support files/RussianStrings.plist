@@ -55,7 +55,7 @@
 	<key>authRegistrationAlertMessage</key>
 	<string>Мы отправили письмо на Ваш e-mail. Пожалуйста, подтвердите Ваш адрес, прежде чем заходить в аккаунт.</string>
 	<key>profileNamePlaceholder</key>
-	<string>Заголовок профиля</string>
+	<string>Заголовок</string>
 	<key>feedNoAdsDescription</key>
 	<string>Никто ещё не опубликовал ни одного объявления. Будьте первым!</string>
 	<key>organizationAdmin</key>

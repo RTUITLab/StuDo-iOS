@@ -28,9 +28,12 @@ class AdTableViewCell: UITableViewCell {
         descriptionTextView.isScrollEnabled = false
         descriptionTextView.backgroundColor = .clear
         
+        dateLabel.textColor = .globalTintColor
+
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         dateLabel.textColor = .globalTintColor
     }
 
