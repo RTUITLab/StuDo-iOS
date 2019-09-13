@@ -12,6 +12,7 @@ fileprivate let textFieldCellId = "textFieldCellId"
 fileprivate let textViewCellId = "textViewCellId"
 fileprivate let userCellId = "userCellId"
 fileprivate let actionCellId = "actionCellId"
+fileprivate let adCellId = "adCellId"
 
 
 class OrganizationViewController: UITableViewController {
@@ -22,6 +23,7 @@ class OrganizationViewController: UITableViewController {
     }
     
     var organizationMembers = [OrganizationMember]()
+    var organizationAds = [Ad]()
     
     var currentOrganization: Organization? = nil
     var nameTextField: UITextField!
@@ -35,10 +37,11 @@ class OrganizationViewController: UITableViewController {
         case members
         case delete
         case join
+        case ads
     }
     
-    let infoPositionsNotMember: [[InfoUnit]] = [[.name, .description, .join], [.members]]
-    let infoPositionsMember: [[InfoUnit]] = [[.name, .description], [.members]]
+    let infoPositionsNotMember: [[InfoUnit]] = [[.name, .description, .join], [.members], [.ads]]
+    let infoPositionsMember: [[InfoUnit]] = [[.name, .description], [.members], [.ads]]
     let infoPositionsEditing: [[InfoUnit]] = [[.name, .description, .delete], [.members]]
 
     let client = APIClient()
@@ -94,6 +97,7 @@ class OrganizationViewController: UITableViewController {
         if let organization = organization {
             client.getOrganization(withId: organization.id)
             client.getMembers(forOrganizationWithId: organization.id)
+            client.getAds(forOrganizationWithId: organization.id)
         } else {
             createButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(createButtonTapped(_:)))
             createButton!.isEnabled = false
@@ -119,13 +123,20 @@ class OrganizationViewController: UITableViewController {
         tableView.register(TableViewCellWithTextViewInput.self, forCellReuseIdentifier: textViewCellId)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: userCellId)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: actionCellId)
-        
+        tableView.register(UINib(nibName: "AdTableViewCell", bundle: nil), forCellReuseIdentifier: adCellId)
+
         tabBarController?.hideTabBar()
         
     }
     
+    var firstAppear = true
     override func viewWillAppear(_ animated: Bool) {
         tabBarController?.hideTabBar()
+        if !firstAppear {
+            client.getMembers(forOrganizationWithId: currentOrganization!.id)
+            client.getAds(forOrganizationWithId: currentOrganization!.id)
+        }
+        firstAppear = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -145,12 +156,16 @@ class OrganizationViewController: UITableViewController {
         nameTextField.isUserInteractionEnabled = toEditing
         descriptionTextView.isUserInteractionEnabled = toEditing
         
+        tableView.beginUpdates()
+        
         if toEditing {
             navigationItem.rightBarButtonItem = doneButton
             tableView.insertRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            tableView.deleteSections(IndexSet(integer: 2), with: .fade)
         } else {
             navigationItem.rightBarButtonItem = editButton
             tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            tableView.insertSections(IndexSet(integer: 2), with: .fade)
 
             if let editedName = nameTextField.text, let editedDescription = descriptionTextView.text {
                 if editedName != currentOrganization!.name || editedDescription != currentOrganization!.description {
@@ -160,6 +175,7 @@ class OrganizationViewController: UITableViewController {
             }
             
         }
+        tableView.endUpdates()
         
         tableView.setEditing(toEditing, animated: true)
         
@@ -222,6 +238,8 @@ class OrganizationViewController: UITableViewController {
         
         if sectionPositions.first! == .members {
             return organizationMembers.count
+        } else if sectionPositions.first! == .ads {
+            return organizationAds.count
         }
         return sectionPositions.count
     }
@@ -231,6 +249,8 @@ class OrganizationViewController: UITableViewController {
             return Localizer.string(for: .organizationInfoHeaderTitle)
         } else if section == 1 {
             return Localizer.string(for: .organizationMembersHeaderTitle)
+        } else if section == 2 && !organizationAds.isEmpty {
+            return Localizer.string(for: .userPublicAdsSectionHeader)
         }
         return nil
     }
@@ -291,6 +311,15 @@ class OrganizationViewController: UITableViewController {
             }
             
             return cell
+        } else if info == .ads {
+            let cell = tableView.dequeueReusableCell(withIdentifier: adCellId, for: indexPath) as! AdTableViewCell
+            let currentAd = organizationAds[indexPath.row]
+            cell.titleLabel.text = currentAd.name
+            cell.creatorLabel.text = Localizer.string(for: .feedPublishedBy) + " " + currentAd.creatorName
+            cell.descriptionTextView.text = currentAd.shortDescription
+            cell.dateLabel.text = currentAd.dateRange
+            cell.moreButton.isHidden = true
+            return cell
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: actionCellId, for: indexPath)
@@ -329,6 +358,10 @@ class OrganizationViewController: UITableViewController {
             alert.addAction(cancelAction)
             
             present(alert, animated: true, completion: nil)
+        } else if info == .ads {
+            let currentAd = organizationAds[indexPath.row]
+            let adVC = AdViewController(with: currentAd)
+            present(adVC, animated: true, completion: nil)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -401,6 +434,11 @@ extension OrganizationViewController: APIClientDelegate {
         
     }
     
+    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String) {
+        organizationAds = ads
+        tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
+    }
+    
     func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String) {
         RootViewController.stopLoadingIndicator(with: .success)
         navigationController?.popViewController(animated: true)
@@ -418,7 +456,7 @@ extension OrganizationViewController: APIClientDelegate {
         set(organization: newOrganization)
         RootViewController.stopLoadingIndicator(with: .success)
         
-        tableView.insertSections(IndexSet(integer: 1), with: .fade)
+        tableView.insertSections(IndexSet(integersIn: 1...2), with: .fade)
         client.getMembers(forOrganizationWithId: newOrganization.id)
         
         nameTextField.isUserInteractionEnabled = false

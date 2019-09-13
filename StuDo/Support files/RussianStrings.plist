@@ -8,16 +8,18 @@
 	<string>Участники</string>
 	<key>emailChangeSectionDescription</key>
 	<string>Мы отправим вам ссылку для подтверждения на данный e-mail.</string>
-	<key>passwordChangeAlertTitle</key>
-	<string>Пароль изменён!</string>
-	<key>profileNameSectionHeader</key>
-	<string>Название</string>
+	<key>accountDetailChangeAlertMessage</key>
+	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
+	<key>adEditorDurationLabel</key>
+	<string>Продолжительность</string>
+	<key>userPublicAdsSectionHeader</key>
+	<string>Объявления</string>
 	<key>pinkThemeName</key>
 	<string>Розовый</string>
-	<key>passwordNewSectionHeader</key>
-	<string>Новый пароль</string>
 	<key>navigationMenuBookmarks</key>
 	<string>Избранные источники</string>
+	<key>passwordNewSectionHeader</key>
+	<string>Новый пароль</string>
 	<key>settingsTitle</key>
 	<string>Настройки</string>
 	<key>tealBlueThemeName</key>
@@ -214,13 +216,11 @@
 	<string>Версия</string>
 	<key>authSurname</key>
 	<string>Фамилия</string>
-	<key>accountDetailChangeAlertMessage</key>
-	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
-	<key>adEditorDurationLabel</key>
-	<string>Продолжительность</string>
 	<key>userPublicProfilesSectionHeader</key>
 	<string>Резюме</string>
-	<key>userPublicAdsSectionHeader</key>
-	<string>Объявления</string>
+	<key>passwordChangeAlertTitle</key>
+	<string>Пароль изменён!</string>
+	<key>profileNameSectionHeader</key>
+	<string>Название</string>
 </dict>
 </plist>

@@ -128,9 +128,9 @@ class UserPublicController: UITableViewController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let currentSection = infoPositions[section]
         
-        if currentSection == .profiles {
+        if currentSection == .profiles && !profiles.isEmpty {
             return Localizer.string(for: .userPublicProfilesSectionHeader)
-        } else if currentSection == .ads {
+        } else if currentSection == .ads && !ads.isEmpty {
             return Localizer.string(for: .userPublicAdsSectionHeader)
         }
         return nil
