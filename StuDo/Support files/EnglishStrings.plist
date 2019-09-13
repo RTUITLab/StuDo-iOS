@@ -179,7 +179,7 @@
 	<key>adEditorCancelAdCreation</key>
 	<string>Close editor</string>
 	<key>adEditorReturnToEditor</key>
-	<string>Return to Editor</string>
+	<string>Continue editing</string>
 	<key>adEditorEditingModeTitle</key>
 	<string>Editing</string>
 	<key>adEditorCreationModeTitle</key>

@@ -8,10 +8,10 @@
 	<string>Участники</string>
 	<key>emailChangeSectionDescription</key>
 	<string>Мы отправим вам ссылку для подтверждения на данный e-mail.</string>
-	<key>accountDetailChangeAlertMessage</key>
-	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
-	<key>adEditorDurationLabel</key>
-	<string>Продолжительность</string>
+	<key>passwordChangeAlertTitle</key>
+	<string>Пароль изменён!</string>
+	<key>profileNameSectionHeader</key>
+	<string>Название</string>
 	<key>userPublicAdsSectionHeader</key>
 	<string>Объявления</string>
 	<key>pinkThemeName</key>
@@ -49,7 +49,7 @@
 	<key>feedNoAdsTitle</key>
 	<string>Нет объявлений.</string>
 	<key>adEditorReturnToEditor</key>
-	<string>Вернуться</string>
+	<string>Продолжить редактирование</string>
 	<key>feedNoOrganizationAdsDescription</key>
 	<string>Вы имеете право публиковать объявления от имени данной организации.</string>
 	<key>accountDetailPassword</key>
@@ -218,9 +218,9 @@
 	<string>Фамилия</string>
 	<key>userPublicProfilesSectionHeader</key>
 	<string>Резюме</string>
-	<key>passwordChangeAlertTitle</key>
-	<string>Пароль изменён!</string>
-	<key>profileNameSectionHeader</key>
-	<string>Название</string>
+	<key>accountDetailChangeAlertMessage</key>
+	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
+	<key>adEditorDurationLabel</key>
+	<string>Продолжительность</string>
 </dict>
 </plist>

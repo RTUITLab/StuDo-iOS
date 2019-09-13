@@ -270,7 +270,7 @@ class AdViewController: CardViewController {
         
         
         nameTextField.isUserInteractionEnabled = false
-        descriptionTextView.isUserInteractionEnabled = false
+        descriptionTextView.isEditable = false
         
         moreButton.addTarget(self, action: #selector(moreButtonPressed(_:)), for: .touchUpInside)
         cancelEditingButton.addTarget(self, action: #selector(cancelEditingButtonPressed(_:)), for: .touchUpInside)
@@ -352,7 +352,7 @@ class AdViewController: CardViewController {
         }
         
         nameTextField.isUserInteractionEnabled = true
-        descriptionTextView.isUserInteractionEnabled = true
+        descriptionTextView.isEditable = true
         additionalInfoLabel.isHidden = true
         
         beginDateButton.isHidden = false
@@ -385,7 +385,7 @@ class AdViewController: CardViewController {
         descriptionTextView.resignFirstResponder()
         
         nameTextField.isUserInteractionEnabled = false
-        descriptionTextView.isUserInteractionEnabled = false
+        descriptionTextView.isEditable = false
         additionalInfoLabel.isHidden = false
         
         self.moreButton.isHidden = false
@@ -447,10 +447,11 @@ class AdViewController: CardViewController {
             }
             cancelEditing()
         } )
-        let cancelAction = UIAlertAction(title: Localizer.string(for: .adEditorReturnToEditor), style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Localizer.string(for: .adEditorReturnToEditor), style: .default, handler: nil)
         
-        shouldProceedAlert.addAction(deleteAction)
         shouldProceedAlert.addAction(cancelAction)
+        shouldProceedAlert.addAction(deleteAction)
+        shouldProceedAlert.preferredAction = cancelAction
         
         present(shouldProceedAlert, animated: true, completion: nil)
 
