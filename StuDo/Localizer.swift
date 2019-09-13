@@ -40,6 +40,7 @@ enum LozalizerString: String {
     case navigationMenuAllAds
     case navigationMenuMyAds
     case navigationMenuOrganizationAds
+    case navigationMenuBookmarks
     
     case accountTitle
     case accountMyProfiles
@@ -130,6 +131,9 @@ enum LozalizerString: String {
     case organizationJoin
     case organizationLeave
     case organizationDeletionAlertMessage
+    
+    case userPublicProfilesSectionHeader
+    case userPublicAdsSectionHeader
 }
 
 class Localizer: NSObject {

@@ -4,18 +4,20 @@
 <dict>
 	<key>passwordChangeAlertMessage</key>
 	<string>Вы успешно изменили свой пароль.</string>
-	<key>accountDetailChangeAlertMessage</key>
-	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
-	<key>emailChangeSectionDescription</key>
-	<string>Мы отправим вам ссылку для подтверждения на данный e-mail.</string>
-	<key>adEditorDurationLabel</key>
-	<string>Продолжительность</string>
 	<key>organizationMembersHeaderTitle</key>
 	<string>Участники</string>
+	<key>emailChangeSectionDescription</key>
+	<string>Мы отправим вам ссылку для подтверждения на данный e-mail.</string>
+	<key>passwordChangeAlertTitle</key>
+	<string>Пароль изменён!</string>
+	<key>profileNameSectionHeader</key>
+	<string>Название</string>
 	<key>pinkThemeName</key>
 	<string>Розовый</string>
 	<key>passwordNewSectionHeader</key>
 	<string>Новый пароль</string>
+	<key>navigationMenuBookmarks</key>
+	<string>Избранные источники</string>
 	<key>settingsTitle</key>
 	<string>Настройки</string>
 	<key>tealBlueThemeName</key>
@@ -34,8 +36,6 @@
 	<string>Введите свой пароль</string>
 	<key>accountOrganizations</key>
 	<string>Организации</string>
-    <key>feedPublishedBy</key>
-    <string>Опубликовал(-а)</string>
 	<key>accountDetailChangeAlertCancel</key>
 	<string>Не сохранять</string>
 	<key>organizationLeave</key>
@@ -46,20 +46,20 @@
 	<string>Организации</string>
 	<key>feedNoAdsTitle</key>
 	<string>Нет объявлений.</string>
-	<key>accountDetailPassword</key>
-	<string>Изменить пароль</string>
-	<key>feedNoOrganizationAdsDescription</key>
-	<string>Вы имеете право публиковать объявления от имени данной организации.</string>
 	<key>adEditorReturnToEditor</key>
 	<string>Вернуться</string>
+	<key>feedNoOrganizationAdsDescription</key>
+	<string>Вы имеете право публиковать объявления от имени данной организации.</string>
+	<key>accountDetailPassword</key>
+	<string>Изменить пароль</string>
 	<key>authRegistrationAlertMessage</key>
 	<string>Мы отправили письмо на Ваш e-mail. Пожалуйста, подтвердите Ваш адрес, прежде чем заходить в аккаунт.</string>
 	<key>profileNamePlaceholder</key>
 	<string>Заголовок</string>
-	<key>feedNoAdsDescription</key>
-	<string>Никто ещё не опубликовал ни одного объявления. Будьте первым!</string>
 	<key>organizationAdmin</key>
 	<string>Создатель</string>
+	<key>feedNoAdsDescription</key>
+	<string>Никто ещё не опубликовал ни одного объявления. Будьте первым!</string>
 	<key>adEditorDeleteAd</key>
 	<string>Удалить объявление</string>
 	<key>accountSettings</key>
@@ -70,18 +70,18 @@
 	<string>Назад</string>
 	<key>okay</key>
 	<string>Хорошо</string>
-	<key>navigationMenuOrganizationAds</key>
-	<string>Объявления организаций</string>
+	<key>adEditorNamePlaceholder</key>
+	<string>Заголовок</string>
 	<key>authForgotPassword</key>
 	<string>Забыли пароль?</string>
 	<key>aboutRTULab</key>
 	<string>Сообщество RTU IT Lab</string>
-	<key>adEditorNamePlaceholder</key>
-	<string>Заголовок</string>
 	<key>adEditorEndDateLabel</key>
 	<string>Актуально до</string>
 	<key>adEditorPublishAdAlertMessage</key>
 	<string>Опубликовать объявление от имени</string>
+	<key>navigationMenuOrganizationAds</key>
+	<string>Объявления организаций</string>
 	<key>accountMyProfiles</key>
 	<string>Мои резюме</string>
 	<key>adEditorDeleteAlertMessage</key>
@@ -116,16 +116,18 @@
 	<string>Вы уверены, что хотите удалить данную организацию? Это действие необратимо.</string>
 	<key>navigationMenuAllAds</key>
 	<string>Все объявления</string>
+	<key>feedPublishedBy</key>
+	<string>Опубликовал(-а)</string>
 	<key>organizationDescriptionPlaceholder</key>
 	<string>Описание</string>
 	<key>accountAddNewProfile</key>
 	<string>Добавить</string>
 	<key>passwordCurrentSectionHeader</key>
 	<string>Действующий пароль</string>
-	<key>adEditorCancelEditingAlertMessage</key>
-	<string>Вы уверены, что хотите отменить редактирование данного объявления? Несохранённые изменения будут утеряны.</string>
 	<key>organizationJoin</key>
 	<string>Вступить в организацию</string>
+	<key>adEditorCancelEditingAlertMessage</key>
+	<string>Вы уверены, что хотите отменить редактирование данного объявления? Несохранённые изменения будут утеряны.</string>
 	<key>adEditorBeginDateLabel</key>
 	<string>Дата начала</string>
 	<key>done</key>
@@ -212,9 +214,13 @@
 	<string>Версия</string>
 	<key>authSurname</key>
 	<string>Фамилия</string>
-	<key>passwordChangeAlertTitle</key>
-	<string>Пароль изменён!</string>
-	<key>profileNameSectionHeader</key>
-	<string>Название</string>
+	<key>accountDetailChangeAlertMessage</key>
+	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
+	<key>adEditorDurationLabel</key>
+	<string>Продолжительность</string>
+	<key>userPublicProfilesSectionHeader</key>
+	<string>Резюме</string>
+	<key>userPublicAdsSectionHeader</key>
+	<string>Объявления</string>
 </dict>
 </plist>

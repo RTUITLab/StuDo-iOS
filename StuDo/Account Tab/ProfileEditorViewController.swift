@@ -47,6 +47,8 @@ class ProfileEditorViewController: UITableViewController {
     }
     private let fieldPosition: [[FieldType]] = [[.name], [.description], [.deleteAction]]
     
+    var userCanEditProfile: Bool
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -61,21 +63,27 @@ class ProfileEditorViewController: UITableViewController {
         tableView.register(TableViewCellWithTextViewInput.self, forCellReuseIdentifier: textViewCellId)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: value1styleCellID)
         
-        saveButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(saveButtonTapped(_:)))
-        navigationItem.rightBarButtonItem = saveButton
-        saveButton.isEnabled = false
+        if userCanEditProfile {
+            saveButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(saveButtonTapped(_:)))
+            navigationItem.rightBarButtonItem = saveButton
+            saveButton.isEnabled = false
+        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         tabBarController?.hideTabBar()
     }
     
-    init(profile: Profile?) {
+    init(profile: Profile?, canEditProfile: Bool = true) {
+        self.userCanEditProfile = canEditProfile
         super.init(style: .grouped)
         
         client.delegate = self
         if let profile = profile {
-            shouldAllowDeletion = true
+            if userCanEditProfile {
+                shouldAllowDeletion = true
+            }
             shouldBecomeFirstResponder = false
             
             self.profile = profile
@@ -101,16 +109,20 @@ extension ProfileEditorViewController {
     
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if section == 0 {
-            return Localizer.string(for: .profileNameSectionFooter)
-        } else if section == 1 {
-            return Localizer.string(for: .profileDescriptionSectionFooter)
+        if userCanEditProfile {
+            if section == 0 {
+                return Localizer.string(for: .profileNameSectionFooter)
+            } else if section == 1 {
+                return Localizer.string(for: .profileDescriptionSectionFooter)
+            }
         }
         return nil
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 1 {
+        if section == 0 {
+            return Localizer.string(for: .profileNameSectionHeader)
+        } else if section == 1 {
             return Localizer.string(for: .profileDescriptionSectionHeader)
         }
         return nil
@@ -149,11 +161,14 @@ extension ProfileEditorViewController {
             nameTextField.delegate = self
             nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
             
+            nameTextField.isUserInteractionEnabled = userCanEditProfile
+            
             if shouldBecomeFirstResponder {
                 shouldBecomeFirstResponder = false
                 
                 nameTextField.becomeFirstResponder()
             }
+            
             
             cell.selectionStyle = .none
             
@@ -165,6 +180,8 @@ extension ProfileEditorViewController {
             descriptionTextView.autocapitalizationType = .sentences
             
             descriptionTextView.delegate = self
+            
+            descriptionTextView.isUserInteractionEnabled = userCanEditProfile
             
             if descriptionInitialSetup {
                 descriptionInitialSetup = false
@@ -327,10 +344,14 @@ extension ProfileEditorViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didRecieveProfile profile: Profile) {
         self.profile = profile
-        #warning("Potential crash may happen if the inputs haven't been yet initialized by the table view.")
-        nameTextField.text = profile.name
-        descriptionTextView.text = profile.description
-        updateTableViewLayout(toFit: descriptionTextView)
+        
+        if nameTextField != nil {
+            nameTextField.text = profile.name
+        }
+        if descriptionTextView != nil {
+            descriptionTextView.text = profile.description
+            updateTableViewLayout(toFit: descriptionTextView)
+        }
     }
     
     

@@ -177,7 +177,7 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
             let header = dequeueReusableHeaderFooterView(withIdentifier: navigationMenuHeaderId)!
             header.backgroundView = UIView()
             header.backgroundView?.backgroundColor = .white
-            header.textLabel?.text = Localizer.string(for: .navigationMenuOrganizationAds)
+            header.textLabel?.text = Localizer.string(for: .navigationMenuBookmarks)
             return header
         }
         return nil

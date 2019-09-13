@@ -124,6 +124,8 @@ class FeedViewController: UIViewController {
         noAdsDescriptionLabel.font = .preferredFont(for: .subheadline, weight: .medium)
         noAdsDescriptionLabel.textColor = .lightGray
         noAdsDescriptionLabel.numberOfLines = 3
+        
+        navigationItem.title = Localizer.string(for: .back)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -296,6 +298,11 @@ extension FeedViewController: APIClientDelegate {
         navigationController?.pushViewController(orgVC, animated: true)
     }
     
+    func apiClient(_ client: APIClient, didRecieveUser user: User) {
+        let userVC = UserPublicController(user: user)
+        navigationController?.pushViewController(userVC, animated: true)
+    }
+    
     
 }
 
@@ -358,7 +365,7 @@ extension FeedViewController {
         
         if let userId = currentAd.userId, let userName = currentAd.userName {
             alert.addAction(UIAlertAction(title: userName, style: .default, handler: { _ in
-                print(userId)
+                self.client.getUser(id: userId)
             }))
         } else if let organizationId = currentAd.organizationId, let organizationName = currentAd.organizationName {
             alert.addAction(UIAlertAction(title: organizationName, style: .default, handler: { _ in
@@ -381,6 +388,7 @@ extension FeedViewController {
             break
         }
         noAdsTitleLabel.text = Localizer.string(for: .feedNoAdsTitle)
+        navigationItem.title = Localizer.string(for: .back)
     }
     
     @objc func userDidDeleteOrganization(notification: Notification) {
