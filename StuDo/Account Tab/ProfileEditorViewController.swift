@@ -66,6 +66,10 @@ class ProfileEditorViewController: UITableViewController {
         saveButton.isEnabled = false
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        tabBarController?.hideTabBar()
+    }
+    
     init(profile: Profile?) {
         super.init(style: .grouped)
         

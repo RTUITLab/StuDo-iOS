@@ -41,6 +41,7 @@ class FeedViewController: UIViewController {
     let noAdsDescriptionLabel = UILabel()
     
     deinit {
+        print("FeedViewController deinitialized")
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -132,6 +133,11 @@ class FeedViewController: UIViewController {
             client.getOrganizations([.canPublish])
             refreshAds()
         }
+        tabBarController?.showTabBar()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        tabBarController?.showTabBar()
     }
     
     @objc func refreshAds() {
@@ -166,6 +172,10 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         cell.creatorLabel.text = Localizer.string(for: .feedPublishedBy) + " " + currentAd.creatorName
         cell.descriptionTextView.text = currentAd.shortDescription
         cell.dateLabel.text = currentAd.dateRange
+        cell.moreButtonCallback = { [weak self] in
+            guard let self = self else { return }
+            self.moreButtonTappedInCell(with: indexPath)
+        }
         
         return cell
     }
@@ -278,6 +288,15 @@ extension FeedViewController: APIClientDelegate {
     }
     
     
+    
+    
+    
+    func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {
+        let orgVC = OrganizationViewController(organization: organization)
+        navigationController?.pushViewController(orgVC, animated: true)
+    }
+    
+    
 }
 
 
@@ -330,6 +349,27 @@ extension FeedViewController: NavigationMenuDelegate {
 
 
 extension FeedViewController {
+    
+    func moreButtonTappedInCell(with indexPath: IndexPath) {
+        
+        let currentAd = feedItems[indexPath.row]
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        if let userId = currentAd.userId, let userName = currentAd.userName {
+            alert.addAction(UIAlertAction(title: userName, style: .default, handler: { _ in
+                print(userId)
+            }))
+        } else if let organizationId = currentAd.organizationId, let organizationName = currentAd.organizationName {
+            alert.addAction(UIAlertAction(title: organizationName, style: .default, handler: { _ in
+                self.client.getOrganization(withId: organizationId)
+            }))
+        }
+        
+        alert.addAction(UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     @objc func languageDidChange(notification: Notification) {
         tableView.reloadData()
         switch currentMode {

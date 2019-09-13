@@ -30,6 +30,10 @@ class SettingsViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        tabBarController?.hideTabBar()
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

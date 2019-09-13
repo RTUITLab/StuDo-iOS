@@ -72,6 +72,10 @@ class AccountDetailViewController: UITableViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        tabBarController?.hideTabBar()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         view.endEditing(true)
     }

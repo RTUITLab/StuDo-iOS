@@ -120,13 +120,21 @@ class OrganizationViewController: UITableViewController {
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: userCellId)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: actionCellId)
         
+        tabBarController?.hideTabBar()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.hideTabBar()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewDidAppear(animated)
         if currentOrganization == nil {
             nameTextField.becomeFirstResponder()
         }
+        tabBarController?.hideTabBar()
+
     }
     
     

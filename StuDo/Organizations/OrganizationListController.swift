@@ -76,6 +76,11 @@ class OrganizationListController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         refreshOrganizationList()
+        tabBarController?.hideTabBar()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        tabBarController?.hideTabBar()
     }
     
     

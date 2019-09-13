@@ -38,6 +38,10 @@ class AboutViewController: UITableViewController {
         navigationItem.title = Localizer.string(for: .aboutTitle)
         
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        tabBarController?.hideTabBar()
+    }
 
     // MARK: - Table view data source
 

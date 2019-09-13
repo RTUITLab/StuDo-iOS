@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49034AF0232B9BE800749D18 /* UserPublicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49034AEF232B9BE800749D18 /* UserPublicController.swift */; };
 		491DCA8C231C089D00A78111 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DCA8B231C089D00A78111 /* UIColorExtension.swift */; };
 		4928D43622A3ED9700F4D703 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4928D43522A3ED9700F4D703 /* DataModel.swift */; };
 		4933A91D232A667F00A09646 /* AdTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4933A91C232A667F00A09646 /* AdTableViewCell.xib */; };
@@ -80,6 +81,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		49034AEF232B9BE800749D18 /* UserPublicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPublicController.swift; sourceTree = "<group>"; };
 		491DCA8B231C089D00A78111 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		4928D43522A3ED9700F4D703 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		4933A91C232A667F00A09646 /* AdTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdTableViewCell.xib; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				49A543C722FF06AB00A466EF /* RootViewController.swift */,
 				49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */,
 				49713C5D230B081D00E65807 /* AboutViewController.swift */,
+				49034AEF232B9BE800749D18 /* UserPublicController.swift */,
 				49713C5F230B093300E65807 /* AboutHeaderView.swift */,
 				49E2DB1522FDB4E20015DCD8 /* DataChecker.swift */,
 				494C64A822C24B0E0039740B /* PersistentStore.swift */,
@@ -465,6 +468,7 @@
 				49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */,
 				49E2DB1022FDB22B0015DCD8 /* UITableViewExtension.swift in Sources */,
 				49DEADCE2302EE440031B3DF /* NewAdButton.swift in Sources */,
+				49034AF0232B9BE800749D18 /* UserPublicController.swift in Sources */,
 				49BBB99D2306E6B600883EB9 /* ListItemCell.swift in Sources */,
 				4933A921232A6C2800A09646 /* AdTableViewCell.swift in Sources */,
 				49E61DDB231A5C69007BC4FF /* TextFormatter.swift in Sources */,

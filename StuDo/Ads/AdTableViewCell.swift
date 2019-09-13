@@ -15,6 +15,8 @@ class AdTableViewCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var moreButton: UIButton!
     
+    var moreButtonCallback: (() -> Void)? = nil
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         if let moreButtonImage = moreButton.currentImage?.withRenderingMode(.alwaysTemplate) {
@@ -29,6 +31,8 @@ class AdTableViewCell: UITableViewCell {
         descriptionTextView.backgroundColor = .clear
         
         dateLabel.textColor = .globalTintColor
+        
+        moreButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
 
     }
     
@@ -42,5 +46,17 @@ class AdTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    deinit {
+        print("AdTableViewCell deinitialized")
+    }
 
+}
+
+
+
+extension AdTableViewCell {
+    @objc func moreButtonTapped(_ button: UIButton) {
+        moreButtonCallback?()
+    }
 }

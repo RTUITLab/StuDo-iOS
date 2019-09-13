@@ -74,34 +74,22 @@ class AccountViewController: UIViewController {
     }
     
     deinit {
+        print("AccountViewController deinitialized")
         NotificationCenter.default.removeObserver(self)
     }
     
-    
-    private var isShowingTabBar = false
     
     override func viewWillAppear(_ animated: Bool) {
         if let selectedRow = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: selectedRow, animated: true)
         }
-        if let tabBarController = tabBarController, tabBarController.isTabBarHidden() {
-            tabBarController.showTabBar()
-            isShowingTabBar = true
-        }
+        tabBarController?.showTabBar()
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if isShowingTabBar {
-            isShowingTabBar = false
-        }
+        tabBarController?.showTabBar()
         client.getUser(id: PersistentStore.shared.user!.id!)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        if isShowingTabBar {
-            isShowingTabBar = false
-            tabBarController?.hideTabBar()
-        }
     }
     
     @objc func cellButtonTapped(_ button: UIButton) {

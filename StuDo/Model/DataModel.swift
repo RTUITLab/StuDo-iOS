@@ -288,7 +288,6 @@ extension Ad {
         }
         
         let dateRangeString = dateString + intervalFormatter.string(from: beginTime, to: endTime)
-        print(dateRangeString)
         return dateRangeString.replacingOccurrences(of: "—", with: " – ")
     }
 }
@@ -401,6 +400,14 @@ extension APIClient {
         }
         
         
+        
+        let userIdField = "userId"
+        let userId = object[userIdField] as? String
+        
+        let organizationIdField = "organizationId"
+        let organizationId = object[organizationIdField] as? String
+        
+        
         if fullDecode == false {
             let userNameField = "userName"
             let userName = object[userNameField] as? String
@@ -409,7 +416,7 @@ extension APIClient {
             let organizationName = object[organizationNameField] as? String
             
             
-            return Ad(id: id, name: name, description: nil, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: userName, organizationName: organizationName, user: nil)
+            return Ad(id: id, name: name, description: nil, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: userName, organizationName: organizationName, user: nil, organization: nil, userId: userId, organizationId: organizationId)
         }
         
         
@@ -420,8 +427,6 @@ extension APIClient {
         // === === === === ===
         // === Full decode ===
         
-        let organizationIdField = "organizationId"
-        let organizationId = object[organizationIdField] as? String
         
         var organization: Organization?
         
@@ -433,8 +438,6 @@ extension APIClient {
         
         
         
-        let userIdField = "userId"
-        let userId = object[userIdField] as? String
         
         var user: User?
         
