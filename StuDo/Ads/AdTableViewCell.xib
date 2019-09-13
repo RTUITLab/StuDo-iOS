@@ -19,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pgk-uy-7pM">
-                        <rect key="frame" x="15" y="7" width="45" height="20.5"/>
+                        <rect key="frame" x="15" y="7" width="354" height="20.5"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -66,6 +66,7 @@
                     <constraint firstAttribute="bottom" secondItem="gkp-hK-klz" secondAttribute="bottom" constant="8" id="Yah-oo-I2b"/>
                     <constraint firstItem="epc-bI-zsv" firstAttribute="top" secondItem="Pgk-uy-7pM" secondAttribute="bottom" constant="2" id="ZwU-9w-XQ2"/>
                     <constraint firstAttribute="trailing" secondItem="Dtb-wa-7Rl" secondAttribute="trailing" constant="15" id="mCV-hY-VRM"/>
+                    <constraint firstItem="qX7-TU-fEO" firstAttribute="leading" secondItem="Pgk-uy-7pM" secondAttribute="trailing" constant="10" id="no2-ek-FzJ"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

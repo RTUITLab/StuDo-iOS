@@ -120,6 +120,8 @@ class AdViewController: CardViewController {
 
         client.delegate = self
         
+        client.getOrganizations([.canPublish])
+        
         if let ad = ad {
             set(advertisement: ad)
             client.getAd(withId: ad.id)
@@ -145,8 +147,6 @@ class AdViewController: CardViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        client.getOrganizations([.canPublish])
         
         let horizontalSpace: CGFloat = 8
         

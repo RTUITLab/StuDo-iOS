@@ -182,14 +182,22 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedAd = feedItems[indexPath.row]
-        let detailVC = AdViewController(with: selectedAd)
+    fileprivate func presentAdViewer(_ selectedAd: Ad, startInEditorMode: Bool = false) {
+        let detailVC = AdViewController(with: selectedAd, isOwner: startInEditorMode)
+        if startInEditorMode {
+            detailVC.currentMode = .editing
+            detailVC.shouldAppearFullScreen = true
+        }
         detailVC.delegate = self
         
         impactFeedback.impactOccurred()
         shouldRefreshOnAppear = false
         self.present(detailVC, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedAd = feedItems[indexPath.row]
+        presentAdViewer(selectedAd)
     }
 }
 
@@ -370,6 +378,17 @@ extension FeedViewController {
         } else if let organizationId = currentAd.organizationId, let organizationName = currentAd.organizationName {
             alert.addAction(UIAlertAction(title: organizationName, style: .default, handler: { _ in
                 self.client.getOrganization(withId: organizationId)
+            }))
+        }
+        
+        if currentAd.userId == PersistentStore.shared.user.id {
+            let currentAd = feedItems[indexPath.row]
+            alert.addAction(UIAlertAction(title: Localizer.string(for: .adEditorEditAd), style: .default, handler: { _ in
+                self.presentAdViewer(currentAd, startInEditorMode: true)
+            }))
+            alert.addAction(UIAlertAction(title: Localizer.string(for: .adEditorDeleteAd), style: .destructive, handler: { _ in
+                self.client.deleteAd(withId: currentAd.id)
+                self.tableView.reloadData()
             }))
         }
         
