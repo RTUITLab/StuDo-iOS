@@ -20,6 +20,8 @@ class FeedViewController: UIViewController {
     var feedItems = [Ad]()
     var client = APIClient()
     
+    var indexPathUnderChange: IndexPath!
+    
     enum FeedMode: Equatable {
         case allAds
         case myAds
@@ -235,6 +237,7 @@ extension FeedViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         print("Feed VC: \(error.localizedDescription)")
         refreshControl.endRefreshing()
+        RootViewController.stopLoadingIndicator(with: .fail)
     }
     
     fileprivate func setAds(_ ads: [Ad]) {
@@ -296,6 +299,13 @@ extension FeedViewController: APIClientDelegate {
         default:
             break
         }
+    }
+    
+    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {
+        RootViewController.stopLoadingIndicator(with: .success)
+        feedItems.remove(at: indexPathUnderChange.row)
+        tableView.deleteRows(at: [indexPathUnderChange], with: .fade)
+        indexPathUnderChange = nil
     }
     
     
@@ -379,12 +389,13 @@ extension FeedViewController {
             }))
         }
         
-        if let userId = currentAd.userId, let userName = currentAd.userName {
-            alert.addAction(UIAlertAction(title: userName, style: .default, handler: { _ in
+        let title = Localizer.string(for: .feedCreatorPage)
+        if let userId = currentAd.userId, userId != PersistentStore.shared.user.id {
+            alert.addAction(UIAlertAction(title: title, style: .default, handler: { _ in
                 self.client.getUser(id: userId)
             }))
-        } else if let organizationId = currentAd.organizationId, let organizationName = currentAd.organizationName {
-            alert.addAction(UIAlertAction(title: organizationName, style: .default, handler: { _ in
+        } else if let organizationId = currentAd.organizationId {
+            alert.addAction(UIAlertAction(title: title, style: .default, handler: { _ in
                 self.client.getOrganization(withId: organizationId)
             }))
         }
@@ -395,8 +406,9 @@ extension FeedViewController {
                 self.presentAdViewer(currentAd, startInEditorMode: true)
             }))
             alert.addAction(UIAlertAction(title: Localizer.string(for: .adEditorDeleteAd), style: .destructive, handler: { _ in
+                self.indexPathUnderChange = indexPath
                 self.client.deleteAd(withId: currentAd.id)
-                self.tableView.reloadData()
+                RootViewController.startLoadingIndicator()
             }))
         }
         

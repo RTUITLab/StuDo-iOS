@@ -36,6 +36,9 @@ enum LozalizerString: String {
     case feedNoOwnAdsDescription
     case feedNoOrganizationAdsDescription
     case feedPublishedBy
+    case feedViewUser
+    case feedViewOrganization
+    case feedCreatorPage
     
     case navigationMenuAllAds
     case navigationMenuMyAds
@@ -147,12 +150,16 @@ enum LozalizerString: String {
 
 class Localizer: NSObject {
     
-    static var currentLocale: Locale {
-        let currentLanguage = PersistentStore.shared.currentLanguage
-        if currentLanguage == .Russian {
+    static func getLocale(for language: StuDoAvailableLanguage) -> Locale {
+        if language == .Russian {
             return Locale(identifier: "ru")
         }
         return Locale(identifier: "en")
+    }
+    
+    static var currentLocale: Locale {
+        let currentLanguage = PersistentStore.shared.currentLanguage
+        return getLocale(for: currentLanguage)
     }
     
     private static func getLocalizedStrings(for: StuDoAvailableLanguage) -> [String: String] {

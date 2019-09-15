@@ -143,7 +143,7 @@ extension ProfileEditorViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let sectionInfo = fieldPosition[indexPath.section][indexPath.row]
         
-        if indexPath.section == 0 {
+        if sectionInfo == .name {
             let cell = tableView.dequeueReusableCell(withIdentifier: textFieldCellId, for: indexPath) as! TableViewCellWithInputField
             
             nameTextField = cell.inputField
@@ -173,7 +173,7 @@ extension ProfileEditorViewController {
             cell.selectionStyle = .none
             
             return cell
-        } else if indexPath.section == 1 {
+        } else if sectionInfo == .description {
             let cell = tableView.dequeueReusableCell(withIdentifier: textViewCellId, for: indexPath) as! TableViewCellWithTextViewInput
             
             descriptionTextView = cell.textViewInput
@@ -195,7 +195,7 @@ extension ProfileEditorViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: value1styleCellID, for: indexPath)
         
-        if indexPath.section == 2 {
+        if sectionInfo == .deleteAction {
             cell.textLabel?.text = "Delete profile"
             cell.textLabel?.textColor = .red
             cell.accessoryType = .disclosureIndicator

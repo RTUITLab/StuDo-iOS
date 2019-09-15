@@ -384,7 +384,7 @@ class AuthorizationViewController: UIViewController {
         firstNameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         lastNameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
-        checkIfShouldProceed()
+        _ = checkIfShouldProceed()
     }
     
     
@@ -684,7 +684,7 @@ extension AuthorizationViewController {
     
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        checkIfShouldProceed()
+        _ = checkIfShouldProceed()
     }
     
     

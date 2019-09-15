@@ -9,6 +9,7 @@
 import UIKit
 
 fileprivate let cellWithAccessoryType = "cellWithAccessoryType"
+fileprivate let cellForColorScheme = "cellForColorScheme"
 
 class SettingsViewController: UITableViewController {
     
@@ -26,6 +27,7 @@ class SettingsViewController: UITableViewController {
         tabBarController?.hideTabBar()
         
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: cellWithAccessoryType)
+        tableView.register(SettingsColorSchemeCell.self, forCellReuseIdentifier: cellForColorScheme)
         
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
     }
@@ -64,10 +66,12 @@ class SettingsViewController: UITableViewController {
             cell.textLabel?.text = Localizer.string(for: .settingsLanguage)
             cell.detailTextLabel?.text = PersistentStore.shared.currentLanguage.rawValue
         } else if info == .theme {
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellForColorScheme, for: indexPath) as! SettingsColorSchemeCell
+            cell.accessoryType = .disclosureIndicator
+
             cell.textLabel?.text = Localizer.string(for: .settingsAccentColor)
-            if let stringRawValue = LozalizerString(rawValue: PersistentStore.shared.currentTheme.rawValue) {
-                cell.detailTextLabel?.text = Localizer.string(for: stringRawValue)
-            }
+            
+            return cell
         }
 
         return cell
@@ -96,4 +100,56 @@ extension SettingsViewController {
     @objc func languageDidChange(notification: Notification) {
         navigationItem.title = Localizer.string(for: .settingsTitle)
     }
+}
+
+
+
+
+class SettingsColorSchemeCell: TableViewCellValue1Style {
+    
+    let colorPreview = UIView()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        colorPreview.backgroundColor = .globalTintColor
+
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
+    var initialLayout = true
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if initialLayout {
+            initialLayout = false
+            
+            contentView.addSubview(colorPreview)
+            colorPreview.translatesAutoresizingMaskIntoConstraints = false
+            colorPreview.widthAnchor.constraint(equalToConstant: 25).isActive = true
+            colorPreview.heightAnchor.constraint(equalTo: colorPreview.widthAnchor).isActive = true
+            colorPreview.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+            colorPreview.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0).isActive = true
+            
+            layoutIfNeeded()
+        }
+        
+        colorPreview.layer.cornerRadius = colorPreview.frame.width / 2
+    }
+    
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        colorPreview.backgroundColor = .globalTintColor
+    }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        colorPreview.backgroundColor = .globalTintColor
+    }
+    
 }

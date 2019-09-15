@@ -109,7 +109,7 @@ class Notifications: NSObject {
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
         
-        let request = UNNotificationRequest(identifier: "ad-reminder:\(ad.id)", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: "ad-reminder:\(ad.id!)", content: content, trigger: trigger)
         
         center.add(request, withCompletionHandler: nil)
         center.add(request) { (error) in

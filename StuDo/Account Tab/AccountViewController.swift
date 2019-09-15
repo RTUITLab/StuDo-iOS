@@ -167,18 +167,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let sectionInfo = sections[indexPath.section]
-        
-//        if sectionInfo == .myAccount{
-//            return UITableView.automaticDimension
-//        } else if sectionInfo == .myProfiles {
-//            return 58
-//        } else {
-//            return 46
-//        }
-        
         return UITableView.automaticDimension
-
     }
     
     

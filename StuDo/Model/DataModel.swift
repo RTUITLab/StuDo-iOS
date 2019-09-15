@@ -541,7 +541,7 @@ extension APIClient {
         var userRights = [OrganizationMemberRight]()
         for right in organizationRightsArray {
             let rightNameField = "rightName"
-            guard let rightName = right[rightNameField] as? String else {
+            guard let rightName = right[rightNameField] else {
                 throw APIError.decodingFailureWithField(rightNameField)
             }
             guard let rightValue = OrganizationMemberRight.init(rawValue: rightName) else {

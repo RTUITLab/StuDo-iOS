@@ -40,7 +40,7 @@ class NavigationMenu: UITableView {
             numberOfRows += organizations.count
             additionalHeight = headerHeight
         }
-        var fullHeight = CGFloat(numberOfRows) * menuItemHeight + additionalHeight
+        let fullHeight = CGFloat(numberOfRows) * menuItemHeight + additionalHeight
         
         let heightLimit = UIScreen.main.bounds.height * 0.8
         if fullHeight < heightLimit {

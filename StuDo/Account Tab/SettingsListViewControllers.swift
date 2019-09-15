@@ -138,6 +138,21 @@ class LanguageListViewController: SettingsListViewController<StuDoAvailableLangu
         
     }
     
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
+        let languageItem = listItems[indexPath.section][indexPath.row]
+        let itemLocale = Localizer.getLocale(for: languageItem)
+        
+        let nativeLanguageName = itemLocale.localizedString(forLanguageCode: itemLocale.identifier)!
+        let localizedLanguageName = Localizer.currentLocale.localizedString(forLanguageCode: itemLocale.identifier)!
+        
+        cell.textLabel?.text = localizedLanguageName.capitalized
+        cell.detailTextLabel?.text = nativeLanguageName.capitalized
+        
+        return cell
+    }
+    
 }
 
 

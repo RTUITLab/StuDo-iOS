@@ -22,6 +22,8 @@ class AdTableViewCell: UITableViewCell {
         if let moreButtonImage = moreButton.currentImage?.withRenderingMode(.alwaysTemplate) {
             moreButton.setImage(moreButtonImage, for: .normal)
             moreButton.tintColor = UIColor(red:0.815, green:0.819, blue:0.837, alpha:1.000)
+            let inset: CGFloat = 10
+            moreButton.imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         }
         
         selectionStyle = .none
@@ -39,12 +41,6 @@ class AdTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         dateLabel.textColor = .globalTintColor
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     deinit {

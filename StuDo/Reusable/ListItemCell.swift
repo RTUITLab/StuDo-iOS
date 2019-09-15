@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListItemCell: UITableViewCell {
+class ListItemCell: TableViewCellWithSubtitle {
     
     let tickGlyph = UIImageView()
     let dimView = UIView()
