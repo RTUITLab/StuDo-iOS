@@ -14,6 +14,7 @@
 		4933A91F232A6A0300A09646 /* TextViewNoPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4933A91E232A6A0300A09646 /* TextViewNoPadding.swift */; };
 		4933A921232A6C2800A09646 /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4933A920232A6C2800A09646 /* AdTableViewCell.swift */; };
 		493C5A5022A189370032AB6E /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C5A4F22A189370032AB6E /* APIClient.swift */; };
+		493E7D29232E2BB600278DAF /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E7D28232E2BB600278DAF /* Notifications.swift */; };
 		493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8ACB228B4354004EC563 /* AppDelegate.swift */; };
 		493E8AD6228B4356004EC563 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 493E8AD4228B4356004EC563 /* LaunchScreen.storyboard */; };
 		493E8AE1228B4357004EC563 /* StuDoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8AE0228B4357004EC563 /* StuDoTests.swift */; };
@@ -88,6 +89,7 @@
 		4933A91E232A6A0300A09646 /* TextViewNoPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewNoPadding.swift; sourceTree = "<group>"; };
 		4933A920232A6C2800A09646 /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
 		493C5A4F22A189370032AB6E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		493E7D28232E2BB600278DAF /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		493E8AC8228B4354004EC563 /* StuDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StuDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		493E8ACB228B4354004EC563 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		493E8AD5228B4356004EC563 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 				493E8ACB228B4354004EC563 /* AppDelegate.swift */,
 				49A543C722FF06AB00A466EF /* RootViewController.swift */,
 				49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */,
+				493E7D28232E2BB600278DAF /* Notifications.swift */,
 				49713C5D230B081D00E65807 /* AboutViewController.swift */,
 				49034AEF232B9BE800749D18 /* UserPublicController.swift */,
 				49713C5F230B093300E65807 /* AboutHeaderView.swift */,
@@ -467,6 +470,7 @@
 				49544FA522FB22240019A544 /* FadeAnimatedTransitioning.swift in Sources */,
 				49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */,
 				49E2DB1022FDB22B0015DCD8 /* UITableViewExtension.swift in Sources */,
+				493E7D29232E2BB600278DAF /* Notifications.swift in Sources */,
 				49DEADCE2302EE440031B3DF /* NewAdButton.swift in Sources */,
 				49034AF0232B9BE800749D18 /* UserPublicController.swift in Sources */,
 				49BBB99D2306E6B600883EB9 /* ListItemCell.swift in Sources */,

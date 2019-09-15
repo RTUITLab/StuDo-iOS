@@ -222,5 +222,21 @@
 	<string>Profiles</string>
 	<key>userPublicAdsSectionHeader</key>
 	<string>Ads</string>
+	<key>notificationSetReminder</key>
+	<string>Set reminder</string>
+	<key>notificationReminderAlertTitle</key>
+	<string>Remind me about the event...</string>
+	<key>notificationRemindBefore15m</key>
+	<string>15m before</string>
+	<key>notificationRemindBefore1h</key>
+	<string>1h before</string>
+	<key>notificationEventReminderMessageBefore15m</key>
+	<string>The event mentioned in this ad begins in 15 minutes.</string>
+	<key>notificationEventReminderMessageBefore1h</key>
+	<string>The event mentioned in this ad begins in 1 hour.</string>
+	<key>notificationsDisabledAlertTitle</key>
+	<string>Notifications are currently disabled. You can enable them in settings.</string>
+	<key>notificationsDisabledSettings</key>
+	<string>Settings</string>
 </dict>
 </plist>

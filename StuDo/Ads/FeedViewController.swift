@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 fileprivate let feedItemCellID = "feedItemCellID"
 
@@ -370,6 +371,13 @@ extension FeedViewController {
         let currentAd = feedItems[indexPath.row]
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        if Notifications.checkIfCanSetNotifications(for: currentAd.beginTime) {
+            alert.addAction(UIAlertAction(title: Localizer.string(for: .notificationSetReminder), style: .default, handler: { _ in
+                let notificationAlert = Notifications.notificationAlert(for: currentAd, in: self)
+                self.present(notificationAlert, animated: true, completion: nil)
+            }))
+        }
         
         if let userId = currentAd.userId, let userName = currentAd.userName {
             alert.addAction(UIAlertAction(title: userName, style: .default, handler: { _ in

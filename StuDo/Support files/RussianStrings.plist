@@ -8,10 +8,10 @@
 	<string>Участники</string>
 	<key>emailChangeSectionDescription</key>
 	<string>Мы отправим вам ссылку для подтверждения на данный e-mail.</string>
-	<key>passwordChangeAlertTitle</key>
-	<string>Пароль изменён!</string>
-	<key>profileNameSectionHeader</key>
-	<string>Название</string>
+	<key>accountDetailChangeAlertMessage</key>
+	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
+	<key>adEditorDurationLabel</key>
+	<string>Продолжительность</string>
 	<key>userPublicAdsSectionHeader</key>
 	<string>Объявления</string>
 	<key>pinkThemeName</key>
@@ -218,9 +218,25 @@
 	<string>Фамилия</string>
 	<key>userPublicProfilesSectionHeader</key>
 	<string>Резюме</string>
-	<key>accountDetailChangeAlertMessage</key>
-	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
-	<key>adEditorDurationLabel</key>
-	<string>Продолжительность</string>
+	<key>passwordChangeAlertTitle</key>
+	<string>Пароль изменён!</string>
+	<key>profileNameSectionHeader</key>
+	<string>Название</string>
+	<key>notificationSetReminder</key>
+	<string>Установить напоминание</string>
+	<key>notificationReminderAlertTitle</key>
+	<string>Напомнить мне о данном событии..</string>
+	<key>notificationRemindBefore15m</key>
+	<string>За 15 минут</string>
+	<key>notificationRemindBefore1h</key>
+	<string>За 1 час</string>
+	<key>notificationEventReminderMessageBefore15m</key>
+	<string>Событие, указанное в данном объявлении, начинается через 15 минут.</string>
+	<key>notificationEventReminderMessageBefore1h</key>
+	<string>Событие, указанное в данном объявлении, начинается через 1 час.</string>
+	<key>notificationsDisabledAlertTitle</key>
+	<string>В настоящее время уведомления для данного приложения отключены. Вы можете включить их в настройках.</string>
+	<key>notificationsDisabledSettings</key>
+	<string>Настройки</string>
 </dict>
 </plist>

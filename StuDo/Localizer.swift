@@ -134,6 +134,15 @@ enum LozalizerString: String {
     
     case userPublicProfilesSectionHeader
     case userPublicAdsSectionHeader
+    
+    case notificationSetReminder
+    case notificationReminderAlertTitle
+    case notificationRemindBefore15m
+    case notificationRemindBefore1h
+    case notificationEventReminderMessageBefore15m
+    case notificationEventReminderMessageBefore1h
+    case notificationsDisabledAlertTitle
+    case notificationsDisabledSettings
 }
 
 class Localizer: NSObject {
