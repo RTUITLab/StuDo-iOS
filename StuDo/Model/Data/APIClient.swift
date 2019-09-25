@@ -576,7 +576,7 @@ extension APIClient {
                 }
                 
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didDeleteAdWithId: id)
+                    self.delegate?.apiClient(self, didDeleteAdWithId: deletedAdID)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -741,7 +741,7 @@ extension APIClient {
     
     
     func getProfiles(forUserWithId userId: String) {
-        var request = APIRequest(method: .get, path: "resumes/user/\(userId)")
+        let request = APIRequest(method: .get, path: "resumes/user/\(userId)")
         
         self.perform(secureRequest: request) { (result) in
             switch result {
@@ -837,7 +837,7 @@ extension APIClient {
                 }
                 
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didDeleteProfileWithId: id)
+                    self.delegate?.apiClient(self, didDeleteProfileWithId: deletedProfileId)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
