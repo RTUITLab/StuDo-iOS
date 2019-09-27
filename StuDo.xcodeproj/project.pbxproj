@@ -32,6 +32,7 @@
 		4973AD23231D50DF00B4B578 /* OrganizationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD22231D50DF00B4B578 /* OrganizationListController.swift */; };
 		4973AD25231D58DD00B4B578 /* OrganizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */; };
 		499075D8233E642B0045DE6A /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D7233E642B0045DE6A /* UserTableViewCell.swift */; };
+		499075DA233E77120045DE6A /* CurrentUserAdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */; };
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
 		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
 		49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF624231C1C4200AA3FCB /* DateButton.swift */; };
@@ -121,6 +122,7 @@
 		4973AD22231D50DF00B4B578 /* OrganizationListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationListController.swift; sourceTree = "<group>"; };
 		4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationViewController.swift; sourceTree = "<group>"; };
 		499075D7233E642B0045DE6A /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserAdTableViewCell.swift; sourceTree = "<group>"; };
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
 		49ADF624231C1C4200AA3FCB /* DateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateButton.swift; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 				4933A91C232A667F00A09646 /* AdTableViewCell.xib */,
 				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
 				491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */,
+				499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -720,6 +723,7 @@
 				49E61DDB231A5C69007BC4FF /* TextFormatter.swift in Sources */,
 				494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */,
 				49D76A7C231050A8002B22D4 /* Localizer.swift in Sources */,
+				499075DA233E77120045DE6A /* CurrentUserAdTableViewCell.swift in Sources */,
 				49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */,
 				494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */,
 				49D76A7A23102FD0002B22D4 /* SettingsListViewControllers.swift in Sources */,

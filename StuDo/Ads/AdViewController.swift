@@ -22,7 +22,8 @@ extension AdViewControllerDelegate {
     func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad) {}
 }
 
-
+fileprivate let memberCellId = "memberCellId"
+fileprivate let memberCurrentUserCellId = "memberCurrentUserCellId"
 
 class AdViewController: CardViewController {
     
@@ -57,7 +58,8 @@ class AdViewController: CardViewController {
             
             descriptionTextView.attributedText = markdownParser.parse(descriptionText)
             
-            additionalInfoLabel.attributedText = TextFormatter.additionalInfoAttributedString(for: ad, style: .body)
+            additionalInfoLabel.text = ad.dateRange
+            
             beginDateButton.date = ad.beginTime
             endDateButton.date = ad.endTime
             
@@ -99,11 +101,30 @@ class AdViewController: CardViewController {
     let cancelEditingButton = UIButton()
     
     
+    
+    let membersTableView = UITableView(frame: .zero, style: .plain)
+    var members = [AdParticipant]()
+    
+    enum AdParticipantType {
+        case user
+        case organization
+        case other
+    }
+    struct AdParticipant {
+        let type: AdParticipantType
+        let content: Any?
+    }
+    
+    
+    
     let beginDateButtonTopPadding: CGFloat = 12
     let nameTextFieldHeight: CGFloat = 20
     
     var dateButtonBottomConstraint: NSLayoutConstraint!
     var dateButtonTopConstraint: NSLayoutConstraint!
+    
+    let membersTableViewRowHeight: CGFloat = 55
+    var membersTableViewHeightConstraint: NSLayoutConstraint!
     
     override var contentHeight: CGFloat {
         var additionalHeight: CGFloat!
@@ -140,6 +161,16 @@ class AdViewController: CardViewController {
         }
         
         additionalInfoLabel.textColor = UIColor(red:0.467, green:0.467, blue:0.471, alpha:1.000)
+        
+        
+        membersTableView.delegate = self
+        membersTableView.dataSource = self
+        membersTableView.register(UserTableViewCell.self, forCellReuseIdentifier: memberCellId)
+        membersTableView.register(CurrentUserAdTableViewCell.self, forCellReuseIdentifier: memberCurrentUserCellId)
+
+        
+        membersTableView.rowHeight = membersTableViewRowHeight
+        
         
     }
     
@@ -186,6 +217,28 @@ class AdViewController: CardViewController {
         additionalInfoLabel.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor).isActive = true
         additionalInfoLabel.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
         additionalInfoLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 7).isActive = true
+        
+        
+        contentView.addSubview(membersTableView)
+        membersTableView.translatesAutoresizingMaskIntoConstraints = false
+        membersTableView.topAnchor.constraint(equalTo: additionalInfoLabel.lastBaselineAnchor, constant: horizontalSpace * 2).isActive = true
+        membersTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        membersTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        
+        membersTableViewHeightConstraint = membersTableView.heightAnchor.constraint(equalToConstant: membersTableViewRowHeight)
+        membersTableViewHeightConstraint.isActive = true
+        
+        
+        let separatorView = UIView()
+        separatorView.backgroundColor = UIColor(red:0.793, green:0.788, blue:0.805, alpha:1.000)
+        contentView.addSubview(separatorView)
+        separatorView.translatesAutoresizingMaskIntoConstraints = false
+        separatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+        separatorView.bottomAnchor.constraint(equalTo: membersTableView.topAnchor).isActive = true
+        separatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        separatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        
+        
         
         contentView.addSubview(beginDateButton)
         beginDateButton.translatesAutoresizingMaskIntoConstraints = false
@@ -299,12 +352,20 @@ class AdViewController: CardViewController {
         descriptionTextView.returnKeyType = .default
         descriptionTextView.autocapitalizationType = .sentences
         
+        additionalInfoLabel.font = .preferredFont(for: .body, weight: .light)
+        additionalInfoLabel.textColor = .lightGray
+        
         
         
         descriptionPlaceholderLabel.text = Localizer.string(for: .adEditorDescriptionPlaceholder)
         descriptionPlaceholderLabel.textColor = .lightGray
         descriptionPlaceholderLabel.font = .preferredFont(forTextStyle: .body)
         descriptionPlaceholderLabel.numberOfLines = 3
+        
+        
+        
+        membersTableView.isScrollEnabled = false
+        membersTableView.separatorInset = .zero
         
 
     }
@@ -366,6 +427,7 @@ class AdViewController: CardViewController {
         nameTextField.isUserInteractionEnabled = true
         descriptionTextView.isEditable = true
         additionalInfoLabel.isHidden = true
+        membersTableView.isHidden = true
         
         beginDateButton.isHidden = false
         endDateButton.isHidden = false
@@ -399,6 +461,7 @@ class AdViewController: CardViewController {
         nameTextField.isUserInteractionEnabled = false
         descriptionTextView.isEditable = false
         additionalInfoLabel.isHidden = false
+        membersTableView.isHidden = false
         
         self.moreButton.isHidden = false
         UIView.animate(withDuration: 0.3, animations: {
@@ -670,6 +733,22 @@ extension AdViewController {
 extension AdViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
         
+        if let user = ad.user {
+            let creator = AdParticipant(type: .user, content: user)
+            if user.id! != PersistentStore.shared.user.id! {
+                let joinAdCell = AdParticipant(type: .other, content: nil)
+                members = [creator, joinAdCell]
+            } else {
+                members = [creator]
+            }
+            membersTableView.reloadSections(IndexSet(integer: 0), with: .fade)
+        } else if let organization = ad.organization {
+            let creator = AdParticipant(type: .organization, content: organization)
+            let joinAdCell = AdParticipant(type: .other, content: nil)
+            members = [creator, joinAdCell]
+            membersTableView.reloadSections(IndexSet(integer: 0), with: .fade)
+        }
+        
         if let userId = ad.userId, userId == PersistentStore.shared.user!.id {
             isViewerOwner = true
         } else if let organizationId = ad.organizationId {
@@ -797,5 +876,72 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
 
             descriptionTextView.attributedText = NSAttributedString(string: resultingDescription, attributes: [.font: UIFont.preferredFont(for: .body, weight: .light)])
         }
+    }
+}
+
+
+
+
+
+extension AdViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView === membersTableView {
+            membersTableViewHeightConstraint.constant = CGFloat(members.count) * membersTableViewRowHeight
+            return members.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let participant = members[indexPath.row]
+        
+        if participant.type == .user || participant.type == .organization {
+            let cell = membersTableView.dequeueReusableCell(withIdentifier: memberCellId, for: indexPath) as! UserTableViewCell
+            
+            var name: String?
+            var surname: String?
+            var detailInfo: String?
+            
+            if let user = participant.content as? User {
+                
+                if user.id! == advertisement?.userId {
+                    detailInfo = Localizer.string(for: .adEditorCreator)
+                }
+                name = user.firstName
+                surname = user.lastName
+                
+            } else if let organization = participant.content as? Organization {
+                
+                detailInfo = Localizer.string(for: .adEditorCreator)
+                name = organization.name
+                
+            }
+            
+            
+            cell.initialsLabel.text = String(name!.prefix(1)) + (surname?.prefix(1) ?? "")
+            cell.nameLabel.text = (name ?? "") + " " + (surname ?? "")
+            cell.nameLabel.font = .preferredFont(for: .body, weight: .medium)
+            cell.detailTextLabel?.text = detailInfo
+            
+            cell.selectionStyle = .none
+            
+            return cell
+        }
+        
+        let cell = membersTableView.dequeueReusableCell(withIdentifier: memberCurrentUserCellId, for: indexPath) as! CurrentUserAdTableViewCell
+        
+        let currentUser = PersistentStore.shared.user!
+        cell.initialsLabel.text = String(currentUser.firstName.prefix(1)) + currentUser.lastName.prefix(1)
+        
+        cell.nameLabel.textColor = .globalTintColor
+        cell.nameLabel.text = Localizer.string(for: .adEditorJoinAd) + "..."
+        
+        return cell
+        
     }
 }

@@ -54,8 +54,9 @@ class UserTableViewCell: TableViewCellValue1Style {
         
         
         nameLabel.font = .preferredFont(for: .body, weight: .regular)
+        
         detailTextLabel?.font = .preferredFont(for: .footnote, weight: .light)
-
+        detailTextLabel?.textColor = .globalTintColor
         
         
         

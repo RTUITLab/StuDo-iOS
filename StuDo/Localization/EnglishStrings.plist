@@ -202,6 +202,10 @@
 	<string>Duration</string>
 	<key>adEditorPublishAdAlertMessage</key>
 	<string>Publish this ad as</string>
+	<key>adEditorCreator</key>
+	<string>Creator</string>
+	<key>adEditorJoinAd</key>
+	<string>I&apos;m in too</string>
 	<key>organizationTitleAllOrganizations</key>
 	<string>All Groups</string>
 	<key>organizationTitleMyOrganizations</key>

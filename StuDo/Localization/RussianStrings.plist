@@ -2,247 +2,251 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>passwordChangeAlertMessage</key>
-	<string>Вы успешно изменили свой пароль.</string>
-	<key>organizationMembersHeaderTitle</key>
-	<string>Участники</string>
-	<key>emailChangeSectionDescription</key>
-	<string>Мы отправим вам ссылку для подтверждения на данный e-mail.</string>
-	<key>passwordChangeAlertTitle</key>
-	<string>Пароль изменён!</string>
-	<key>profileNameSectionHeader</key>
-	<string>Название</string>
-	<key>userPublicAdsSectionHeader</key>
-	<string>Объявления</string>
-	<key>pinkThemeName</key>
-	<string>Розовый</string>
-	<key>navigationMenuBookmarks</key>
-	<string>Избранные источники</string>
-	<key>passwordNewSectionHeader</key>
-	<string>Новый пароль</string>
-	<key>settingsTitle</key>
-	<string>Настройки</string>
-	<key>tealBlueThemeName</key>
-	<string>Голубой</string>
-	<key>settingsAccentColor</key>
-	<string>Цветовая схема</string>
-	<key>authPasswordRestorationAlertMessage</key>
-	<string>Для восстановления пароля следуйте инструкциям, отправленным на Ваш почтовый адрес.</string>
-	<key>authEmail</key>
-	<string>E-mail</string>
-	<key>adEditorFindPeople</key>
-	<string>Пригласить людей</string>
-	<key>organizationInfoHeaderTitle</key>
-	<string>Организация</string>
-	<key>passwordEnterCurrent</key>
-	<string>Введите свой пароль</string>
-	<key>accountOrganizations</key>
-	<string>Организации</string>
+	<key>authName</key>
+	<string>Имя</string>
+	<key>notificationEventReminderMessageBefore1h</key>
+	<string>Событие, указанное в данном объявлении, начинается через 1 час.</string>
+	<key>accountOrganizationsSectionDescription</key>
+	<string>Вы можете присоединиться к различным организациям и получить право публиковать объявления от имени организации.</string>
 	<key>accountDetailChangeAlertCancel</key>
 	<string>Не сохранять</string>
-	<key>organizationLeave</key>
-	<string>Покинуть организацию</string>
-	<key>accountDetailStudentID</key>
-	<string>Номер студенческого билета</string>
-	<key>organizationListTitle</key>
-	<string>Организации</string>
-	<key>feedNoAdsTitle</key>
-	<string>Нет объявлений.</string>
-	<key>adEditorReturnToEditor</key>
-	<string>Продолжить редактирование</string>
-	<key>feedNoOrganizationAdsDescription</key>
-	<string>Вы имеете право публиковать объявления от имени данной организации.</string>
-	<key>accountDetailPassword</key>
-	<string>Изменить пароль</string>
-	<key>notificationsDisabledAlertTitle</key>
-	<string>В настоящее время уведомления для данного приложения отключены. Вы можете включить их в настройках.</string>
-	<key>authRegistrationAlertMessage</key>
-	<string>Мы отправили письмо на Ваш e-mail. Пожалуйста, подтвердите Ваш адрес, прежде чем заходить в аккаунт.</string>
-	<key>profileNamePlaceholder</key>
-	<string>Заголовок</string>
-	<key>organizationAdmin</key>
-	<string>Создатель</string>
-	<key>feedNoAdsDescription</key>
-	<string>Никто ещё не опубликовал ни одного объявления. Будьте первым!</string>
-	<key>adEditorDeleteAd</key>
-	<string>Удалить объявление</string>
-	<key>accountSettings</key>
-	<string>Настройки</string>
-	<key>navigationMenuMyAds</key>
-	<string>Только мои объявления</string>
-	<key>back</key>
-	<string>Назад</string>
-	<key>okay</key>
-	<string>Хорошо</string>
-	<key>adEditorNamePlaceholder</key>
-	<string>Заголовок</string>
-	<key>authForgotPassword</key>
-	<string>Забыли пароль?</string>
-	<key>aboutRTULab</key>
-	<string>Сообщество RTU IT Lab</string>
-	<key>adEditorEndDateLabel</key>
-	<string>Актуально до</string>
 	<key>adEditorPublishAdAlertMessage</key>
 	<string>Опубликовать объявление от имени</string>
-	<key>navigationMenuOrganizationAds</key>
-	<string>Объявления организаций</string>
+	<key>adEditorEditingModeTitle</key>
+	<string>Редактирование</string>
 	<key>notificationReminderAlertTitle</key>
 	<string>Напомнить мне о данном событии..</string>
-	<key>accountMyProfiles</key>
-	<string>Мои резюме</string>
-	<key>adEditorDeleteAlertMessage</key>
-	<string>Вы уверены, что хотите удалить данное объявление? Объявление будет навсегда утеряно.</string>
-	<key>authRegistrationAlertTitle</key>
-	<string>Успешная регистрация!</string>
-	<key>feedNoOwnAdsDescription</key>
-	<string>Публикуемые Вами объявления появятся здесь.</string>
-	<key>accountProfileSectionDescription</key>
-	<string>Резюме помогут другим найти Вас по Вашим навыкам. Вы можете добавить неограниченное количество резюме.</string>
-	<key>delete</key>
-	<string>Удалить</string>
-	<key>edit</key>
-	<string>Изм.</string>
-	<key>adEditorCancelCreatingAlertMessage</key>
-	<string>Вы уверены, что не хотите сохранять данное объявление?</string>
-	<key>purpleThemeName</key>
-	<string>Фиолетовый</string>
-	<key>save</key>
-	<string>Сохранить</string>
-	<key>profileNameSectionFooter</key>
-	<string>Кратко озаглавьте Ваше резюме.</string>
-	<key>accountDetailLastName</key>
-	<string>Фамилия</string>
-	<key>organizationTitleAllOrganizations</key>
-	<string>Все</string>
-	<key>authPassword</key>
-	<string>Пароль</string>
-	<key>yellowThemeName</key>
-	<string>Жёлтый</string>
-	<key>organizationDeletionAlertMessage</key>
-	<string>Вы уверены, что хотите удалить данную организацию? Это действие необратимо.</string>
-	<key>navigationMenuAllAds</key>
-	<string>Все объявления</string>
-	<key>feedPublishedBy</key>
-	<string>Опубликовал(-а)</string>
-	<key>organizationDescriptionPlaceholder</key>
-	<string>Описание</string>
-	<key>accountAddNewProfile</key>
-	<string>Добавить</string>
 	<key>passwordCurrentSectionHeader</key>
 	<string>Действующий пароль</string>
-	<key>notificationSetReminder</key>
-	<string>Установить напоминание</string>
+	<key>authPasswordRestorationAlertMessage</key>
+	<string>Для восстановления пароля следуйте инструкциям, отправленным на Ваш почтовый адрес.</string>
+	<key>passwordRepeatNew</key>
+	<string>Введите новый пароль ещё раз</string>
+	<key>settingsAccentColor</key>
+	<string>Цветовая схема</string>
+	<key>settingsTitle</key>
+	<string>Настройки</string>
+	<key>search</key>
+	<string>Найти</string>
+	<key>adEditorCreator</key>
+	<string>Создатель</string>
+	<key>organizationInfoHeaderTitle</key>
+	<string>Организация</string>
+	<key>adEditorJoinAd</key>
+	<string>Я тоже участвую</string>
+	<key>adEditorEndDateLabel</key>
+	<string>Актуально до</string>
+	<key>accountProfileSectionDescription</key>
+	<string>Резюме помогут другим найти Вас по Вашим навыкам. Вы можете добавить неограниченное количество резюме.</string>
+	<key>passwordChangeAlertMessage</key>
+	<string>Вы успешно изменили свой пароль.</string>
+	<key>accountDetailStudentID</key>
+	<string>Номер студенческого билета</string>
+	<key>organizationDescriptionPlaceholder</key>
+	<string>Описание</string>
+	<key>aboutRTULab</key>
+	<string>Сообщество RTU IT Lab</string>
+	<key>adEditorDurationLabel</key>
+	<string>Продолжительность</string>
+	<key>adEditorDescriptionPlaceholder</key>
+	<string>Текст Вашего объявления. Первый параграф будет использоваться в качестве краткого описания.</string>
+	<key>accountTitle</key>
+	<string>Аккаунт</string>
+	<key>profileNamePlaceholder</key>
+	<string>Заголовок</string>
 	<key>organizationJoin</key>
 	<string>Вступить в организацию</string>
+	<key>accountDetailLogout</key>
+	<string>Выйти из приложения</string>
+	<key>accountAbout</key>
+	<string>О приложении</string>
+	<key>accountDetailNameSectionDescription</key>
+	<string>Вы можете редактировать своё имя и фамилию.</string>
+	<key>aboutVersion</key>
+	<string>Версия</string>
+	<key>tealBlueThemeName</key>
+	<string>Голубой</string>
+	<key>organizationAdmin</key>
+	<string>Создатель</string>
+	<key>okay</key>
+	<string>Хорошо</string>
+	<key>feedNoAdsTitle</key>
+	<string>Нет объявлений.</string>
 	<key>adEditorCancelEditingAlertMessage</key>
 	<string>Вы уверены, что хотите отменить редактирование данного объявления? Несохранённые изменения будут утеряны.</string>
+	<key>adEditorDeleteAd</key>
+	<string>Удалить объявление</string>
+	<key>notificationRemindBefore1h</key>
+	<string>За 1 час</string>
+	<key>authSurname</key>
+	<string>Фамилия</string>
+	<key>adEditorNamePlaceholder</key>
+	<string>Заголовок</string>
+	<key>delete</key>
+	<string>Удалить</string>
+	<key>passwordNewSectionHeader</key>
+	<string>Новый пароль</string>
+	<key>passwordEnterCurrent</key>
+	<string>Введите свой пароль</string>
+	<key>authPassword</key>
+	<string>Пароль</string>
+	<key>organizationTitleMyOrganizations</key>
+	<string>Только мои</string>
+	<key>profileNameSectionFooter</key>
+	<string>Кратко озаглавьте Ваше резюме.</string>
+	<key>organizationNamePlaceholder</key>
+	<string>Название</string>
+	<key>profileDescriptionSectionFooter</key>
+	<string>Опишите в нескольких предложениях, чем Вы могли бы помочь другим в данном качестве.</string>
+	<key>navigationMenuAllAds</key>
+	<string>Все объявления</string>
+	<key>feedNoOwnAdsDescription</key>
+	<string>Публикуемые Вами объявления появятся здесь.</string>
+	<key>greenThemeName</key>
+	<string>Зелёный</string>
+	<key>yellowThemeName</key>
+	<string>Жёлтый</string>
+	<key>notificationSetReminder</key>
+	<string>Установить напоминание</string>
+	<key>organizationTitleAllOrganizations</key>
+	<string>Все</string>
+	<key>redThemeName</key>
+	<string>Красный</string>
+	<key>emailChangeSectionDescription</key>
+	<string>Мы отправим вам ссылку для подтверждения на данный e-mail.</string>
+	<key>passwordNewSectionDescription</key>
+	<string>Ваш пароль должен иметь длину не менее 6 символов.</string>
+	<key>accountDetailPassword</key>
+	<string>Изменить пароль</string>
+	<key>accountDetailChangeAlertMessage</key>
+	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
+	<key>accountMyProfiles</key>
+	<string>Мои резюме</string>
+	<key>aboutFeedback</key>
+	<string>Отправить фидбек</string>
+	<key>adEditorFindPeople</key>
+	<string>Пригласить людей</string>
+	<key>notificationsDisabledAlertTitle</key>
+	<string>В настоящее время уведомления для данного приложения отключены. Вы можете включить их в настройках.</string>
+	<key>adEditorDeleteAlertMessage</key>
+	<string>Вы уверены, что хотите удалить данное объявление? Объявление будет навсегда утеряно.</string>
+	<key>adEditorCancelAdCreation</key>
+	<string>Закрыть редактор</string>
+	<key>back</key>
+	<string>Назад</string>
+	<key>authEmail</key>
+	<string>E-mail</string>
+	<key>save</key>
+	<string>Сохранить</string>
+	<key>authForgotPassword</key>
+	<string>Забыли пароль?</string>
+	<key>adEditorEditAd</key>
+	<string>Редактировать</string>
+	<key>organizationMembersHeaderTitle</key>
+	<string>Участники</string>
+	<key>settingsLanguage</key>
+	<string>Язык приложения</string>
+	<key>pinkThemeName</key>
+	<string>Розовый</string>
+	<key>accountAddNewProfile</key>
+	<string>Добавить</string>
+	<key>accountDetailEmail</key>
+	<string>Изменить e-mail</string>
+	<key>adEditorCreationModeTitle</key>
+	<string>Новое объявление</string>
+	<key>accountDetailLastName</key>
+	<string>Фамилия</string>
+	<key>accountDetailFirstName</key>
+	<string>Имя</string>
+	<key>adEditorReturnToEditor</key>
+	<string>Продолжить редактирование</string>
+	<key>feedTitleMyAds</key>
+	<string>Мои объявления</string>
+	<key>userPublicAdsSectionHeader</key>
+	<string>Объявления</string>
+	<key>userPublicProfilesSectionHeader</key>
+	<string>Резюме</string>
+	<key>feedViewUser</key>
+	<string>Показать пользователя</string>
+	<key>authRegistrationAlertTitle</key>
+	<string>Успешная регистрация!</string>
+	<key>emailChangeAlertMessage</key>
+	<string>На Ваш новый e-mail отправлена ссылка подтверждения. После подверждения за Вашим аккаунтом будет закреплён новый адрес.</string>
+	<key>orangeThemeName</key>
+	<string>Оранжевый</string>
+	<key>create</key>
+	<string>Создать</string>
+	<key>organizationListTitle</key>
+	<string>Организации</string>
+	<key>edit</key>
+	<string>Изм.</string>
+	<key>navigationMenuOrganizationAds</key>
+	<string>Объявления организаций</string>
+	<key>emailChangeSectionHeader</key>
+	<string>Новый e-mail</string>
+	<key>aboutTitle</key>
+	<string>О приложении</string>
+	<key>authSignIn</key>
+	<string>Войти</string>
 	<key>adEditorBeginDateLabel</key>
 	<string>Дата начала</string>
+	<key>profileNameSectionHeader</key>
+	<string>Название</string>
+	<key>cancel</key>
+	<string>Отменить</string>
+	<key>navigationMenuBookmarks</key>
+	<string>Избранные источники</string>
+	<key>adEditorCancelCreatingAlertMessage</key>
+	<string>Вы уверены, что не хотите сохранять данное объявление?</string>
+	<key>passwordChangeAlertTitle</key>
+	<string>Пароль изменён!</string>
+	<key>authRepeatPassword</key>
+	<string>Повторите пароль</string>
+	<key>notificationEventReminderMessageBefore15m</key>
+	<string>Событие, указанное в данном объявлении, начинается через 15 минут.</string>
+	<key>accountSettings</key>
+	<string>Настройки</string>
+	<key>passwordEnterNew</key>
+	<string>Введите новый пароль</string>
+	<key>accountOrganizations</key>
+	<string>Организации</string>
+	<key>feedPublishedBy</key>
+	<string>Опубликовал(-а)</string>
+	<key>blueThemeName</key>
+	<string>Синий</string>
+	<key>adEditorDiscardChanges</key>
+	<string>Отменить изменения</string>
+	<key>feedNoOrganizationAdsDescription</key>
+	<string>Вы имеете право публиковать объявления от имени данной организации.</string>
+	<key>navigationMenuMyAds</key>
+	<string>Только мои объявления</string>
+	<key>feedNoAdsDescription</key>
+	<string>Никто ещё не опубликовал ни одного объявления. Будьте первым!</string>
+	<key>feedViewOrganization</key>
+	<string>Показать организацию</string>
+	<key>organizationDeletionAlertMessage</key>
+	<string>Вы уверены, что хотите удалить данную организацию? Это действие необратимо.</string>
+	<key>authRegistrationAlertMessage</key>
+	<string>Мы отправили письмо на Ваш e-mail. Пожалуйста, подтвердите Ваш адрес, прежде чем заходить в аккаунт.</string>
 	<key>notificationRemindBefore15m</key>
 	<string>За 15 минут</string>
 	<key>done</key>
 	<string>Готово</string>
-	<key>search</key>
-	<string>Найти</string>
-	<key>emailChangeAlertMessage</key>
-	<string>На Ваш новый e-mail отправлена ссылка подтверждения. После подверждения за Вашим аккаунтом будет закреплён новый адрес.</string>
-	<key>adEditorEditAd</key>
-	<string>Редактировать</string>
 	<key>feedTitleAllAds</key>
 	<string>Объявления</string>
-	<key>accountOrganizationsSectionDescription</key>
-	<string>Вы можете присоединиться к различным организациям и получить право публиковать объявления от имени организации.</string>
-	<key>orangeThemeName</key>
-	<string>Оранжевый</string>
-	<key>adEditorCancelAdCreation</key>
-	<string>Закрыть редактор</string>
-	<key>adEditorDescriptionPlaceholder</key>
-	<string>Текст Вашего объявления. Первый параграф будет использоваться в качестве краткого описания.</string>
-	<key>feedTitleMyAds</key>
-	<string>Мои объявления</string>
-	<key>accountDetailEmail</key>
-	<string>Изменить e-mail</string>
-	<key>organizationNamePlaceholder</key>
-	<string>Название</string>
-	<key>blueThemeName</key>
-	<string>Синий</string>
-	<key>redThemeName</key>
-	<string>Красный</string>
-	<key>aboutFeedback</key>
-	<string>Отправить фидбек</string>
-	<key>notificationRemindBefore1h</key>
-	<string>За 1 час</string>
-	<key>accountDetailFirstName</key>
-	<string>Имя</string>
-	<key>cancel</key>
-	<string>Отменить</string>
-	<key>adEditorDiscardChanges</key>
-	<string>Отменить изменения</string>
-	<key>authRepeatPassword</key>
-	<string>Повторите пароль</string>
-	<key>notificationEventReminderMessageBefore1h</key>
-	<string>Событие, указанное в данном объявлении, начинается через 1 час.</string>
-	<key>notificationsDisabledSettings</key>
-	<string>Настройки</string>
-	<key>adEditorCreationModeTitle</key>
-	<string>Новое объявление</string>
-	<key>aboutTitle</key>
-	<string>О приложении</string>
-	<key>passwordRepeatNew</key>
-	<string>Введите новый пароль ещё раз</string>
+	<key>organizationLeave</key>
+	<string>Покинуть организацию</string>
 	<key>profileDescriptionSectionHeader</key>
 	<string>Описание</string>
-	<key>aboutRate</key>
-	<string>Оценить в App Store</string>
-	<key>settingsLanguage</key>
-	<string>Язык приложения</string>
-	<key>accountTitle</key>
-	<string>Аккаунт</string>
-	<key>passwordNewSectionDescription</key>
-	<string>Ваш пароль должен иметь длину не менее 6 символов.</string>
-	<key>adEditorEditingModeTitle</key>
-	<string>Редактирование</string>
-	<key>feedViewOrganization</key>
-	<string>Показать организацию</string>
-	<key>feedViewUser</key>
-	<string>Показать пользователя</string>
 	<key>feedCreatorPage</key>
 	<string>Показать страницу создателя</string>
-	<key>accountDetailNameSectionDescription</key>
-	<string>Вы можете редактировать своё имя и фамилию.</string>
-	<key>authName</key>
-	<string>Имя</string>
-	<key>organizationTitleMyOrganizations</key>
-	<string>Только мои</string>
-	<key>accountDetailLogout</key>
-	<string>Выйти из приложения</string>
-	<key>profileDescriptionSectionFooter</key>
-	<string>Опишите в нескольких предложениях, чем Вы могли бы помочь другим в данном качестве.</string>
 	<key>authSignUp</key>
 	<string>Зарегистрироваться</string>
-	<key>authSignIn</key>
-	<string>Войти</string>
-	<key>emailChangeSectionHeader</key>
-	<string>Новый e-mail</string>
-	<key>greenThemeName</key>
-	<string>Зелёный</string>
-	<key>accountAbout</key>
-	<string>О приложении</string>
-	<key>passwordEnterNew</key>
-	<string>Введите новый пароль</string>
-	<key>notificationEventReminderMessageBefore15m</key>
-	<string>Событие, указанное в данном объявлении, начинается через 15 минут.</string>
-	<key>create</key>
-	<string>Создать</string>
-	<key>aboutVersion</key>
-	<string>Версия</string>
-	<key>authSurname</key>
-	<string>Фамилия</string>
-	<key>userPublicProfilesSectionHeader</key>
-	<string>Резюме</string>
-	<key>accountDetailChangeAlertMessage</key>
-	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
-	<key>adEditorDurationLabel</key>
-	<string>Продолжительность</string>
+	<key>notificationsDisabledSettings</key>
+	<string>Настройки</string>
+	<key>purpleThemeName</key>
+	<string>Фиолетовый</string>
+	<key>aboutRate</key>
+	<string>Оценить в App Store</string>
 </dict>
 </plist>
