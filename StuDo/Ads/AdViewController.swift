@@ -24,6 +24,8 @@ extension AdViewControllerDelegate {
 
 fileprivate let memberCellId = "memberCellId"
 fileprivate let memberCurrentUserCellId = "memberCurrentUserCellId"
+fileprivate let commentCellId = "commentCellId"
+fileprivate let commentInputCellId = "commentInputCellId"
 
 class AdViewController: CardViewController {
     
@@ -100,10 +102,16 @@ class AdViewController: CardViewController {
     let publishButton = UIButton()
     let cancelEditingButton = UIButton()
     
+    var commentTextView: UITextView!
+    var commentPlaceholderLabel: UILabel!
     
     
     let membersTableView = UITableView(frame: .zero, style: .plain)
     var members = [AdParticipant]()
+    
+    
+    let commentsTableView = UITableView(frame: .zero, style: .plain)
+    var comments = [String]()
     
     
     let nonEditingInfoContainer = UIView()
@@ -128,6 +136,10 @@ class AdViewController: CardViewController {
     
     let membersTableViewRowHeight: CGFloat = 55
     var membersTableViewHeightConstraint: NSLayoutConstraint!
+    
+    let commentsTableViewRowHeight: CGFloat = 55
+    var commentsTableViewHeightConstraint: NSLayoutConstraint!
+    
     
     override var contentHeight: CGFloat {
         var additionalHeight: CGFloat!
@@ -170,10 +182,17 @@ class AdViewController: CardViewController {
         membersTableView.dataSource = self
         membersTableView.register(UserTableViewCell.self, forCellReuseIdentifier: memberCellId)
         membersTableView.register(CurrentUserAdTableViewCell.self, forCellReuseIdentifier: memberCurrentUserCellId)
-
         
         membersTableView.rowHeight = membersTableViewRowHeight
+
         
+        commentsTableView.delegate = self
+        commentsTableView.dataSource = self
+        commentsTableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: commentCellId)
+        commentsTableView.register(TableViewCellWithTextViewInput.self, forCellReuseIdentifier: commentInputCellId)
+        
+        commentsTableView.tableFooterView = UIView()
+
         
     }
     
@@ -233,7 +252,6 @@ class AdViewController: CardViewController {
         membersTableView.topAnchor.constraint(equalTo: additionalInfoLabel.lastBaselineAnchor, constant: horizontalSpace * 2).isActive = true
         membersTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         membersTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        membersTableView.bottomAnchor.constraint(equalTo: nonEditingInfoContainer.bottomAnchor).isActive = true
         
         membersTableViewHeightConstraint = membersTableView.heightAnchor.constraint(equalToConstant: membersTableViewRowHeight)
         membersTableViewHeightConstraint.isActive = true
@@ -247,6 +265,28 @@ class AdViewController: CardViewController {
         separatorView.bottomAnchor.constraint(equalTo: membersTableView.topAnchor).isActive = true
         separatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         separatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        
+        
+        let commentsSectionHeader = UILabel()
+        nonEditingInfoContainer.addSubview(commentsSectionHeader)
+        commentsSectionHeader.translatesAutoresizingMaskIntoConstraints = false
+        commentsSectionHeader.topAnchor.constraint(equalTo: membersTableView.bottomAnchor, constant: horizontalSpace).isActive = true
+        commentsSectionHeader.leadingAnchor.constraint(equalTo: additionalInfoLabel.leadingAnchor, constant: 0).isActive = true
+
+        
+        commentsSectionHeader.font = .preferredFont(for: .title3, weight: .medium)
+        commentsSectionHeader.text = Localizer.string(for: .adEditorComments)
+        
+        nonEditingInfoContainer.addSubview(commentsTableView)
+        commentsTableView.translatesAutoresizingMaskIntoConstraints = false
+        commentsTableView.topAnchor.constraint(equalTo: commentsSectionHeader.bottomAnchor, constant: horizontalSpace / 2).isActive = true
+        commentsTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        commentsTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        commentsTableView.bottomAnchor.constraint(equalTo: nonEditingInfoContainer.bottomAnchor).isActive = true
+        
+        commentsTableViewHeightConstraint = commentsTableView.heightAnchor.constraint(equalToConstant: 200)
+        commentsTableViewHeightConstraint.isActive = true
+        
         
         
         
@@ -376,6 +416,10 @@ class AdViewController: CardViewController {
         
         membersTableView.isScrollEnabled = false
         membersTableView.separatorInset = .zero
+        
+        commentsTableView.isScrollEnabled = false
+        commentsTableView.separatorInset = .zero
+        commentsTableView.rowHeight = UITableView.automaticDimension
         
 
     }
@@ -761,6 +805,7 @@ extension AdViewController: APIClientDelegate {
             membersTableView.reloadSections(IndexSet(integer: 0), with: .fade)
             membersTableViewHeightConstraint.constant = CGFloat(members.count) * membersTableViewRowHeight
         }
+        commentsTableView.reloadData()
         
         if let userId = ad.userId, userId == PersistentStore.shared.user!.id {
             isViewerOwner = true
@@ -848,7 +893,9 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
     
     
     func textViewDidChange(_ textView: UITextView) {
+        
         if textView === descriptionTextView {
+            
             if textView.text != "" {
                 descriptionPlaceholderLabel.isHidden = true
             } else {
@@ -858,9 +905,39 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
             DispatchQueue.main.asyncAfter(deadline: waitTime, execute: {
                 self.adjustContentLayout()
             })
+            
+            checkIfCanPublish()
+
+        } else if textView === commentTextView {
+            
+            if !commentTextView.text.isEmpty {
+                commentPlaceholderLabel.isHidden = true
+            } else {
+                commentPlaceholderLabel.isHidden = false
+            }
+            
+            let actualHeight = commentTextView.frame.size.height
+            let calculatedHeight = commentTextView.sizeThatFits(commentTextView.frame.size).height
+            
+            if actualHeight != calculatedHeight {
+                
+                UIView.setAnimationsEnabled(false)
+                
+                commentsTableView.beginUpdates()
+                commentsTableView.endUpdates()
+                
+                UIView.setAnimationsEnabled(true)
+            }
+            
         }
         
-        checkIfCanPublish()
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView === commentTextView {
+            let bottomOffset = CGPoint(x: 0, y: containerView.contentSize.height - containerView.bounds.size.height + 160)
+            containerView.setContentOffset(bottomOffset, animated: true)
+        }
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {
@@ -905,55 +982,86 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView === membersTableView {
             return members.count
+        } else if tableView === commentsTableView {
+            return comments.count + 1
         }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let participant = members[indexPath.row]
-        
-        if participant.type == .user || participant.type == .organization {
-            let cell = membersTableView.dequeueReusableCell(withIdentifier: memberCellId, for: indexPath) as! UserTableViewCell
+        if tableView === membersTableView {
             
-            var name: String?
-            var surname: String?
-            var detailInfo: String?
             
-            if let user = participant.content as? User {
+            let participant = members[indexPath.row]
+            
+            if participant.type == .user || participant.type == .organization {
+                let cell = membersTableView.dequeueReusableCell(withIdentifier: memberCellId, for: indexPath) as! UserTableViewCell
                 
-                if user.id! == advertisement?.userId {
+                var name: String?
+                var surname: String?
+                var detailInfo: String?
+                
+                if let user = participant.content as? User {
+                    
+                    if user.id! == advertisement?.userId {
+                        detailInfo = Localizer.string(for: .adEditorCreator)
+                    }
+                    name = user.firstName
+                    surname = user.lastName
+                    
+                } else if let organization = participant.content as? Organization {
+                    
                     detailInfo = Localizer.string(for: .adEditorCreator)
+                    name = organization.name
+                    
                 }
-                name = user.firstName
-                surname = user.lastName
                 
-            } else if let organization = participant.content as? Organization {
                 
-                detailInfo = Localizer.string(for: .adEditorCreator)
-                name = organization.name
+                cell.initialsLabel.text = String(name!.prefix(1)) + (surname?.prefix(1) ?? "")
+                cell.nameLabel.text = (name ?? "") + " " + (surname ?? "")
+                cell.nameLabel.font = .preferredFont(for: .body, weight: .medium)
+                cell.detailTextLabel?.text = detailInfo
                 
+                cell.selectionStyle = .none
+                
+                return cell
             }
             
+            let cell = membersTableView.dequeueReusableCell(withIdentifier: memberCurrentUserCellId, for: indexPath) as! CurrentUserAdTableViewCell
             
-            cell.initialsLabel.text = String(name!.prefix(1)) + (surname?.prefix(1) ?? "")
-            cell.nameLabel.text = (name ?? "") + " " + (surname ?? "")
-            cell.nameLabel.font = .preferredFont(for: .body, weight: .medium)
-            cell.detailTextLabel?.text = detailInfo
+            let currentUser = PersistentStore.shared.user!
+            cell.initialsLabel.text = String(currentUser.firstName.prefix(1)) + currentUser.lastName.prefix(1)
             
-            cell.selectionStyle = .none
+            cell.nameLabel.textColor = .globalTintColor
+            cell.nameLabel.text = Localizer.string(for: .adEditorJoinAd) + "..."
+            
+            return cell
+            
+            
+            
+        } else if tableView === commentsTableView {
+            if indexPath.row == comments.count {
+                let inputCell = commentsTableView.dequeueReusableCell(withIdentifier: commentInputCellId, for: indexPath) as! TableViewCellWithTextViewInput
+                
+                inputCell.minimumHeightConstant.isActive = false
+                
+                inputCell.placeholderLabel.text = Localizer.string(for: .adEditorCommentPlaceholder)
+                inputCell.placeholderLabel.isHidden = false
+                
+                commentTextView = inputCell.textViewInput
+                commentTextView.delegate = self
+                
+                commentPlaceholderLabel = inputCell.placeholderLabel
+                
+                return inputCell
+            }
+            
+            let cell = commentsTableView.dequeueReusableCell(withIdentifier: commentCellId, for: indexPath)
             
             return cell
         }
         
-        let cell = membersTableView.dequeueReusableCell(withIdentifier: memberCurrentUserCellId, for: indexPath) as! CurrentUserAdTableViewCell
-        
-        let currentUser = PersistentStore.shared.user!
-        cell.initialsLabel.text = String(currentUser.firstName.prefix(1)) + currentUser.lastName.prefix(1)
-        
-        cell.nameLabel.textColor = .globalTintColor
-        cell.nameLabel.text = Localizer.string(for: .adEditorJoinAd) + "..."
-        
-        return cell
+        return UITableViewCell(style: .default, reuseIdentifier: nil)
         
     }
 }

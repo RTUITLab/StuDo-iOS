@@ -206,6 +206,10 @@
 	<string>Creator</string>
 	<key>adEditorJoinAd</key>
 	<string>I&apos;m in too</string>
+	<key>adEditorComments</key>
+	<string>Comments</string>
+	<key>adEditorCommentPlaceholder</key>
+	<string>Write your comment</string>
 	<key>organizationTitleAllOrganizations</key>
 	<string>All Groups</string>
 	<key>organizationTitleMyOrganizations</key>

@@ -124,6 +124,8 @@ enum LozalizerString: String {
     case adEditorPublishAdAlertMessage
     case adEditorCreator
     case adEditorJoinAd
+    case adEditorComments
+    case adEditorCommentPlaceholder
     
     case organizationTitleAllOrganizations
     case organizationTitleMyOrganizations

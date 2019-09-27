@@ -59,10 +59,13 @@ class TableViewCellWithTextViewInput: UITableViewCell {
     
     /**
      - Important: Placeholder handling (i.e. appearing and disappearing on appropriate time) must be implemented in the **parent controller**!
+     - Note: Initially is hidden.
      */
     let placeholderLabel = UILabel()
     
     let textViewInput = UITextView()
+    
+    var minimumHeightConstant: NSLayoutConstraint!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -73,7 +76,9 @@ class TableViewCellWithTextViewInput: UITableViewCell {
         textViewInput.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
         textViewInput.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
         textViewInput.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
-        textViewInput.heightAnchor.constraint(greaterThanOrEqualToConstant: 44 * 2).isActive = true
+        
+        minimumHeightConstant = textViewInput.heightAnchor.constraint(greaterThanOrEqualToConstant: 44 * 2)
+        minimumHeightConstant.isActive = true
         
         contentView.addSubview(placeholderLabel)
         placeholderLabel.translatesAutoresizingMaskIntoConstraints = false

@@ -20,20 +20,20 @@
 	<string>Действующий пароль</string>
 	<key>authPasswordRestorationAlertMessage</key>
 	<string>Для восстановления пароля следуйте инструкциям, отправленным на Ваш почтовый адрес.</string>
-	<key>passwordRepeatNew</key>
-	<string>Введите новый пароль ещё раз</string>
+	<key>adEditorJoinAd</key>
+	<string>Я тоже участвую</string>
+	<key>adEditorCommentPlaceholder</key>
+	<string>Оставить комментарий</string>
+	<key>adEditorComments</key>
+	<string>Комментарии</string>
 	<key>settingsAccentColor</key>
 	<string>Цветовая схема</string>
 	<key>settingsTitle</key>
 	<string>Настройки</string>
 	<key>search</key>
 	<string>Найти</string>
-	<key>adEditorCreator</key>
-	<string>Создатель</string>
 	<key>organizationInfoHeaderTitle</key>
 	<string>Организация</string>
-	<key>adEditorJoinAd</key>
-	<string>Я тоже участвую</string>
 	<key>adEditorEndDateLabel</key>
 	<string>Актуально до</string>
 	<key>accountProfileSectionDescription</key>
@@ -46,10 +46,12 @@
 	<string>Описание</string>
 	<key>aboutRTULab</key>
 	<string>Сообщество RTU IT Lab</string>
-	<key>adEditorDurationLabel</key>
-	<string>Продолжительность</string>
+	<key>passwordRepeatNew</key>
+	<string>Введите новый пароль ещё раз</string>
 	<key>adEditorDescriptionPlaceholder</key>
 	<string>Текст Вашего объявления. Первый параграф будет использоваться в качестве краткого описания.</string>
+	<key>adEditorDurationLabel</key>
+	<string>Продолжительность</string>
 	<key>accountTitle</key>
 	<string>Аккаунт</string>
 	<key>profileNamePlaceholder</key>
@@ -206,6 +208,8 @@
 	<string>Событие, указанное в данном объявлении, начинается через 15 минут.</string>
 	<key>accountSettings</key>
 	<string>Настройки</string>
+	<key>adEditorCreator</key>
+	<string>Создатель</string>
 	<key>passwordEnterNew</key>
 	<string>Введите новый пароль</string>
 	<key>accountOrganizations</key>
