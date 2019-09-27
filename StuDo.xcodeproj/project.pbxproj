@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		49034AF0232B9BE800749D18 /* UserPublicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49034AEF232B9BE800749D18 /* UserPublicController.swift */; };
+		491BFCEF233BE72E002CF4AE /* AdDescriptionTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */; };
 		491DCA8C231C089D00A78111 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DCA8B231C089D00A78111 /* UIColorExtension.swift */; };
 		4928D43622A3ED9700F4D703 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4928D43522A3ED9700F4D703 /* DataModel.swift */; };
 		4933A91D232A667F00A09646 /* AdTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4933A91C232A667F00A09646 /* AdTableViewCell.xib */; };
@@ -82,6 +83,7 @@
 
 /* Begin PBXFileReference section */
 		49034AEF232B9BE800749D18 /* UserPublicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPublicController.swift; sourceTree = "<group>"; };
+		491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdDescriptionTextView.swift; sourceTree = "<group>"; };
 		491DCA8B231C089D00A78111 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		4928D43522A3ED9700F4D703 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		4933A91C232A667F00A09646 /* AdTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdTableViewCell.xib; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 				4933A920232A6C2800A09646 /* AdTableViewCell.swift */,
 				4933A91C232A667F00A09646 /* AdTableViewCell.xib */,
 				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
+				491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -598,6 +601,7 @@
 				4973AD23231D50DF00B4B578 /* OrganizationListController.swift in Sources */,
 				49C85B2522D8C2E800578F39 /* BasicTableViewCells.swift in Sources */,
 				49E2DB1822FDBD1E0015DCD8 /* PasswordTableViewController.swift in Sources */,
+				491BFCEF233BE72E002CF4AE /* AdDescriptionTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

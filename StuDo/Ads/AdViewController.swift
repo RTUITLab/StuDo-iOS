@@ -40,12 +40,13 @@ class AdViewController: CardViewController {
             
             if let description = ad.description {
                 if description.contains(ad.shortDescription) {
-                    descriptionTextView.text = description
+                    descriptionTextView.attributedText = NSAttributedString(string: description)
                 } else {
-                    descriptionTextView.text = ad.shortDescription + "\n\n" + description
+                    let fullDescription = ad.shortDescription + "\n\n" + description
+                    descriptionTextView.attributedText = NSAttributedString(string: fullDescription)
                 }
             } else {
-                descriptionTextView.text = ad.shortDescription
+                descriptionTextView.attributedText = NSAttributedString(string: ad.shortDescription)
             }
             
             additionalInfoLabel.attributedText = TextFormatter.additionalInfoAttributedString(for: ad, style: .body)
@@ -79,7 +80,7 @@ class AdViewController: CardViewController {
     // MARK: Visible properties
     
     let nameTextField = UITextField()
-    let descriptionTextView = UITextView()
+    let descriptionTextView = AdDescriptionTextView()
     let descriptionPlaceholderLabel = UILabel()
     let additionalInfoLabel = UILabel()
     let beginDateButton: DateButton!
@@ -751,5 +752,31 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
         }
         
         checkIfCanPublish()
+    }
+    
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        if textView === descriptionTextView && currentMode == .editing {
+            
+//            if let selectedRange = descriptionTextView.selectedTextRange, !selectedRange.isEmpty {
+//                let boldItem = UIMenuItem(title: "Bold", action: #selector(toggleBoldTextInDescriptionTextView))
+//                UIMenuController.shared.menuItems = [boldItem]
+//                
+//                return
+//            }
+            
+        }
+        
+        UIMenuController.shared.menuItems = []
+
+    }
+    
+    @objc func toggleBoldTextInDescriptionTextView() {
+        if let selectedRange = descriptionTextView.selectedRangeAsNSRange {
+            if let descriptionString = descriptionTextView.text {
+                let attrString = NSMutableAttributedString(string: descriptionString)
+                attrString.addAttributes([.font: UIFont.preferredFont(for: .body, weight: .bold)], range: selectedRange)
+                descriptionTextView.attributedText = attrString
+            }
+        }
     }
 }
