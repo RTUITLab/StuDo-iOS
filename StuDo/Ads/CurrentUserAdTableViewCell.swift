@@ -23,6 +23,8 @@ class CurrentUserAdTableViewCell: UserTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        accessoryType = .disclosureIndicator
+        
         let gradients = [orangeGradient, pinkGradient, ocyanGradient, greenGradient]
         
         var gradientIndex: Int!

@@ -105,6 +105,9 @@ class AdViewController: CardViewController {
     let membersTableView = UITableView(frame: .zero, style: .plain)
     var members = [AdParticipant]()
     
+    
+    let nonEditingInfoContainer = UIView()
+    
     enum AdParticipantType {
         case user
         case organization
@@ -129,9 +132,9 @@ class AdViewController: CardViewController {
     override var contentHeight: CGFloat {
         var additionalHeight: CGFloat!
         if currentMode == .viewing {
-            additionalHeight = additionalInfoLabel.frame.height * 3
+            additionalHeight = nonEditingInfoContainer.frame.height + 25
         } else {
-            additionalHeight = beginDateButton.frame.height + beginDateButtonTopPadding + 25
+            additionalHeight = beginDateButton.frame.height + beginDateButtonTopPadding + 35
         }
         
         let calculatedHeight = headerView.frame.height + nameTextFieldHeight + descriptionTextView.frame.height + view.safeAreaInsets.bottom + additionalHeight
@@ -212,18 +215,25 @@ class AdViewController: CardViewController {
         descriptionPlaceholderLabel.topAnchor.constraint(equalTo: descriptionTextView.topAnchor, constant: 7).isActive = true
         
         
-        contentView.addSubview(additionalInfoLabel)
+        contentView.addSubview(nonEditingInfoContainer)
+        nonEditingInfoContainer.translatesAutoresizingMaskIntoConstraints = false
+        nonEditingInfoContainer.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor).isActive = true
+        nonEditingInfoContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        nonEditingInfoContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        
+        nonEditingInfoContainer.addSubview(additionalInfoLabel)
         additionalInfoLabel.translatesAutoresizingMaskIntoConstraints = false
         additionalInfoLabel.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor).isActive = true
         additionalInfoLabel.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
         additionalInfoLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 7).isActive = true
         
         
-        contentView.addSubview(membersTableView)
+        nonEditingInfoContainer.addSubview(membersTableView)
         membersTableView.translatesAutoresizingMaskIntoConstraints = false
         membersTableView.topAnchor.constraint(equalTo: additionalInfoLabel.lastBaselineAnchor, constant: horizontalSpace * 2).isActive = true
         membersTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         membersTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        membersTableView.bottomAnchor.constraint(equalTo: nonEditingInfoContainer.bottomAnchor).isActive = true
         
         membersTableViewHeightConstraint = membersTableView.heightAnchor.constraint(equalToConstant: membersTableViewRowHeight)
         membersTableViewHeightConstraint.isActive = true
@@ -231,7 +241,7 @@ class AdViewController: CardViewController {
         
         let separatorView = UIView()
         separatorView.backgroundColor = UIColor(red:0.793, green:0.788, blue:0.805, alpha:1.000)
-        contentView.addSubview(separatorView)
+        nonEditingInfoContainer.addSubview(separatorView)
         separatorView.translatesAutoresizingMaskIntoConstraints = false
         separatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         separatorView.bottomAnchor.constraint(equalTo: membersTableView.topAnchor).isActive = true
@@ -246,7 +256,7 @@ class AdViewController: CardViewController {
         
         dateButtonTopConstraint = beginDateButton.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: beginDateButtonTopPadding)
         
-        dateButtonBottomConstraint = beginDateButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -52)
+        dateButtonBottomConstraint = beginDateButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -18)
         dateButtonBottomConstraint.isActive = true
         
         
@@ -382,7 +392,7 @@ class AdViewController: CardViewController {
         super.adjustContentLayout()
         guard dateButtonTopConstraint != nil else { return }
         
-        if descriptionTextView.frame.maxY >= beginDateButton.frame.minX {
+        if descriptionTextView.frame.maxY <= beginDateButton.frame.minY {
             dateButtonBottomConstraint.isActive = true
             dateButtonTopConstraint.isActive = false
         } else {
@@ -426,8 +436,6 @@ class AdViewController: CardViewController {
         
         nameTextField.isUserInteractionEnabled = true
         descriptionTextView.isEditable = true
-        additionalInfoLabel.isHidden = true
-        membersTableView.isHidden = true
         
         beginDateButton.isHidden = false
         endDateButton.isHidden = false
@@ -439,8 +447,10 @@ class AdViewController: CardViewController {
             self.cancelEditingButton.alpha = 1
             self.beginDateButton.alpha = 1
             self.endDateButton.alpha = 1
+            self.nonEditingInfoContainer.alpha = 0
         }) { _ in
             self.moreButton.isHidden = true
+            self.nonEditingInfoContainer.isHidden = true
         }
         
         if publishButton.isHidden {
@@ -460,8 +470,8 @@ class AdViewController: CardViewController {
         
         nameTextField.isUserInteractionEnabled = false
         descriptionTextView.isEditable = false
-        additionalInfoLabel.isHidden = false
-        membersTableView.isHidden = false
+        
+        nonEditingInfoContainer.isHidden = false
         
         self.moreButton.isHidden = false
         UIView.animate(withDuration: 0.3, animations: {
@@ -470,6 +480,7 @@ class AdViewController: CardViewController {
             self.cancelEditingButton.alpha = 0
             self.beginDateButton.alpha = 0
             self.endDateButton.alpha = 0
+            self.nonEditingInfoContainer.alpha = 1
         }) { _ in
             self.publishButton.isHidden = true
             self.cancelEditingButton.isHidden = true
@@ -742,11 +753,13 @@ extension AdViewController: APIClientDelegate {
                 members = [creator]
             }
             membersTableView.reloadSections(IndexSet(integer: 0), with: .fade)
+            membersTableViewHeightConstraint.constant = CGFloat(members.count) * membersTableViewRowHeight
         } else if let organization = ad.organization {
             let creator = AdParticipant(type: .organization, content: organization)
             let joinAdCell = AdParticipant(type: .other, content: nil)
             members = [creator, joinAdCell]
             membersTableView.reloadSections(IndexSet(integer: 0), with: .fade)
+            membersTableViewHeightConstraint.constant = CGFloat(members.count) * membersTableViewRowHeight
         }
         
         if let userId = ad.userId, userId == PersistentStore.shared.user!.id {
@@ -891,7 +904,6 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView === membersTableView {
-            membersTableViewHeightConstraint.constant = CGFloat(members.count) * membersTableViewRowHeight
             return members.count
         }
         return 0

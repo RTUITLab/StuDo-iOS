@@ -195,7 +195,7 @@ class CardViewController: UIViewController {
         
         containerView.contentSize = containerContentSize
         cardView.frame = CGRect(origin: .zero, size: cardViewSize)
-        contentView.frame = CGRect(origin: CGPoint(x: 0, y: cardTopOffset), size: contentSize)
+        contentView.frame = CGRect(origin: CGPoint(x: 0, y: cardTopOffset), size: CGSize(width: contentSize.width, height: contentSize.height - cardTopOffset))
         
     }
     
