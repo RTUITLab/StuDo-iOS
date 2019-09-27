@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MarkdownKit
 
 
 protocol AdViewControllerDelegate: class {
@@ -38,16 +39,23 @@ class AdViewController: CardViewController {
         if let ad = advertisement {
             nameTextField.text = ad.name
             
+            var descriptionText: String!
             if let description = ad.description {
-                if description.contains(ad.shortDescription) {
-                    descriptionTextView.attributedText = NSAttributedString(string: description)
-                } else {
-                    let fullDescription = ad.shortDescription + "\n\n" + description
-                    descriptionTextView.attributedText = NSAttributedString(string: fullDescription)
-                }
+                descriptionText = description
             } else {
-                descriptionTextView.attributedText = NSAttributedString(string: ad.shortDescription)
+                descriptionText = ad.shortDescription
             }
+            
+            let markdownParser = MarkdownParser(font: UIFont.preferredFont(for: .body, weight: .light))
+            markdownParser.enabledElements = .all
+            markdownParser.bold.font = UIFont.preferredFont(for: .body, weight: .medium)
+            markdownParser.italic.font = UIFont.preferredFont(for: .body, weight: .light).italic()
+            markdownParser.header.font = UIFont.preferredFont(for: .title3, weight: .medium)
+            markdownParser.quote.font = UIFont.preferredFont(for: .body, weight: .light).italic()
+            markdownParser.quote.color = .lightGray
+            markdownParser.link.color = .globalTintColor
+            
+            descriptionTextView.attributedText = markdownParser.parse(descriptionText)
             
             additionalInfoLabel.attributedText = TextFormatter.additionalInfoAttributedString(for: ad, style: .body)
             beginDateButton.date = ad.beginTime
@@ -149,21 +157,20 @@ class AdViewController: CardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let horizontalSpace: CGFloat = 8
+        let horizontalSpace: CGFloat = 16
         
         contentView.addSubview(nameTextField)
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16).isActive = true
         nameTextField.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16).isActive = true
-        nameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: horizontalSpace).isActive = true
-        nameTextField.heightAnchor.constraint(equalToConstant: nameTextFieldHeight).isActive = true
+        nameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: horizontalSpace / 2).isActive = true
         
         
         contentView.addSubview(descriptionTextView)
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
         descriptionTextView.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor, constant: -4).isActive = true
         descriptionTextView.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
-        descriptionTextView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: horizontalSpace).isActive = true
+        descriptionTextView.topAnchor.constraint(equalTo: nameTextField.lastBaselineAnchor, constant: horizontalSpace).isActive = true
         
         
         
@@ -282,7 +289,7 @@ class AdViewController: CardViewController {
         nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         nameTextField.delegate = self
         
-        nameTextField.font = .preferredFont(forTextStyle: .headline)
+        nameTextField.font = .preferredFont(for: .title2, weight: .bold)
         nameTextField.placeholder = Localizer.string(for: .adEditorNamePlaceholder)
         nameTextField.returnKeyType = .next
         nameTextField.autocapitalizationType = .sentences
@@ -350,6 +357,10 @@ class AdViewController: CardViewController {
             title = Localizer.string(for: .adEditorCreationModeTitle)
         } else {
             title = Localizer.string(for: .adEditorEditingModeTitle)
+        }
+        
+        if let ad = advertisement, let description = ad.description, description != descriptionTextView.attributedText.string {
+            descriptionTextView.attributedText = NSAttributedString(string: description, attributes: [.font: UIFont.preferredFont(for: .body, weight: .light)])
         }
         
         nameTextField.isUserInteractionEnabled = true
@@ -524,7 +535,13 @@ class AdViewController: CardViewController {
 
         if let oldAd = advertisement {
             
-            let adToUpdate = Ad(id: oldAd.id, name: title, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
+            // short description shouldn't support markdown
+            let parser = MarkdownParser()
+            let parsedArrtibutedString = parser.parse(shortDescription)
+            let shortDescriptionNoFormatting = parsedArrtibutedString.string
+            
+            
+            let adToUpdate = Ad(id: oldAd.id, name: title, description: description, shortDescription: shortDescriptionNoFormatting, beginTime: beginTime, endTime: endTime)
             
             client.replaceAd(with: adToUpdate)
             RootViewController.startLoadingIndicator()
@@ -684,11 +701,11 @@ extension AdViewController: APIClientDelegate {
     }
     
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {
-        set(advertisement: updatedAd)
         delegate?.adViewController(self, didUpdateAd: updatedAd)
-        RootViewController.stopLoadingIndicator(with: .success) {
-            self.disableEditingMode(completion: nil)
-        }
+        RootViewController.stopLoadingIndicator(with: .success)
+        
+        self.set(advertisement: updatedAd)
+        self.disableEditingMode(completion: nil)
     }
     
     func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {
@@ -760,7 +777,7 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
 //            if let selectedRange = descriptionTextView.selectedTextRange, !selectedRange.isEmpty {
 //                let boldItem = UIMenuItem(title: "Bold", action: #selector(toggleBoldTextInDescriptionTextView))
 //                UIMenuController.shared.menuItems = [boldItem]
-//                
+//
 //                return
 //            }
             
@@ -771,12 +788,14 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
     }
     
     @objc func toggleBoldTextInDescriptionTextView() {
-        if let selectedRange = descriptionTextView.selectedRangeAsNSRange {
-            if let descriptionString = descriptionTextView.text {
-                let attrString = NSMutableAttributedString(string: descriptionString)
-                attrString.addAttributes([.font: UIFont.preferredFont(for: .body, weight: .bold)], range: selectedRange)
-                descriptionTextView.attributedText = attrString
-            }
+        if var description = descriptionTextView.text, let selectedRange = descriptionTextView.selectedRangeAsNSRange {
+            
+            
+            let selectedString = description.substring(with: Range(selectedRange, in: description)!)
+            
+            let resultingDescription = description.replacingCharacters(in: Range(selectedRange, in: description)!, with: "**\(selectedString)**")
+
+            descriptionTextView.attributedText = NSAttributedString(string: resultingDescription, attributes: [.font: UIFont.preferredFont(for: .body, weight: .light)])
         }
     }
 }
