@@ -31,6 +31,7 @@
 		4973AD20231D4A0300B4B578 /* DateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD1F231D4A0300B4B578 /* DateFormatterExtension.swift */; };
 		4973AD23231D50DF00B4B578 /* OrganizationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD22231D50DF00B4B578 /* OrganizationListController.swift */; };
 		4973AD25231D58DD00B4B578 /* OrganizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */; };
+		499075D8233E642B0045DE6A /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D7233E642B0045DE6A /* UserTableViewCell.swift */; };
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
 		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
 		49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF624231C1C4200AA3FCB /* DateButton.swift */; };
@@ -119,6 +120,7 @@
 		4973AD1F231D4A0300B4B578 /* DateFormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterExtension.swift; sourceTree = "<group>"; };
 		4973AD22231D50DF00B4B578 /* OrganizationListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationListController.swift; sourceTree = "<group>"; };
 		4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationViewController.swift; sourceTree = "<group>"; };
+		499075D7233E642B0045DE6A /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
 		49ADF624231C1C4200AA3FCB /* DateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateButton.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 			isa = PBXGroup;
 			children = (
 				49034AEF232B9BE800749D18 /* UserPublicController.swift */,
+				499075D7233E642B0045DE6A /* UserTableViewCell.swift */,
 			);
 			path = Users;
 			sourceTree = "<group>";
@@ -458,7 +461,6 @@
 				2FE429D61770B68559E85652 /* Pods-StuDoUITests.debug.xcconfig */,
 				92FE8AEEC3A250B32B848A84 /* Pods-StuDoUITests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -692,6 +694,7 @@
 			files = (
 				4973AD20231D4A0300B4B578 /* DateFormatterExtension.swift in Sources */,
 				49E61DD523185CB1007BC4FF /* LoadingIndicator.swift in Sources */,
+				499075D8233E642B0045DE6A /* UserTableViewCell.swift in Sources */,
 				49BBB99B2306E25600883EB9 /* NavigationMenu.swift in Sources */,
 				49D76A82231059B9002B22D4 /* NotificationExtension.swift in Sources */,
 				4933A91F232A6A0300A09646 /* TextViewNoPadding.swift in Sources */,

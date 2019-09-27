@@ -43,7 +43,7 @@ class OrganizationViewController: UITableViewController {
     let infoPositionsNotMember: [[InfoUnit]] = [[.name, .description, .join], [.members], [.ads]]
     let infoPositionsMember: [[InfoUnit]] = [[.name, .description], [.members], [.ads]]
     let infoPositionsEditing: [[InfoUnit]] = [[.name, .description, .delete], [.members]]
-
+    
     let client = APIClient()
     
     var editButton: UIBarButtonItem!
@@ -62,8 +62,8 @@ class OrganizationViewController: UITableViewController {
         case unknown
     }
     var currentUserState: UserState = .unknown
-        
-        
+    
+    
     var canUserEditMembers = false
     var currentUserAsMember: OrganizationMember? = nil {
         didSet {
@@ -112,19 +112,19 @@ class OrganizationViewController: UITableViewController {
     
     
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.keyboardDismissMode = .interactive
         tableView.allowsSelectionDuringEditing = true
-
+        
         tableView.register(TableViewCellWithInputField.self, forCellReuseIdentifier: textFieldCellId)
         tableView.register(TableViewCellWithTextViewInput.self, forCellReuseIdentifier: textViewCellId)
-        tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: userCellId)
+        tableView.register(UserTableViewCell.self, forCellReuseIdentifier: userCellId)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: actionCellId)
         tableView.register(UINib(nibName: "AdTableViewCell", bundle: nil), forCellReuseIdentifier: adCellId)
-
+        
         tabBarController?.hideTabBar()
         
     }
@@ -145,7 +145,7 @@ class OrganizationViewController: UITableViewController {
             nameTextField.becomeFirstResponder()
         }
         tabBarController?.hideTabBar()
-
+        
     }
     
     
@@ -166,7 +166,7 @@ class OrganizationViewController: UITableViewController {
             navigationItem.rightBarButtonItem = editButton
             tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
             tableView.insertSections(IndexSet(integer: 2), with: .fade)
-
+            
             if let editedName = nameTextField.text, let editedDescription = descriptionTextView.text {
                 if editedName != currentOrganization!.name || editedDescription != currentOrganization!.description {
                     client.replaceOrganization(with: Organization(id: currentOrganization!.id, name: nameTextField.text ?? "", description: descriptionTextView.text ?? ""))
@@ -259,15 +259,17 @@ class OrganizationViewController: UITableViewController {
         let info = getInfo(for: indexPath)
         
         if info == .members {
-            let cell = tableView.dequeueReusableCell(withIdentifier: userCellId, for: indexPath)
-
+            let cell = tableView.dequeueReusableCell(withIdentifier: userCellId, for: indexPath) as! UserTableViewCell
+            
             let currentMember = organizationMembers[indexPath.row]
             if currentMember.user.id! == currentOrganization!.creatorId {
                 cell.detailTextLabel?.text = Localizer.string(for: .organizationAdmin)
                 cell.detailTextLabel?.textColor = .globalTintColor
                 creatorCellRow = indexPath.row
             }
-            cell.textLabel?.text = "\(currentMember.user.firstName) \(currentMember.user.lastName)"
+            
+            cell.initialsLabel.text = String(currentMember.user.firstName.prefix(1)) + currentMember.user.lastName.prefix(1)
+            cell.nameLabel.text = "\(currentMember.user.firstName) \(currentMember.user.lastName)"
             
             return cell
         } else if info == .name {
@@ -365,7 +367,7 @@ class OrganizationViewController: UITableViewController {
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
+    
 }
 
 
