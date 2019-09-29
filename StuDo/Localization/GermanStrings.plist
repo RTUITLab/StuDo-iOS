@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>done</key>
+	<string>Fertig</string>
+	<key>save</key>
+	<string>Speichern</string>
+	<key>back</key>
+	<string>Zurück</string>
+	<key>okay</key>
+	<string>OK</string>
+	<key>cancel</key>
+	<string>Abbrechen</string>
+	<key>delete</key>
+	<string>Löschen</string>
+	<key>edit</key>
+	<string>Bearbeiten</string>
+	<key>create</key>
+	<string>Aufgeben</string>
+	<key>search</key>
+	<string>Suchen</string>
+	<key>redThemeName</key>
+	<string>Rot</string>
+	<key>orangeThemeName</key>
+	<string>Orange</string>
+	<key>yellowThemeName</key>
+	<string>Gelb</string>
+	<key>greenThemeName</key>
+	<string>Grün</string>
+	<key>tealBlueThemeName</key>
+	<string>Blaugrün</string>
+	<key>blueThemeName</key>
+	<string>Blau</string>
+	<key>purpleThemeName</key>
+	<string>Lila</string>
+	<key>pinkThemeName</key>
+	<string>Rosa</string>
+	<key>feedTitleAllAds</key>
+	<string>Neuigkeiten</string>
+	<key>feedTitleMyAds</key>
+	<string>Meine Anzeigen</string>
+	<key>feedNoAdsTitle</key>
+	<string>Keine Anzeigen dabei.</string>
+	<key>feedNoAdsDescription</key>
+	<string>Keine Anzeigen noch da. Mach die Erste!</string>
+	<key>feedNoOwnAdsDescription</key>
+	<string>Die von Ihnen veröffentlichten Anzeigen erscheinen hier.</string>
+	<key>feedNoOrganizationAdsDescription</key>
+	<string>Sie können im Namen dieser Gruppe veröffentlichen.</string>
+	<key>feedCreatorPage</key>
+	<string>Autorseite anzeigen</string>
+	<key>feedPublishedBy</key>
+	<string>Veröffentlicht von</string>
+	<key>navigationMenuAllAds</key>
+	<string>Alle Neuigkeiten</string>
+	<key>navigationMenuMyAds</key>
+	<string>Nur Ihres anzeigen</string>
+	<key>navigationMenuOrganizationAds</key>
+	<string>Die Anzeigen meiner Organization</string>
+	<key>navigationMenuBookmarks</key>
+	<string>Gespeicherte Quellen</string>
+	<key>accountTitle</key>
+	<string>Account</string>
+	<key>accountMyProfiles</key>
+	<string>Meine Profile</string>
+	<key>accountAddNewProfile</key>
+	<string>Neuen angeben</string>
+	<key>accountProfileSectionDescription</key>
+	<string>Ihre Profile helfen anderen, Sie anhand Ihrer Fähigkeiten zu finden. Fügen Sie so viele Profile hinzu, wie Sie möchten.</string>
+	<key>accountOrganizations</key>
+	<string>Gruppen</string>
+	<key>accountOrganizationsSectionDescription</key>
+	<string>Sie können verschiedenen Gruppen beitreten und das Recht erhalten, Anzeigen im Namen der Gruppe zu veröffentlichen..</string>
+	<key>accountSettings</key>
+	<string>Einstellungen</string>
+	<key>accountAbout</key>
+	<string>Mehr über die App</string>
+	<key>settingsTitle</key>
+	<string>Einstellungen</string>
+	<key>settingsLanguage</key>
+	<string>Aktuelle Sprache</string>
+	<key>settingsAccentColor</key>
+	<string>Accentsfarbe</string>
+	<key>aboutTitle</key>
+	<string>Info</string>
+	<key>aboutVersion</key>
+	<string>Version</string>
+	<key>aboutFeedback</key>
+	<string>Feedback abgeben</string>
+	<key>aboutRate</key>
+	<string>Auf App Store bewerten</string>
+	<key>aboutRTULab</key>
+	<string>RTU IT Lab</string>
+	<key>accountDetailFirstName</key>
+	<string>Name</string>
+	<key>accountDetailLastName</key>
+	<string>Nachname</string>
+	<key>accountDetailNameSectionDescription</key>
+	<string>Bearbeiten Sie Ihren Namen und Nachnamen.</string>
+	<key>accountDetailStudentID</key>
+	<string>Ihr Studenten-ID</string>
+	<key>accountDetailEmail</key>
+	<string>Email ändern</string>
+	<key>accountDetailPassword</key>
+	<string>Passwort ändern</string>
+	<key>accountDetailLogout</key>
+	<string>Ausloggen</string>
+	<key>accountDetailChangeAlertMessage</key>
+	<string>Sie haben Ihre persönlichen Daten geändert. Möchten Sie die Veränderung speichern?</string>
+	<key>accountDetailChangeAlertCancel</key>
+	<string>Nicht speichern</string>
+	<key>emailChangeSectionHeader</key>
+	<string>Neue Email Adresse</string>
+	<key>emailChangeSectionDescription</key>
+	<string>Sie bekommen bald einen Bestätigungslink.</string>
+	<key>emailChangeAlertMessage</key>
+	<string>Wir haben Ihnen einen Bestätigungslink gesendet. Bestätigen Sie es, um den E-Mail mit Ihrem Konto zu verknüpfen.</string>
+	<key>passwordCurrentSectionHeader</key>
+	<string>Aktuelles Passwort</string>
+	<key>passwordEnterCurrent</key>
+	<string>Geben Sie Ihr aktuelles Passwort ein</string>
+	<key>passwordNewSectionHeader</key>
+	<string>Neues Passwort</string>
+	<key>passwordEnterNew</key>
+	<string>Neues Passwort eingeben</string>
+	<key>passwordRepeatNew</key>
+	<string>Neues Passwort noch einmal eingeben</string>
+	<key>passwordNewSectionDescription</key>
+	<string>Ihr Passwort muss mindestens 6 Zeichen erhalten.</string>
+	<key>passwordChangeAlertTitle</key>
+	<string>Passwort geändert!</string>
+	<key>passwordChangeAlertMessage</key>
+	<string>Sie haben Ihr Passwort erfolgreich geändert.</string>
+	<key>profileNameSectionHeader</key>
+	<string>Profilname</string>
+	<key>profileNamePlaceholder</key>
+	<string>Name</string>
+	<key>profileNameSectionFooter</key>
+	<string>Ein kurzer Profilname.</string>
+	<key>profileDescriptionSectionHeader</key>
+	<string>Profilbeschreibung</string>
+	<key>profileDescriptionSectionFooter</key>
+	<string>Beschreiben Sie kurz, wie Sie anderen helfen können.</string>
+	<key>authEmail</key>
+	<string>E-mail</string>
+	<key>authPassword</key>
+	<string>Passwort</string>
+	<key>authRepeatPassword</key>
+	<string>Passwort wiedereingeben</string>
+	<key>authForgotPassword</key>
+	<string>Passwort vergessen?</string>
+	<key>authName</key>
+	<string>Name</string>
+	<key>authSurname</key>
+	<string>Nachname</string>
+	<key>authSignIn</key>
+	<string>Einloggen</string>
+	<key>authSignUp</key>
+	<string>Anmelden</string>
+	<key>authRegistrationAlertTitle</key>
+	<string>Erfolgreich angemeldet!</string>
+	<key>authRegistrationAlertMessage</key>
+	<string>Bestätigen Sie Ihre E-Mail-Adresse, bevor Sie einloggen.</string>
+	<key>authPasswordRestorationAlertMessage</key>
+	<string>Wir haben eine Nachricht an Ihre E-Mail gesendet. Bitte folgen Sie den Anweisungen.</string>
+	<key>adEditorFindPeople</key>
+	<string>Menschen einladen</string>
+	<key>adEditorEditAd</key>
+	<string>Anzeige bearbeiten</string>
+	<key>adEditorDeleteAd</key>
+	<string>Anzeige löschen</string>
+	<key>adEditorDeleteAlertMessage</key>
+	<string>Möchten Sie diese Anzeige wirklich löschen? Das kann nicht rückgängig gemacht werden.</string>
+	<key>adEditorCancelCreatingAlertMessage</key>
+	<string>Möchten Sie die Erstellung der Anzeige wirklich nicht abschließen?</string>
+	<key>adEditorCancelEditingAlertMessage</key>
+	<string>Möchten Sie die Bearbeitung wirklich abbrechen? Nicht gespeicherte Änderungen werden verworfen.</string>
+	<key>adEditorDiscardChanges</key>
+	<string>Änderungen verwerfen</string>
+	<key>adEditorCancelAdCreation</key>
+	<string>Bearbeitung schließen</string>
+	<key>adEditorReturnToEditor</key>
+	<string>Zurück zur Bearbeitung</string>
+	<key>adEditorEditingModeTitle</key>
+	<string>Bearbeitung</string>
+	<key>adEditorCreationModeTitle</key>
+	<string>Neue Anzeige</string>
+	<key>adEditorNamePlaceholder</key>
+	<string>Name für Ihre Anzeige</string>
+	<key>adEditorDescriptionPlaceholder</key>
+	<string>Der Text für Ihre Anzeige. Der erste Absatz wird als kurze Beschreibung verwendet.</string>
+	<key>adEditorBeginDateLabel</key>
+	<string>Anfangsdatum</string>
+	<key>adEditorCreator</key>
+	<string>Autor</string>
+	<key>adEditorEndDateLabel</key>
+	<string>Endtermin</string>
+	<key>adEditorDurationLabel</key>
+	<string>Dauer</string>
+	<key>adEditorJoinAd</key>
+	<string>Ich gehe auch</string>
+	<key>adEditorComments</key>
+	<string>Kommentare</string>
+	<key>adEditorPublishAdAlertMessage</key>
+	<string>Diese Anzeige veröffentlichen als</string>
+	<key>adEditorCommentPlaceholder</key>
+	<string>Schreiben Sie Ihren Kommentar</string>
+	<key>organizationTitleAllOrganizations</key>
+	<string>Alle Gruppen</string>
+	<key>organizationTitleMyOrganizations</key>
+	<string>Nur meine</string>
+	<key>organizationListTitle</key>
+	<string>Gruppen</string>
+	<key>organizationInfoHeaderTitle</key>
+	<string>Hauptinfo</string>
+	<key>organizationNamePlaceholder</key>
+	<string>Name</string>
+	<key>organizationDescriptionPlaceholder</key>
+	<string>Beschreibung</string>
+	<key>organizationMembersHeaderTitle</key>
+	<string>Mitglieder</string>
+	<key>organizationAdmin</key>
+	<string>Admin</string>
+	<key>organizationJoin</key>
+	<string>Gruppe beitreten</string>
+	<key>organizationLeave</key>
+	<string>Gruppe verlassen</string>
+	<key>organizationDeletionAlertMessage</key>
+	<string>Möchten Sie diese Gruppe wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.</string>
+    
+    <key>userPublicProfilesSectionHeader</key>
+    <string>Profile</string>
+    <key>userPublicAdsSectionHeader</key>
+    <string>Anzeigen</string>
+    <key>notificationSetReminder</key>
+    <string>Erinnerung einstellen</string>
+    <key>notificationReminderAlertTitle</key>
+    <string>Erinnere mich an die Veranstaltung...</string>
+    <key>notificationRemindBefore15m</key>
+    <string>15 minuten früher</string>
+    <key>notificationRemindBefore1h</key>
+    <string>1h stunde früher</string>
+    <key>notificationEventReminderMessageBefore15m</key>
+    <string>Die in dieser Anzeige erwähnte Veranstaltung beginnt in 15 Minuten.</string>
+    <key>notificationEventReminderMessageBefore1h</key>
+    <string>Die in dieser Anzeige erwähnte Veranstaltung beginnt in 1 Stunde.</string>
+    <key>notificationsDisabledAlertTitle</key>
+    <string>Benachrichtigungen sind derzeit deaktiviert. Sie können sie in den Einstellungen aktivieren.</string>
+    <key>notificationsDisabledSettings</key>
+    <string>Einstellungen</string>
+</dict>
+</plist>

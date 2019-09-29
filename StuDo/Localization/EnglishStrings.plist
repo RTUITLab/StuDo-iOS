@@ -50,10 +50,6 @@
 	<string>You have the right to publish on behalf of this group.</string>
 	<key>feedPublishedBy</key>
 	<string>Published by</string>
-	<key>feedViewUser</key>
-	<string>View user</string>
-	<key>feedViewOrganization</key>
-	<string>View group</string>
 	<key>feedCreatorPage</key>
 	<string>Show creator&apos;s page</string>
 	<key>navigationMenuAllAds</key>

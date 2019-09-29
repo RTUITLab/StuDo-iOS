@@ -157,6 +157,8 @@ class Localizer: NSObject {
     static func getLocale(for language: StuDoAvailableLanguage) -> Locale {
         if language == .Russian {
             return Locale(identifier: "ru")
+        } else if language == .German {
+            return Locale(identifier: "de")
         }
         return Locale(identifier: "en")
     }
@@ -172,6 +174,8 @@ class Localizer: NSObject {
         switch PersistentStore.shared.currentLanguage {
         case .Russian:
             languageName = "Russian"
+        case .German:
+            languageName = "German"
         default:
             break
         }

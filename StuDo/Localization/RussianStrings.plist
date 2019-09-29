@@ -22,10 +22,6 @@
 	<string>Для восстановления пароля следуйте инструкциям, отправленным на Ваш почтовый адрес.</string>
 	<key>adEditorJoinAd</key>
 	<string>Я тоже участвую</string>
-	<key>adEditorCommentPlaceholder</key>
-	<string>Оставить комментарий</string>
-	<key>adEditorComments</key>
-	<string>Комментарии</string>
 	<key>settingsAccentColor</key>
 	<string>Цветовая схема</string>
 	<key>settingsTitle</key>
@@ -120,6 +116,8 @@
 	<string>Ваш пароль должен иметь длину не менее 6 символов.</string>
 	<key>accountDetailPassword</key>
 	<string>Изменить пароль</string>
+	<key>adEditorComments</key>
+	<string>Комментарии</string>
 	<key>accountDetailChangeAlertMessage</key>
 	<string>Вы изменили информацию о себе. Желаете ли Вы сохранить изменения?</string>
 	<key>accountMyProfiles</key>
@@ -132,10 +130,12 @@
 	<string>В настоящее время уведомления для данного приложения отключены. Вы можете включить их в настройках.</string>
 	<key>adEditorDeleteAlertMessage</key>
 	<string>Вы уверены, что хотите удалить данное объявление? Объявление будет навсегда утеряно.</string>
-	<key>adEditorCancelAdCreation</key>
-	<string>Закрыть редактор</string>
+	<key>adEditorCommentPlaceholder</key>
+	<string>Оставить комментарий</string>
 	<key>back</key>
 	<string>Назад</string>
+	<key>adEditorCancelAdCreation</key>
+	<string>Закрыть редактор</string>
 	<key>authEmail</key>
 	<string>E-mail</string>
 	<key>save</key>
@@ -168,8 +168,6 @@
 	<string>Объявления</string>
 	<key>userPublicProfilesSectionHeader</key>
 	<string>Резюме</string>
-	<key>feedViewUser</key>
-	<string>Показать пользователя</string>
 	<key>authRegistrationAlertTitle</key>
 	<string>Успешная регистрация!</string>
 	<key>emailChangeAlertMessage</key>
@@ -226,8 +224,6 @@
 	<string>Только мои объявления</string>
 	<key>feedNoAdsDescription</key>
 	<string>Никто ещё не опубликовал ни одного объявления. Будьте первым!</string>
-	<key>feedViewOrganization</key>
-	<string>Показать организацию</string>
 	<key>organizationDeletionAlertMessage</key>
 	<string>Вы уверены, что хотите удалить данную организацию? Это действие необратимо.</string>
 	<key>authRegistrationAlertMessage</key>

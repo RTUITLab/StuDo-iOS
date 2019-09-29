@@ -51,6 +51,7 @@
 		49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2622D8D06300578F39 /* GlobalConstants.swift */; };
 		49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C85B2C22D8F64C00578F39 /* AccountHeaderCell.swift */; };
 		49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CAEC8E229D93B00008D809 /* AdViewController.swift */; };
+		49D3A25C2340F8F800FE4731 /* GermanStrings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49D3A25B2340F8F600FE4731 /* GermanStrings.plist */; };
 		49D76A7723102B26002B22D4 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D76A7623102B26002B22D4 /* SettingsViewController.swift */; };
 		49D76A7A23102FD0002B22D4 /* SettingsListViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D76A7923102FD0002B22D4 /* SettingsListViewControllers.swift */; };
 		49D76A7C231050A8002B22D4 /* Localizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D76A7B231050A8002B22D4 /* Localizer.swift */; };
@@ -141,6 +142,7 @@
 		49C85B2622D8D06300578F39 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		49C85B2C22D8F64C00578F39 /* AccountHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeaderCell.swift; sourceTree = "<group>"; };
 		49CAEC8E229D93B00008D809 /* AdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewController.swift; sourceTree = "<group>"; };
+		49D3A25B2340F8F600FE4731 /* GermanStrings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GermanStrings.plist; sourceTree = "<group>"; };
 		49D76A7623102B26002B22D4 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		49D76A7923102FD0002B22D4 /* SettingsListViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsListViewControllers.swift; sourceTree = "<group>"; };
 		49D76A7B231050A8002B22D4 /* Localizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizer.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				49D76A7B231050A8002B22D4 /* Localizer.swift */,
 				49D76A7F231053D2002B22D4 /* EnglishStrings.plist */,
 				49D76A8323105F64002B22D4 /* RussianStrings.plist */,
+				49D3A25B2340F8F600FE4731 /* GermanStrings.plist */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -580,6 +583,7 @@
 				49D76A8423105F64002B22D4 /* RussianStrings.plist in Resources */,
 				49D76A80231053D2002B22D4 /* EnglishStrings.plist in Resources */,
 				493E8AD6228B4356004EC563 /* LaunchScreen.storyboard in Resources */,
+				49D3A25C2340F8F800FE4731 /* GermanStrings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

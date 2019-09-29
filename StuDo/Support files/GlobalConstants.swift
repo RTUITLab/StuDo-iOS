@@ -10,7 +10,7 @@
 enum StuDoAvailableLanguage: String {
     case English = "English"
     case Russian = "Русский"
-//    case German = "Deutsch"
+    case German = "Deutsch"
 }
 
 extension StuDoAvailableLanguage: CaseIterable {}
