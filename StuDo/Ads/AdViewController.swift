@@ -153,7 +153,7 @@ class AdViewController: CardViewController {
             if currentMode == .viewing {
                 return height + view.safeAreaInsets.bottom
             }
-            return height + 10
+            return height
         case .editing:
             
             // TODO: - Now the old way of handling things is used since the new one brings about lags.
@@ -956,14 +956,16 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
                 
                 commentsTableViewHeightConstraint.constant = commentsTableView.contentSize.height
                 
-                let difference = calculatedHeight - actualHeight
-                let currentOffset = containerView.contentOffset
-                containerView.contentOffset = CGPoint(x: currentOffset.x, y: currentOffset.y + difference)
-                
                 UIView.setAnimationsEnabled(true)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.adjustContentLayout()
+
+                    if self.containerView.contentSize.height > self.containerView.bounds.height - self.visibleKeyboardHeight {
+                        let difference = calculatedHeight - actualHeight
+                        let currentOffset = self.containerView.contentOffset
+                        self.containerView.contentOffset = CGPoint(x: currentOffset.x, y: currentOffset.y + difference)
+                    }
                 }
 
             }
