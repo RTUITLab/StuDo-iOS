@@ -184,11 +184,13 @@ struct Ad {
     let userName: String?
     let organizationName: String?
 
-    var userId: String?
+    let userId: String?
     let organizationId: String?
     
     let user: User?
     let organization: Organization?
+    
+    let comments: [Comment]?
     
     
     // initializer for ad creation and update
@@ -206,6 +208,7 @@ struct Ad {
         self.userId = nil
         self.organizationId = nil
         self.organization = nil
+        self.comments = nil
     }
     
     init(organizationId: String, name: String, description: String, shortDescription: String, beginTime: Date, endTime: Date) {
@@ -222,10 +225,11 @@ struct Ad {
         self.user = nil
         self.userId = nil
         self.organization = nil
+        self.comments = nil
     }
     
     // initializer for ads fetched from the server
-    init(id: String, name: String, description: String?, shortDescription: String, beginTime: String, endTime: String, userName: String?, organizationName: String? = nil, user: User? = nil, organization: Organization? = nil, userId: String? = nil, organizationId: String? = nil) {
+    init(id: String, name: String, description: String?, shortDescription: String, beginTime: String, endTime: String, userName: String?, organizationName: String? = nil, user: User? = nil, organization: Organization? = nil, userId: String? = nil, organizationId: String? = nil, comments: [Comment]?) {
         self.id = id
         
         self.name = name
@@ -244,6 +248,8 @@ struct Ad {
         
         self.beginTime = DateFormatter.dateFromISO8601String(beginTime)
         self.endTime = DateFormatter.dateFromISO8601String(endTime)
+        
+        self.comments = comments
     }
     
 }
@@ -310,6 +316,26 @@ struct AdCreateForm: Codable {
     let organizationId: String?
 }
 
+
+
+struct Comment {
+    let id: String!
+    let text: String
+    let commentTime: Date!
+    let authorId: String!
+    let author: String!
+}
+
+extension Comment {
+    init(text: String) {
+        self.text = text
+        
+        self.id = nil
+        self.commentTime = nil
+        self.authorId = nil
+        self.author = nil
+    }
+}
 
 
 
@@ -416,7 +442,7 @@ extension APIClient {
             let organizationName = object[organizationNameField] as? String
             
             
-            return Ad(id: id, name: name, description: nil, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: userName, organizationName: organizationName, user: nil, organization: nil, userId: userId, organizationId: organizationId)
+            return Ad(id: id, name: name, description: nil, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: userName, organizationName: organizationName, user: nil, organization: nil, userId: userId, organizationId: organizationId, comments: nil)
         }
         
         
@@ -455,7 +481,18 @@ extension APIClient {
             throw APIError.decodingFailureWithField(descriptionField)
         }
         
-        return Ad(id: id, name: name, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: nil, organizationName: nil, user: user, organization: organization, userId: userId, organizationId: organizationId)
+        let commentsField = "comments"
+        guard let commentsObject = object[commentsField] as? [[String: Any]] else {
+            throw APIError.decodingFailureWithField(commentsField)
+        }
+        
+        var comments = [Comment]()
+        for object in commentsObject {
+            let comment = try decodeComment(from: object)
+            comments.append(comment)
+        }
+        
+        return Ad(id: id, name: name, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: nil, organizationName: nil, user: user, organization: organization, userId: userId, organizationId: organizationId, comments: comments)
         
     }
     
@@ -551,6 +588,40 @@ extension APIClient {
         }
         
         return OrganizationMember(user: user, rights: userRights)
+        
+    }
+    
+    
+    func decodeComment(from object: [String: Any]) throws -> Comment {
+        
+        let idField = "id"
+        guard let id = object[idField] as? String else {
+            throw APIError.decodingFailureWithField(idField)
+        }
+        
+        let textField = "text"
+        guard let text = object[textField] as? String else {
+            throw APIError.decodingFailureWithField(textField)
+        }
+        
+        let commentTimeField = "commentTime"
+        guard let commentTimeString = object[commentTimeField] as? String else {
+            throw APIError.decodingFailureWithField(commentTimeField)
+        }
+        
+        let commentTime = DateFormatter.dateFromISO8601String(commentTimeString)
+        
+        let authorIdField = "authorId"
+        guard let authorId = object[authorIdField] as? String else {
+            throw APIError.decodingFailureWithField(authorIdField)
+        }
+        
+        let authorField = "author"
+        guard let author = object[authorField] as? String else {
+            throw APIError.decodingFailureWithField(authorField)
+        }
+        
+        return Comment(id: id, text: text, commentTime: commentTime, authorId: authorId, author: author)
         
     }
     

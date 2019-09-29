@@ -149,7 +149,6 @@ class AdViewController: CardViewController {
     override var contentHeight: CGFloat {
         switch currentMode {
         case .viewing, .commenting:
-            print(nonEditingInfoContainer.frame.height)
             let height = contentView.convert(nonEditingInfoContainer.frame.origin, to: containerView).y + nonEditingInfoContainer.frame.height
             if currentMode == .viewing {
                 return height + view.safeAreaInsets.bottom
