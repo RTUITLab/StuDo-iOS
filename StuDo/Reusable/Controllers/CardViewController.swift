@@ -218,6 +218,14 @@ class CardViewController: UIViewController {
 
 
 extension CardViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        let location = scrollView.panGestureRecognizer.location(in: cardView)
+        if location.y < -20 {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView === containerView {
             let offsetY = containerView.contentOffset.y
