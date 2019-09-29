@@ -76,6 +76,7 @@ class AdViewController: CardViewController {
     enum AdViewerMode {
         case viewing
         case editing
+        case commenting
     }
     var currentMode: AdViewerMode = .viewing
     
@@ -88,6 +89,10 @@ class AdViewController: CardViewController {
     }
     
     private var shouldDisappearOnEditingCancellation = false
+    
+    override var shouldResetOffsetOnKeyboardChange: Bool {
+        return currentMode == .editing
+    }
     
     // MARK: Visible properties
     
@@ -142,15 +147,26 @@ class AdViewController: CardViewController {
     
     
     override var contentHeight: CGFloat {
-        var additionalHeight: CGFloat!
-        if currentMode == .viewing {
-            additionalHeight = nonEditingInfoContainer.frame.height + 25
-        } else {
-            additionalHeight = beginDateButton.frame.height + beginDateButtonTopPadding + 35
+        switch currentMode {
+        case .viewing, .commenting:
+            print(nonEditingInfoContainer.frame.height)
+            let height = contentView.convert(nonEditingInfoContainer.frame.origin, to: containerView).y + nonEditingInfoContainer.frame.height
+            if currentMode == .viewing {
+                return height + view.safeAreaInsets.bottom
+            }
+            return height + 10
+        case .editing:
+            
+            // TODO: - Now the old way of handling things is used since the new one brings about lags.
+            
+//            let height = contentView.convert(descriptionTextView.frame, to: containerView).maxY
+//            return height + beginDateButton.frame.height + beginDateButtonTopPadding
+
+            let additionalHeight = beginDateButton.frame.height + beginDateButtonTopPadding + 35
+            let calculatedHeight = headerView.frame.height + nameTextFieldHeight + descriptionTextView.frame.height + view.safeAreaInsets.bottom + additionalHeight
+            return calculatedHeight
+
         }
-        
-        let calculatedHeight = headerView.frame.height + nameTextFieldHeight + descriptionTextView.frame.height + view.safeAreaInsets.bottom + additionalHeight
-        return calculatedHeight
     }
     
     
@@ -173,6 +189,7 @@ class AdViewController: CardViewController {
             descriptionPlaceholderLabel.isHidden = true
         } else {
             descriptionPlaceholderLabel.isHidden = false
+            nonEditingInfoContainer.isHidden = true
         }
         
         additionalInfoLabel.textColor = UIColor(red:0.467, green:0.467, blue:0.471, alpha:1.000)
@@ -284,7 +301,7 @@ class AdViewController: CardViewController {
         commentsTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         commentsTableView.bottomAnchor.constraint(equalTo: nonEditingInfoContainer.bottomAnchor).isActive = true
         
-        commentsTableViewHeightConstraint = commentsTableView.heightAnchor.constraint(equalToConstant: 200)
+        commentsTableViewHeightConstraint = commentsTableView.heightAnchor.constraint(equalToConstant: 30)
         commentsTableViewHeightConstraint.isActive = true
         
         
@@ -786,7 +803,10 @@ extension AdViewController {
 
 
 extension AdViewController: APIClientDelegate {
-    func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
+    
+    fileprivate func loadAdParticipants(from ad: Ad) {
+        
+        // Todo: - this code is not elegant at all. Change it later to eliminate repeating parts
         
         if let user = ad.user {
             let creator = AdParticipant(type: .user, content: user)
@@ -806,6 +826,12 @@ extension AdViewController: APIClientDelegate {
             membersTableViewHeightConstraint.constant = CGFloat(members.count) * membersTableViewRowHeight
         }
         commentsTableView.reloadData()
+        commentsTableViewHeightConstraint.constant = commentsTableView.contentSize.height
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
+        
+        loadAdParticipants(from: ad)
         
         if let userId = ad.userId, userId == PersistentStore.shared.user!.id {
             isViewerOwner = true
@@ -829,7 +855,10 @@ extension AdViewController: APIClientDelegate {
     }
     
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {
+        
+        loadAdParticipants(from: newAd)
         set(advertisement: newAd)
+        
         delegate?.adViewController(self, didCreateAd: newAd)
         
         RootViewController.stopLoadingIndicator(with: .success) {
@@ -901,8 +930,7 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
             } else {
                 descriptionPlaceholderLabel.isHidden = false
             }
-            let waitTime = DispatchTime(uptimeNanoseconds: 100)
-            DispatchQueue.main.asyncAfter(deadline: waitTime, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
                 self.adjustContentLayout()
             })
             
@@ -921,22 +949,58 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
             
             if actualHeight != calculatedHeight {
                 
+                
                 UIView.setAnimationsEnabled(false)
                 
                 commentsTableView.beginUpdates()
                 commentsTableView.endUpdates()
                 
+                commentsTableViewHeightConstraint.constant = commentsTableView.contentSize.height
+                
+                let difference = calculatedHeight - actualHeight
+                let currentOffset = containerView.contentOffset
+                containerView.contentOffset = CGPoint(x: currentOffset.x, y: currentOffset.y + difference)
+                
                 UIView.setAnimationsEnabled(true)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.adjustContentLayout()
+                }
+
             }
             
         }
         
     }
     
+    override func didShowKeyboard() {
+        if currentMode == .commenting {
+            let visibleSize = containerView.bounds.height - visibleKeyboardHeight
+            if contentHeight > visibleSize {
+                let bottomOffset = CGPoint(x: 0, y: contentHeight - visibleSize)
+                containerView.setContentOffset(bottomOffset, animated: true)
+            }
+        }
+    }
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        if textView === commentTextView {
+            currentMode = .commenting
+        }
+        return true
+    }
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView === commentTextView {
-            let bottomOffset = CGPoint(x: 0, y: containerView.contentSize.height - containerView.bounds.size.height + 160)
-            containerView.setContentOffset(bottomOffset, animated: true)
+            shouldResetOffsetOnFullscreenEnter = false
+            isFullscreen = true
+            shouldResetOffsetOnFullscreenEnter = true
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView === commentTextView {
+            isFullscreen = false
         }
     }
     

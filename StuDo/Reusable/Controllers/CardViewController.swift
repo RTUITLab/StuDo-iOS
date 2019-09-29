@@ -14,13 +14,20 @@ class CardViewController: UIViewController {
     
     private var defaultContainerInsets: UIEdgeInsets!
     
+    var shouldResetOffsetOnKeyboardChange: Bool {
+        return true
+    }
+    
     var shouldAppearFullScreen = false
+    var shouldResetOffsetOnFullscreenEnter = true
     var isFullscreen = false {
         didSet {
             switch isFullscreen {
             case true:
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.containerView.contentOffset = .zero
+                UIView.animate(withDuration: shouldResetOffsetOnFullscreenEnter ? 0.3 : 0, animations: {
+                    if self.shouldResetOffsetOnFullscreenEnter {
+                        self.containerView.contentOffset = .zero
+                    }
                 }) { _ in
                     // keep the previousBottomInset in case if keyboard show notification fires first
                     let previousContentInset = self.containerView.contentInset
@@ -36,7 +43,7 @@ class CardViewController: UIViewController {
         }
     }
     
-    private var visibleKeyboardHeight: CGFloat = 0
+    var visibleKeyboardHeight: CGFloat = 0
     var contentHeight: CGFloat {
         return 0
     }
@@ -311,13 +318,20 @@ extension CardViewController: UIViewControllerTransitioningDelegate {
 
 
 extension CardViewController {
+    
+    @objc func didShowKeyboard() {}
+    
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         
         visibleKeyboardHeight = keyboardSize.height + 5
         containerView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: visibleKeyboardHeight, right: 0)
-        containerView.contentOffset = CGPoint(x: 0, y: 0)
+        if shouldResetOffsetOnKeyboardChange {
+            containerView.contentOffset = CGPoint(x: 0, y: 0)
+        }
         adjustContentLayout()
+        
+        didShowKeyboard()
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
@@ -326,7 +340,9 @@ extension CardViewController {
         
         if shouldAllowDismissOnSwipe() {
             containerView.contentInset = defaultContainerInsets
-            containerView.setContentOffset(.zero, animated: true)
+            if shouldResetOffsetOnKeyboardChange {
+                containerView.setContentOffset(.zero, animated: true)
+            }
         } else {
             containerView.contentInset = .zero
         }
