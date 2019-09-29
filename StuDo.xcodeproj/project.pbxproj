@@ -16,6 +16,8 @@
 		4933A91D232A667F00A09646 /* AdTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4933A91C232A667F00A09646 /* AdTableViewCell.xib */; };
 		4933A91F232A6A0300A09646 /* TextViewNoPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4933A91E232A6A0300A09646 /* TextViewNoPadding.swift */; };
 		4933A921232A6C2800A09646 /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4933A920232A6C2800A09646 /* AdTableViewCell.swift */; };
+		4938CF3723412A6800055A98 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4938CF3623412A6800055A98 /* CommentTableViewCell.swift */; };
+		4938CF39234137BE00055A98 /* UserGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4938CF38234137BE00055A98 /* UserGradient.swift */; };
 		493C5A5022A189370032AB6E /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C5A4F22A189370032AB6E /* APIClient.swift */; };
 		493E7D29232E2BB600278DAF /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E7D28232E2BB600278DAF /* Notifications.swift */; };
 		493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8ACB228B4354004EC563 /* AppDelegate.swift */; };
@@ -101,6 +103,8 @@
 		4933A91C232A667F00A09646 /* AdTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdTableViewCell.xib; sourceTree = "<group>"; };
 		4933A91E232A6A0300A09646 /* TextViewNoPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewNoPadding.swift; sourceTree = "<group>"; };
 		4933A920232A6C2800A09646 /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
+		4938CF3623412A6800055A98 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
+		4938CF38234137BE00055A98 /* UserGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserGradient.swift; sourceTree = "<group>"; };
 		493C5A4F22A189370032AB6E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		493E7D28232E2BB600278DAF /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		493E8AC8228B4354004EC563 /* StuDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StuDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -289,6 +293,7 @@
 				494C64A822C24B0E0039740B /* PersistentStore.swift */,
 				493E7D28232E2BB600278DAF /* Notifications.swift */,
 				49E61DDA231A5C69007BC4FF /* TextFormatter.swift */,
+				4938CF38234137BE00055A98 /* UserGradient.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -444,6 +449,7 @@
 				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
 				491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */,
 				499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */,
+				4938CF3623412A6800055A98 /* CommentTableViewCell.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -739,6 +745,7 @@
 				49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */,
 				49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */,
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,
+				4938CF3723412A6800055A98 /* CommentTableViewCell.swift in Sources */,
 				49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */,
 				491DCA8C231C089D00A78111 /* UIColorExtension.swift in Sources */,
 				493C5A5022A189370032AB6E /* APIClient.swift in Sources */,
@@ -748,6 +755,7 @@
 				4973AD23231D50DF00B4B578 /* OrganizationListController.swift in Sources */,
 				49C85B2522D8C2E800578F39 /* BasicTableViewCells.swift in Sources */,
 				49E2DB1822FDBD1E0015DCD8 /* PasswordTableViewController.swift in Sources */,
+				4938CF39234137BE00055A98 /* UserGradient.swift in Sources */,
 				491BFCEF233BE72E002CF4AE /* AdDescriptionTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

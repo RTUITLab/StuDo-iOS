@@ -137,6 +137,7 @@ class PersistentStore: NSObject {
         try? APIClient.deleteAccessTokenFromKeychain()
         PersistentStore.shared.user = nil
         PersistentStore.shared.profilePictureGradientIndex = nil
+        UserGradient.cleanSavedCurrent()
         
     }
     

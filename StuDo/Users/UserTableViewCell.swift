@@ -15,13 +15,17 @@ class UserTableViewCell: TableViewCellValue1Style {
     let initialsLabel = UILabel()
     let nameLabel = UILabel()
     
+    var avatarViewSizeConstraint: NSLayoutConstraint!
+    var avatarViewCenterYConstraint: NSLayoutConstraint!
+    var nameLabelCenterYConstraint: NSLayoutConstraint!
+
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         
         
-        avatarGradientLayer.colors = [UIColor(red:0.753, green:0.753, blue:0.753, alpha:1.000).cgColor, UIColor(red:0.527, green:0.541, blue:0.584, alpha:1.000).cgColor]
+        avatarGradientLayer.colors = UserGradient.grayColors
         
         avatarGradientLayer.startPoint = CGPoint(x: 0, y: 0)
         avatarGradientLayer.endPoint = CGPoint(x: 1, y: 1)
@@ -35,11 +39,14 @@ class UserTableViewCell: TableViewCellValue1Style {
         
         contentView.addSubview(avatarView)
         avatarView.translatesAutoresizingMaskIntoConstraints = false
-        avatarView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: avatarPadding).isActive = true
         avatarView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16).isActive = true
-        avatarView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -avatarPadding).isActive = true
         avatarView.widthAnchor.constraint(equalTo: avatarView.heightAnchor, multiplier: 1).isActive = true
-        avatarView.widthAnchor.constraint(greaterThanOrEqualToConstant: 30).isActive = true
+        
+        avatarViewSizeConstraint = avatarView.heightAnchor.constraint(equalToConstant: 40)
+        avatarViewSizeConstraint.isActive = true
+        
+        avatarViewCenterYConstraint = avatarView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        avatarViewCenterYConstraint.isActive = true
         
         avatarView.addSubview(initialsLabel)
         initialsLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +57,9 @@ class UserTableViewCell: TableViewCellValue1Style {
         contentView.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: avatarPadding).isActive = true
-        nameLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor).isActive = true
+        
+        nameLabelCenterYConstraint = nameLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor)
+        nameLabelCenterYConstraint.isActive = true
         
         
         nameLabel.font = .preferredFont(for: .body, weight: .regular)

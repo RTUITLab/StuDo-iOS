@@ -116,7 +116,7 @@ class AdViewController: CardViewController {
     
     
     let commentsTableView = UITableView(frame: .zero, style: .plain)
-    var comments = [String]()
+    var comments = [Comment]()
     
     
     let nonEditingInfoContainer = UIView()
@@ -204,8 +204,11 @@ class AdViewController: CardViewController {
         
         commentsTableView.delegate = self
         commentsTableView.dataSource = self
-        commentsTableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: commentCellId)
+        commentsTableView.register(CommentTableViewCell.self, forCellReuseIdentifier: commentCellId)
         commentsTableView.register(TableViewCellWithTextViewInput.self, forCellReuseIdentifier: commentInputCellId)
+        
+        commentsTableView.rowHeight = UITableView.automaticDimension
+        commentsTableView.estimatedRowHeight = 45
         
         commentsTableView.tableFooterView = UIView()
 
@@ -803,7 +806,7 @@ extension AdViewController {
 
 extension AdViewController: APIClientDelegate {
     
-    fileprivate func loadAdParticipants(from ad: Ad) {
+    fileprivate func loadAdParticipantsAndComments(from ad: Ad) {
         
         // Todo: - this code is not elegant at all. Change it later to eliminate repeating parts
         
@@ -824,13 +827,14 @@ extension AdViewController: APIClientDelegate {
             membersTableView.reloadSections(IndexSet(integer: 0), with: .fade)
             membersTableViewHeightConstraint.constant = CGFloat(members.count) * membersTableViewRowHeight
         }
+        
+        comments = ad.comments ?? []
         commentsTableView.reloadData()
-        commentsTableViewHeightConstraint.constant = commentsTableView.contentSize.height
     }
     
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
         
-        loadAdParticipants(from: ad)
+        loadAdParticipantsAndComments(from: ad)
         
         if let userId = ad.userId, userId == PersistentStore.shared.user!.id {
             isViewerOwner = true
@@ -855,7 +859,7 @@ extension AdViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {
         
-        loadAdParticipants(from: newAd)
+        loadAdParticipantsAndComments(from: newAd)
         set(advertisement: newAd)
         
         delegate?.adViewController(self, didCreateAd: newAd)
@@ -1105,6 +1109,8 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
             
             
         } else if tableView === commentsTableView {
+            self.commentsTableViewHeightConstraint.constant = self.commentsTableView.contentSize.height
+
             if indexPath.row == comments.count {
                 let inputCell = commentsTableView.dequeueReusableCell(withIdentifier: commentInputCellId, for: indexPath) as! TableViewCellWithTextViewInput
                 
@@ -1118,11 +1124,46 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
                 
                 commentPlaceholderLabel = inputCell.placeholderLabel
                 
+                inputCell.selectionStyle = .none
+                
+                let inputPadding: CGFloat = 8
+                inputCell.topConstraint.constant = inputPadding
+                inputCell.bottomConstraint.constant = -inputPadding
+
                 return inputCell
             }
             
-            let cell = commentsTableView.dequeueReusableCell(withIdentifier: commentCellId, for: indexPath)
+            let cell = commentsTableView.dequeueReusableCell(withIdentifier: commentCellId, for: indexPath) as! CommentTableViewCell
             
+            let comment = comments[indexPath.row]
+            
+            cell.bodyTextView.text = comment.text
+            
+            let formatter = DateFormatter()
+            formatter.locale = Localizer.currentLocale
+            formatter.dateStyle = .short
+            formatter.timeStyle = .short
+            
+            cell.dateLabel.text = formatter.string(from: comment.commentTime)
+            
+            cell.nameLabel.text = comment.author
+            
+            let nameParts = comment.author.components(separatedBy: " ")
+            if nameParts.count == 1 {
+                cell.initialsLabel.text = String(nameParts.first!.suffix(1))
+            } else if nameParts.count == 2 {
+                // TODO: - Change the order later
+                let name = nameParts.last!
+                let surname = nameParts.first!
+                cell.initialsLabel.text = String(name.prefix(1)) + surname.prefix(1)
+                
+                cell.nameLabel.text = "\(name) \(surname)"
+            }
+            
+            cell.isAvatarHighlighted = (comment.authorId == PersistentStore.shared.user.id)
+            
+            cell.selectionStyle = .none
+
             return cell
         }
         
