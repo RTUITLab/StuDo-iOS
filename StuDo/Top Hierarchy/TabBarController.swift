@@ -125,6 +125,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         newAdVC.currentMode = .editing
         newAdVC.shouldAppearFullScreen = true
         
+        newAdVC.modalPresentationStyle = .fullScreen
         self.present(newAdVC, animated: true, completion: nil)
     }
     

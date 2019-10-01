@@ -363,6 +363,7 @@ class OrganizationViewController: UITableViewController {
         } else if info == .ads {
             let currentAd = organizationAds[indexPath.row]
             let adVC = AdViewController(with: currentAd)
+            adVC.modalPresentationStyle = .fullScreen
             present(adVC, animated: true, completion: nil)
         }
         tableView.deselectRow(at: indexPath, animated: true)

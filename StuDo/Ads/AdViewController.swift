@@ -825,6 +825,7 @@ extension AdViewController {
                 self?.endDateButton.date = nil
             }
         }
+        datePickerVC.modalPresentationStyle = .fullScreen
         present(datePickerVC, animated: true, completion: nil)
     }
     
@@ -844,6 +845,7 @@ extension AdViewController {
                 self?.beginDateButton.date = nil
             }
         }
+        datePickerVC.modalPresentationStyle = .fullScreen
         present(datePickerVC, animated: true, completion: nil)
     }
     
@@ -1130,7 +1132,7 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
     }
     
     @objc func toggleBoldTextInDescriptionTextView() {
-        if var description = descriptionTextView.text, let selectedRange = descriptionTextView.selectedRangeAsNSRange {
+        if let description = descriptionTextView.text, let selectedRange = descriptionTextView.selectedRangeAsNSRange {
             
             
             let selectedString = description.substring(with: Range(selectedRange, in: description)!)

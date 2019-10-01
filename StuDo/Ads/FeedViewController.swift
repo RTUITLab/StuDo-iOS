@@ -197,6 +197,8 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         
         impactFeedback.impactOccurred()
         shouldRefreshOnAppear = false
+        
+        detailVC.modalPresentationStyle = .fullScreen
         self.present(detailVC, animated: true, completion: nil)
     }
     

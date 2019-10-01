@@ -97,6 +97,7 @@ class RootViewController: UIViewController {
         authorizationController = AuthorizationViewController()
         authorizationController.transitioningDelegate = self
         
+        authorizationController.modalPresentationStyle = .fullScreen
         present(authorizationController, animated: true, completion: nil)
     }
     
@@ -105,7 +106,7 @@ class RootViewController: UIViewController {
     func proceedToMainController() {
         mainController = TabBarController()
         mainController.transitioningDelegate = self
-        
+        mainController.modalPresentationStyle = .fullScreen
         present(mainController, animated: true, completion: nil)
     }
     
