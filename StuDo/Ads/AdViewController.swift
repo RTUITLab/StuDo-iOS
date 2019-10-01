@@ -117,6 +117,7 @@ class AdViewController: CardViewController {
     
     let commentsTableView = UITableView(frame: .zero, style: .plain)
     var comments = [Comment]()
+    var publishCommentButton: UIButton!
     
     
     let nonEditingInfoContainer = UIView()
@@ -205,7 +206,7 @@ class AdViewController: CardViewController {
         commentsTableView.delegate = self
         commentsTableView.dataSource = self
         commentsTableView.register(CommentTableViewCell.self, forCellReuseIdentifier: commentCellId)
-        commentsTableView.register(TableViewCellWithTextViewInput.self, forCellReuseIdentifier: commentInputCellId)
+        commentsTableView.register(CommentInputTableViewCell.self, forCellReuseIdentifier: commentInputCellId)
         
         commentsTableView.rowHeight = UITableView.automaticDimension
         commentsTableView.estimatedRowHeight = 45
@@ -439,6 +440,20 @@ class AdViewController: CardViewController {
         commentsTableView.isScrollEnabled = false
         commentsTableView.separatorInset = .zero
         commentsTableView.rowHeight = UITableView.automaticDimension
+        
+
+    }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        super.scrollViewDidScroll(scrollView)
+        
+        if currentMode == .viewing {
+            let commentsHeight = commentsTableView.contentSize.height
+            if commentsHeight != commentsTableViewHeightConstraint.constant {
+                commentsTableViewHeightConstraint.constant = commentsTableView.contentSize.height
+                adjustContentLayout()
+            }
+        }
         
 
     }
@@ -733,6 +748,30 @@ class AdViewController: CardViewController {
     }
     
     
+    fileprivate func checkIfCanPublishComment() {
+        if let text = commentTextView.text, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            if publishCommentButton.isHidden {
+                publishCommentButton.isHidden = false
+                publishCommentButton.alpha = 0
+                UIView.animate(withDuration: 0.3) {
+                    self.publishCommentButton.alpha = 1
+                }
+            }
+        } else {
+            if !publishCommentButton.isHidden {
+                publishCommentButton.alpha = 1
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.publishCommentButton.alpha = 0
+                }) { _ in
+                    self.publishCommentButton.isHidden = true
+                }
+            }
+        }
+    }
+    
+    
+    
+    
 }
 
 
@@ -941,6 +980,8 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
 
         } else if textView === commentTextView {
             
+            checkIfCanPublishComment()
+            
             if !commentTextView.text.isEmpty {
                 commentPlaceholderLabel.isHidden = true
             } else {
@@ -1112,7 +1153,7 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
             self.commentsTableViewHeightConstraint.constant = self.commentsTableView.contentSize.height
 
             if indexPath.row == comments.count {
-                let inputCell = commentsTableView.dequeueReusableCell(withIdentifier: commentInputCellId, for: indexPath) as! TableViewCellWithTextViewInput
+                let inputCell = commentsTableView.dequeueReusableCell(withIdentifier: commentInputCellId, for: indexPath) as! CommentInputTableViewCell
                 
                 inputCell.minimumHeightConstant.isActive = false
                 
@@ -1129,6 +1170,8 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
                 let inputPadding: CGFloat = 8
                 inputCell.topConstraint.constant = inputPadding
                 inputCell.bottomConstraint.constant = -inputPadding
+                
+                publishCommentButton = inputCell.publishButton
 
                 return inputCell
             }

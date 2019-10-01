@@ -121,7 +121,7 @@ class OrganizationViewController: UITableViewController {
         
         tableView.register(TableViewCellWithInputField.self, forCellReuseIdentifier: textFieldCellId)
         tableView.register(TableViewCellWithTextViewInput.self, forCellReuseIdentifier: textViewCellId)
-        tableView.register(UserTableViewCell.self, forCellReuseIdentifier: userCellId)
+        tableView.register(MemberTableViewCell.self, forCellReuseIdentifier: userCellId)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: actionCellId)
         tableView.register(UINib(nibName: "AdTableViewCell", bundle: nil), forCellReuseIdentifier: adCellId)
         

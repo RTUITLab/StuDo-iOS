@@ -18,6 +18,7 @@
 		4933A921232A6C2800A09646 /* AdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4933A920232A6C2800A09646 /* AdTableViewCell.swift */; };
 		4938CF3723412A6800055A98 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4938CF3623412A6800055A98 /* CommentTableViewCell.swift */; };
 		4938CF39234137BE00055A98 /* UserGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4938CF38234137BE00055A98 /* UserGradient.swift */; };
+		4938CF3B2341421300055A98 /* MemberTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4938CF3A2341421300055A98 /* MemberTableViewCell.swift */; };
 		493C5A5022A189370032AB6E /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C5A4F22A189370032AB6E /* APIClient.swift */; };
 		493E7D29232E2BB600278DAF /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E7D28232E2BB600278DAF /* Notifications.swift */; };
 		493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8ACB228B4354004EC563 /* AppDelegate.swift */; };
@@ -33,6 +34,7 @@
 		4973AD20231D4A0300B4B578 /* DateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD1F231D4A0300B4B578 /* DateFormatterExtension.swift */; };
 		4973AD23231D50DF00B4B578 /* OrganizationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD22231D50DF00B4B578 /* OrganizationListController.swift */; };
 		4973AD25231D58DD00B4B578 /* OrganizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */; };
+		4980ED702341E375003FADC6 /* CommentInputTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4980ED6F2341E375003FADC6 /* CommentInputTableViewCell.swift */; };
 		499075D8233E642B0045DE6A /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D7233E642B0045DE6A /* UserTableViewCell.swift */; };
 		499075DA233E77120045DE6A /* CurrentUserAdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */; };
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
@@ -105,6 +107,7 @@
 		4933A920232A6C2800A09646 /* AdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTableViewCell.swift; sourceTree = "<group>"; };
 		4938CF3623412A6800055A98 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		4938CF38234137BE00055A98 /* UserGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserGradient.swift; sourceTree = "<group>"; };
+		4938CF3A2341421300055A98 /* MemberTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberTableViewCell.swift; sourceTree = "<group>"; };
 		493C5A4F22A189370032AB6E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		493E7D28232E2BB600278DAF /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		493E8AC8228B4354004EC563 /* StuDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StuDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,6 +129,7 @@
 		4973AD1F231D4A0300B4B578 /* DateFormatterExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterExtension.swift; sourceTree = "<group>"; };
 		4973AD22231D50DF00B4B578 /* OrganizationListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationListController.swift; sourceTree = "<group>"; };
 		4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationViewController.swift; sourceTree = "<group>"; };
+		4980ED6F2341E375003FADC6 /* CommentInputTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputTableViewCell.swift; sourceTree = "<group>"; };
 		499075D7233E642B0045DE6A /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserAdTableViewCell.swift; sourceTree = "<group>"; };
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -423,6 +427,7 @@
 			children = (
 				4973AD22231D50DF00B4B578 /* OrganizationListController.swift */,
 				4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */,
+				4938CF3A2341421300055A98 /* MemberTableViewCell.swift */,
 			);
 			path = Organizations;
 			sourceTree = "<group>";
@@ -450,6 +455,7 @@
 				491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */,
 				499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */,
 				4938CF3623412A6800055A98 /* CommentTableViewCell.swift */,
+				4980ED6F2341E375003FADC6 /* CommentInputTableViewCell.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -711,6 +717,7 @@
 				49BBB99B2306E25600883EB9 /* NavigationMenu.swift in Sources */,
 				49D76A82231059B9002B22D4 /* NotificationExtension.swift in Sources */,
 				4933A91F232A6A0300A09646 /* TextViewNoPadding.swift in Sources */,
+				4938CF3B2341421300055A98 /* MemberTableViewCell.swift in Sources */,
 				49BCE24C22F0AC2100C64C44 /* CardAnimatedTransitioning.swift in Sources */,
 				49E2DB1422FDB3730015DCD8 /* EmailTableViewController.swift in Sources */,
 				49E61DD9231A564C007BC4FF /* UIFontExtension.swift in Sources */,
@@ -752,6 +759,7 @@
 				49713C60230B093300E65807 /* AboutHeaderView.swift in Sources */,
 				49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */,
 				493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */,
+				4980ED702341E375003FADC6 /* CommentInputTableViewCell.swift in Sources */,
 				4973AD23231D50DF00B4B578 /* OrganizationListController.swift in Sources */,
 				49C85B2522D8C2E800578F39 /* BasicTableViewCells.swift in Sources */,
 				49E2DB1822FDBD1E0015DCD8 /* PasswordTableViewController.swift in Sources */,

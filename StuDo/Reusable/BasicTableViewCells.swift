@@ -69,6 +69,7 @@ class TableViewCellWithTextViewInput: UITableViewCell {
     
     var topConstraint: NSLayoutConstraint!
     var bottomConstraint: NSLayoutConstraint!
+    var trailingConstraint: NSLayoutConstraint!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -76,7 +77,9 @@ class TableViewCellWithTextViewInput: UITableViewCell {
         contentView.addSubview(textViewInput)
         textViewInput.translatesAutoresizingMaskIntoConstraints = false
         textViewInput.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15).isActive = true
-        textViewInput.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
+        
+        trailingConstraint = textViewInput.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
+        trailingConstraint.isActive = true
         
         topConstraint = textViewInput.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0)
         topConstraint.isActive = true
