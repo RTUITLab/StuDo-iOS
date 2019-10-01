@@ -44,7 +44,7 @@ class CommentTableViewCell: UserTableViewCell {
         
         contentView.addSubview(dateLabel)
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.topAnchor.constraint(equalTo: bodyTextView.bottomAnchor, constant: 8).isActive = true
+        dateLabel.topAnchor.constraint(equalTo: bodyTextView.lastBaselineAnchor, constant: 10).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor, constant: 0).isActive = true
         dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6).isActive = true
         

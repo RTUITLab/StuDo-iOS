@@ -182,6 +182,8 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
             self.moreButtonTappedInCell(with: indexPath)
         }
         
+        cell.layoutIfNeeded()
+        
         return cell
     }
     

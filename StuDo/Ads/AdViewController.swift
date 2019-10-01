@@ -146,6 +146,7 @@ class AdViewController: CardViewController {
     
     let commentsTableViewRowHeight: CGFloat = 55
     var commentsTableViewHeightConstraint: NSLayoutConstraint!
+    var scrollToBottomNeeded = false
     
     
     override var contentHeight: CGFloat {
@@ -906,6 +907,16 @@ extension AdViewController: APIClientDelegate {
         
         comments = ad.comments ?? []
         commentsTableView.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.layoutCommentsTableView()
+            if self.scrollToBottomNeeded {
+                self.scrollToBottomNeeded = false
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.scrollToBottom()
+                }
+            }
+        }
     }
     
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
@@ -974,6 +985,7 @@ extension AdViewController: APIClientDelegate {
         commentTextView.isEditable = true
         commentTextView.text = ""
         RootViewController.stopLoadingIndicator(with: .success)
+        scrollToBottomNeeded = true
         client.getAd(withId: adId)
     }
     
@@ -1063,13 +1075,18 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
         
     }
     
+    fileprivate func scrollToBottom(_ additionalOffset: CGFloat = 0) {
+        let visibleSize = containerView.bounds.height - visibleKeyboardHeight
+        let contentHeight = self.contentHeight
+        if contentHeight > visibleSize {
+            let bottomOffset = CGPoint(x: 0, y: contentHeight - visibleSize + additionalOffset)
+            containerView.setContentOffset(bottomOffset, animated: true)
+        }
+    }
+    
     override func didShowKeyboard() {
         if currentMode == .commenting {
-            let visibleSize = containerView.bounds.height - visibleKeyboardHeight
-            if contentHeight > visibleSize {
-                let bottomOffset = CGPoint(x: 0, y: contentHeight - visibleSize)
-                containerView.setContentOffset(bottomOffset, animated: true)
-            }
+            scrollToBottom()
         }
     }
     
@@ -1262,6 +1279,8 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
                     cell.backgroundColor = initialCellBackgroundColor
                 }
             }
+            
+            cell.layoutIfNeeded()
 
             return cell
         }
