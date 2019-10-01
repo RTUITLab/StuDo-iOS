@@ -24,12 +24,23 @@ extension DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = iso8601Dateformat
         
+        var decodedDate: Date!
         if let date = formatter.date(from: dateString) {
-            return date
+            decodedDate = date
+        } else {
+            formatter.dateFormat = iso8601DateformatWithNanoseconds
+            decodedDate = formatter.date(from: dateString)!
         }
         
-        formatter.dateFormat = iso8601DateformatWithNanoseconds
-        return formatter.date(from: dateString)!
+        // As the time strings stored on the server don't include 'Z' at the end,
+        // the date is believed to be in local time and is handled not correctly,
+        // since it actually represents GMT Time
         
+        // To correct this, offset the decoded time by the difference between
+        // time in current time zone and in GMT
+        
+        let timeOffset = TimeZone.current.secondsFromGMT(for: decodedDate)
+        return Calendar.current.date(byAdding: .second, value: Int(timeOffset), to: decodedDate)!
+
     }
 }
