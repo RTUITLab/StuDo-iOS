@@ -115,6 +115,7 @@ class AdViewController: CardViewController {
     var members = [AdParticipant]()
     
     
+    var newCommentsCount: Int = 0
     let commentsTableView = UITableView(frame: .zero, style: .plain)
     var comments = [Comment]()
     var publishCommentButton: UIButton!
@@ -304,7 +305,7 @@ class AdViewController: CardViewController {
         commentsTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         commentsTableView.bottomAnchor.constraint(equalTo: nonEditingInfoContainer.bottomAnchor).isActive = true
         
-        commentsTableViewHeightConstraint = commentsTableView.heightAnchor.constraint(equalToConstant: 30)
+        commentsTableViewHeightConstraint = commentsTableView.heightAnchor.constraint(equalToConstant: 0)
         commentsTableViewHeightConstraint.isActive = true
         
         
@@ -440,6 +441,7 @@ class AdViewController: CardViewController {
         commentsTableView.isScrollEnabled = false
         commentsTableView.separatorInset = .zero
         commentsTableView.rowHeight = UITableView.automaticDimension
+        commentsTableView.isHidden = true
         
 
     }
@@ -448,11 +450,7 @@ class AdViewController: CardViewController {
         super.scrollViewDidScroll(scrollView)
         
         if currentMode == .viewing {
-            let commentsHeight = commentsTableView.contentSize.height
-            if commentsHeight != commentsTableViewHeightConstraint.constant {
-                commentsTableViewHeightConstraint.constant = commentsTableView.contentSize.height
-                adjustContentLayout()
-            }
+            layoutCommentsTableView()
         }
         
 
@@ -463,6 +461,10 @@ class AdViewController: CardViewController {
         if currentMode == .editing {
             enableEditingMode()
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        adjustContentLayout()
     }
     
     
@@ -480,6 +482,26 @@ class AdViewController: CardViewController {
         
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
+        }
+    }
+    
+    fileprivate func layoutCommentsTableView() {
+        let commentsHeight = commentsTableView.contentSize.height
+        if commentsHeight != commentsTableViewHeightConstraint.constant {
+            commentsTableViewHeightConstraint.constant = CGFloat(commentsTableView.contentSize.height)
+            additionalInfoLabel.layoutIfNeeded()
+
+            if commentsTableView.isHidden {
+                commentsTableView.isHidden = false
+                commentsTableView.alpha = 0
+                UIView.animate(withDuration: 0.3) {
+                    self.commentsTableView.alpha = 1
+                }
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                self.adjustContentLayout()
+            })
         }
     }
     
@@ -549,7 +571,9 @@ class AdViewController: CardViewController {
         nameTextField.isUserInteractionEnabled = false
         descriptionTextView.isEditable = false
         
-        nonEditingInfoContainer.isHidden = false
+        if advertisement != nil {
+            nonEditingInfoContainer.isHidden = false
+        }
         
         self.moreButton.isHidden = false
         UIView.animate(withDuration: 0.3, animations: {
@@ -781,6 +805,15 @@ class AdViewController: CardViewController {
 
 extension AdViewController {
     
+    @objc func publishCommentButtonTapped(_ button: UIButton) {
+        let commentText = commentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let comment = Comment(text: commentText)
+        
+        RootViewController.startLoadingIndicator()
+        commentTextView.isEditable = false
+        client.add(comment: comment, forAdWithId: advertisement!.id)
+    }
+    
     @objc func beginDateButtonPressed(_ button: UIButton) {
         let datePickerVC = DatePickerController(title: Localizer.string(for: .adEditorBeginDateLabel))
         datePickerVC.datePicker.minimumDate = Date()
@@ -867,6 +900,10 @@ extension AdViewController: APIClientDelegate {
             membersTableViewHeightConstraint.constant = CGFloat(members.count) * membersTableViewRowHeight
         }
         
+        if let newComments = ad.comments, !comments.isEmpty {
+            newCommentsCount = newComments.count - comments.count
+        }
+        
         comments = ad.comments ?? []
         commentsTableView.reloadData()
     }
@@ -931,6 +968,13 @@ extension AdViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {
         publishableOrganizations = organizations
+    }
+    
+    func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String) {
+        commentTextView.isEditable = true
+        commentTextView.text = ""
+        RootViewController.stopLoadingIndicator(with: .success)
+        client.getAd(withId: adId)
     }
     
     
@@ -1047,6 +1091,8 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView === commentTextView {
             isFullscreen = false
+            currentMode = .viewing
+            adjustContentLayout()
         }
     }
     
@@ -1150,7 +1196,7 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
             
             
         } else if tableView === commentsTableView {
-            self.commentsTableViewHeightConstraint.constant = self.commentsTableView.contentSize.height
+//            self.commentsTableViewHeightConstraint.constant = self.commentsTableView.contentSize.height
 
             if indexPath.row == comments.count {
                 let inputCell = commentsTableView.dequeueReusableCell(withIdentifier: commentInputCellId, for: indexPath) as! CommentInputTableViewCell
@@ -1172,6 +1218,7 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
                 inputCell.bottomConstraint.constant = -inputPadding
                 
                 publishCommentButton = inputCell.publishButton
+                publishCommentButton.addTarget(self, action: #selector(publishCommentButtonTapped(_ :)), for: .touchUpInside)
 
                 return inputCell
             }
@@ -1206,6 +1253,15 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
             cell.isAvatarHighlighted = (comment.authorId == PersistentStore.shared.user.id)
             
             cell.selectionStyle = .none
+            
+            if indexPath.row >= comments.count - newCommentsCount {
+                newCommentsCount -= 1
+                let initialCellBackgroundColor = cell.backgroundColor
+                cell.backgroundColor = UIColor.globalTintColor.withAlphaComponent(0.2)
+                UIView.animate(withDuration: 1.5) {
+                    cell.backgroundColor = initialCellBackgroundColor
+                }
+            }
 
             return cell
         }

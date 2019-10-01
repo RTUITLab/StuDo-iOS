@@ -324,9 +324,17 @@ struct Comment {
     let commentTime: Date!
     let authorId: String!
     let author: String!
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case text
+        case commentTime
+        case authorId
+        case author
+    }
 }
 
-extension Comment {
+extension Comment: Encodable {
     init(text: String) {
         self.text = text
         
@@ -334,6 +342,15 @@ extension Comment {
         self.commentTime = nil
         self.authorId = nil
         self.author = nil
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        if id != nil {
+            try container.encode(id, forKey: .id)
+        }
+        
+        try container.encode(text, forKey: .text)
     }
 }
 

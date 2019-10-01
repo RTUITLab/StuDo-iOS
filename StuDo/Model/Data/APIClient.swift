@@ -270,6 +270,9 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad)
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String)
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String)
+    
+    func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String)
+
 
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad)
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad)
@@ -313,6 +316,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String) {}
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String) {}
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {}
+    func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String) {}
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
     func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {}
@@ -719,6 +723,26 @@ extension APIClient {
                         DispatchQueue.main.async {
                             self.delegate?.apiClient(self, didCreateOrganization: newOrganization)
                         }
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    
+    func add(comment: Comment, forAdWithId adId: String) {
+        
+        if let request = try? APIRequest(method: .post, path: "ad/comment/\(adId)", body: comment) {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success:
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didCreateCommentForAdWithId: adId)
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
