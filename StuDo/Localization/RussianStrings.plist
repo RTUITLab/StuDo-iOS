@@ -26,6 +26,10 @@
 	<string>Цветовая схема</string>
 	<key>settingsTitle</key>
 	<string>Настройки</string>
+	<key>adEditorRemoveFromBookmarks</key>
+	<string>Убрать из избранного</string>
+	<key>adEditorAddToBookmarks</key>
+	<string>Добавить в избранное</string>
 	<key>search</key>
 	<string>Найти</string>
 	<key>organizationInfoHeaderTitle</key>
@@ -168,10 +172,10 @@
 	<string>Объявления</string>
 	<key>userPublicProfilesSectionHeader</key>
 	<string>Резюме</string>
-	<key>authRegistrationAlertTitle</key>
-	<string>Успешная регистрация!</string>
 	<key>emailChangeAlertMessage</key>
 	<string>На Ваш новый e-mail отправлена ссылка подтверждения. После подверждения за Вашим аккаунтом будет закреплён новый адрес.</string>
+	<key>authRegistrationAlertTitle</key>
+	<string>Успешная регистрация!</string>
 	<key>orangeThemeName</key>
 	<string>Оранжевый</string>
 	<key>create</key>
@@ -224,20 +228,20 @@
 	<string>Только мои объявления</string>
 	<key>feedNoAdsDescription</key>
 	<string>Никто ещё не опубликовал ни одного объявления. Будьте первым!</string>
+	<key>notificationRemindBefore15m</key>
+	<string>За 15 минут</string>
 	<key>organizationDeletionAlertMessage</key>
 	<string>Вы уверены, что хотите удалить данную организацию? Это действие необратимо.</string>
 	<key>authRegistrationAlertMessage</key>
 	<string>Мы отправили письмо на Ваш e-mail. Пожалуйста, подтвердите Ваш адрес, прежде чем заходить в аккаунт.</string>
-	<key>notificationRemindBefore15m</key>
-	<string>За 15 минут</string>
+	<key>profileDescriptionSectionHeader</key>
+	<string>Описание</string>
 	<key>done</key>
 	<string>Готово</string>
 	<key>feedTitleAllAds</key>
 	<string>Объявления</string>
 	<key>organizationLeave</key>
 	<string>Покинуть организацию</string>
-	<key>profileDescriptionSectionHeader</key>
-	<string>Описание</string>
 	<key>feedCreatorPage</key>
 	<string>Показать страницу создателя</string>
 	<key>authSignUp</key>

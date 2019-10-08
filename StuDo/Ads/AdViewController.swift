@@ -85,13 +85,7 @@ class AdViewController: CardViewController {
     }
     var currentMode: AdViewerMode = .viewing
     
-    var isViewerOwner: Bool {
-        didSet {
-            if isViewerOwner {
-                moreButton.isHidden = false
-            }
-        }
-    }
+    var isViewerOwner: Bool = false
     
     private var shouldDisappearOnEditingCancellation = false
     
@@ -258,7 +252,9 @@ class AdViewController: CardViewController {
         descriptionTextView.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor).isActive = true
         descriptionTextView.topAnchor.constraint(equalTo: nameTextField.lastBaselineAnchor, constant: horizontalSpace).isActive = true
         
-        
+        if #available(iOS 13, *) {
+            descriptionTextView.textColor = .label
+        }
         
         contentView.addSubview(descriptionPlaceholderLabel)
         descriptionPlaceholderLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -368,10 +364,16 @@ class AdViewController: CardViewController {
         moreButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
         moreButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -leftRightPadding).isActive = true
         
-        let moreButtonImage = #imageLiteral(resourceName: "three-dots-menu").withRenderingMode(.alwaysTemplate)
-        moreButton.setImage(moreButtonImage, for: .normal)
+        if #available(iOS 13, *) {
+            let moreButtonImage = UIImage(systemName: "ellipsis.circle.fill")!.withRenderingMode(.alwaysTemplate)
+            moreButton.setImage(moreButtonImage, for: .normal)
+        } else {
+            let moreButtonImage = #imageLiteral(resourceName: "three-dots-menu").withRenderingMode(.alwaysTemplate)
+            moreButton.setImage(moreButtonImage, for: .normal)
+        }
+        
         moreButton.adjustsImageWhenHighlighted = false
-        moreButton.isHidden = true
+        moreButton.isHidden = false
         
         
         let publishButtonSize: CGFloat = 28
@@ -560,7 +562,7 @@ class AdViewController: CardViewController {
         }
         
         if let ad = advertisement, let description = ad.description, description != descriptionTextView.attributedText.string {
-            descriptionTextView.attributedText = NSAttributedString(string: description, attributes: [.font: UIFont.preferredFont(for: .body, weight: .light)])
+            addDescription(fromPlainString: description)
         }
         
         nameTextField.isUserInteractionEnabled = true
@@ -827,6 +829,12 @@ class AdViewController: CardViewController {
     }
     
     
+    func toggleBookmark() {
+        client.bookmarkAd(withId: advertisement!.id)
+        RootViewController.startLoadingIndicator()
+    }
+    
+    
     
     
 }
@@ -885,14 +893,23 @@ extension AdViewController {
     @objc func moreButtonPressed(_ button: UIButton) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let inviteAction = UIAlertAction(title: Localizer.string(for: .adEditorFindPeople), style: .default, handler: nil)
-        let editAction = UIAlertAction(title: Localizer.string(for: .adEditorEditAd), style: .default, handler: { _ in self.enableEditingMode() } )
-        let deleteAction = UIAlertAction(title: Localizer.string(for: .adEditorDeleteAd), style: .destructive, handler: { _ in self.deleteCurrentAd() } )
-        let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
+        if isViewerOwner {
+            let inviteAction = UIAlertAction(title: Localizer.string(for: .adEditorFindPeople), style: .default, handler: nil)
+            let editAction = UIAlertAction(title: Localizer.string(for: .adEditorEditAd), style: .default, handler: { _ in self.enableEditingMode() } )
+            let deleteAction = UIAlertAction(title: Localizer.string(for: .adEditorDeleteAd), style: .destructive, handler: { _ in self.deleteCurrentAd() } )
 
-        actionSheet.addAction(inviteAction)
-        actionSheet.addAction(editAction)
-        actionSheet.addAction(deleteAction)
+            actionSheet.addAction(inviteAction)
+            actionSheet.addAction(editAction)
+            actionSheet.addAction(deleteAction)
+        } else {
+            let title = Localizer.string(for: .adEditorAddToBookmarks)
+            let bookmarkAction = UIAlertAction(title: title, style: .default) { _ in
+                self.toggleBookmark()
+            }
+            actionSheet.addAction(bookmarkAction)
+        }
+        
+        let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
         actionSheet.addAction(cancelAction)
         
         present(actionSheet, animated: true, completion: nil)
@@ -1021,6 +1038,11 @@ extension AdViewController: APIClientDelegate {
         RootViewController.stopLoadingIndicator(with: .success)
         scrollToBottomNeeded = true
         client.getAd(withId: adId)
+    }
+    
+    
+    func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String) {
+        RootViewController.stopLoadingIndicator(with: .success)
     }
     
     
@@ -1163,6 +1185,15 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
 
     }
     
+    fileprivate func addDescription(fromPlainString string: String) {
+        if #available(iOS 13, *) {
+            return descriptionTextView.attributedText = NSAttributedString(string: string, attributes: [.font: UIFont.preferredFont(for: .body, weight: .light), .foregroundColor: UIColor.label])
+        } else {
+            return descriptionTextView.attributedText = NSAttributedString(string: string, attributes: [.font: UIFont.preferredFont(for: .body, weight: .light)])
+        }
+        
+    }
+    
     @objc func toggleBoldTextInDescriptionTextView() {
         if let description = descriptionTextView.text, let selectedRange = descriptionTextView.selectedRangeAsNSRange {
             
@@ -1171,7 +1202,7 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
             
             let resultingDescription = description.replacingCharacters(in: Range(selectedRange, in: description)!, with: "**\(selectedString)**")
 
-            descriptionTextView.attributedText = NSAttributedString(string: resultingDescription, attributes: [.font: UIFont.preferredFont(for: .body, weight: .light)])
+            addDescription(fromPlainString: resultingDescription)
         }
     }
 }

@@ -26,6 +26,10 @@
 	<string>Orange</string>
 	<key>yellowThemeName</key>
 	<string>Gelb</string>
+	<key>adEditorAddToBookmarks</key>
+	<string>Zu Lesezeichen hinzufügen</string>
+	<key>adEditorRemoveFromBookmarks</key>
+	<string>Von Lesezeichen entfernen</string>
 	<key>greenThemeName</key>
 	<string>Grün</string>
 	<key>tealBlueThemeName</key>
@@ -228,26 +232,25 @@
 	<string>Gruppe verlassen</string>
 	<key>organizationDeletionAlertMessage</key>
 	<string>Möchten Sie diese Gruppe wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.</string>
-    
-    <key>userPublicProfilesSectionHeader</key>
-    <string>Profile</string>
-    <key>userPublicAdsSectionHeader</key>
-    <string>Anzeigen</string>
-    <key>notificationSetReminder</key>
-    <string>Erinnerung einstellen</string>
-    <key>notificationReminderAlertTitle</key>
-    <string>Erinnere mich an die Veranstaltung...</string>
-    <key>notificationRemindBefore15m</key>
-    <string>15 minuten früher</string>
-    <key>notificationRemindBefore1h</key>
-    <string>1h stunde früher</string>
-    <key>notificationEventReminderMessageBefore15m</key>
-    <string>Die in dieser Anzeige erwähnte Veranstaltung beginnt in 15 Minuten.</string>
-    <key>notificationEventReminderMessageBefore1h</key>
-    <string>Die in dieser Anzeige erwähnte Veranstaltung beginnt in 1 Stunde.</string>
-    <key>notificationsDisabledAlertTitle</key>
-    <string>Benachrichtigungen sind derzeit deaktiviert. Sie können sie in den Einstellungen aktivieren.</string>
-    <key>notificationsDisabledSettings</key>
-    <string>Einstellungen</string>
+	<key>userPublicProfilesSectionHeader</key>
+	<string>Profile</string>
+	<key>userPublicAdsSectionHeader</key>
+	<string>Anzeigen</string>
+	<key>notificationSetReminder</key>
+	<string>Erinnerung einstellen</string>
+	<key>notificationReminderAlertTitle</key>
+	<string>Erinnere mich an die Veranstaltung...</string>
+	<key>notificationRemindBefore15m</key>
+	<string>15 minuten früher</string>
+	<key>notificationRemindBefore1h</key>
+	<string>1h stunde früher</string>
+	<key>notificationEventReminderMessageBefore15m</key>
+	<string>Die in dieser Anzeige erwähnte Veranstaltung beginnt in 15 Minuten.</string>
+	<key>notificationEventReminderMessageBefore1h</key>
+	<string>Die in dieser Anzeige erwähnte Veranstaltung beginnt in 1 Stunde.</string>
+	<key>notificationsDisabledAlertTitle</key>
+	<string>Benachrichtigungen sind derzeit deaktiviert. Sie können sie in den Einstellungen aktivieren.</string>
+	<key>notificationsDisabledSettings</key>
+	<string>Einstellungen</string>
 </dict>
 </plist>

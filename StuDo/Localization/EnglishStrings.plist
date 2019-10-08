@@ -206,6 +206,10 @@
 	<string>Comments</string>
 	<key>adEditorCommentPlaceholder</key>
 	<string>Write your comment</string>
+	<key>adEditorAddToBookmarks</key>
+	<string>Add to bookmarks</string>
+	<key>adEditorRemoveFromBookmarks</key>
+	<string>Remove from bookmarks</string>
 	<key>organizationTitleAllOrganizations</key>
 	<string>All Groups</string>
 	<key>organizationTitleMyOrganizations</key>

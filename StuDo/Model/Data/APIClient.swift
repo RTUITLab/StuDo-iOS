@@ -278,6 +278,9 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad)
     func apiClient(_ client: APIClient, didDeleteAdWithId adId: String)
     
+    func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String)
+    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String)
+    
     
     func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile])
     func apiClient(_ client: APIClient, didRecieveProfile profile: Profile)
@@ -319,6 +322,8 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String) {}
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
+    func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String) {}
+    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String) {}
     func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {}
     func apiClient(_ client: APIClient, didRecieveProfile profile: Profile) {}
     func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {}
@@ -580,7 +585,7 @@ extension APIClient {
                 }
                 
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didDeleteAdWithId: deletedAdID)
+                    self.delegate?.apiClient(self, didDeleteAdWithId: id)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -588,6 +593,33 @@ extension APIClient {
                 }
             }
         }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    func bookmarkAd(withId adId: String) {
+        
+        let request =  APIRequest(method: .post, path: "ad/bookmarks/\(adId)")
+        
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didBookmarkAdWithId: adId)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+        
     }
     
     
