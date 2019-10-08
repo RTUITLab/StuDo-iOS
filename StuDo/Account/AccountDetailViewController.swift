@@ -190,7 +190,11 @@ class AccountDetailViewController: UITableViewController {
         switch sectionInfo {
         case .logout:
             cell.textLabel?.text = Localizer.string(for: .accountDetailLogout)
-            cell.textLabel?.textColor = .red
+            if #available(iOS 13, *) {
+                cell.textLabel?.textColor = .systemRed
+            } else {
+                cell.textLabel?.textColor = .red
+            }
         case .credentials:
             if indexPath.row == 0 {
                 cell.textLabel?.text = Localizer.string(for: .accountDetailEmail)

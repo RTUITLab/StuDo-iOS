@@ -197,7 +197,11 @@ extension ProfileEditorViewController {
         
         if sectionInfo == .deleteAction {
             cell.textLabel?.text = "Delete profile"
-            cell.textLabel?.textColor = .red
+            if #available(iOS 13, *) {
+                cell.textLabel?.textColor = .systemRed
+            } else {
+                cell.textLabel?.textColor = .red
+            }
             cell.accessoryType = .disclosureIndicator
         }
         

@@ -11,7 +11,7 @@ import UIKit
 class RootViewController: UIViewController {
     
     var isInitialSetup = true
-    let loadingIndicator = LoadingIndicator()
+    var loadingIndicator = LoadingIndicator()
     
     private var mainController: TabBarController!
     private var authorizationController: AuthorizationViewController!
@@ -59,6 +59,10 @@ class RootViewController: UIViewController {
         
         
 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        RootViewController.main.loadingIndicator.adaptColors()
     }
     
     override func viewDidLayoutSubviews() {
@@ -181,5 +185,9 @@ extension RootViewController {
     
     static func stopLoadingIndicator(with stopReason: LoadingIndicator.StopIndicatorType, completion: (() -> ())? = nil) {
         RootViewController.main.loadingIndicator.stopIndicator(with: stopReason, completion: completion)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        RootViewController.main.loadingIndicator.adaptColors()
     }
 }

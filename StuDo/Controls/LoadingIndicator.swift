@@ -39,6 +39,24 @@ class LoadingIndicator: UIView {
         
     }
     
+    func adaptColors() {
+        var blurEffect: UIBlurEffect!
+
+        if #available(iOS 13, *), self.traitCollection.userInterfaceStyle == .dark  {
+            indicatorLayer.strokeColor = UIColor.systemGray2.cgColor
+            doneImageView.tintColor = .systemGray2
+            blurEffect = UIBlurEffect(style: .dark)
+        } else {
+            indicatorLayer.strokeColor = UIColor.darkGray.cgColor
+            doneImageView.tintColor = .darkGray
+            blurEffect = UIBlurEffect(style: .light)
+        }
+        
+        blurView = UIVisualEffectView(effect: blurEffect)
+        let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
+        vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
+    }
+    
     init() {
         super.init(frame: .zero)
         
@@ -46,18 +64,13 @@ class LoadingIndicator: UIView {
         layer.masksToBounds = true
         
         backgroundColor = .clear
-        let blurEffect = UIBlurEffect(style: .light)
-        blurView = UIVisualEffectView(effect: blurEffect)
+        adaptColors()
         
-        let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
-        vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
-        
-        indicatorLayer.strokeColor = UIColor.darkGray.cgColor
         indicatorLayer.fillColor = UIColor.init(white: 0, alpha: 0).cgColor
+        
         indicatorLayer.lineWidth = 4
         indicatorLayer.lineCap = .round
         
-        doneImageView.tintColor = .darkGray
         doneImageView.contentMode = .scaleAspectFit
         
         doneImageView.isHidden = true

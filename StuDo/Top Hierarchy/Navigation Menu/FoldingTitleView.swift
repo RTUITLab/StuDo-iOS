@@ -83,6 +83,8 @@ class FoldingTitleView: UIView {
         glyph.contentMode = .scaleAspectFit
         if #available(iOS 13, *) {
             glyph.tintColor = .label
+        } else {
+            glyph.tintColor = .black
         }
         
         

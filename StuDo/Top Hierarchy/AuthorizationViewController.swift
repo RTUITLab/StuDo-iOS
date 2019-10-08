@@ -71,8 +71,20 @@ class AuthorizationViewController: UIViewController {
     static private let pink = UIColor(red:0.952, green:0.447, blue:0.597, alpha:1.000)
     static private let violette = UIColor(red:0.664, green:0.567, blue:0.825, alpha:1.000)
     
-    private let proceedColor = UIColor(red:0.000, green:0.467, blue:1.000, alpha:1.000)
-    private let modeColor = UIColor(red:0.184, green:0.184, blue:0.184, alpha:1.000)
+    private lazy var proceedColor: UIColor = {
+        if #available(iOS 13, *) {
+            return .systemBlue
+        } else {
+            return UIColor(red:0.000, green:0.467, blue:1.000, alpha:1.000)
+        }
+    }()
+    private lazy var modeColor: UIColor = {
+        if #available(iOS 13, *) {
+            return .secondaryLabel
+        } else {
+            return UIColor(red:0.184, green:0.184, blue:0.184, alpha:1.000)
+        }
+    }()
     
     private var currentSet = 0
     
@@ -391,7 +403,9 @@ class AuthorizationViewController: UIViewController {
         _ = checkIfShouldProceed()
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        adaptColors()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         let scaleFactor: CGFloat = 0.9
@@ -420,7 +434,22 @@ class AuthorizationViewController: UIViewController {
     }
     
     
-    
+    func adaptColors() {
+        if #available(iOS 13, *) {
+            var preferredColor: UIColor!
+            if traitCollection.userInterfaceStyle == .dark {
+                preferredColor = UIColor.systemBackground.withAlphaComponent(0.4)
+            } else {
+                preferredColor = nil
+            }
+            
+            emailTextField.backgroundColor = preferredColor
+            passwordTextField.backgroundColor = preferredColor
+            checkPasswordTextField.backgroundColor = preferredColor
+            firstNameTextField.backgroundColor = preferredColor
+            lastNameTextField.backgroundColor = preferredColor
+        }
+    }
     
     
     
