@@ -96,13 +96,20 @@ class TableViewCellWithTextViewInput: UITableViewCell {
         placeholderLabel.topAnchor.constraint(equalTo: textViewInput.topAnchor, constant: 7).isActive = true
         
         placeholderLabel.font = .preferredFont(forTextStyle: .body)
-        placeholderLabel.textColor = UIColor(red:0.781, green:0.780, blue:0.802, alpha:1.000)
+        
+        if #available(iOS 13, *) {
+            placeholderLabel.textColor = .placeholderText
+        } else {
+            placeholderLabel.textColor = UIColor(red:0.781, green:0.780, blue:0.802, alpha:1.000)
+        }
         
         placeholderLabel.isHidden = true
         
         textViewInput.isScrollEnabled = false
         
         textViewInput.font = .preferredFont(forTextStyle: .body)
+        
+        textViewInput.backgroundColor = nil
     }
     
     required init?(coder aDecoder: NSCoder) {

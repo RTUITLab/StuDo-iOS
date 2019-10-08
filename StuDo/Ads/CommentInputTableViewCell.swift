@@ -15,6 +15,8 @@ class CommentInputTableViewCell: TableViewCellWithTextViewInput {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        contentView.backgroundColor = nil
+        
         let publishButtonSize: CGFloat = 28
         contentView.addSubview(publishButton)
         publishButton.translatesAutoresizingMaskIntoConstraints = false

@@ -328,7 +328,11 @@ class OrganizationViewController: UITableViewController {
         cell.accessoryType = .disclosureIndicator
         
         if info == .delete {
-            cell.textLabel?.textColor = .red
+            if #available(iOS 13, *) {
+                cell.textLabel?.textColor = .systemRed
+            } else {
+                cell.textLabel?.textColor = .red
+            }
             cell.textLabel?.text = Localizer.string(for: .delete)
         } else if info == .join {
             cell.textLabel?.textColor = .globalTintColor

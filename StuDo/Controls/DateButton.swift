@@ -22,9 +22,14 @@ class DateButton: UIButton {
             }
         } else {
             label.text = labelPlaceholder
-            label.textColor = UIColor(red:0.149, green:0.149, blue:0.149, alpha:1.000)
             
-            backgroundColor = UIColor(red:0.936, green:0.941, blue:0.950, alpha:1.000)
+            if #available(iOS 13, *) {
+                label.textColor = .placeholderText
+                backgroundColor = .systemGray5
+            } else {
+                backgroundColor = UIColor(red:0.936, green:0.941, blue:0.950, alpha:1.000)
+                label.textColor = UIColor(red:0.149, green:0.149, blue:0.149, alpha:1.000)
+            }
         }
     }
     

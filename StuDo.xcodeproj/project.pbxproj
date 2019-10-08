@@ -391,6 +391,7 @@
 		496772CB233A1C0400776852 /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */,
 				49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */,
 				494C64AA22C253AC0039740B /* AccountDetailViewController.swift */,
 				49C85B2C22D8F64C00578F39 /* AccountHeaderCell.swift */,
@@ -403,7 +404,6 @@
 			children = (
 				49D76A7623102B26002B22D4 /* SettingsViewController.swift */,
 				49D76A7923102FD0002B22D4 /* SettingsListViewControllers.swift */,
-				49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */,
 				49E2DB1722FDBD1E0015DCD8 /* PasswordTableViewController.swift */,
 				49E2DB1322FDB3730015DCD8 /* EmailTableViewController.swift */,
 			);

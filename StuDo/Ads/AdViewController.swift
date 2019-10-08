@@ -49,7 +49,12 @@ class AdViewController: CardViewController {
                 descriptionText = ad.shortDescription
             }
             
-            let markdownParser = MarkdownParser(font: UIFont.preferredFont(for: .body, weight: .light))
+            var markdownParser: MarkdownParser!
+            if #available(iOS 13.0, *) {
+                markdownParser = MarkdownParser(font: UIFont.preferredFont(for: .body, weight: .light), color: .label)
+            } else {
+                markdownParser = MarkdownParser(font: UIFont.preferredFont(for: .body, weight: .light))
+            }
             markdownParser.enabledElements = .all
             markdownParser.bold.font = UIFont.preferredFont(for: .body, weight: .medium)
             markdownParser.italic.font = UIFont.preferredFont(for: .body, weight: .light).italic()
@@ -194,7 +199,13 @@ class AdViewController: CardViewController {
             nonEditingInfoContainer.isHidden = true
         }
         
-        additionalInfoLabel.textColor = UIColor(red:0.467, green:0.467, blue:0.471, alpha:1.000)
+        if #available(iOS 13, *) {
+            additionalInfoLabel.textColor = .label
+            membersTableView.backgroundColor = .secondarySystemBackground
+            commentsTableView.backgroundColor = .secondarySystemBackground
+        } else {
+            additionalInfoLabel.textColor = UIColor(red:0.467, green:0.467, blue:0.471, alpha:1.000)
+        }
         
         
         membersTableView.delegate = self
@@ -280,7 +291,6 @@ class AdViewController: CardViewController {
         
         
         let separatorView = UIView()
-        separatorView.backgroundColor = UIColor(red:0.793, green:0.788, blue:0.805, alpha:1.000)
         nonEditingInfoContainer.addSubview(separatorView)
         separatorView.translatesAutoresizingMaskIntoConstraints = false
         separatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
@@ -360,7 +370,6 @@ class AdViewController: CardViewController {
         
         let moreButtonImage = #imageLiteral(resourceName: "three-dots-menu").withRenderingMode(.alwaysTemplate)
         moreButton.setImage(moreButtonImage, for: .normal)
-        moreButton.tintColor = UIColor(red:0.815, green:0.819, blue:0.837, alpha:1.000)
         moreButton.adjustsImageWhenHighlighted = false
         moreButton.isHidden = true
         
@@ -390,7 +399,14 @@ class AdViewController: CardViewController {
         cancelEditingButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
         cancelEditingButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: leftRightPadding).isActive = true
         
-        let cancelEditingButtonImage = #imageLiteral(resourceName: "cancel").withRenderingMode(.alwaysOriginal)
+        var cancelEditingButtonImage: UIImage!
+        if #available(iOS 13, *) {
+            cancelEditingButtonImage = UIImage(systemName: "xmark.circle.fill")
+            cancelEditingButton.tintColor = .systemGray2
+            // TODO: Make the SFSymbol larger
+        } else {
+            cancelEditingButtonImage = #imageLiteral(resourceName: "cancel").withRenderingMode(.alwaysOriginal)
+        }
         cancelEditingButton.setImage(cancelEditingButtonImage, for: .normal)
         cancelEditingButton.alpha = 0
         cancelEditingButton.isHidden = true
@@ -425,12 +441,10 @@ class AdViewController: CardViewController {
         descriptionTextView.autocapitalizationType = .sentences
         
         additionalInfoLabel.font = .preferredFont(for: .body, weight: .light)
-        additionalInfoLabel.textColor = .lightGray
         
         
         
         descriptionPlaceholderLabel.text = Localizer.string(for: .adEditorDescriptionPlaceholder)
-        descriptionPlaceholderLabel.textColor = .lightGray
         descriptionPlaceholderLabel.font = .preferredFont(forTextStyle: .body)
         descriptionPlaceholderLabel.numberOfLines = 3
         
@@ -443,6 +457,20 @@ class AdViewController: CardViewController {
         commentsTableView.separatorInset = .zero
         commentsTableView.rowHeight = UITableView.automaticDimension
         commentsTableView.isHidden = true
+        
+        if #available(iOS 13, *) {
+            additionalInfoLabel.textColor = .label
+            moreButton.tintColor = .systemGray2
+            descriptionPlaceholderLabel.textColor = .placeholderText
+            separatorView.backgroundColor = .separator
+            descriptionTextView.backgroundColor = nil
+        } else {
+            additionalInfoLabel.textColor = .lightGray
+            moreButton.tintColor = UIColor(red:0.815, green:0.819, blue:0.837, alpha:1.000)
+            descriptionPlaceholderLabel.textColor = .lightGray
+            separatorView.backgroundColor = UIColor(red:0.793, green:0.788, blue:0.805, alpha:1.000)
+
+        }
         
 
     }
@@ -691,7 +719,11 @@ class AdViewController: CardViewController {
             publishButton.tintColor = .globalTintColor
         } else {
             publishButton.isEnabled = false
-            publishButton.tintColor = UIColor(red:0.936, green:0.941, blue:0.950, alpha:1.000)
+            if #available(iOS 13, *) {
+                publishButton.tintColor = .lightGray
+            } else {
+                publishButton.tintColor = UIColor(red:0.936, green:0.941, blue:0.950, alpha:1.000)
+            }
         }
     }
     
@@ -1199,6 +1231,10 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
                 
                 cell.selectionStyle = .none
                 
+                if #available(iOS 13, *) {
+                    cell.contentView.backgroundColor = .secondarySystemBackground
+                }
+                
                 return cell
             }
             
@@ -1209,6 +1245,10 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
             
             cell.nameLabel.textColor = .globalTintColor
             cell.nameLabel.text = Localizer.string(for: .adEditorJoinAd) + "..."
+            
+            if #available(iOS 13, *) {
+                cell.contentView.backgroundColor = .secondarySystemBackground
+            }
             
             return cell
             
@@ -1238,6 +1278,10 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
                 
                 publishCommentButton = inputCell.publishButton
                 publishCommentButton.addTarget(self, action: #selector(publishCommentButtonTapped(_ :)), for: .touchUpInside)
+                
+                if #available(iOS 13, *) {
+                    inputCell.contentView.backgroundColor = .secondarySystemBackground
+                }
 
                 return inputCell
             }
@@ -1283,6 +1327,10 @@ extension AdViewController: UITableViewDataSource, UITableViewDelegate {
             }
             
             cell.layoutIfNeeded()
+            
+            if #available(iOS 13, *) {
+                cell.contentView.backgroundColor = .secondarySystemBackground
+            }
 
             return cell
         }

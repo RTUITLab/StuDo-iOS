@@ -79,8 +79,11 @@ class FoldingTitleView: UIView {
         
         titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         
-        glyph.image = #imageLiteral(resourceName: "expand arrow")
+        glyph.image = #imageLiteral(resourceName: "expand arrow").withRenderingMode(.alwaysTemplate)
         glyph.contentMode = .scaleAspectFit
+        if #available(iOS 13, *) {
+            glyph.tintColor = .label
+        }
         
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(handle(tap:)))

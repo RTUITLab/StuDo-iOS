@@ -13,6 +13,8 @@ class CurrentUserAdTableViewCell: UserTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        backgroundColor = nil
+        
         accessoryType = .disclosureIndicator
         
         let colors = UserGradient.current

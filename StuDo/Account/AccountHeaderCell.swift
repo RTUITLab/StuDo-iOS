@@ -22,7 +22,11 @@ class AccountHeaderView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor.white
+        if #available(iOS 13, *) {
+            contentView.backgroundColor = .secondarySystemGroupedBackground
+        } else {
+            contentView.backgroundColor = UIColor.white
+        }
         
         contentView.addSubview(sectionTitleLabel)
         sectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false

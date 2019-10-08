@@ -169,7 +169,11 @@ class AuthorizationViewController: UIViewController {
         containerViewHeightConstraint = containerView.heightAnchor.constraint(equalToConstant: initialContainerViewHeight)
         containerViewHeightConstraint.isActive = true
         
-        containerView.backgroundColor = .init(white: 1, alpha: 0.6)
+        if #available(iOS 13, *) {
+            containerView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.8)
+        } else {
+            containerView.backgroundColor = .init(white: 1, alpha: 0.6)
+        }
         containerView.layer.cornerRadius = 8
         containerView.layer.masksToBounds = false
         

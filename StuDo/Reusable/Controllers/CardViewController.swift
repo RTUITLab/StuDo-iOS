@@ -100,13 +100,11 @@ class CardViewController: UIViewController {
         containerView.layer.masksToBounds = true
         
         containerView.addSubview(cardView)
-        cardView.backgroundColor = .white
         cardView.layer.cornerRadius = cornerRadius
         cardView.layer.masksToBounds = true
         
         
         cardView.addSubview(contentView)
-        contentView.backgroundColor = .white
         
         
         view.insertSubview(dimView, belowSubview: containerView)
@@ -117,7 +115,6 @@ class CardViewController: UIViewController {
         
         cardView.addSubview(headerView)
         headerView.frame = CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: cardTopOffset))
-        headerView.backgroundColor = .white
         headerView.layer.shadowColor = UIColor(red:0.447, green:0.447, blue:0.443, alpha:0.4).cgColor
         headerView.layer.shadowRadius = 5
         
@@ -132,7 +129,6 @@ class CardViewController: UIViewController {
         horizontalHandle.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
         
         horizontalHandle.layer.cornerRadius = handleHeight / 2
-        horizontalHandle.backgroundColor = UIColor(red:0.815, green:0.819, blue:0.837, alpha:1.000)
         
         
         headerView.addSubview(headerSeparator)
@@ -142,7 +138,6 @@ class CardViewController: UIViewController {
         headerSeparator.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
         headerSeparator.bottomAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
         
-        headerSeparator.backgroundColor = UIColor(red:0.816, green:0.816, blue:0.816, alpha:1.000)
         headerSeparator.alpha = 0
         
         
@@ -153,8 +148,24 @@ class CardViewController: UIViewController {
         headerLabel.centerXAnchor.constraint(equalTo: horizontalHandle.centerXAnchor).isActive = true
         headerLabel.centerYAnchor.constraint(equalTo: horizontalHandle.centerYAnchor).isActive = true
         
-        headerLabel.textColor = .lightGray
         headerLabel.font = .systemFont(ofSize: 16, weight: .light)
+        
+        
+        if #available(iOS 13, *) {
+            cardView.backgroundColor = .secondarySystemBackground
+            contentView.backgroundColor = .secondarySystemBackground
+            headerView.backgroundColor = .secondarySystemBackground
+            headerSeparator.backgroundColor = .separator
+            horizontalHandle.backgroundColor = .separator
+            headerLabel.textColor = .label
+        } else {
+            cardView.backgroundColor = .white
+            contentView.backgroundColor = .white
+            headerView.backgroundColor = .white
+            headerLabel.textColor = .lightGray
+            horizontalHandle.backgroundColor = UIColor(red:0.815, green:0.819, blue:0.837, alpha:1.000)
+            headerSeparator.backgroundColor = UIColor(red:0.816, green:0.816, blue:0.816, alpha:1.000)
+        }
 
         
         containerView.keyboardDismissMode = .interactive

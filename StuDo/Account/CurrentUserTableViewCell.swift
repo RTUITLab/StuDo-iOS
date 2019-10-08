@@ -70,7 +70,12 @@ class CurrentUserTableViewCell: UITableViewCell {
             
         } else {
             let separator = UIView()
-            separator.backgroundColor = UIColor(red:0.867, green:0.867, blue:0.867, alpha:1.000)
+            
+            if #available(iOS 13, *) {
+                separator.backgroundColor = .separator
+            } else {
+                separator.backgroundColor = UIColor(red:0.867, green:0.867, blue:0.867, alpha:1.000)
+            }
             
             addSubview(separator)
             separator.translatesAutoresizingMaskIntoConstraints = false

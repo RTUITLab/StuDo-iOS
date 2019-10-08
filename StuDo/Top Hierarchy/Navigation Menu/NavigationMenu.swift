@@ -93,6 +93,10 @@ class NavigationMenu: UITableView {
         
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange(notification:)), name: PersistentStoreNotification.themeDidChange.name, object: nil)
+        
+        if #available(iOS 13, *) {
+            backgroundColor = .secondarySystemBackground
+        }
 
     }
     
@@ -142,6 +146,10 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
             cell.tickGlyph.alpha = 0
         }
         
+        if #available(iOS 13, *) {
+            cell.contentView.backgroundColor = .secondarySystemBackground
+        }
+        
         return cell
     }
     
@@ -176,7 +184,12 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
         if section == 1 {
             let header = dequeueReusableHeaderFooterView(withIdentifier: navigationMenuHeaderId)!
             header.backgroundView = UIView()
-            header.backgroundView?.backgroundColor = .white
+            if #available(iOS 13, *) {
+                header.backgroundView?.backgroundColor = .secondarySystemBackground
+                header.textLabel?.textColor = .tertiaryLabel
+            } else {
+                header.backgroundView?.backgroundColor = .white
+            }
             header.textLabel?.text = Localizer.string(for: .navigationMenuBookmarks)
             return header
         }
