@@ -25,6 +25,7 @@ class FeedViewController: UIViewController {
     enum FeedMode: Equatable {
         case allAds
         case myAds
+        case bookmarks
         case organization(String)
     }
     var currentMode: FeedMode = .allAds
@@ -151,6 +152,8 @@ class FeedViewController: UIViewController {
             client.getAds()
         case .myAds:
             client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
+        case .bookmarks:
+            client.getBookmarkedAds()
         case .organization(let id):
             client.getAds(forOrganizationWithId: id)
             break
@@ -252,6 +255,8 @@ extension FeedViewController: APIClientDelegate {
             noAdsDescriptionLabel.text = Localizer.string(for: .feedNoAdsDescription)
         case .myAds:
             noAdsDescriptionLabel.text = Localizer.string(for: .feedNoOwnAdsDescription)
+        case .bookmarks:
+            noAdsDescriptionLabel.text = Localizer.string(for: .feedNoBookmarkedAdsDescription)
         case .organization:
             noAdsDescriptionLabel.text = Localizer.string(for: .feedNoOrganizationAdsDescription)
         }
@@ -269,6 +274,14 @@ extension FeedViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String) {
         if currentMode == .myAds {
+            setAds(ads)
+            tableView.reloadData()
+            refreshControl.endRefreshing()
+        }
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveBookmarkedAds ads: [Ad]) {
+        if currentMode == .bookmarks {
             setAds(ads)
             tableView.reloadData()
             refreshControl.endRefreshing()
@@ -361,6 +374,10 @@ extension FeedViewController: NavigationMenuDelegate {
             currentMode = .myAds
             client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
             titleView.titleLabel.text = Localizer.string(for: .feedTitleMyAds)
+        case .bookmarks:
+            currentMode = .bookmarks
+            client.getBookmarkedAds()
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleBookmarks)
         case .organization(let id, let name):
             currentMode = .organization(id)
             titleView.titleLabel.text = name
@@ -427,7 +444,9 @@ extension FeedViewController {
             titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
         case .myAds:
             titleView.titleLabel.text = Localizer.string(for: .feedTitleMyAds)
-        default:
+        case .bookmarks:
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleBookmarks)
+        case .organization(_):
             break
         }
         noAdsTitleLabel.text = Localizer.string(for: .feedNoAdsTitle)

@@ -30,6 +30,8 @@
 	<string>Убрать из избранного</string>
 	<key>adEditorAddToBookmarks</key>
 	<string>Добавить в избранное</string>
+	<key>feedNoBookmarkedAdsDescription</key>
+	<string>Ваши избранные объявления будут отображаться здесь.</string>
 	<key>search</key>
 	<string>Найти</string>
 	<key>organizationInfoHeaderTitle</key>
@@ -198,8 +200,12 @@
 	<string>Название</string>
 	<key>cancel</key>
 	<string>Отменить</string>
+	<key>feedTitleBookmarks</key>
+	<string>Избранное</string>
 	<key>navigationMenuBookmarks</key>
-	<string>Избранные источники</string>
+	<string>Избранные объявления</string>
+	<key>navigationMenuSavedSources</key>
+	<string>Сохранённые источники</string>
 	<key>adEditorCancelCreatingAlertMessage</key>
 	<string>Вы уверены, что не хотите сохранять данное объявление?</string>
 	<key>passwordChangeAlertTitle</key>

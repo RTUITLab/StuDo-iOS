@@ -40,12 +40,16 @@
 	<string>News</string>
 	<key>feedTitleMyAds</key>
 	<string>My Ads</string>
+	<key>feedTitleBookmarks</key>
+	<string>Bookmarks</string>
 	<key>feedNoAdsTitle</key>
 	<string>No ads to display.</string>
 	<key>feedNoAdsDescription</key>
 	<string>No one has published ads yet. Be the first!</string>
 	<key>feedNoOwnAdsDescription</key>
-	<string>The adds you&apos;ll publish will appear hear.</string>
+	<string>The ads you&apos;ll publish will appear here.</string>
+	<key>feedNoBookmarkedAdsDescription</key>
+	<string>The ads you bookmark will appear here.</string>
 	<key>feedNoOrganizationAdsDescription</key>
 	<string>You have the right to publish on behalf of this group.</string>
 	<key>feedPublishedBy</key>
@@ -56,10 +60,12 @@
 	<string>All news</string>
 	<key>navigationMenuMyAds</key>
 	<string>Only my ads</string>
+	<key>navigationMenuBookmarks</key>
+	<string>My bookmarked ads</string>
 	<key>navigationMenuOrganizationAds</key>
 	<string>My organization&apos;s ads</string>
-	<key>navigationMenuBookmarks</key>
-	<string>Bookmarks</string>
+	<key>navigationMenuSavedSources</key>
+	<string>Saved sources</string>
 	<key>accountTitle</key>
 	<string>Account</string>
 	<key>accountMyProfiles</key>

@@ -28,6 +28,8 @@
 	<string>Gelb</string>
 	<key>adEditorAddToBookmarks</key>
 	<string>Zu Lesezeichen hinzufügen</string>
+	<key>feedNoBookmarkedAdsDescription</key>
+	<string>Die von Ihnen mit einem Lesezeichen versehenen Anzeigen werden hier angezeigt.</string>
 	<key>adEditorRemoveFromBookmarks</key>
 	<string>Von Lesezeichen entfernen</string>
 	<key>greenThemeName</key>
@@ -59,10 +61,14 @@
 	<key>navigationMenuAllAds</key>
 	<string>Alle Neuigkeiten</string>
 	<key>navigationMenuMyAds</key>
-	<string>Nur Ihres anzeigen</string>
+	<string>Nur meine Anzeigen</string>
 	<key>navigationMenuOrganizationAds</key>
 	<string>Die Anzeigen meiner Organization</string>
+	<key>feedTitleBookmarks</key>
+	<string>Lesezeichnen</string>
 	<key>navigationMenuBookmarks</key>
+	<string>Meine Lesezeichnen</string>
+	<key>navigationMenuSavedSources</key>
 	<string>Gespeicherte Quellen</string>
 	<key>accountTitle</key>
 	<string>Account</string>

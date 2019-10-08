@@ -280,6 +280,7 @@ protocol APIClientDelegate: class {
     
     func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String)
     func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String)
+    func apiClient(_ client: APIClient, didRecieveBookmarkedAds ads: [Ad])
     
     
     func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile])
@@ -324,6 +325,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
     func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String) {}
     func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String) {}
+    func apiClient(_ client: APIClient, didRecieveBookmarkedAds ads: [Ad]) {}
     func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {}
     func apiClient(_ client: APIClient, didRecieveProfile profile: Profile) {}
     func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {}
@@ -600,7 +602,22 @@ extension APIClient {
     
     
     
-    
+    func getBookmarkedAds() {
+        let request = APIRequest(method: .get, path: "ad/bookmarks/")
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                let ads = try self.decodeAds(from: response)
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didRecieveBookmarkedAds: ads)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+    }
     
     
     func bookmarkAd(withId adId: String) {

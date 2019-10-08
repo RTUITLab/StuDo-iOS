@@ -60,9 +60,10 @@ class NavigationMenu: UITableView {
     enum MenuItemName: Equatable {
         case allAds
         case myAds
+        case bookmarks
         case organization(String, String)
     }
-    private let defaultMenuItems: [[MenuItemName]] = [[.allAds, .myAds]]
+    private let defaultMenuItems: [[MenuItemName]] = [[.allAds, .myAds, .bookmarks]]
     private lazy var menuItems = {
         return defaultMenuItems
     }()
@@ -133,6 +134,8 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
             cell.textLabel?.text = Localizer.string(for: .navigationMenuAllAds)
         case .myAds:
             cell.textLabel?.text = Localizer.string(for: .navigationMenuMyAds)
+        case .bookmarks:
+            cell.textLabel?.text = Localizer.string(for: .navigationMenuBookmarks)
         case .organization(_, let name):
             cell.textLabel?.text = name
         }
@@ -190,7 +193,7 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
             } else {
                 header.backgroundView?.backgroundColor = .white
             }
-            header.textLabel?.text = Localizer.string(for: .navigationMenuBookmarks)
+            header.textLabel?.text = Localizer.string(for: .navigationMenuSavedSources)
             return header
         }
         return nil
