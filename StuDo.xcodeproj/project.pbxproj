@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,6 +12,8 @@
 		49034AF0232B9BE800749D18 /* UserPublicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49034AEF232B9BE800749D18 /* UserPublicController.swift */; };
 		491BFCEF233BE72E002CF4AE /* AdDescriptionTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */; };
 		491DCA8C231C089D00A78111 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DCA8B231C089D00A78111 /* UIColorExtension.swift */; };
+		491E329523F06B4900E0CF6B /* AdBodyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491E329323F06B4900E0CF6B /* AdBodyCell.swift */; };
+		491E329623F06B4900E0CF6B /* AdBodyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491E329423F06B4900E0CF6B /* AdBodyCell.xib */; };
 		4928D43622A3ED9700F4D703 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4928D43522A3ED9700F4D703 /* DataModel.swift */; };
 		4933A91D232A667F00A09646 /* AdTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4933A91C232A667F00A09646 /* AdTableViewCell.xib */; };
 		4933A91F232A6A0300A09646 /* TextViewNoPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4933A91E232A6A0300A09646 /* TextViewNoPadding.swift */; };
@@ -35,6 +37,7 @@
 		4973AD23231D50DF00B4B578 /* OrganizationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD22231D50DF00B4B578 /* OrganizationListController.swift */; };
 		4973AD25231D58DD00B4B578 /* OrganizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */; };
 		4980ED702341E375003FADC6 /* CommentInputTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4980ED6F2341E375003FADC6 /* CommentInputTableViewCell.swift */; };
+		4986BE3B23F094EC0068F8E1 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4986BE3A23F094EC0068F8E1 /* UIViewExtension.swift */; };
 		499075D8233E642B0045DE6A /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D7233E642B0045DE6A /* UserTableViewCell.swift */; };
 		499075DA233E77120045DE6A /* CurrentUserAdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */; };
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
@@ -42,6 +45,7 @@
 		49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF624231C1C4200AA3FCB /* DateButton.swift */; };
 		49ADF627231CF3A100AA3FCB /* DatePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF626231CF3A100AA3FCB /* DatePickerController.swift */; };
 		49ADF629231CF4BD00AA3FCB /* SlideUpTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF628231CF4BD00AA3FCB /* SlideUpTransition.swift */; };
+		49AF5A6323F039A7007832FD /* AdViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AF5A6223F039A7007832FD /* AdViewController2.swift */; };
 		49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */; };
 		49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */; };
 		49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B382228DD75400CA9EC7 /* FeedViewController.swift */; };
@@ -101,6 +105,8 @@
 		49034AEF232B9BE800749D18 /* UserPublicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPublicController.swift; sourceTree = "<group>"; };
 		491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdDescriptionTextView.swift; sourceTree = "<group>"; };
 		491DCA8B231C089D00A78111 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		491E329323F06B4900E0CF6B /* AdBodyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBodyCell.swift; sourceTree = "<group>"; };
+		491E329423F06B4900E0CF6B /* AdBodyCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdBodyCell.xib; sourceTree = "<group>"; };
 		4928D43522A3ED9700F4D703 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		4933A91C232A667F00A09646 /* AdTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdTableViewCell.xib; sourceTree = "<group>"; };
 		4933A91E232A6A0300A09646 /* TextViewNoPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewNoPadding.swift; sourceTree = "<group>"; };
@@ -130,6 +136,7 @@
 		4973AD22231D50DF00B4B578 /* OrganizationListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationListController.swift; sourceTree = "<group>"; };
 		4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationViewController.swift; sourceTree = "<group>"; };
 		4980ED6F2341E375003FADC6 /* CommentInputTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputTableViewCell.swift; sourceTree = "<group>"; };
+		4986BE3A23F094EC0068F8E1 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		499075D7233E642B0045DE6A /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserAdTableViewCell.swift; sourceTree = "<group>"; };
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -137,6 +144,7 @@
 		49ADF624231C1C4200AA3FCB /* DateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateButton.swift; sourceTree = "<group>"; };
 		49ADF626231CF3A100AA3FCB /* DatePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerController.swift; sourceTree = "<group>"; };
 		49ADF628231CF4BD00AA3FCB /* SlideUpTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpTransition.swift; sourceTree = "<group>"; };
+		49AF5A6223F039A7007832FD /* AdViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewController2.swift; sourceTree = "<group>"; };
 		49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		49B1B382228DD75400CA9EC7 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
@@ -231,6 +239,7 @@
 		491BFCE4233BDC44002CF4AE /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				4986BE3A23F094EC0068F8E1 /* UIViewExtension.swift */,
 				49E2DB0F22FDB22B0015DCD8 /* UITableViewExtension.swift */,
 				4973AD1F231D4A0300B4B578 /* DateFormatterExtension.swift */,
 				49E61DD8231A564C007BC4FF /* UIFontExtension.swift */,
@@ -445,6 +454,16 @@
 			path = Reusable;
 			sourceTree = "<group>";
 		};
+		49AF5A6423F04034007832FD /* AdViewer */ = {
+			isa = PBXGroup;
+			children = (
+				49AF5A6223F039A7007832FD /* AdViewController2.swift */,
+				491E329323F06B4900E0CF6B /* AdBodyCell.swift */,
+				491E329423F06B4900E0CF6B /* AdBodyCell.xib */,
+			);
+			path = AdViewer;
+			sourceTree = "<group>";
+		};
 		49C85B2F22D9EBFC00578F39 /* Ads */ = {
 			isa = PBXGroup;
 			children = (
@@ -452,6 +471,7 @@
 				4933A920232A6C2800A09646 /* AdTableViewCell.swift */,
 				4933A91C232A667F00A09646 /* AdTableViewCell.xib */,
 				49CAEC8E229D93B00008D809 /* AdViewController.swift */,
+				49AF5A6423F04034007832FD /* AdViewer */,
 				491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */,
 				499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */,
 				4938CF3623412A6800055A98 /* CommentTableViewCell.swift */,
@@ -592,6 +612,7 @@
 			files = (
 				4933A91D232A667F00A09646 /* AdTableViewCell.xib in Resources */,
 				49BCE24E22F31D4C00C64C44 /* Assets.xcassets in Resources */,
+				491E329623F06B4900E0CF6B /* AdBodyCell.xib in Resources */,
 				49D76A8423105F64002B22D4 /* RussianStrings.plist in Resources */,
 				49D76A80231053D2002B22D4 /* EnglishStrings.plist in Resources */,
 				493E8AD6228B4356004EC563 /* LaunchScreen.storyboard in Resources */,
@@ -666,16 +687,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-StuDo/Pods-StuDo-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/MarkdownKit/MarkdownKit.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-StuDo/Pods-StuDo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarkdownKit.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-StuDo/Pods-StuDo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -713,9 +729,11 @@
 			files = (
 				4973AD20231D4A0300B4B578 /* DateFormatterExtension.swift in Sources */,
 				49E61DD523185CB1007BC4FF /* LoadingIndicator.swift in Sources */,
+				49AF5A6323F039A7007832FD /* AdViewController2.swift in Sources */,
 				499075D8233E642B0045DE6A /* UserTableViewCell.swift in Sources */,
 				49BBB99B2306E25600883EB9 /* NavigationMenu.swift in Sources */,
 				49D76A82231059B9002B22D4 /* NotificationExtension.swift in Sources */,
+				491E329523F06B4900E0CF6B /* AdBodyCell.swift in Sources */,
 				4933A91F232A6A0300A09646 /* TextViewNoPadding.swift in Sources */,
 				4938CF3B2341421300055A98 /* MemberTableViewCell.swift in Sources */,
 				49BCE24C22F0AC2100C64C44 /* CardAnimatedTransitioning.swift in Sources */,
@@ -760,6 +778,7 @@
 				49CAEC8F229D93B00008D809 /* AdViewController.swift in Sources */,
 				493E8ACC228B4354004EC563 /* AppDelegate.swift in Sources */,
 				4980ED702341E375003FADC6 /* CommentInputTableViewCell.swift in Sources */,
+				4986BE3B23F094EC0068F8E1 /* UIViewExtension.swift in Sources */,
 				4973AD23231D50DF00B4B578 /* OrganizationListController.swift in Sources */,
 				49C85B2522D8C2E800578F39 /* BasicTableViewCells.swift in Sources */,
 				49E2DB1822FDBD1E0015DCD8 /* PasswordTableViewController.swift in Sources */,

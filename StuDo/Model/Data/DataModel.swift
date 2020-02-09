@@ -334,6 +334,8 @@ struct Comment {
     }
 }
 
+extension Comment: Equatable {}
+
 extension Comment: Encodable {
     init(text: String) {
         self.text = text

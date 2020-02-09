@@ -23,7 +23,7 @@ class CommentInputTableViewCell: TableViewCellWithTextViewInput {
         publishButton.widthAnchor.constraint(equalToConstant: publishButtonSize).isActive = true
         publishButton.heightAnchor.constraint(equalToConstant: publishButtonSize).isActive = true
         publishButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
-        publishButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16).isActive = true
+        publishButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         
         publishButton.isHidden = true
         
@@ -37,6 +37,10 @@ class CommentInputTableViewCell: TableViewCellWithTextViewInput {
         publishButton.setImage(publishButtonImage, for: .disabled)
         publishButton.adjustsImageWhenHighlighted = false
         publishButton.tintColor = .globalTintColor
+        
+        minimumHeightConstant.isActive = false
+        topConstraint.constant = 8
+        bottomConstraint.constant = -8
         
     }
     

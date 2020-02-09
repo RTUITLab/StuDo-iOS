@@ -191,12 +191,14 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     fileprivate func presentAdViewer(_ selectedAd: Ad, startInEditorMode: Bool = false) {
-        let detailVC = AdViewController(with: selectedAd, isOwner: startInEditorMode)
-        if startInEditorMode {
-            detailVC.currentMode = .editing
-            detailVC.shouldAppearFullScreen = true
-        }
-        detailVC.delegate = self
+//        let detailVC = AdViewController(with: selectedAd, isOwner: startInEditorMode)
+//        if startInEditorMode {
+//            detailVC.currentMode = .editing
+//            detailVC.shouldAppearFullScreen = true
+//        }
+//        detailVC.delegate = self
+        
+        let detailVC = AdViewController2(ad: selectedAd)
         
         impactFeedback.impactOccurred()
         shouldRefreshOnAppear = false
