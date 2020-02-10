@@ -55,7 +55,6 @@ class OrganizationListController: UITableViewController {
         
         searchController.delegate = self
         searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         
         if #available(iOS 10.0, *) {

@@ -121,11 +121,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     @objc func actionButtonTapped(_ button: UIButton) {
         hapticFeedback.impactOccurred()
         
-        let newAdVC = AdViewController(with: nil, isOwner: true)
-        newAdVC.currentMode = .editing
-        newAdVC.shouldAppearFullScreen = true
-        
-        newAdVC.modalPresentationStyle = .fullScreen
+        let newAdVC = AdViewController(ad: nil)
         self.present(newAdVC, animated: true, completion: nil)
     }
     

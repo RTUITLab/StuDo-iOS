@@ -191,19 +191,12 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     fileprivate func presentAdViewer(_ selectedAd: Ad, startInEditorMode: Bool = false) {
-//        let detailVC = AdViewController(with: selectedAd, isOwner: startInEditorMode)
-//        if startInEditorMode {
-//            detailVC.currentMode = .editing
-//            detailVC.shouldAppearFullScreen = true
-//        }
-//        detailVC.delegate = self
         
-        let detailVC = AdViewController2(ad: selectedAd)
+        let detailVC = AdViewController(ad: selectedAd)
         
         impactFeedback.impactOccurred()
         shouldRefreshOnAppear = false
         
-        detailVC.modalPresentationStyle = .fullScreen
         self.present(detailVC, animated: true, completion: nil)
     }
     
@@ -211,33 +204,6 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         let selectedAd = feedItems[indexPath.row]
         presentAdViewer(selectedAd)
     }
-}
-
-
-
-extension FeedViewController: AdViewControllerDelegate {
-    func adViewController(_ adVC: AdViewController, didDeleteAd deletedAd: Ad) {
-        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
-        
-        for indexPath in selectedRowsIndexPath {
-            if feedItems[indexPath.row].id == deletedAd.id {
-                feedItems.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-        }
-    }
-    
-    func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad) {
-        guard let selectedRowsIndexPath = tableView.indexPathsForSelectedRows else { return }
-        
-        for indexPath in selectedRowsIndexPath {
-            if feedItems[indexPath.row].id == updatedAd.id {
-                feedItems[indexPath.row] = updatedAd
-                tableView.reloadRows(at: [indexPath], with: .fade)
-            }
-        }
-    }
-    
 }
 
 

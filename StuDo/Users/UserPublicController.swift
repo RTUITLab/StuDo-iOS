@@ -116,8 +116,7 @@ class UserPublicController: UITableViewController {
         
         if currentSection == .ads {
             let currentAd = ads[indexPath.row]
-            let adVC = AdViewController(with: currentAd)
-            adVC.modalPresentationStyle = .fullScreen
+            let adVC = AdViewController(ad: currentAd)
             present(adVC, animated: true, completion: nil)
         } else if currentSection == .profiles {
             let currentProfile = profiles[indexPath.row]

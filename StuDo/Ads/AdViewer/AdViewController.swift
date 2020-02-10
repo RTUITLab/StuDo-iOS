@@ -14,18 +14,16 @@ private let editableBodyCellId = "editableBodyCellId"
 private let commentCellId = "commentCellId"
 private let commentInputCellId = "commentInputCellId"
 
-class AdViewController2: CardViewController {
+class AdViewController: UIViewController {
     
     // MARK: Visible elements
     
-    private let tableView: UITableView!
+    private let tableView: UITableView
+    
+    private var headerView: AdControllerHeaderView!
     private var commentInputTextView: UITextView!
     private var commentPlaceholderLabel: UILabel!
     private var commentPublishButton: UIButton!
-    
-    override var contentHeight: CGFloat {
-        return tableView.contentSize.height
-    }
     
     // MARK: - State properties
     // This properties allow the controller to switch between two states
@@ -93,22 +91,45 @@ class AdViewController2: CardViewController {
             currentState = .previewing
             client.getAd(withId: currentAd.id) // get full data of the ad
         }
-        tableView = UITableView(frame: .zero, style: .plain)
         
-        super.init()
+        tableView = UITableView(frame: .zero, style: .plain)
+        super.init(nibName: nil, bundle: nil)
+        
+        tableView.delegate = self
+        tableView.dataSource = self
         
         client.delegate = self
+        presentationController?.delegate = self
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Initial Setup
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        // Order is important
+        setHeaderView()
+        setTableView()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        
+    }
+        
+    private func setTableView() {
+        
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         // TODO: Remove
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CELL")
@@ -117,66 +138,31 @@ class AdViewController2: CardViewController {
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: commentCellId)
         tableView.register(CommentInputTableViewCell.self, forCellReuseIdentifier: commentInputCellId)
         
-        if #available(iOS 13.0, *) {
-            tableView.backgroundColor = .secondarySystemBackground
-        }
+        tableView.backgroundColor = .secondarySystemBackground
         tableView.tableFooterView = UIView()
         
-        setupInitialLayout()
-        setupVisualElements()
     }
     
-    // MARK: Layout
-    
-    private func setupInitialLayout() {
-        contentView.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 0).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: 0).isActive = true
-        tableView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
+    private func setHeaderView() {
+        headerView = AdControllerHeaderView(frame: .zero)
+        view.addSubview(headerView)
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        headerView.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
-        tableView.rowHeight = UITableView.automaticDimension
-
+        headerView.layer.shadowColor = UIColor(red:0.447, green:0.447, blue:0.443, alpha:0.4).cgColor
+        headerView.layer.shadowRadius = 5
+        headerView.backgroundColor = .red
+        
     }
-    
-    private func setupVisualElements() {
-        tableView.separatorInset = .zero
-    }
-
-    
-    private func scrollToBottom(_ additionalOffset: CGFloat = 0) {
-        let visibleSize = containerView.bounds.height - visibleKeyboardHeight
-        let contentHeight = self.contentHeight
-        guard contentHeight > visibleSize else { return }
-        if contentHeight > visibleSize {
-            let bottomOffset = CGPoint(x: 0, y: contentHeight - visibleSize + additionalOffset)
-            containerView.setContentOffset(bottomOffset, animated: true)
-        }
-    }
-    
-    // MARK: CardView Overrides
-    
-    override func didShowKeyboard() {
-        if currentState == .commenting {
-            self.scrollToBottom()
-        }
-    }
-    
-    override func shouldAllowDismissOnSwipe() -> Bool {
-        switch currentState {
-        case .commenting, .editing, .publishing:
-            return false
-        case .viewing, .previewing:
-            return true
-        }
-    }
-    
+        
     // MARK: - Model-related methods
-    
     
     private func set(ad: Ad) {
         currentAd = ad
+        headerView.titleText = ad.name
         if ad.comments != currentAdComments {
             currentAdComments = ad.comments ?? []
             if let commentsSectionIndex = getSectionIndex(for: .comments) {
@@ -213,9 +199,18 @@ class AdViewController2: CardViewController {
     }
     
     
-    // MARK: Actions
+    // MARK: Actions & Observers
     
+    @objc func keyboardWillShow(_ notification:Notification) {
+
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.cgRectValue.height, right: 0)
+        }
+    }
     
+    @objc func keyboardWillHide(_ notification:Notification) {
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
     
     
     
@@ -224,7 +219,7 @@ class AdViewController2: CardViewController {
 
 // MARK: - Table view data source
 
-extension AdViewController2: UITableViewDataSource {
+extension AdViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return currentSections.count
@@ -346,13 +341,13 @@ extension AdViewController2: UITableViewDataSource {
 
 // MARK: UITableViewDelegate
 
-extension AdViewController2: UITableViewDelegate {
+extension AdViewController: UITableViewDelegate {
     
 }
 
 // MARK: TextViewDelegate
 
-extension AdViewController2: UITextViewDelegate {
+extension AdViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         if textView === commentInputTextView {
             commentInputUpdated(with: textView.text)
@@ -373,11 +368,30 @@ extension AdViewController2: UITextViewDelegate {
         return true
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView === tableView {
+            headerView.toggleState(showTitle: scrollView.contentOffset.y > 0)
+        }
+    }
+    
+}
+
+// MARK: UIPresentationCo
+
+extension AdViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        switch currentState {
+        case .editing, .publishing:
+            return false
+        default:
+            return true
+        }
+    }
 }
 
 // MARK: APIClientDelegate
 
-extension AdViewController2: APIClientDelegate {
+extension AdViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
         set(ad: ad)
     }
