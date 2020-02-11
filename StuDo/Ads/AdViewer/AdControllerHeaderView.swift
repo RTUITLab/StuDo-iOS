@@ -9,7 +9,7 @@
 import UIKit
 
 class AdControllerHeaderView: UIView {
-    
+        
     var titleText: String = "" {
         didSet {
             headerLabel.text = titleText
@@ -19,6 +19,10 @@ class AdControllerHeaderView: UIView {
     private let horizontalHandle = UIView()
     private let headerSeparator = UIView()
     private let headerLabel = UILabel()
+    
+    let moreButton = UIButton()
+    let publishButton = UIButton()
+    let cancelEditingButton = UIButton()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,8 +64,32 @@ class AdControllerHeaderView: UIView {
         headerLabel.centerXAnchor.constraint(equalTo: horizontalHandle.centerXAnchor).isActive = true
         headerLabel.centerYAnchor.constraint(equalTo: horizontalHandle.centerYAnchor).isActive = true
         
-        headerLabel.font = .systemFont(ofSize: 16, weight: .light)
-                
+        let leftRightPadding: CGFloat = 16
+
+        let moreButtonSize: CGFloat = 20
+        self.addSubview(moreButton)
+        moreButton.translatesAutoresizingMaskIntoConstraints = false
+        moreButton.widthAnchor.constraint(equalToConstant: moreButtonSize).isActive = true
+        moreButton.heightAnchor.constraint(equalToConstant: moreButtonSize).isActive = true
+        moreButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        moreButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -leftRightPadding).isActive = true
+        
+        let publishButtonSize: CGFloat = 28
+        self.addSubview(publishButton)
+        publishButton.translatesAutoresizingMaskIntoConstraints = false
+        publishButton.widthAnchor.constraint(equalToConstant: publishButtonSize).isActive = true
+        publishButton.heightAnchor.constraint(equalToConstant: publishButtonSize).isActive = true
+        publishButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
+        publishButton.centerXAnchor.constraint(equalTo: moreButton.centerXAnchor).isActive = true
+        
+        let cancelEditingButtonSize: CGFloat = 24
+        self.addSubview(cancelEditingButton)
+        cancelEditingButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelEditingButton.widthAnchor.constraint(equalToConstant: cancelEditingButtonSize).isActive = true
+        cancelEditingButton.heightAnchor.constraint(equalToConstant: cancelEditingButtonSize).isActive = true
+        cancelEditingButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
+        cancelEditingButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: leftRightPadding).isActive = true
+        
     }
     
     private func setInitialVisuals() {
@@ -74,6 +102,22 @@ class AdControllerHeaderView: UIView {
         headerLabel.textColor = .label
         
         headerLabel.font = .systemFont(ofSize: 16, weight: .light)
+        
+        let moreButtonImage = UIImage(systemName: "ellipsis.circle.fill")!.withRenderingMode(.alwaysTemplate)
+        moreButton.setImage(moreButtonImage, for: .normal)
+        moreButton.adjustsImageWhenHighlighted = false
+        
+        let publishButtonImage = #imageLiteral(resourceName: "publish-button").withRenderingMode(.alwaysTemplate)
+        publishButton.setImage(publishButtonImage, for: .normal)
+        publishButton.setImage(publishButtonImage, for: .disabled)
+        publishButton.adjustsImageWhenHighlighted = false
+        publishButton.isHidden = true
+        
+        let cancelEditingButtonImage = UIImage(systemName: "xmark.circle.fill")
+        cancelEditingButton.tintColor = .systemGray2
+        cancelEditingButton.setImage(cancelEditingButtonImage, for: .normal)
+        cancelEditingButton.isHidden = true
+        
     }
     
     private func toggleTitle(visible: Bool) {
@@ -81,9 +125,24 @@ class AdControllerHeaderView: UIView {
         headerLabel.animateVisibility(shouldHide: !visible)
     }
     
+    func togglePublishButton(isEnabled: Bool) {
+        publishButton.tintColor = isEnabled ? .globalTintColor : .lightGray
+    }
+    
+    var showEditingControls = false {
+        willSet {
+            toggleTitle(visible: newValue)
+            moreButton.animateVisibility(shouldHide: newValue)
+            publishButton.animateVisibility(shouldHide: !newValue)
+            cancelEditingButton.animateVisibility(shouldHide: !newValue)
+        }
+    }
+    
     func toggleState(showTitle: Bool) {
-        toggleTitle(visible: showTitle)
         headerSeparator.animateVisibility(shouldHide: !showTitle)
+        if !showEditingControls {
+            toggleTitle(visible: showTitle)
+        }
     }
     
 

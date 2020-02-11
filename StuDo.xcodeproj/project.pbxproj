@@ -11,6 +11,8 @@
 		34445C941AC774AB402BEC54 /* Pods_StuDoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33751538F6BBDCA5F378E119 /* Pods_StuDoTests.framework */; };
 		49034AF0232B9BE800749D18 /* UserPublicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49034AEF232B9BE800749D18 /* UserPublicController.swift */; };
 		491BFCEF233BE72E002CF4AE /* AdDescriptionTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */; };
+		491DA7D923F206BC005892BD /* EditableAdBodyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DA7D723F206BC005892BD /* EditableAdBodyCell.swift */; };
+		491DA7DA23F206BC005892BD /* EditableAdBodyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491DA7D823F206BC005892BD /* EditableAdBodyCell.xib */; };
 		491DCA8C231C089D00A78111 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DCA8B231C089D00A78111 /* UIColorExtension.swift */; };
 		491E329523F06B4900E0CF6B /* AdBodyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491E329323F06B4900E0CF6B /* AdBodyCell.swift */; };
 		491E329623F06B4900E0CF6B /* AdBodyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491E329423F06B4900E0CF6B /* AdBodyCell.xib */; };
@@ -105,6 +107,8 @@
 		33751538F6BBDCA5F378E119 /* Pods_StuDoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StuDoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		49034AEF232B9BE800749D18 /* UserPublicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPublicController.swift; sourceTree = "<group>"; };
 		491BFCEE233BE72E002CF4AE /* AdDescriptionTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdDescriptionTextView.swift; sourceTree = "<group>"; };
+		491DA7D723F206BC005892BD /* EditableAdBodyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableAdBodyCell.swift; sourceTree = "<group>"; };
+		491DA7D823F206BC005892BD /* EditableAdBodyCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditableAdBodyCell.xib; sourceTree = "<group>"; };
 		491DCA8B231C089D00A78111 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		491E329323F06B4900E0CF6B /* AdBodyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBodyCell.swift; sourceTree = "<group>"; };
 		491E329423F06B4900E0CF6B /* AdBodyCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdBodyCell.xib; sourceTree = "<group>"; };
@@ -463,6 +467,8 @@
 				49AF5A6223F039A7007832FD /* AdViewController.swift */,
 				491E329323F06B4900E0CF6B /* AdBodyCell.swift */,
 				491E329423F06B4900E0CF6B /* AdBodyCell.xib */,
+				491DA7D723F206BC005892BD /* EditableAdBodyCell.swift */,
+				491DA7D823F206BC005892BD /* EditableAdBodyCell.xib */,
 				49E7187023F1D9960071374E /* AdControllerHeaderView.swift */,
 			);
 			path = AdViewer;
@@ -617,6 +623,7 @@
 				49BCE24E22F31D4C00C64C44 /* Assets.xcassets in Resources */,
 				491E329623F06B4900E0CF6B /* AdBodyCell.xib in Resources */,
 				49D76A8423105F64002B22D4 /* RussianStrings.plist in Resources */,
+				491DA7DA23F206BC005892BD /* EditableAdBodyCell.xib in Resources */,
 				49D76A80231053D2002B22D4 /* EnglishStrings.plist in Resources */,
 				493E8AD6228B4356004EC563 /* LaunchScreen.storyboard in Resources */,
 				49D3A25C2340F8F800FE4731 /* GermanStrings.plist in Resources */,
@@ -762,6 +769,7 @@
 				494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */,
 				49D76A7C231050A8002B22D4 /* Localizer.swift in Sources */,
 				499075DA233E77120045DE6A /* CurrentUserAdTableViewCell.swift in Sources */,
+				491DA7D923F206BC005892BD /* EditableAdBodyCell.swift in Sources */,
 				49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */,
 				494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */,
 				49D76A7A23102FD0002B22D4 /* SettingsListViewControllers.swift in Sources */,

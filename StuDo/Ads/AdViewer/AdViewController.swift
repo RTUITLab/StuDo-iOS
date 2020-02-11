@@ -25,13 +25,33 @@ class AdViewController: UIViewController {
     private var commentPlaceholderLabel: UILabel!
     private var commentPublishButton: UIButton!
     
-    // MARK: - State properties
+    private var titleEditableTextField: UITextField!
+    private var bodyEditableTextView: UITextView!
+    
+    // MARK: - State
     // This properties allow the controller to switch between two states
     // One allows to view the ad, the other allows to edit or publish
     
     private var currentAd: Ad!
     private var currentAdComments: [Comment] = []
     private var currentAdPeople: [User] = []
+    
+    private var adNameUnderEditing: String = ""
+    private var adBodyUnderEditing: String = ""
+    
+    private var publishableOrganizations: [Organization]!
+    
+    private var canEditAd: Bool {
+        if let currentGroupId = currentAd.organizationId {
+            for org in publishableOrganizations {
+                if org.id == currentGroupId {
+                    return true
+                }
+            }
+            return false
+        }
+        return currentAd.userId == PersistentStore.shared.user.id
+    }
     
     private let client = APIClient()
     
@@ -86,10 +106,14 @@ class AdViewController: UIViewController {
     init(ad: Ad?) {
         if ad == nil {
             currentState = .publishing
+            client.getOrganizations([.canPublish])
         } else {
             currentAd = ad
             currentState = .previewing
             client.getAd(withId: currentAd.id) // get full data of the ad
+            if currentAd.organizationId != nil {
+                client.getOrganizations([.canPublish])
+            }
         }
         
         tableView = UITableView(frame: .zero, style: .plain)
@@ -106,6 +130,13 @@ class AdViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    fileprivate func updateTableViewHeight() {
+        UIView.setAnimationsEnabled(false)
+        tableView.beginUpdates()
+        tableView.endUpdates()
+        UIView.setAnimationsEnabled(true)
+    }
+    
     // MARK: - Initial Setup
     
     override func viewDidLoad() {
@@ -119,7 +150,15 @@ class AdViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 
+        headerView.moreButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
+        headerView.cancelEditingButton.addTarget(self, action: #selector(cancelEditingButtonTapped(_:)), for: .touchUpInside)
+        headerView.publishButton.addTarget(self, action: #selector(publishButtonTapped(_:)), for: .touchUpInside)
         
+        if currentState == .publishing {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.enableEditingState()
+            }
+        }
     }
         
     private func setTableView() {
@@ -135,11 +174,14 @@ class AdViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CELL")
         
         tableView.register(UINib(nibName: String(describing: AdBodyCell.self), bundle: nil), forCellReuseIdentifier: bodyCellId)
+        tableView.register(UINib(nibName: String(describing: EditableAdBodyCell.self), bundle: nil), forCellReuseIdentifier: editableBodyCellId)
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: commentCellId)
         tableView.register(CommentInputTableViewCell.self, forCellReuseIdentifier: commentInputCellId)
         
         tableView.backgroundColor = .secondarySystemBackground
         tableView.tableFooterView = UIView()
+        
+        tableView.separatorStyle = .none
         
     }
     
@@ -159,10 +201,9 @@ class AdViewController: UIViewController {
     }
         
     // MARK: - Model-related methods
-    
+            
     private func set(ad: Ad) {
         currentAd = ad
-        headerView.titleText = ad.name
         if ad.comments != currentAdComments {
             currentAdComments = ad.comments ?? []
             if let commentsSectionIndex = getSectionIndex(for: .comments) {
@@ -178,6 +219,111 @@ class AdViewController: UIViewController {
         }
     }
     
+    private func deleteCurrentAd() {
+        func deleteAd() {
+            client.deleteAd(withId: currentAd.id)
+            RootViewController.startLoadingIndicator()
+        }
+        
+        let shouldProceedAlert = UIAlertController(title: Localizer.string(for: .adEditorDeleteAlertMessage), message: nil, preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: Localizer.string(for: .delete), style: .destructive, handler: { _ in deleteAd() } )
+        let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
+        
+        shouldProceedAlert.addAction(deleteAction)
+        shouldProceedAlert.addAction(cancelAction)
+        
+        present(shouldProceedAlert, animated: true, completion: nil)
+    }
+    
+    private func toggleBookmark() {
+        client.bookmarkAd(withId: currentAd!.id)
+        RootViewController.startLoadingIndicator()
+    }
+    
+    // MARK: Editing & Publishing
+    
+    private func checkIfCanPublishAd() -> Bool {
+        adNameUnderEditing.count > 0 && adBodyUnderEditing.count > 0
+    }
+    
+    private func updatePublishButton() {
+        headerView.togglePublishButton(isEnabled: checkIfCanPublishAd())
+    }
+    
+    func publishCurrentAd() {
+        
+        let adTitle = adNameUnderEditing
+        let description = adNameUnderEditing
+        var shortDescription: String!
+        
+        if let firstParagraph = adBodyUnderEditing.components(separatedBy: CharacterSet.newlines).first {
+            shortDescription = firstParagraph
+        } else {
+            shortDescription = description
+        }
+        
+//        let beginTime = beginDateButton.date!
+//        let endTime = endDateButton.date!
+        let beginTime = Date()
+        let endTime = Date()
+        
+
+        if currentAd != nil {
+            
+            let adToUpdate = Ad(id: currentAd.id, name: adTitle, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
+            
+            client.replaceAd(with: adToUpdate)
+            RootViewController.startLoadingIndicator()
+            
+        } else {
+            func createAd(id: String, asUser: Bool) {
+                var newAd: Ad!
+                if !asUser {
+                    newAd = Ad(organizationId: id, name: adTitle, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
+                } else {
+                    newAd = Ad(id: nil, name: adTitle, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
+                }
+                client.create(ad: newAd)
+                RootViewController.startLoadingIndicator()
+            }
+            
+            let currentUser = PersistentStore.shared.user!
+            
+            if !publishableOrganizations.isEmpty {
+
+                let alert = UIAlertController(title: Localizer.string(for: .adEditorPublishAdAlertMessage), message: nil, preferredStyle: .actionSheet)
+                
+                let meAction = UIAlertAction(title: "\(currentUser.firstName) \(currentUser.lastName)" , style: .default) { _ in
+                    createAd(id: currentUser.id!, asUser: true)
+                }
+                
+                alert.addAction(meAction)
+                alert.preferredAction = meAction
+                
+                for organization in publishableOrganizations {
+                    let action = UIAlertAction(title: "\(organization.name)" , style: .default) { _ in
+                        createAd(id: organization.id, asUser: false)
+                    }
+                    alert.addAction(action)
+                }
+                
+                
+                let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
+                alert.addAction(cancelAction)
+                
+                present(alert, animated: true, completion: nil)
+                
+            } else {
+                createAd(id: currentUser.id!, asUser: true)
+            }
+        }
+        
+    }
+
+    
+    // MARK: Comments
+    
     private func checkCanPublishComment(_ comment: String) -> Bool {
         return comment.count > 0
     }
@@ -191,15 +337,10 @@ class AdViewController: UIViewController {
         } else {
             commentPlaceholderLabel.isHidden = false
         }
-        
-        UIView.setAnimationsEnabled(false)
-        tableView.beginUpdates()
-        tableView.endUpdates()
-        UIView.setAnimationsEnabled(true)
     }
     
     
-    // MARK: Actions & Observers
+    // MARK: - Actions & Observers
     
     @objc func keyboardWillShow(_ notification:Notification) {
 
@@ -212,8 +353,106 @@ class AdViewController: UIViewController {
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
+    @objc func moreButtonTapped(_ button: UIButton) {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        if canEditAd {
+            let inviteAction = UIAlertAction(title: Localizer.string(for: .adEditorFindPeople), style: .default, handler: nil)
+            let editAction = UIAlertAction(title: Localizer.string(for: .adEditorEditAd), style: .default, handler: { _ in self.enableEditingState() } )
+            let deleteAction = UIAlertAction(title: Localizer.string(for: .adEditorDeleteAd), style: .destructive, handler: { _ in self.deleteCurrentAd() } )
+
+            actionSheet.addAction(inviteAction)
+            actionSheet.addAction(editAction)
+            actionSheet.addAction(deleteAction)
+        } else {
+            let title = Localizer.string(for: .adEditorAddToBookmarks)
+            let bookmarkAction = UIAlertAction(title: title, style: .default) { _ in
+                self.toggleBookmark()
+            }
+            actionSheet.addAction(bookmarkAction)
+        }
+        
+        let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
+        actionSheet.addAction(cancelAction)
+        
+        present(actionSheet, animated: true, completion: nil)
+    }
     
+    @objc func cancelEditingButtonTapped(_ button: UIButton) {
+        exitEditingState()
+    }
     
+    @objc func publishButtonTapped(_ button: UIButton) {
+        publishCurrentAd()
+    }
+    
+    // MARK: State switching
+    
+    private func reloadTableView() {
+        UIView.transition(with: tableView,
+                          duration: 0.35,
+                          options: .transitionCrossDissolve,
+                          animations: { self.tableView.reloadData() })
+    }
+    
+    private func enableEditingState() {
+        if currentAd == nil {
+            currentState = .publishing
+            headerView.titleText = Localizer.string(for: .adEditorCreationModeTitle)
+        } else {
+            currentState = .editing
+            headerView.titleText = Localizer.string(for: .adEditorEditingModeTitle)
+            adNameUnderEditing = currentAd.name
+            adBodyUnderEditing = currentAd.description! // TODO: Use FULL description instead (must be calculated!)
+        }
+        
+        headerView.showEditingControls = true
+        headerView.togglePublishButton(isEnabled: false)
+
+        reloadTableView()
+    }
+    
+    private func exitEditingState(shouldShowPrompt: Bool = true) {
+        func exitEditing() {
+            currentState = .viewing
+            self.headerView.showEditingControls = false
+            self.reloadTableView()
+        }
+        
+        guard shouldShowPrompt else {
+            exitEditing()
+            return
+        }
+        
+        if currentAd == nil && adNameUnderEditing.isEmpty && adBodyUnderEditing.isEmpty {
+            dismiss(animated: true, completion: nil)
+            return
+        }
+                
+        var alertMessage = Localizer.string(for: .adEditorCancelEditingAlertMessage)
+        var exitEditingActionMessage = Localizer.string(for: .adEditorDiscardChanges)
+        
+        if currentAd == nil {
+            alertMessage = Localizer.string(for: .adEditorCancelCreatingAlertMessage)
+            exitEditingActionMessage = Localizer.string(for: .adEditorCancelAdCreation)
+        }
+        
+        
+        let shouldProceedAlert = UIAlertController(title: alertMessage, message: nil, preferredStyle: .alert)
+        
+        let exitEditingAction = UIAlertAction(title: exitEditingActionMessage, style: .destructive, handler: { _ in
+            exitEditing()
+        } )
+        
+        let cancelAction = UIAlertAction(title: Localizer.string(for: .adEditorReturnToEditor), style: .default, handler: nil)
+        
+        shouldProceedAlert.addAction(cancelAction)
+        shouldProceedAlert.addAction(exitEditingAction)
+        shouldProceedAlert.preferredAction = cancelAction
+        
+        present(shouldProceedAlert, animated: true, completion: nil)
+
+    }
 
 }
 
@@ -269,7 +508,7 @@ extension AdViewController: UITableViewDataSource {
             
             cell.selectionStyle = .none
             
-            returnCell = cell as UITableViewCell
+            returnCell = cell
         case .commentInput:
             let cell = tableView.dequeueReusableCell(withIdentifier: commentInputCellId, for: indexPath) as! CommentInputTableViewCell
             
@@ -285,7 +524,7 @@ extension AdViewController: UITableViewDataSource {
             commentPublishButton = cell.publishButton
 //            commentPublishButton.addTarget(self, action: #selector(publishCommentButtonTapped(_ :)), for: .touchUpInside)
 
-            returnCell = cell as UITableViewCell
+            returnCell = cell
         case .body:
             let cell = tableView.dequeueReusableCell(withIdentifier: bodyCellId, for: indexPath) as! AdBodyCell
             cell.titleLabel.text = currentAd.name
@@ -322,8 +561,17 @@ extension AdViewController: UITableViewDataSource {
             cell.bodyTextView.attributedText = markdownParser.parse(attrDescription)
             
             
-            returnCell = cell as UITableViewCell
-        case .editableBody: fallthrough
+            returnCell = cell
+        case .editableBody:
+            let cell = tableView.dequeueReusableCell(withIdentifier: editableBodyCellId, for: indexPath) as! EditableAdBodyCell
+            cell.titleTextField.text = adNameUnderEditing
+            cell.bodyTextView.text = adBodyUnderEditing
+            cell.titleTextField.delegate = self
+            cell.titleTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+            cell.bodyTextView.delegate = self
+            titleEditableTextField = cell.titleTextField
+            bodyEditableTextView = cell.bodyTextView
+            returnCell = cell
         case .people: fallthrough
         case .preferences:
             let cell = tableView.dequeueReusableCell(withIdentifier: "CELL", for: indexPath)
@@ -351,12 +599,17 @@ extension AdViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         if textView === commentInputTextView {
             commentInputUpdated(with: textView.text)
+        } else if textView === bodyEditableTextView {
+            adBodyUnderEditing = bodyEditableTextView.text
+            updatePublishButton()
         }
+        updateTableViewHeight()
     }
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         if textView === commentInputTextView {
             currentState = .commenting
+            tableView.keyboardDismissMode = .interactive
         }
         return true
     }
@@ -364,6 +617,7 @@ extension AdViewController: UITextViewDelegate {
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         if textView === commentInputTextView {
             currentState = .viewing
+            tableView.keyboardDismissMode = .none
         }
         return true
     }
@@ -372,6 +626,24 @@ extension AdViewController: UITextViewDelegate {
         if scrollView === tableView {
             headerView.toggleState(showTitle: scrollView.contentOffset.y > 0)
         }
+    }
+    
+}
+
+// MARK: UITextFieldDelegate
+
+extension AdViewController: UITextFieldDelegate {
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        adNameUnderEditing = titleEditableTextField.text!
+        updatePublishButton()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField === titleEditableTextField {
+            bodyEditableTextView.becomeFirstResponder()
+        }
+        return false
     }
     
 }
@@ -392,9 +664,45 @@ extension AdViewController: UIAdaptivePresentationControllerDelegate {
 // MARK: APIClientDelegate
 
 extension AdViewController: APIClientDelegate {
+    
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
         set(ad: ad)
+        headerView.titleText = self.currentAd.name
     }
+    
+    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {
+        publishableOrganizations = organizations
+    }
+    
+    func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {
+        set(ad: newAd)
+        headerView.titleText = self.currentAd.name
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.exitEditingState(shouldShowPrompt: false)
+        }
+    }
+    
+    func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {
+        set(ad: updatedAd)
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.exitEditingState(shouldShowPrompt: false)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.headerView.titleText = self.currentAd.name
+            }
+        }
+    }
+    
+    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {
+        RootViewController.stopLoadingIndicator(with: .success) {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
+        RootViewController.stopLoadingIndicator(with: .fail)
+    }
+
+    
 }
 
 
