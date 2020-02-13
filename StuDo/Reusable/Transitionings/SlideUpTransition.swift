@@ -24,10 +24,10 @@ class SlideUpTransition: NSObject, UIViewControllerAnimatedTransitioning {
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let container = transitionContext.containerView
-        let fromView = transitionContext.view(forKey: .from)!
-        let toView = transitionContext.view(forKey: .to)!
         let fromVC = transitionContext.viewController(forKey: .from)!
         let toVC = transitionContext.viewController(forKey: .to)!
+        let fromView = fromVC.view!
+        let toView = toVC.view!
         
         container.addSubview(fromView)
         container.addSubview(toView)

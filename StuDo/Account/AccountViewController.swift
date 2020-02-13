@@ -197,18 +197,14 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         return nil
     }
     
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: standartFooterID)
-        
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         let sectionInfo = sections[section]
         if sectionInfo == .myProfiles {
-            footer?.textLabel?.text = Localizer.string(for: .accountProfileSectionDescription)
+            return Localizer.string(for: .accountProfileSectionDescription)
         } else if sectionInfo == .organizations {
-            footer?.textLabel?.text = Localizer.string(for: .accountOrganizationsSectionDescription)
+            return Localizer.string(for: .accountOrganizationsSectionDescription)
         }
-        
-        return footer
+        return nil
     }
     
     

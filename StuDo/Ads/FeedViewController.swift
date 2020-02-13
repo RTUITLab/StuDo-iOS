@@ -194,6 +194,10 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         
         let detailVC = AdViewController(ad: selectedAd)
         
+        if startInEditorMode {
+            detailVC.currentState = .editing
+        }
+        
         impactFeedback.impactOccurred()
         shouldRefreshOnAppear = false
         

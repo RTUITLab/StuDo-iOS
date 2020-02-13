@@ -133,7 +133,7 @@ class SettingsColorSchemeCell: TableViewCellValue1Style {
             colorPreview.widthAnchor.constraint(equalToConstant: 25).isActive = true
             colorPreview.heightAnchor.constraint(equalTo: colorPreview.widthAnchor).isActive = true
             colorPreview.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-            colorPreview.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0).isActive = true
+            colorPreview.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
             
             layoutIfNeeded()
         }

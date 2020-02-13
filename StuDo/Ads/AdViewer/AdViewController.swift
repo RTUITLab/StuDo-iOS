@@ -13,6 +13,7 @@ private let bodyCellId = "bodyCellId"
 private let editableBodyCellId = "editableBodyCellId"
 private let commentCellId = "commentCellId"
 private let commentInputCellId = "commentInputCellId"
+private let adDateButtonsCellId = "adDateButtonsCellId"
 
 class AdViewController: UIViewController {
     
@@ -27,6 +28,9 @@ class AdViewController: UIViewController {
     
     private var titleEditableTextField: UITextField!
     private var bodyEditableTextView: UITextView!
+    
+    private var beginDateButton: DateButton!
+    private var endDateButton: DateButton!
     
     // MARK: - State
     // This properties allow the controller to switch between two states
@@ -154,7 +158,7 @@ class AdViewController: UIViewController {
         headerView.cancelEditingButton.addTarget(self, action: #selector(cancelEditingButtonTapped(_:)), for: .touchUpInside)
         headerView.publishButton.addTarget(self, action: #selector(publishButtonTapped(_:)), for: .touchUpInside)
         
-        if currentState == .publishing {
+        if currentState == .publishing || currentState == .editing {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 self.enableEditingState()
             }
@@ -177,6 +181,7 @@ class AdViewController: UIViewController {
         tableView.register(UINib(nibName: String(describing: EditableAdBodyCell.self), bundle: nil), forCellReuseIdentifier: editableBodyCellId)
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: commentCellId)
         tableView.register(CommentInputTableViewCell.self, forCellReuseIdentifier: commentInputCellId)
+        tableView.register(AdPreferencesCell.self, forCellReuseIdentifier: adDateButtonsCellId)
         
         tableView.backgroundColor = .secondarySystemBackground
         tableView.tableFooterView = UIView()
@@ -386,6 +391,42 @@ class AdViewController: UIViewController {
         publishCurrentAd()
     }
     
+    @objc func beginDateButtonTapped(_ button: UIButton) {
+        let datePickerVC = DatePickerController(title: Localizer.string(for: .adEditorBeginDateLabel))
+        datePickerVC.datePicker.minimumDate = Date()
+        datePickerVC.doneCompletionHandler = { [weak self] in
+            guard let self = self, self.beginDateButton != nil else { return }
+            let beginDate = datePickerVC.datePicker.date
+            self.beginDateButton.date = beginDate
+            if let endDate = self.endDateButton.date, endDate.compare(beginDate) == .orderedAscending {
+                self.endDateButton.date = nil
+            }
+        }
+        datePickerVC.modalPresentationStyle = .fullScreen
+        present(datePickerVC, animated: true, completion: nil)
+    }
+    
+    @objc func endDateButtonTapped(_ button: UIButton) {
+        let datePickerVC = DatePickerController(title: Localizer.string(for: .adEditorEndDateLabel))
+        
+        if beginDateButton.date == nil {
+            datePickerVC.datePicker.minimumDate = Date()
+        } else {
+            datePickerVC.datePicker.minimumDate = beginDateButton.date
+        }
+        
+        datePickerVC.doneCompletionHandler = { [weak self] in
+            guard let self = self, self.endDateButton != nil else { return }
+            let endDate = datePickerVC.datePicker.date
+            self.endDateButton.date = endDate
+            if let beginDate = self.beginDateButton.date, beginDate.compare(endDate) == .orderedDescending {
+                self.beginDateButton.date = nil
+            }
+        }
+        datePickerVC.modalPresentationStyle = .fullScreen
+        present(datePickerVC, animated: true, completion: nil)
+    }
+    
     // MARK: State switching
     
     private func reloadTableView() {
@@ -403,6 +444,8 @@ class AdViewController: UIViewController {
             currentState = .editing
             headerView.titleText = Localizer.string(for: .adEditorEditingModeTitle)
             adNameUnderEditing = currentAd.name
+            
+            // FIX: Possible error can be possible if the ad is not loaded
             adBodyUnderEditing = currentAd.description! // TODO: Use FULL description instead (must be calculated!)
         }
         
@@ -540,16 +583,13 @@ extension AdViewController: UITableViewDataSource {
             }
             
             var markdownParser: MarkdownParser!
-            if #available(iOS 13.0, *) {
-                markdownParser = MarkdownParser(font: UIFont.preferredFont(for: .body, weight: .light), color: .label)
-            } else {
-                markdownParser = MarkdownParser(font: UIFont.preferredFont(for: .body, weight: .light))
-            }
+            markdownParser = MarkdownParser(font: UIFont.preferredFont(forTextStyle: .body), color: .label)
+            
             markdownParser.enabledElements = .all
             markdownParser.bold.font = UIFont.preferredFont(for: .body, weight: .medium)
-            markdownParser.italic.font = UIFont.preferredFont(for: .body, weight: .light).italic()
+            markdownParser.italic.font = UIFont.preferredFont(forTextStyle: .body).italic()
             markdownParser.header.font = UIFont.preferredFont(for: .title3, weight: .medium)
-            markdownParser.quote.font = UIFont.preferredFont(for: .body, weight: .light).italic()
+            markdownParser.quote.font = UIFont.preferredFont(forTextStyle: .body).italic()
             markdownParser.quote.color = .lightGray
             markdownParser.link.color = .globalTintColor
             
@@ -574,13 +614,16 @@ extension AdViewController: UITableViewDataSource {
             returnCell = cell
         case .people: fallthrough
         case .preferences:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CELL", for: indexPath)
-            return cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: adDateButtonsCellId, for: indexPath) as! AdPreferencesCell
+            cell.selectionStyle = .none
+            beginDateButton = cell.beginDateButton
+            endDateButton = cell.endDateButton
+            beginDateButton.addTarget(self, action: #selector(beginDateButtonTapped(_:)), for: .touchUpInside)
+            endDateButton.addTarget(self, action: #selector(endDateButtonTapped(_:)), for: .touchUpInside)
+            returnCell = cell
         }
         
-        if #available(iOS 13, *) {
-            returnCell.contentView.backgroundColor = .secondarySystemBackground
-        }
+        returnCell.contentView.backgroundColor = .secondarySystemBackground
         
         return returnCell
     }

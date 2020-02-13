@@ -119,6 +119,8 @@ class AccountDetailViewController: UITableViewController {
         switch sectionInfo {
         case .nameAndSurname:
             return Localizer.string(for: .accountDetailNameSectionDescription)
+        case .studentId:
+            return Localizer.string(for: .accountDetailStudentID) + "."
         default:
             return nil
         }
@@ -166,7 +168,7 @@ class AccountDetailViewController: UITableViewController {
             return cell
         } else if sectionInfo == .studentId {
             let cell = tableView.dequeueReusableCell(withIdentifier: inputFieldCellID, for: indexPath) as! TableViewCellWithInputField
-            cell.inputField.placeholder = Localizer.string(for: .accountDetailStudentID)
+            cell.inputField.placeholder = "18И0513"
             
             cell.inputField.tag = TagsForTextField.studentID.rawValue
             cell.inputField.addTarget(self, action: #selector(valueChanged(in:)), for: .editingChanged)

@@ -10,7 +10,7 @@ import UIKit
 
 class AdBodyCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var bodyTextView: UITextView!
+    @IBOutlet weak var bodyTextView: TextViewNoPadding!
     @IBOutlet weak var dateLabel: UILabel!
     
     override func awakeFromNib() {
