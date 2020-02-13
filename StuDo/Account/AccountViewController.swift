@@ -316,7 +316,14 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         } else if sectionInfo == .myProfiles {
             if hideAllProfiles && indexPath.row == profilesInTableInitialLimit {
                 hideAllProfiles = false
-                tableView.reloadSections(IndexSet(integer: indexPath.section), with: .fade)
+                var pathsToUpdate = [IndexPath]()
+                for i in profilesInTableInitialLimit + 1 ..< ownProfiles.count {
+                    pathsToUpdate.append(IndexPath(item: i, section: indexPath.section))
+                }
+                tableView.beginUpdates()
+                tableView.reloadRows(at: [IndexPath(item: profilesInTableInitialLimit, section: indexPath.section)], with: .fade)
+                tableView.insertRows(at: pathsToUpdate, with: .fade)
+                tableView.endUpdates()
                 return
             }
             let selectedProfile = ownProfiles[indexPath.row]

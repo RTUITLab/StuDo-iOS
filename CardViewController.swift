@@ -9,9 +9,7 @@
 import UIKit
 
 class CardViewController: UIViewController {
-    
-    fileprivate let animator = CardAnimatedTransitioning()
-    
+        
     private var defaultContainerInsets: UIEdgeInsets!
     
     var shouldResetOffsetOnKeyboardChange: Bool {
@@ -189,7 +187,6 @@ class CardViewController: UIViewController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        transitioningDelegate = self
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -306,22 +303,6 @@ extension CardViewController: UIScrollViewDelegate {
     }
 }
 
-
-
-
-
-
-extension CardViewController: UIViewControllerTransitioningDelegate {
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        animator.isPresenting = false
-        return animator
-    }
-    
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        animator.isPresenting = true
-        return animator
-    }
-}
 
 
 

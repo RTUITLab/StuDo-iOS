@@ -11,15 +11,15 @@ import MarkdownKit
 
 
 protocol AdViewControllerDelegate: class {
-    func adViewController(_ adVC: AdViewController, didCreateAd createdAd: Ad)
-    func adViewController(_ adVC: AdViewController, didDeleteAd deletedAd: Ad)
-    func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad)
+    func adViewController(_ adVC: AdViewControllerPAST, didCreateAd createdAd: Ad)
+    func adViewController(_ adVC: AdViewControllerPAST, didDeleteAd deletedAd: Ad)
+    func adViewController(_ adVC: AdViewControllerPAST, didUpdateAd updatedAd: Ad)
 }
 
 extension AdViewControllerDelegate {
-    func adViewController(_ adVC: AdViewController, didCreateAd createdAd: Ad) {}
-    func adViewController(_ adVC: AdViewController, didDeleteAd deletedAd: Ad) {}
-    func adViewController(_ adVC: AdViewController, didUpdateAd updatedAd: Ad) {}
+    func adViewController(_ adVC: AdViewControllerPAST, didCreateAd createdAd: Ad) {}
+    func adViewController(_ adVC: AdViewControllerPAST, didDeleteAd deletedAd: Ad) {}
+    func adViewController(_ adVC: AdViewControllerPAST, didUpdateAd updatedAd: Ad) {}
 }
 
 fileprivate let memberCellId = "memberCellId"
@@ -27,7 +27,7 @@ fileprivate let memberCurrentUserCellId = "memberCurrentUserCellId"
 fileprivate let commentCellId = "commentCellId"
 fileprivate let commentInputCellId = "commentInputCellId"
 
-class AdViewController: CardViewController {
+class AdViewControllerPAST: CardViewController {
     
     weak var delegate: AdViewControllerDelegate?
     
@@ -844,7 +844,7 @@ class AdViewController: CardViewController {
 
 
 
-extension AdViewController {
+extension AdViewControllerPAST {
     
     @objc func publishCommentButtonTapped(_ button: UIButton) {
         let commentText = commentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -928,7 +928,7 @@ extension AdViewController {
 
 
 
-extension AdViewController: APIClientDelegate {
+extension AdViewControllerPAST: APIClientDelegate {
     
     fileprivate func loadAdParticipantsAndComments(from ad: Ad) {
         
@@ -1052,7 +1052,7 @@ extension AdViewController: APIClientDelegate {
 
 
 
-extension AdViewController: NSLayoutManagerDelegate {
+extension AdViewControllerPAST: NSLayoutManagerDelegate {
     func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
         return 6
     }
@@ -1061,7 +1061,7 @@ extension AdViewController: NSLayoutManagerDelegate {
 
 
 
-extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
+extension AdViewControllerPAST: UITextFieldDelegate, UITextViewDelegate {
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         checkIfCanPublish()
@@ -1211,7 +1211,7 @@ extension AdViewController: UITextFieldDelegate, UITextViewDelegate {
 
 
 
-extension AdViewController: UITableViewDataSource, UITableViewDelegate {
+extension AdViewControllerPAST: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
