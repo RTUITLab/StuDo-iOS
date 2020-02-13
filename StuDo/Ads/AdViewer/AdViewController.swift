@@ -57,6 +57,9 @@ class AdViewController: UIViewController {
         return currentAd.userId == PersistentStore.shared.user.id
     }
     
+    private var needToUpdateComments = false
+    private var newCommentsIndices: [String: Int] = [:]
+    
     private let client = APIClient()
     
     enum AdViewControllerSection {
@@ -187,6 +190,7 @@ class AdViewController: UIViewController {
         tableView.tableFooterView = UIView()
         
         tableView.separatorStyle = .none
+        tableView.contentInsetAdjustmentBehavior = .automatic
         
     }
     
@@ -204,24 +208,27 @@ class AdViewController: UIViewController {
         headerView.backgroundColor = .red
         
     }
+    
+    // MARK: Layout
+    
+    fileprivate func scrollToBottom(_ additionalOffset: CGFloat = 0) {
+        let bottomOffset = CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + tableView.contentInset.bottom)
+        tableView.setContentOffset(bottomOffset, animated: true)
+    }
         
     // MARK: - Model-related methods
             
     private func set(ad: Ad) {
         currentAd = ad
-        if ad.comments != currentAdComments {
-            currentAdComments = ad.comments ?? []
-            if let commentsSectionIndex = getSectionIndex(for: .comments) {
-                tableView.reloadSections(commentsSectionIndex, with: .fade)
-            }
-        }
         
+        tableView.beginUpdates()
         if currentState == .previewing {
             currentState = .viewing
             if let bodySectionIndex = getSectionIndex(for: .body) {
                 tableView.reloadSections(bodySectionIndex, with: .fade)
             }
         }
+        tableView.endUpdates()
     }
     
     private func deleteCurrentAd() {
@@ -344,6 +351,41 @@ class AdViewController: UIViewController {
         }
     }
     
+    private func updateComments(with newComments: [Comment], partialUpdate: Bool = false) {
+        guard partialUpdate else {
+            currentAdComments = newComments
+            if let commentsSectionIndex = getSectionIndex(for: .comments) {
+                tableView.reloadSections(commentsSectionIndex, with: .fade)
+            }
+            return
+        }
+        var previousCommentIds = Set<String>()
+        for comment in currentAdComments {
+            previousCommentIds.insert(comment.id)
+        }
+        for (i, comment) in newComments.enumerated() {
+            if !previousCommentIds.contains(comment.id) {
+                newCommentsIndices[comment.id] = i
+            }
+        }
+        
+        currentAdComments = newComments
+        
+        if let commentsSectionIndex = getSectionIndex(for: .comments) {
+            tableView.beginUpdates()
+            for (_, index) in newCommentsIndices {
+                let indexPath = IndexPath(item: index, section: Int(commentsSectionIndex.first!))
+                tableView.insertRows(at: [indexPath], with: .fade)
+            }
+            tableView.endUpdates()
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.scrollToBottom()
+        }
+        
+    }
+    
     
     // MARK: - Actions & Observers
     
@@ -425,6 +467,18 @@ class AdViewController: UIViewController {
         }
         datePickerVC.modalPresentationStyle = .fullScreen
         present(datePickerVC, animated: true, completion: nil)
+    }
+    
+    @objc func publishCommentButtonTapped(_ button: UIButton) {
+        commentInputTextView.isEditable = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            let commentText = self.commentInputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+            let comment = Comment(text: commentText)
+            
+            RootViewController.startLoadingIndicator()
+            self.client.add(comment: comment, forAdWithId: self.currentAd.id)
+        }
+        
     }
     
     // MARK: State switching
@@ -551,7 +605,18 @@ extension AdViewController: UITableViewDataSource {
             
             cell.selectionStyle = .none
             
-            returnCell = cell
+            cell.contentView.backgroundColor = .secondarySystemBackground
+            
+            if newCommentsIndices[comment.id] != nil {
+                newCommentsIndices.removeValue(forKey: comment.id)
+                let initialCellBackgroundColor = cell.contentView.backgroundColor
+                cell.contentView.backgroundColor = UIColor.globalTintColor.withAlphaComponent(0.2)
+                UIView.animate(withDuration: 1.5) {
+                    cell.contentView.backgroundColor = initialCellBackgroundColor
+                }
+            }
+            
+            return cell
         case .commentInput:
             let cell = tableView.dequeueReusableCell(withIdentifier: commentInputCellId, for: indexPath) as! CommentInputTableViewCell
             
@@ -565,7 +630,7 @@ extension AdViewController: UITableViewDataSource {
             cell.selectionStyle = .none
             
             commentPublishButton = cell.publishButton
-//            commentPublishButton.addTarget(self, action: #selector(publishCommentButtonTapped(_ :)), for: .touchUpInside)
+            commentPublishButton.addTarget(self, action: #selector(publishCommentButtonTapped(_ :)), for: .touchUpInside)
 
             returnCell = cell
         case .body:
@@ -709,6 +774,8 @@ extension AdViewController: UIAdaptivePresentationControllerDelegate {
 extension AdViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
+        updateComments(with: ad.comments ?? [], partialUpdate: needToUpdateComments)
+        needToUpdateComments = false
         set(ad: ad)
         headerView.titleText = self.currentAd.name
     }
@@ -743,6 +810,14 @@ extension AdViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         RootViewController.stopLoadingIndicator(with: .fail)
+    }
+    
+    func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String) {
+        commentInputTextView.isEditable = true
+        commentInputTextView.text = ""
+        RootViewController.stopLoadingIndicator(with: .success)
+        needToUpdateComments = true
+        client.getAd(withId: adId)
     }
 
     

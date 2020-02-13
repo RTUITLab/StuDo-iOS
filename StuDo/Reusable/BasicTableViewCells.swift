@@ -70,6 +70,7 @@ class TableViewCellWithTextViewInput: UITableViewCell {
     var topConstraint: NSLayoutConstraint!
     var bottomConstraint: NSLayoutConstraint!
     var trailingConstraint: NSLayoutConstraint!
+    var placeholderLeadingConstraint: NSLayoutConstraint!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -92,7 +93,8 @@ class TableViewCellWithTextViewInput: UITableViewCell {
         
         contentView.addSubview(placeholderLabel)
         placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
-        placeholderLabel.leadingAnchor.constraint(equalTo: textViewInput.leadingAnchor, constant: 4).isActive = true
+        placeholderLeadingConstraint = placeholderLabel.leadingAnchor.constraint(equalTo: textViewInput.leadingAnchor, constant: 4)
+        placeholderLeadingConstraint.isActive = true
         placeholderLabel.topAnchor.constraint(equalTo: textViewInput.topAnchor, constant: 7).isActive = true
         
         placeholderLabel.font = .preferredFont(forTextStyle: .body)
