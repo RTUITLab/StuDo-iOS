@@ -26,12 +26,8 @@
 	<string>Цветовая схема</string>
 	<key>settingsTitle</key>
 	<string>Настройки</string>
-	<key>adEditorRemoveFromBookmarks</key>
-	<string>Убрать из избранного</string>
-	<key>adEditorAddToBookmarks</key>
-	<string>Добавить в избранное</string>
-	<key>feedNoBookmarkedAdsDescription</key>
-	<string>Ваши избранные объявления будут отображаться здесь.</string>
+	<key>userShowAllProfiles</key>
+	<string>Показать все профили</string>
 	<key>search</key>
 	<string>Найти</string>
 	<key>organizationInfoHeaderTitle</key>
@@ -76,10 +72,12 @@
 	<string>Хорошо</string>
 	<key>feedNoAdsTitle</key>
 	<string>Нет объявлений.</string>
-	<key>adEditorCancelEditingAlertMessage</key>
-	<string>Вы уверены, что хотите отменить редактирование данного объявления? Несохранённые изменения будут утеряны.</string>
+	<key>feedNoBookmarkedAdsDescription</key>
+	<string>Ваши избранные объявления будут отображаться здесь.</string>
 	<key>adEditorDeleteAd</key>
 	<string>Удалить объявление</string>
+	<key>adEditorCancelEditingAlertMessage</key>
+	<string>Вы уверены, что хотите отменить редактирование данного объявления? Несохранённые изменения будут утеряны.</string>
 	<key>notificationRemindBefore1h</key>
 	<string>За 1 час</string>
 	<key>authSurname</key>
@@ -94,6 +92,8 @@
 	<string>Введите свой пароль</string>
 	<key>authPassword</key>
 	<string>Пароль</string>
+	<key>adEditorRemoveFromBookmarks</key>
+	<string>Убрать из избранного</string>
 	<key>organizationTitleMyOrganizations</key>
 	<string>Только мои</string>
 	<key>profileNameSectionFooter</key>
@@ -178,6 +178,8 @@
 	<string>На Ваш новый e-mail отправлена ссылка подтверждения. После подверждения за Вашим аккаунтом будет закреплён новый адрес.</string>
 	<key>authRegistrationAlertTitle</key>
 	<string>Успешная регистрация!</string>
+	<key>feedTitleBookmarks</key>
+	<string>Избранное</string>
 	<key>orangeThemeName</key>
 	<string>Оранжевый</string>
 	<key>create</key>
@@ -200,12 +202,8 @@
 	<string>Название</string>
 	<key>cancel</key>
 	<string>Отменить</string>
-	<key>feedTitleBookmarks</key>
-	<string>Избранное</string>
 	<key>navigationMenuBookmarks</key>
 	<string>Избранные объявления</string>
-	<key>navigationMenuSavedSources</key>
-	<string>Сохранённые источники</string>
 	<key>adEditorCancelCreatingAlertMessage</key>
 	<string>Вы уверены, что не хотите сохранять данное объявление?</string>
 	<key>passwordChangeAlertTitle</key>
@@ -240,6 +238,8 @@
 	<string>Вы уверены, что хотите удалить данную организацию? Это действие необратимо.</string>
 	<key>authRegistrationAlertMessage</key>
 	<string>Мы отправили письмо на Ваш e-mail. Пожалуйста, подтвердите Ваш адрес, прежде чем заходить в аккаунт.</string>
+	<key>adEditorAddToBookmarks</key>
+	<string>Добавить в избранное</string>
 	<key>profileDescriptionSectionHeader</key>
 	<string>Описание</string>
 	<key>done</key>
@@ -258,5 +258,7 @@
 	<string>Фиолетовый</string>
 	<key>aboutRate</key>
 	<string>Оценить в App Store</string>
+	<key>navigationMenuSavedSources</key>
+	<string>Сохранённые источники</string>
 </dict>
 </plist>

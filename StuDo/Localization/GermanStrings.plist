@@ -56,6 +56,8 @@
 	<string>Sie können im Namen dieser Gruppe veröffentlichen.</string>
 	<key>feedCreatorPage</key>
 	<string>Autorseite anzeigen</string>
+	<key>userShowAllProfiles</key>
+	<string>Alle Profile anzeigen</string>
 	<key>feedPublishedBy</key>
 	<string>Veröffentlicht von</string>
 	<key>navigationMenuAllAds</key>

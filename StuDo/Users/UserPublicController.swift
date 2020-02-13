@@ -11,6 +11,7 @@ import UIKit
 fileprivate let userCellId = "userCellId"
 fileprivate let profileCellId = "profileCellId"
 fileprivate let adCellId = "adCellId"
+fileprivate let reusableCellID = "reusableCellID"
 
 class UserPublicController: UITableViewController {
     
@@ -27,6 +28,9 @@ class UserPublicController: UITableViewController {
     var user: User
     var profiles = [Profile]()
     var ads = [Ad]()
+    
+    let profilesInTableInitialLimit = 3
+    var hideAllProfiles = true
     
     init(user: User) {
         self.user = user
@@ -47,6 +51,7 @@ class UserPublicController: UITableViewController {
         tableView.register(CurrentUserTableViewCell.self, forCellReuseIdentifier: userCellId)
         tableView.register(TableViewCellWithSubtitle.self, forCellReuseIdentifier: profileCellId)
         tableView.register(UINib(nibName: "AdTableViewCell", bundle: nil), forCellReuseIdentifier: adCellId)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: reusableCellID)
         
         tableView.allowsMultipleSelection = false
         
@@ -92,6 +97,13 @@ class UserPublicController: UITableViewController {
             cell.selectionStyle = .none
             return cell
         case .profiles:
+            if hideAllProfiles && indexPath.row == profilesInTableInitialLimit {
+                let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath)
+                cell.accessoryType = .none
+                cell.textLabel!.text = Localizer.string(for: .userShowAllProfiles)
+                cell.textLabel!.textColor = .globalTintColor
+                return cell
+            }
             let cell = tableView.dequeueReusableCell(withIdentifier: profileCellId, for: indexPath)
             let currentProfile = profiles[indexPath.row]
             cell.textLabel?.text = currentProfile.name
@@ -119,6 +131,11 @@ class UserPublicController: UITableViewController {
             let adVC = AdViewController(ad: currentAd)
             present(adVC, animated: true, completion: nil)
         } else if currentSection == .profiles {
+            if hideAllProfiles && indexPath.row == profilesInTableInitialLimit {
+                hideAllProfiles = false
+                tableView.reloadSections(IndexSet(integer: indexPath.section), with: .fade)
+                return
+            }
             let currentProfile = profiles[indexPath.row]
             let profileVC = ProfileEditorViewController(profile: currentProfile, canEditProfile: false)
             navigationController?.pushViewController(profileVC, animated: true)

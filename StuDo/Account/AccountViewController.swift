@@ -34,6 +34,8 @@ class AccountViewController: UIViewController {
     
     var client = APIClient()
     
+    let profilesInTableInitialLimit = 3
+    var hideAllProfiles = true
     var ownProfiles = [Profile]()
     
     private var sections: [SectionName] = [.myAccount, .myProfiles, .organizations, .settingsAbout]
@@ -249,6 +251,9 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         let sectionInfo = sections[section]
         
         if sectionInfo == .myProfiles {
+            if hideAllProfiles {
+                return min(ownProfiles.count, profilesInTableInitialLimit + 1)
+            }
             return ownProfiles.count
         } else if sectionInfo == .settingsAbout {
             return 2
@@ -270,6 +275,13 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             cell.accessoryType = .disclosureIndicator
             return cell
         } else if sectionInfo == .myProfiles {
+            if hideAllProfiles && indexPath.row == profilesInTableInitialLimit {
+                let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath)
+                cell.accessoryType = .none
+                cell.textLabel!.text = Localizer.string(for: .userShowAllProfiles)
+                cell.textLabel!.textColor = .globalTintColor
+                return cell
+            }
             let cell = tableView.dequeueReusableCell(withIdentifier: profileCellID, for: indexPath)
             let profile = ownProfiles[indexPath.row]
             cell.textLabel?.text = profile.name
@@ -279,6 +291,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath)
         cell.accessoryType = .disclosureIndicator
+        cell.textLabel!.textColor = .label
         
         if sectionInfo == .organizations {
             cell.textLabel?.text = Localizer.string(for: .accountOrganizations)
@@ -301,6 +314,11 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
             detailVC.accountViewController = self
             navigationController?.pushViewController(detailVC, animated: true)
         } else if sectionInfo == .myProfiles {
+            if hideAllProfiles && indexPath.row == profilesInTableInitialLimit {
+                hideAllProfiles = false
+                tableView.reloadSections(IndexSet(integer: indexPath.section), with: .fade)
+                return
+            }
             let selectedProfile = ownProfiles[indexPath.row]
             presentProfileEditor(for: selectedProfile)
         } else if sectionInfo == .organizations {

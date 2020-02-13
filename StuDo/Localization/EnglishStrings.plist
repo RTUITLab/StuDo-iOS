@@ -242,6 +242,8 @@
 	<string>Profiles</string>
 	<key>userPublicAdsSectionHeader</key>
 	<string>Ads</string>
+	<key>userShowAllProfiles</key>
+	<string>Show all profiles</string>
 	<key>notificationSetReminder</key>
 	<string>Set reminder</string>
 	<key>notificationReminderAlertTitle</key>
