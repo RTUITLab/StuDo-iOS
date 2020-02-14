@@ -106,6 +106,7 @@ class AdControllerHeaderView: UIView {
         let moreButtonImage = UIImage(systemName: "ellipsis.circle.fill")!.withRenderingMode(.alwaysTemplate)
         moreButton.setImage(moreButtonImage, for: .normal)
         moreButton.adjustsImageWhenHighlighted = false
+        moreButton.tintColor = .globalTintColor
         
         let publishButtonImage = #imageLiteral(resourceName: "publish-button").withRenderingMode(.alwaysTemplate)
         publishButton.setImage(publishButtonImage, for: .normal)

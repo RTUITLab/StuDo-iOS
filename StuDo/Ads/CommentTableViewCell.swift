@@ -29,7 +29,7 @@ class CommentTableViewCell: UserTableViewCell {
         nameLabelCenterYConstraint.isActive = false
         nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         
-        avatarViewCenterYConstraint.isActive = false
+        avatarViewBottomConstraint.isActive = false
         avatarView.topAnchor.constraint(equalTo: nameLabel.topAnchor, constant: 0).isActive = true
         
         

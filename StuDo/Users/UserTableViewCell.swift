@@ -16,7 +16,7 @@ class UserTableViewCell: TableViewCellValue1Style {
     let nameLabel = UILabel()
     
     var avatarViewSizeConstraint: NSLayoutConstraint!
-    var avatarViewCenterYConstraint: NSLayoutConstraint!
+    var avatarViewBottomConstraint: NSLayoutConstraint!
     var nameLabelCenterYConstraint: NSLayoutConstraint!
 
     
@@ -41,12 +41,12 @@ class UserTableViewCell: TableViewCellValue1Style {
         avatarView.translatesAutoresizingMaskIntoConstraints = false
         avatarView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16).isActive = true
         avatarView.widthAnchor.constraint(equalTo: avatarView.heightAnchor, multiplier: 1).isActive = true
+        avatarView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
         
-        avatarViewSizeConstraint = avatarView.heightAnchor.constraint(equalToConstant: 40)
+        avatarViewBottomConstraint = avatarView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
+        avatarViewBottomConstraint.isActive = true
+        avatarViewSizeConstraint = avatarView.heightAnchor.constraint(equalToConstant: 35)
         avatarViewSizeConstraint.isActive = true
-        
-        avatarViewCenterYConstraint = avatarView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-        avatarViewCenterYConstraint.isActive = true
         
         avatarView.addSubview(initialsLabel)
         initialsLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -73,6 +73,16 @@ class UserTableViewCell: TableViewCellValue1Style {
         initialsLabel.font = .systemFont(ofSize: 14, weight: .semibold)
         initialsLabel.textColor = .white
         initialsLabel.adjustsFontSizeToFitWidth = true
+        
+        let separator = UIView()
+        contentView.addSubview(separator)
+        separator.translatesAutoresizingMaskIntoConstraints = false
+        separator.heightAnchor.constraint(equalToConstant: 0.7).isActive = true
+        separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        separator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        separator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        
+        separator.backgroundColor = .separator
         
     }
     

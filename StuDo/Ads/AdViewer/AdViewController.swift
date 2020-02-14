@@ -13,7 +13,10 @@ private let bodyCellId = "bodyCellId"
 private let editableBodyCellId = "editableBodyCellId"
 private let commentCellId = "commentCellId"
 private let commentInputCellId = "commentInputCellId"
-private let adDateButtonsCellId = "adDateButtonsCellId"
+private let adPreferencesCellId = "adDateButtonsCellId"
+private let adParticipantCellId = "adParticipantCellId"
+private let currentUserCellId = "currentUserCellId"
+
 
 class AdViewController: UIViewController {
     
@@ -38,7 +41,7 @@ class AdViewController: UIViewController {
     
     private var currentAd: Ad!
     private var currentAdComments: [Comment] = []
-    private var currentAdPeople: [User] = []
+    private var currentAdPeople: [AdParticipant] = []
     
     private var adNameUnderEditing: String = ""
     private var adBodyUnderEditing: String = ""
@@ -184,7 +187,9 @@ class AdViewController: UIViewController {
         tableView.register(UINib(nibName: String(describing: EditableAdBodyCell.self), bundle: nil), forCellReuseIdentifier: editableBodyCellId)
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: commentCellId)
         tableView.register(CommentInputTableViewCell.self, forCellReuseIdentifier: commentInputCellId)
-        tableView.register(AdPreferencesCell.self, forCellReuseIdentifier: adDateButtonsCellId)
+        tableView.register(AdPreferencesCell.self, forCellReuseIdentifier: adPreferencesCellId)
+        tableView.register(CurrentUserAdTableViewCell.self, forCellReuseIdentifier: currentUserCellId)
+        tableView.register(UserTableViewCell.self, forCellReuseIdentifier: adParticipantCellId)
         
         tableView.backgroundColor = .secondarySystemBackground
         tableView.tableFooterView = UIView()
@@ -384,6 +389,28 @@ class AdViewController: UIViewController {
             self.scrollToBottom()
         }
         
+    }
+    
+    // MARK: Ad Participants
+    
+    private func updateParticipants(with ad: Ad) {
+        if let user = ad.user {
+            let creator = AdParticipant(type: .user, content: user)
+            if user.id! != PersistentStore.shared.user.id! {
+                let joinAdCell = AdParticipant(type: .other, content: nil)
+                currentAdPeople = [creator, joinAdCell]
+            } else {
+                currentAdPeople = [creator]
+            }
+        } else if let organization = ad.organization {
+            let creator = AdParticipant(type: .organization, content: organization)
+            let joinAdCell = AdParticipant(type: .other, content: nil)
+            currentAdPeople = [creator, joinAdCell]
+        }
+        
+        if let peopleIndex = getSectionIndex(for: .people) {
+            tableView.reloadSections(peopleIndex, with: .fade)
+        }
     }
     
     
@@ -677,9 +704,61 @@ extension AdViewController: UITableViewDataSource {
             titleEditableTextField = cell.titleTextField
             bodyEditableTextView = cell.bodyTextView
             returnCell = cell
-        case .people: fallthrough
+        case .people:
+            let participant = currentAdPeople[indexPath.row]
+            
+            if participant.type == .user || participant.type == .organization {
+                let cell = tableView.dequeueReusableCell(withIdentifier: adParticipantCellId, for: indexPath) as! UserTableViewCell
+                
+                var name: String?
+                var surname: String?
+                var detailInfo: String?
+                
+                if let user = participant.content as? User {
+                    
+                    if user.id! == currentAd.userId {
+                        detailInfo = Localizer.string(for: .adEditorCreator)
+                    }
+                    name = user.firstName
+                    surname = user.lastName
+                    
+                    if user.id! == PersistentStore.shared.user.id {
+                        cell.avatarGradientLayer.colors = UserGradient.currentColors
+                    }
+                    
+                } else if let organization = participant.content as? Organization {
+                    
+                    detailInfo = Localizer.string(for: .adEditorCreator)
+                    name = organization.name
+                    
+                }
+                
+                
+                cell.initialsLabel.text = String(name!.prefix(1)) + (surname?.prefix(1) ?? "")
+                cell.nameLabel.text = (name ?? "") + " " + (surname ?? "")
+                cell.nameLabel.font = .preferredFont(for: .body, weight: .medium)
+                cell.detailTextLabel?.text = detailInfo
+                
+                cell.selectionStyle = .none
+                
+                cell.contentView.backgroundColor = .secondarySystemBackground
+                
+                return cell
+            }
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: currentUserCellId, for: indexPath) as! CurrentUserAdTableViewCell
+            
+            let currentUser = PersistentStore.shared.user!
+            cell.initialsLabel.text = String(currentUser.firstName.prefix(1)) + currentUser.lastName.prefix(1)
+            
+            cell.nameLabel.textColor = .globalTintColor
+            cell.nameLabel.text = Localizer.string(for: .adEditorJoinAd) + "..."
+            
+            cell.contentView.backgroundColor = .secondarySystemBackground
+            
+            return cell
         case .preferences:
-            let cell = tableView.dequeueReusableCell(withIdentifier: adDateButtonsCellId, for: indexPath) as! AdPreferencesCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: adPreferencesCellId, for: indexPath) as! AdPreferencesCell
             cell.selectionStyle = .none
             beginDateButton = cell.beginDateButton
             endDateButton = cell.endDateButton
@@ -693,12 +772,22 @@ extension AdViewController: UITableViewDataSource {
         return returnCell
     }
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let section = currentSections[section]
+        if section == .comments {
+            return Localizer.string(for: .adEditorComments)
+        }
+        return nil
+    }
+    
 }
 
 // MARK: UITableViewDelegate
 
 extension AdViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor = .secondarySystemBackground
+    }
 }
 
 // MARK: TextViewDelegate
@@ -775,6 +864,7 @@ extension AdViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
         updateComments(with: ad.comments ?? [], partialUpdate: needToUpdateComments)
+        updateParticipants(with: ad)
         needToUpdateComments = false
         set(ad: ad)
         headerView.titleText = self.currentAd.name

@@ -172,6 +172,17 @@ enum OrganizationMemberRight: String {
 }
 
 
+enum AdParticipantType {
+    case user
+    case organization
+    case other
+}
+struct AdParticipant {
+    let type: AdParticipantType
+    let content: Any?
+}
+
+
 
 struct Ad {
     let id: String!

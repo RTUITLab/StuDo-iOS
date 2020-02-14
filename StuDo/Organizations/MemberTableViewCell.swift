@@ -15,7 +15,7 @@ class MemberTableViewCell: UserTableViewCell {
         
         avatarViewSizeConstraint.constant = 35
         
-        avatarViewCenterYConstraint.isActive = false
+        avatarViewBottomConstraint.isActive = false
         
         let padding: CGFloat = 8
         avatarView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding).isActive = true

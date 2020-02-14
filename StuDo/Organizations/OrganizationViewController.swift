@@ -271,6 +271,10 @@ class OrganizationViewController: UITableViewController {
             cell.initialsLabel.text = String(currentMember.user.firstName.prefix(1)) + currentMember.user.lastName.prefix(1)
             cell.nameLabel.text = "\(currentMember.user.firstName) \(currentMember.user.lastName)"
             
+            if currentMember.user.id! == PersistentStore.shared.user.id {
+                cell.avatarGradientLayer.colors = UserGradient.currentColors
+            }
+            
             return cell
         } else if info == .name {
             let cell = tableView.dequeueReusableCell(withIdentifier: textFieldCellId, for: indexPath) as! TableViewCellWithInputField
