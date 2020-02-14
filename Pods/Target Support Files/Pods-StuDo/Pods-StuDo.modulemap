@@ -1,6 +1,0 @@
-framework module Pods_StuDo {
-  umbrella header "Pods-StuDo-umbrella.h"
-
-  export *
-  module * { export * }
-}
