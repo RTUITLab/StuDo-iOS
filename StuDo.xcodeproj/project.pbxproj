@@ -45,14 +45,12 @@
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
 		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
 		49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF624231C1C4200AA3FCB /* DateButton.swift */; };
-		49ADF627231CF3A100AA3FCB /* DatePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF626231CF3A100AA3FCB /* DatePickerController.swift */; };
 		49ADF629231CF4BD00AA3FCB /* SlideUpTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF628231CF4BD00AA3FCB /* SlideUpTransition.swift */; };
 		49AF5A6323F039A7007832FD /* AdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AF5A6223F039A7007832FD /* AdViewController.swift */; };
 		49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */; };
 		49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */; };
 		49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B1B382228DD75400CA9EC7 /* FeedViewController.swift */; };
 		49B65E2F23F43772006C48AE /* AdPreferencesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B65E2E23F43772006C48AE /* AdPreferencesCell.swift */; };
-		49B65E3123F4388E006C48AE /* AdDescriptionTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B65E3023F4388D006C48AE /* AdDescriptionTextView.swift */; };
 		49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BBB9982306BCC700883EB9 /* FoldingTitleView.swift */; };
 		49BBB99B2306E25600883EB9 /* NavigationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BBB99A2306E25600883EB9 /* NavigationMenu.swift */; };
 		49BBB99D2306E6B600883EB9 /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BBB99C2306E6B600883EB9 /* ListItemCell.swift */; };
@@ -77,8 +75,6 @@
 		49E61DD9231A564C007BC4FF /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E61DD8231A564C007BC4FF /* UIFontExtension.swift */; };
 		49E61DDB231A5C69007BC4FF /* TextFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E61DDA231A5C69007BC4FF /* TextFormatter.swift */; };
 		49E7187123F1D9960071374E /* AdControllerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E7187023F1D9960071374E /* AdControllerHeaderView.swift */; };
-		49E7187623F1DA0C0071374E /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E7187423F1DA0B0071374E /* CardViewController.swift */; };
-		49E7187723F1DA0C0071374E /* AdViewControllerPAST.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E7187523F1DA0B0071374E /* AdViewControllerPAST.swift */; };
 		4F40B5808A2133A8365DB0BA /* Pods_StuDoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0741CF780B623AECF2A2DEEA /* Pods_StuDoUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -148,14 +144,12 @@
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
 		49ADF624231C1C4200AA3FCB /* DateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateButton.swift; sourceTree = "<group>"; };
-		49ADF626231CF3A100AA3FCB /* DatePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerController.swift; sourceTree = "<group>"; };
 		49ADF628231CF4BD00AA3FCB /* SlideUpTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpTransition.swift; sourceTree = "<group>"; };
 		49AF5A6223F039A7007832FD /* AdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewController.swift; sourceTree = "<group>"; };
 		49B1B37C228DD4F300CA9EC7 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		49B1B380228DD5CB00CA9EC7 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		49B1B382228DD75400CA9EC7 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		49B65E2E23F43772006C48AE /* AdPreferencesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPreferencesCell.swift; sourceTree = "<group>"; };
-		49B65E3023F4388D006C48AE /* AdDescriptionTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdDescriptionTextView.swift; sourceTree = "<group>"; };
 		49BBB9982306BCC700883EB9 /* FoldingTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldingTitleView.swift; sourceTree = "<group>"; };
 		49BBB99A2306E25600883EB9 /* NavigationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationMenu.swift; sourceTree = "<group>"; };
 		49BBB99C2306E6B600883EB9 /* ListItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
@@ -180,8 +174,6 @@
 		49E61DD8231A564C007BC4FF /* UIFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 		49E61DDA231A5C69007BC4FF /* TextFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormatter.swift; sourceTree = "<group>"; };
 		49E7187023F1D9960071374E /* AdControllerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdControllerHeaderView.swift; sourceTree = "<group>"; };
-		49E7187423F1DA0B0071374E /* CardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
-		49E7187523F1DA0B0071374E /* AdViewControllerPAST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdViewControllerPAST.swift; sourceTree = "<group>"; };
 		92FE8AEEC3A250B32B848A84 /* Pods-StuDoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StuDoUITests.release.xcconfig"; path = "Target Support Files/Pods-StuDoUITests/Pods-StuDoUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DD37F5D6A70202D2D3ED0DF6 /* Pods-StuDoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StuDoTests.release.xcconfig"; path = "Target Support Files/Pods-StuDoTests/Pods-StuDoTests.release.xcconfig"; sourceTree = "<group>"; };
 		E4D439D26148893F2BEDDB99 /* Pods-StuDo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StuDo.debug.xcconfig"; path = "Target Support Files/Pods-StuDo/Pods-StuDo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -238,7 +230,6 @@
 		491BFCE2233BDC11002CF4AE /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				49ADF626231CF3A100AA3FCB /* DatePickerController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -347,9 +338,6 @@
 		493E8ABF228B4353004EC563 = {
 			isa = PBXGroup;
 			children = (
-				49E7187523F1DA0B0071374E /* AdViewControllerPAST.swift */,
-				49E7187423F1DA0B0071374E /* CardViewController.swift */,
-				49B65E3023F4388D006C48AE /* AdDescriptionTextView.swift */,
 				493E8ACA228B4354004EC563 /* StuDo */,
 				493E8ADF228B4357004EC563 /* StuDoTests */,
 				493E8AEA228B4357004EC563 /* StuDoUITests */,
@@ -751,7 +739,6 @@
 				4938CF3B2341421300055A98 /* MemberTableViewCell.swift in Sources */,
 				49E2DB1422FDB3730015DCD8 /* EmailTableViewController.swift in Sources */,
 				49E61DD9231A564C007BC4FF /* UIFontExtension.swift in Sources */,
-				49ADF627231CF3A100AA3FCB /* DatePickerController.swift in Sources */,
 				49E2DB1622FDB4E20015DCD8 /* DataChecker.swift in Sources */,
 				49ADF629231CF4BD00AA3FCB /* SlideUpTransition.swift in Sources */,
 				4928D43622A3ED9700F4D703 /* DataModel.swift in Sources */,
@@ -759,7 +746,6 @@
 				4973AD25231D58DD00B4B578 /* OrganizationViewController.swift in Sources */,
 				49D76A7723102B26002B22D4 /* SettingsViewController.swift in Sources */,
 				49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */,
-				49E7187723F1DA0C0071374E /* AdViewControllerPAST.swift in Sources */,
 				49544FA522FB22240019A544 /* FadeAnimatedTransitioning.swift in Sources */,
 				49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */,
 				49E2DB1022FDB22B0015DCD8 /* UITableViewExtension.swift in Sources */,
@@ -775,7 +761,6 @@
 				491DA7D923F206BC005892BD /* EditableAdBodyCell.swift in Sources */,
 				49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */,
 				494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */,
-				49B65E3123F4388E006C48AE /* AdDescriptionTextView.swift in Sources */,
 				49D76A7A23102FD0002B22D4 /* SettingsListViewControllers.swift in Sources */,
 				49B1B37D228DD4F300CA9EC7 /* TabBarController.swift in Sources */,
 				49713C5E230B081D00E65807 /* AboutViewController.swift in Sources */,
@@ -784,7 +769,6 @@
 				4986BE3D23F0A52A0068F8E1 /* CGPointExtension.swift in Sources */,
 				49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */,
 				49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */,
-				49E7187623F1DA0C0071374E /* CardViewController.swift in Sources */,
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,
 				4938CF3723412A6800055A98 /* CommentTableViewCell.swift in Sources */,
 				49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */,
