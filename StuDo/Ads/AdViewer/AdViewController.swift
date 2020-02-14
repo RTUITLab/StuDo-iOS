@@ -7,13 +7,11 @@
 //
 
 import UIKit
-import MarkdownKit
 
 private let bodyCellId = "bodyCellId"
 private let editableBodyCellId = "editableBodyCellId"
 private let commentCellId = "commentCellId"
 private let commentInputCellId = "commentInputCellId"
-private let adPreferencesCellId = "adDateButtonsCellId"
 private let adParticipantCellId = "adParticipantCellId"
 private let currentUserCellId = "currentUserCellId"
 
@@ -36,6 +34,9 @@ class AdViewController: UIViewController {
     
     private var beginDateButton: DateButton!
     private var endDateButton: DateButton!
+    private var preferencesView: AdPreferencesView!
+    private var beginDatePicker: UIDatePicker!
+    private var endDatePicker: UIDatePicker!
     
     // MARK: - State
     // This properties allow the controller to switch between two states
@@ -73,7 +74,6 @@ class AdViewController: UIViewController {
         case people
         case comments
         case commentInput
-        case preferences
     }
     
     private let viewStateSections: [AdViewControllerSection] = [
@@ -81,7 +81,7 @@ class AdViewController: UIViewController {
     ]
     
     private let editStateSections: [AdViewControllerSection] = [
-        .editableBody, .preferences
+        .editableBody
     ]
     
     var currentSections: [AdViewControllerSection] {
@@ -171,6 +171,8 @@ class AdViewController: UIViewController {
                 self.enableEditingState()
             }
         }
+        
+        headerView.moreButton.animateVisibility(shouldHide: true)
     }
         
     private func setTableView() {
@@ -189,7 +191,6 @@ class AdViewController: UIViewController {
         tableView.register(UINib(nibName: String(describing: EditableAdBodyCell.self), bundle: nil), forCellReuseIdentifier: editableBodyCellId)
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: commentCellId)
         tableView.register(CommentInputTableViewCell.self, forCellReuseIdentifier: commentInputCellId)
-        tableView.register(AdPreferencesCell.self, forCellReuseIdentifier: adPreferencesCellId)
         tableView.register(CurrentUserAdTableViewCell.self, forCellReuseIdentifier: currentUserCellId)
         tableView.register(UserTableViewCell.self, forCellReuseIdentifier: adParticipantCellId)
         
@@ -198,6 +199,7 @@ class AdViewController: UIViewController {
         
         tableView.separatorStyle = .none
         tableView.contentInsetAdjustmentBehavior = .automatic
+        tableView.keyboardDismissMode = .interactive
         
     }
     
@@ -263,82 +265,129 @@ class AdViewController: UIViewController {
     // MARK: Editing & Publishing
     
     private func checkIfCanPublishAd() -> Bool {
-        adNameUnderEditing.count > 0 && adBodyUnderEditing.count > 0
+        beginDateButton.date != nil && endDateButton.date != nil && adNameUnderEditing.count > 0 && adBodyUnderEditing.count > 0
     }
     
     private func updatePublishButton() {
         headerView.togglePublishButton(isEnabled: checkIfCanPublishAd())
     }
     
-    func publishCurrentAd() {
-        
-        let adTitle = adNameUnderEditing
-        let description = adBodyUnderEditing
-        var shortDescription: String!
-        
-        if let firstParagraph = adBodyUnderEditing.components(separatedBy: CharacterSet.newlines).first {
-            shortDescription = firstParagraph
-        } else {
-            shortDescription = description
+    private func publishCurrentAd() {
+        func enableDisableEditingsInputs(enable: Bool) {
+            titleEditableTextField.isEnabled = enable
+            bodyEditableTextView.isEditable = enable
+            beginDateButton.isEnabled = enable
+            endDateButton.isEnabled = enable
         }
         
-//        let beginTime = beginDateButton.date!
-//        let endTime = endDateButton.date!
-        let beginTime = Date()
-        let endTime = Date()
-        
-
-        if currentAd != nil {
+        func publish() {
+            let adTitle = adNameUnderEditing
+            let description = adBodyUnderEditing
+            var shortDescription: String!
             
-            let adToUpdate = Ad(id: currentAd.id, name: adTitle, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
-            
-            client.replaceAd(with: adToUpdate)
-            RootViewController.startLoadingIndicator()
-            
-        } else {
-            func createAd(id: String, asUser: Bool) {
-                var newAd: Ad!
-                if !asUser {
-                    newAd = Ad(organizationId: id, name: adTitle, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
-                } else {
-                    newAd = Ad(id: nil, name: adTitle, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
-                }
-                client.create(ad: newAd)
-                RootViewController.startLoadingIndicator()
+            if let firstParagraph = adBodyUnderEditing.components(separatedBy: CharacterSet.newlines).first {
+                shortDescription = firstParagraph
+            } else {
+                shortDescription = description
             }
             
-            let currentUser = PersistentStore.shared.user!
+            let beginTime = beginDateButton.date!
+            let endTime = endDateButton.date!
             
-            if !publishableOrganizations.isEmpty {
-
-                let alert = UIAlertController(title: Localizer.string(for: .adEditorPublishAdAlertMessage), message: nil, preferredStyle: .actionSheet)
+            if currentAd != nil {
                 
-                let meAction = UIAlertAction(title: "\(currentUser.firstName) \(currentUser.lastName)" , style: .default) { _ in
-                    createAd(id: currentUser.id!, asUser: true)
-                }
+                let adToUpdate = Ad(id: currentAd.id, name: adTitle, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
                 
-                alert.addAction(meAction)
-                alert.preferredAction = meAction
-                
-                for organization in publishableOrganizations {
-                    let action = UIAlertAction(title: "\(organization.name)" , style: .default) { _ in
-                        createAd(id: organization.id, asUser: false)
-                    }
-                    alert.addAction(action)
-                }
-                
-                
-                let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
-                alert.addAction(cancelAction)
-                
-                present(alert, animated: true, completion: nil)
+                client.replaceAd(with: adToUpdate)
+                RootViewController.startLoadingIndicator()
                 
             } else {
-                createAd(id: currentUser.id!, asUser: true)
+                func createAd(id: String, asUser: Bool) {
+                    var newAd: Ad!
+                    if !asUser {
+                        newAd = Ad(organizationId: id, name: adTitle, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
+                    } else {
+                        newAd = Ad(id: nil, name: adTitle, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime)
+                    }
+                    client.create(ad: newAd)
+                    RootViewController.startLoadingIndicator()
+                }
+                
+                let currentUser = PersistentStore.shared.user!
+                
+                if !publishableOrganizations.isEmpty {
+
+                    let alert = UIAlertController(title: Localizer.string(for: .adEditorPublishAdAlertMessage), message: nil, preferredStyle: .actionSheet)
+                    
+                    let meAction = UIAlertAction(title: "\(currentUser.firstName) \(currentUser.lastName)" , style: .default) { _ in
+                        createAd(id: currentUser.id!, asUser: true)
+                    }
+                    
+                    alert.addAction(meAction)
+                    alert.preferredAction = meAction
+                    
+                    for organization in publishableOrganizations {
+                        let action = UIAlertAction(title: "\(organization.name)" , style: .default) { _ in
+                            createAd(id: organization.id, asUser: false)
+                        }
+                        alert.addAction(action)
+                    }
+                    
+                    
+                    let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
+                    alert.addAction(cancelAction)
+                    
+                    present(alert, animated: true, completion: nil)
+                    
+                } else {
+                    createAd(id: currentUser.id!, asUser: true)
+                }
             }
+        }
+        
+        enableDisableEditingsInputs(enable: false)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            publish()
+            enableDisableEditingsInputs(enable: true)
         }
         
     }
+    
+    // MARK: Date
+    
+    func setupDatePicker(_ datePicker: UIDatePicker, for textField: UITextField, title: String, onDone: Selector) {
+        textField.inputView = datePicker
+        
+        let toolbar = UIToolbar()
+        toolbar.tintColor = .globalTintColor
+        toolbar.sizeToFit()
+        let cancelButton = UIBarButtonItem(title: Localizer.string(for: .cancel), style: .plain, target: self, action: #selector(cancelDatePickerInput(_:)))
+        let doneButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: onDone)
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        let titleItem = UIBarButtonItem(customView: titleLabel)
+        toolbar.setItems([cancelButton, space, titleItem, space, doneButton], animated: true)
+        textField.inputAccessoryView = toolbar
+    }
+    
+    private func setupPreferencesView() {
+        preferencesView = AdPreferencesView(frame: CGRect(x: 0, y: 0, width: 0, height: 50))
+        beginDateButton = preferencesView.beginDateButton
+        endDateButton = preferencesView.endDateButton
+        if let ad = currentAd {
+            beginDateButton.date = ad.beginTime
+            endDateButton.date = ad.endTime
+        }
+        beginDateButton.addTarget(self, action: #selector(beginDateButtonTapped(_:)), for: .touchUpInside)
+        endDateButton.addTarget(self, action: #selector(endDateButtonTapped(_:)), for: .touchUpInside)
+        
+        beginDatePicker = UIDatePicker()
+        setupDatePicker(beginDatePicker, for: preferencesView.beginTextField, title: Localizer.string(for: .adEditorBeginDateLabel), onDone: #selector(beginDateChanged(_:)))
+        endDatePicker = UIDatePicker()
+        setupDatePicker(endDatePicker, for: preferencesView.endTextField, title: Localizer.string(for: .adEditorEndDateLabel), onDone: #selector(endDateChanged(_:)))
+    }
+    
 
     
     // MARK: Comments
@@ -462,40 +511,55 @@ class AdViewController: UIViewController {
         publishCurrentAd()
     }
     
-    @objc func beginDateButtonTapped(_ button: UIButton) {
-        let datePickerVC = DatePickerController(title: Localizer.string(for: .adEditorBeginDateLabel))
-        datePickerVC.datePicker.minimumDate = Date()
-        datePickerVC.doneCompletionHandler = { [weak self] in
-            guard let self = self, self.beginDateButton != nil else { return }
-            let beginDate = datePickerVC.datePicker.date
-            self.beginDateButton.date = beginDate
-            if let endDate = self.endDateButton.date, endDate.compare(beginDate) == .orderedAscending {
-                self.endDateButton.date = nil
-            }
+    @objc func beginDateChanged(_ button: UIBarButtonItem) {
+        tableView.keyboardDismissMode = .interactive
+        bodyEditableTextView.becomeFirstResponder()
+        let beginDate = beginDatePicker.date
+        beginDateButton.date = beginDate
+        if let endDate = endDateButton.date, beginDate > endDate {
+            endDateButton.date = nil
         }
-        datePickerVC.modalPresentationStyle = .fullScreen
-        present(datePickerVC, animated: true, completion: nil)
+        updatePublishButton()
+    }
+    
+    @objc func endDateChanged(_ button: UIBarButtonItem) {
+        tableView.keyboardDismissMode = .interactive
+        bodyEditableTextView.becomeFirstResponder()
+        let endDate = endDatePicker.date
+        endDateButton.date = endDate
+        if let beginDate = beginDateButton.date, endDate < beginDate {
+            beginDateButton.date = nil
+        }
+        updatePublishButton()
+    }
+    
+    @objc func cancelDatePickerInput(_ button: UIBarButtonItem) {
+        bodyEditableTextView.becomeFirstResponder()
+        tableView.keyboardDismissMode = .interactive
+    }
+    
+    @objc func beginDateButtonTapped(_ button: UIButton) {
+        preferencesView.beginTextField.becomeFirstResponder()
+        tableView.keyboardDismissMode = .none
+        if let beginDate = beginDateButton.date {
+            beginDatePicker.date = beginDate
+        } else {
+            endDatePicker.date = Date()
+        }
+        endDatePicker.minimumDate = Date()
     }
     
     @objc func endDateButtonTapped(_ button: UIButton) {
-        let datePickerVC = DatePickerController(title: Localizer.string(for: .adEditorEndDateLabel))
-        
-        if beginDateButton.date == nil {
-            datePickerVC.datePicker.minimumDate = Date()
+        preferencesView.endTextField.becomeFirstResponder()
+        tableView.keyboardDismissMode = .none
+        if let endDate = endDateButton.date {
+            endDatePicker.date = endDate
+        } else if let beginDate = beginDateButton.date {
+            endDatePicker.date = beginDate
         } else {
-            datePickerVC.datePicker.minimumDate = beginDateButton.date
+            endDatePicker.date = Date()
         }
-        
-        datePickerVC.doneCompletionHandler = { [weak self] in
-            guard let self = self, self.endDateButton != nil else { return }
-            let endDate = datePickerVC.datePicker.date
-            self.endDateButton.date = endDate
-            if let beginDate = self.beginDateButton.date, beginDate.compare(endDate) == .orderedDescending {
-                self.beginDateButton.date = nil
-            }
-        }
-        datePickerVC.modalPresentationStyle = .fullScreen
-        present(datePickerVC, animated: true, completion: nil)
+        endDatePicker.minimumDate = Date()
     }
     
     @objc func publishCommentButtonTapped(_ button: UIButton) {
@@ -527,9 +591,7 @@ class AdViewController: UIViewController {
             currentState = .editing
             headerView.titleText = Localizer.string(for: .adEditorEditingModeTitle)
             adNameUnderEditing = currentAd.name
-            
-            // FIX: Possible error can be possible if the ad is not loaded
-            adBodyUnderEditing = currentAd.description! // TODO: Use FULL description instead (must be calculated!)
+            adBodyUnderEditing = currentAd.fullDescription
         }
         
         headerView.showEditingControls = true
@@ -659,6 +721,7 @@ class AdViewController: UIViewController {
         cell.titleTextField.delegate = self
         cell.titleTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         cell.bodyTextView.delegate = self
+        cell.bodyTextView.layoutManager.delegate = self
         
         titlePlaceholderLabel = cell.titlePlaceholderLabel
         bodyPlaceholderLabel = cell.bodyPlaceholderLabel
@@ -671,6 +734,11 @@ class AdViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             self.titleEditableTextField.becomeFirstResponder()
         }
+        
+        setupPreferencesView()
+        titleEditableTextField.inputAccessoryView = preferencesView
+        bodyEditableTextView.inputAccessoryView = preferencesView
+        
         return cell
     }
     
@@ -724,17 +792,6 @@ class AdViewController: UIViewController {
         cell.avatarViewSizeConstraint.constant = 40
         return cell
     }
-    
-    private func setupPreferencesCell(for indexPath: IndexPath) -> AdPreferencesCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: adPreferencesCellId, for: indexPath) as! AdPreferencesCell
-        cell.selectionStyle = .none
-        beginDateButton = cell.beginDateButton
-        endDateButton = cell.endDateButton
-        beginDateButton.addTarget(self, action: #selector(beginDateButtonTapped(_:)), for: .touchUpInside)
-        endDateButton.addTarget(self, action: #selector(endDateButtonTapped(_:)), for: .touchUpInside)
-        return cell
-    }
-    
 
 }
 
@@ -748,7 +805,7 @@ extension AdViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch currentSections[section] {
-        case .body, .editableBody, .preferences, .commentInput:
+        case .body, .editableBody, .commentInput:
             return 1
         case .comments:
             return currentAdComments.count
@@ -775,8 +832,6 @@ extension AdViewController: UITableViewDataSource {
             } else {
                 cell = setupCurrentUserCell(for: indexPath)
             }
-        case .preferences:
-            cell = setupPreferencesCell(for: indexPath)
         }
         
         cell.contentView.backgroundColor = .secondarySystemBackground
@@ -835,7 +890,6 @@ extension AdViewController: UITextViewDelegate {
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         if textView === commentInputTextView {
             currentState = .commenting
-            tableView.keyboardDismissMode = .interactive
         }
         return true
     }
@@ -843,7 +897,6 @@ extension AdViewController: UITextViewDelegate {
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         if textView === commentInputTextView {
             currentState = .viewing
-            tableView.keyboardDismissMode = .none
         }
         return true
     }
@@ -893,6 +946,7 @@ extension AdViewController: UIAdaptivePresentationControllerDelegate {
 extension AdViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
+        headerView.moreButton.animateVisibility(shouldHide: false)
         updateComments(with: ad.comments ?? [], partialUpdate: needToUpdateComments)
         updateParticipants(with: ad)
         needToUpdateComments = false
@@ -941,6 +995,14 @@ extension AdViewController: APIClientDelegate {
     }
 
     
+}
+
+// MARK: NSLayoutManagerDelegate
+
+extension AdViewController: NSLayoutManagerDelegate {
+    func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
+        return 6
+    }
 }
 
 

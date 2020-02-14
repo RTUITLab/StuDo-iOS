@@ -52,6 +52,7 @@
                     <constraint firstItem="Pwi-A7-ns0" firstAttribute="leading" secondItem="tep-KG-xZ2" secondAttribute="leading" id="CUY-mm-PQD"/>
                     <constraint firstItem="Pwi-A7-ns0" firstAttribute="trailing" secondItem="oZ0-SJ-e5l" secondAttribute="trailing" id="Nzz-m1-hdX"/>
                     <constraint firstItem="tep-KG-xZ2" firstAttribute="leading" secondItem="oZ0-SJ-e5l" secondAttribute="leading" id="SDN-w4-dBa"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Pwi-A7-ns0" secondAttribute="bottom" constant="5" id="Vgp-jM-7QK"/>
                     <constraint firstAttribute="bottom" secondItem="tep-KG-xZ2" secondAttribute="bottom" constant="10" id="lEx-RD-QUD"/>
                     <constraint firstItem="oZ0-SJ-e5l" firstAttribute="leading" secondItem="pBf-Z1-sad" secondAttribute="leading" constant="16" id="m8W-U6-TeF"/>
                     <constraint firstItem="dOs-Va-0tk" firstAttribute="leading" secondItem="oZ0-SJ-e5l" secondAttribute="leading" id="n1c-dB-glK"/>
