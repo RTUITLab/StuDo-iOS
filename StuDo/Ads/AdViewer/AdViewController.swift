@@ -31,6 +31,8 @@ class AdViewController: UIViewController {
     
     private var titleEditableTextField: UITextField!
     private var bodyEditableTextView: UITextView!
+    private var titlePlaceholderLabel: UILabel!
+    private var bodyPlaceholderLabel: UILabel!
     
     private var beginDateButton: DateButton!
     private var endDateButton: DateButton!
@@ -271,7 +273,7 @@ class AdViewController: UIViewController {
     func publishCurrentAd() {
         
         let adTitle = adNameUnderEditing
-        let description = adNameUnderEditing
+        let description = adBodyUnderEditing
         var shortDescription: String!
         
         if let firstParagraph = adBodyUnderEditing.components(separatedBy: CharacterSet.newlines).first {
@@ -701,6 +703,12 @@ extension AdViewController: UITableViewDataSource {
             cell.titleTextField.delegate = self
             cell.titleTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
             cell.bodyTextView.delegate = self
+            titlePlaceholderLabel = cell.titlePlaceholderLabel
+            bodyPlaceholderLabel = cell.bodyPlaceholderLabel
+            titlePlaceholderLabel.text = Localizer.string(for: .adEditorNamePlaceholder)
+            bodyPlaceholderLabel.text = Localizer.string(for: .adEditorDescriptionPlaceholder)
+            titlePlaceholderLabel.animateVisibility(shouldHide: currentAd != nil, duration: 0)
+            bodyPlaceholderLabel.animateVisibility(shouldHide: currentAd != nil, duration: 0)
             titleEditableTextField = cell.titleTextField
             bodyEditableTextView = cell.bodyTextView
             returnCell = cell
@@ -798,6 +806,7 @@ extension AdViewController: UITextViewDelegate {
             commentInputUpdated(with: textView.text)
         } else if textView === bodyEditableTextView {
             adBodyUnderEditing = bodyEditableTextView.text
+            bodyPlaceholderLabel.animateVisibility(shouldHide: !adBodyUnderEditing.isEmpty)
             updatePublishButton()
         }
         updateTableViewHeight()
@@ -833,6 +842,7 @@ extension AdViewController: UITextFieldDelegate {
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         adNameUnderEditing = titleEditableTextField.text!
+        titlePlaceholderLabel.animateVisibility(shouldHide: !adNameUnderEditing.isEmpty)
         updatePublishButton()
     }
     

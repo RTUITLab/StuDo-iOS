@@ -23,14 +23,14 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="k1K-qZ-4WC" customClass="TextViewNoPadding" customModule="StuDo" customModuleProvider="target">
-                        <rect key="frame" x="16" y="35" width="280" height="258"/>
+                        <rect key="frame" x="16" y="38" width="280" height="247.5"/>
                         <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</string>
                         <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="748" text="Sep 12, 2019 8:00 - 9:00 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bL0-1w-a3M">
-                        <rect key="frame" x="16" y="293" width="280" height="14"/>
+                        <rect key="frame" x="16" y="285.5" width="280" height="20.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
@@ -45,13 +45,13 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="RHt-OS-IvU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="2uF-Gm-U8c"/>
-                    <constraint firstAttribute="bottom" secondItem="bL0-1w-a3M" secondAttribute="bottom" constant="16" id="6fz-9R-CtO"/>
+                    <constraint firstAttribute="bottom" secondItem="bL0-1w-a3M" secondAttribute="bottom" constant="17" id="6fz-9R-CtO"/>
                     <constraint firstAttribute="trailing" secondItem="RHt-OS-IvU" secondAttribute="trailing" constant="16" id="J1k-4J-NW7"/>
                     <constraint firstAttribute="bottom" secondItem="Pr3-It-a63" secondAttribute="bottom" id="O7x-cX-bqU"/>
                     <constraint firstAttribute="trailing" secondItem="Pr3-It-a63" secondAttribute="trailing" id="Q1e-NU-FCk"/>
                     <constraint firstItem="bL0-1w-a3M" firstAttribute="trailing" secondItem="RHt-OS-IvU" secondAttribute="trailing" id="W5N-zL-y3B"/>
                     <constraint firstItem="bL0-1w-a3M" firstAttribute="top" secondItem="k1K-qZ-4WC" secondAttribute="bottom" id="WHW-Ld-1lR"/>
-                    <constraint firstItem="k1K-qZ-4WC" firstAttribute="top" secondItem="RHt-OS-IvU" secondAttribute="baseline" constant="14" id="YOS-4M-Y8Q"/>
+                    <constraint firstItem="k1K-qZ-4WC" firstAttribute="top" secondItem="RHt-OS-IvU" secondAttribute="baseline" constant="17" id="YOS-4M-Y8Q"/>
                     <constraint firstItem="k1K-qZ-4WC" firstAttribute="trailing" secondItem="RHt-OS-IvU" secondAttribute="trailing" id="agd-Ka-848"/>
                     <constraint firstItem="RHt-OS-IvU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="btn-3M-KKj"/>
                     <constraint firstItem="Pr3-It-a63" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="f38-w2-ipr"/>
