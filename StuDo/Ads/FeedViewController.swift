@@ -178,7 +178,7 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         let currentAd = feedItems[indexPath.row]
         cell.titleLabel.text = currentAd.name
         cell.creatorLabel.text = Localizer.string(for: .feedPublishedBy) + " " + currentAd.creatorName
-        cell.descriptionTextView.text = currentAd.shortDescription
+        cell.descriptionTextView.attributedText = TextFormatter.parseMarkdownString(currentAd.shortDescription, fontWeight: .light)
         cell.dateLabel.text = currentAd.dateRange
         cell.moreButtonCallback = { [weak self] in
             guard let self = self else { return }

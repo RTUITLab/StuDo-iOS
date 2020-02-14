@@ -9,11 +9,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="323" id="KGk-i7-Jjw" customClass="AdBodyCell" customModule="StuDo" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="312" height="323"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="343" id="KGk-i7-Jjw" customClass="AdBodyCell" customModule="StuDo" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="312" height="343"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="312" height="323"/>
+                <rect key="frame" x="0.0" y="0.0" width="312" height="343"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Ad title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RHt-OS-IvU">
@@ -23,23 +23,23 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="k1K-qZ-4WC" customClass="TextViewNoPadding" customModule="StuDo" customModuleProvider="target">
-                        <rect key="frame" x="16" y="38" width="280" height="247.5"/>
+                        <rect key="frame" x="16" y="40" width="280" height="265.5"/>
                         <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</string>
                         <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="748" text="Sep 12, 2019 8:00 - 9:00 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bL0-1w-a3M">
-                        <rect key="frame" x="16" y="285.5" width="280" height="20.5"/>
+                        <rect key="frame" x="16" y="305.5" width="280" height="20.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pr3-It-a63">
-                        <rect key="frame" x="0.0" y="322.5" width="312" height="0.5"/>
+                        <rect key="frame" x="0.0" y="342.5" width="312" height="0.5"/>
                         <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="0.69999999999999996" id="JEn-2J-auk"/>
+                            <constraint firstAttribute="height" constant="0.5" id="JEn-2J-auk"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -51,7 +51,7 @@
                     <constraint firstAttribute="trailing" secondItem="Pr3-It-a63" secondAttribute="trailing" id="Q1e-NU-FCk"/>
                     <constraint firstItem="bL0-1w-a3M" firstAttribute="trailing" secondItem="RHt-OS-IvU" secondAttribute="trailing" id="W5N-zL-y3B"/>
                     <constraint firstItem="bL0-1w-a3M" firstAttribute="top" secondItem="k1K-qZ-4WC" secondAttribute="bottom" id="WHW-Ld-1lR"/>
-                    <constraint firstItem="k1K-qZ-4WC" firstAttribute="top" secondItem="RHt-OS-IvU" secondAttribute="baseline" constant="17" id="YOS-4M-Y8Q"/>
+                    <constraint firstItem="k1K-qZ-4WC" firstAttribute="top" secondItem="RHt-OS-IvU" secondAttribute="baseline" constant="19" id="YOS-4M-Y8Q"/>
                     <constraint firstItem="k1K-qZ-4WC" firstAttribute="trailing" secondItem="RHt-OS-IvU" secondAttribute="trailing" id="agd-Ka-848"/>
                     <constraint firstItem="RHt-OS-IvU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="btn-3M-KKj"/>
                     <constraint firstItem="Pr3-It-a63" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="f38-w2-ipr"/>
@@ -65,7 +65,7 @@
                 <outlet property="dateLabel" destination="bL0-1w-a3M" id="aBz-Z8-FLw"/>
                 <outlet property="titleLabel" destination="RHt-OS-IvU" id="Fa6-CF-8Tq"/>
             </connections>
-            <point key="canvasLocation" x="169.56521739130437" y="191.18303571428569"/>
+            <point key="canvasLocation" x="169.56521739130437" y="197.87946428571428"/>
         </tableViewCell>
     </objects>
 </document>

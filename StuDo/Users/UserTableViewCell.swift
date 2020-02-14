@@ -15,6 +15,8 @@ class UserTableViewCell: TableViewCellValue1Style {
     let initialsLabel = UILabel()
     let nameLabel = UILabel()
     
+    let separator = UIView()
+    
     var avatarViewSizeConstraint: NSLayoutConstraint!
     var avatarViewBottomConstraint: NSLayoutConstraint!
     var nameLabelCenterYConstraint: NSLayoutConstraint!
@@ -74,10 +76,9 @@ class UserTableViewCell: TableViewCellValue1Style {
         initialsLabel.textColor = .white
         initialsLabel.adjustsFontSizeToFitWidth = true
         
-        let separator = UIView()
         contentView.addSubview(separator)
         separator.translatesAutoresizingMaskIntoConstraints = false
-        separator.heightAnchor.constraint(equalToConstant: 0.7).isActive = true
+        separator.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         separator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         separator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true

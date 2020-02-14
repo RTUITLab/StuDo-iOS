@@ -203,6 +203,15 @@ struct Ad {
     
     let comments: [Comment]?
     
+    // Not endoceded
+    var fullDescription: String {
+        guard let description = description else { return shortDescription }
+        if description.contains(shortDescription) {
+            return description
+        }
+        return "\(shortDescription)\n\(description)"
+    }
+    
     
     // initializer for ad creation and update
     init(id: String?, name: String, description: String, shortDescription: String, beginTime: Date, endTime: Date) {
@@ -335,6 +344,27 @@ struct Comment {
     let commentTime: Date!
     let authorId: String!
     let author: String!
+    
+    var dateString: String {
+        let formatter = DateFormatter()
+        formatter.locale = Localizer.currentLocale
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        
+        return formatter.string(from: commentTime)
+    }
+    
+    var nameParts: [String]? {
+        let nameParts = author.components(separatedBy: " ")
+        if nameParts.count == 1 {
+            return [nameParts.first!]
+        } else if nameParts.count == 2 {
+            let name = nameParts.last!
+            let surname = nameParts.first!
+            return [name, surname]
+        }
+        return nil
+    }
     
     enum CodingKeys: String, CodingKey {
         case id

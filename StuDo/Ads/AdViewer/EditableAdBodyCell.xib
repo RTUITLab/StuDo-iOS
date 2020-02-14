@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="tep-KG-xZ2" customClass="TextViewNoPadding" customModule="StuDo" customModuleProvider="target">
-                        <rect key="frame" x="16" y="35.5" width="280" height="359.5"/>
+                        <rect key="frame" x="16" y="40.5" width="280" height="354.5"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="Lkw-ag-3WJ"/>
                         </constraints>
@@ -29,7 +29,7 @@
                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Ad title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oZ0-SJ-e5l">
                         <rect key="frame" x="16" y="0.0" width="280" height="28"/>
                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                        <textInputTraits key="textInputTraits"/>
+                        <textInputTraits key="textInputTraits" returnKeyType="continue"/>
                     </textField>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Placeholder" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dOs-Va-0tk" userLabel="Title placeholder">
                         <rect key="frame" x="16" y="5.5" width="280" height="21"/>
@@ -38,7 +38,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Placeholder" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pwi-A7-ns0">
-                        <rect key="frame" x="16" y="35.5" width="280" height="21"/>
+                        <rect key="frame" x="16" y="40.5" width="280" height="21"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <color key="textColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
@@ -47,7 +47,7 @@
                 <constraints>
                     <constraint firstItem="dOs-Va-0tk" firstAttribute="trailing" secondItem="oZ0-SJ-e5l" secondAttribute="trailing" id="0Ty-In-pce"/>
                     <constraint firstAttribute="trailing" secondItem="oZ0-SJ-e5l" secondAttribute="trailing" constant="16" id="7yQ-Oo-MKt"/>
-                    <constraint firstItem="tep-KG-xZ2" firstAttribute="top" secondItem="oZ0-SJ-e5l" secondAttribute="baseline" constant="14" id="80q-gT-NeN"/>
+                    <constraint firstItem="tep-KG-xZ2" firstAttribute="top" secondItem="oZ0-SJ-e5l" secondAttribute="baseline" constant="19" id="80q-gT-NeN"/>
                     <constraint firstItem="oZ0-SJ-e5l" firstAttribute="top" secondItem="pBf-Z1-sad" secondAttribute="top" id="BwF-9S-qVF"/>
                     <constraint firstItem="Pwi-A7-ns0" firstAttribute="leading" secondItem="tep-KG-xZ2" secondAttribute="leading" id="CUY-mm-PQD"/>
                     <constraint firstItem="Pwi-A7-ns0" firstAttribute="trailing" secondItem="oZ0-SJ-e5l" secondAttribute="trailing" id="Nzz-m1-hdX"/>

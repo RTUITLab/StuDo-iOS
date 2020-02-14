@@ -542,7 +542,11 @@ class AdViewController: UIViewController {
         func exitEditing() {
             currentState = .viewing
             self.headerView.showEditingControls = false
-            self.reloadTableView()
+            if currentAd != nil {
+                self.reloadTableView()
+            } else {
+                dismiss(animated: true, completion: nil)
+            }
         }
         
         guard shouldShowPrompt else {
@@ -579,6 +583,158 @@ class AdViewController: UIViewController {
         present(shouldProceedAlert, animated: true, completion: nil)
 
     }
+    
+    // MARK: - Cell setup
+    
+    private func setupCommentCell(for indexPath: IndexPath) -> CommentTableViewCell {
+        let comment = currentAdComments[indexPath.row]
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: commentCellId, for: indexPath) as! CommentTableViewCell
+        cell.bodyTextView.attributedText = TextFormatter.parseMarkdownString(comment.text, fontWeight: .light)
+        cell.nameLabel.text = comment.author
+        cell.dateLabel.text = comment.dateString
+        
+        let nameParts = comment.nameParts ?? []
+        let initials = nameParts.map({ String($0.prefix(1)) }).reduce("", { $0 + $1 })
+        cell.initialsLabel.text = initials
+        cell.nameLabel.text = nameParts.reduce("", { "\($0!)\($1) " })
+        
+        cell.isAvatarHighlighted = (comment.authorId == PersistentStore.shared.user.id)
+        cell.selectionStyle = .none
+        
+        if newCommentsIndices[comment.id] != nil {
+            newCommentsIndices.removeValue(forKey: comment.id)
+            let initialCellBackgroundColor = cell.contentView.backgroundColor
+            cell.contentView.backgroundColor = UIColor.globalTintColor.withAlphaComponent(0.2)
+            UIView.animate(withDuration: 1.5) {
+                cell.contentView.backgroundColor = initialCellBackgroundColor
+            }
+        }
+        
+        if indexPath.row == currentAdComments.count - 1 {
+            cell.separator.isHidden = true
+        } else {
+            cell.separator.isHidden = false
+        }
+        
+        return cell
+    }
+    
+    private func setupCommentInputCell(for indexPath: IndexPath) -> CommentInputTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: commentInputCellId, for: indexPath) as! CommentInputTableViewCell
+        
+        commentPlaceholderLabel = cell.placeholderLabel
+        cell.placeholderLabel.text = Localizer.string(for: .adEditorCommentPlaceholder)
+        cell.placeholderLabel.isHidden = false
+        
+        commentInputTextView = cell.textViewInput
+        commentInputTextView.delegate = self
+                    
+        cell.selectionStyle = .none
+        
+        commentPublishButton = cell.publishButton
+        commentPublishButton.addTarget(self, action: #selector(publishCommentButtonTapped(_ :)), for: .touchUpInside)
+        return cell
+    }
+    
+    private func setupBodyCell(for indexPath: IndexPath) -> AdBodyCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: bodyCellId, for: indexPath) as! AdBodyCell
+        cell.titleLabel.text = currentAd.name
+        cell.dateLabel.text = currentAd.dateRange
+        cell.selectionStyle = .none
+        
+        let attrDescription = NSMutableAttributedString(string: currentAd.fullDescription)
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 6
+        attrDescription.addAttribute(.paragraphStyle, value: style, range: NSRange(location: 0, length: attrDescription.length))
+        
+        cell.bodyTextView.attributedText = TextFormatter.parseMarkdownString(attrDescription)
+        return cell
+    }
+    
+    private func setupEditableBodyCell(for indexPath: IndexPath) -> EditableAdBodyCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: editableBodyCellId, for: indexPath) as! EditableAdBodyCell
+        cell.titleTextField.text = adNameUnderEditing
+        cell.bodyTextView.text = adBodyUnderEditing
+        cell.titleTextField.delegate = self
+        cell.titleTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        cell.bodyTextView.delegate = self
+        
+        titlePlaceholderLabel = cell.titlePlaceholderLabel
+        bodyPlaceholderLabel = cell.bodyPlaceholderLabel
+        titlePlaceholderLabel.text = Localizer.string(for: .adEditorNamePlaceholder)
+        bodyPlaceholderLabel.text = Localizer.string(for: .adEditorDescriptionPlaceholder)
+        titlePlaceholderLabel.animateVisibility(shouldHide: currentAd != nil, duration: 0)
+        bodyPlaceholderLabel.animateVisibility(shouldHide: currentAd != nil, duration: 0)
+        titleEditableTextField = cell.titleTextField
+        bodyEditableTextView = cell.bodyTextView
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            self.titleEditableTextField.becomeFirstResponder()
+        }
+        return cell
+    }
+    
+    private func setupParticipantCell(for indexPath: IndexPath, participant: AdParticipant) -> UserTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: adParticipantCellId, for: indexPath) as! UserTableViewCell
+        
+        var name: String?
+        var surname: String?
+        var detailInfo: String?
+        
+        if let user = participant.content as? User {
+            
+            if user.id! == currentAd.userId {
+                detailInfo = Localizer.string(for: .adEditorCreator)
+            }
+            name = user.firstName
+            surname = user.lastName
+            
+            if user.id! == PersistentStore.shared.user.id {
+                cell.avatarGradientLayer.colors = UserGradient.currentColors
+            }
+            
+        } else if let organization = participant.content as? Organization {
+            
+            detailInfo = Localizer.string(for: .adEditorCreator)
+            name = organization.name
+            
+        }
+        
+        
+        cell.initialsLabel.text = String(name!.prefix(1)) + (surname?.prefix(1) ?? "")
+        cell.nameLabel.text = (name ?? "") + " " + (surname ?? "")
+        cell.nameLabel.font = .preferredFont(for: .body, weight: .medium)
+        cell.detailTextLabel?.text = detailInfo
+        
+        cell.selectionStyle = .none
+                
+        cell.avatarViewSizeConstraint.constant = 40
+        return cell
+    }
+    
+    private func setupCurrentUserCell(for indexPath: IndexPath) -> CurrentUserAdTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: currentUserCellId, for: indexPath) as! CurrentUserAdTableViewCell
+        
+        let currentUser = PersistentStore.shared.user!
+        cell.initialsLabel.text = String(currentUser.firstName.prefix(1)) + currentUser.lastName.prefix(1)
+        
+        cell.nameLabel.textColor = .globalTintColor
+        cell.nameLabel.text = Localizer.string(for: .adEditorJoinAd) + "..."
+        
+        cell.avatarViewSizeConstraint.constant = 40
+        return cell
+    }
+    
+    private func setupPreferencesCell(for indexPath: IndexPath) -> AdPreferencesCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: adPreferencesCellId, for: indexPath) as! AdPreferencesCell
+        cell.selectionStyle = .none
+        beginDateButton = cell.beginDateButton
+        endDateButton = cell.endDateButton
+        beginDateButton.addTarget(self, action: #selector(beginDateButtonTapped(_:)), for: .touchUpInside)
+        endDateButton.addTarget(self, action: #selector(endDateButtonTapped(_:)), for: .touchUpInside)
+        return cell
+    }
+    
 
 }
 
@@ -602,188 +758,44 @@ extension AdViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var returnCell: UITableViewCell!
+        var cell: UITableViewCell!
         switch currentSections[indexPath.section] {
         case .comments:
-            let comment = currentAdComments[indexPath.row]
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: commentCellId, for: indexPath) as! CommentTableViewCell
-            cell.bodyTextView.text = comment.text
-            cell.nameLabel.text = comment.author
-
-            // TODO: This code should be put in a separate file and refactored
-            // NOTE: The cell class is subclass of UserTableViewCell
-            let formatter = DateFormatter()
-            formatter.locale = Localizer.currentLocale
-            formatter.dateStyle = .short
-            formatter.timeStyle = .short
-            cell.dateLabel.text = formatter.string(from: comment.commentTime)
-            
-            let nameParts = comment.author.components(separatedBy: " ")
-            if nameParts.count == 1 {
-                cell.initialsLabel.text = String(nameParts.first!.suffix(1))
-            } else if nameParts.count == 2 {
-                let name = nameParts.last!
-                let surname = nameParts.first!
-                cell.initialsLabel.text = String(name.prefix(1)) + surname.prefix(1)
-                
-                cell.nameLabel.text = "\(name) \(surname)"
-            }
-            
-            cell.isAvatarHighlighted = (comment.authorId == PersistentStore.shared.user.id)
-            
-            cell.selectionStyle = .none
-            
-            cell.contentView.backgroundColor = .secondarySystemBackground
-            
-            if newCommentsIndices[comment.id] != nil {
-                newCommentsIndices.removeValue(forKey: comment.id)
-                let initialCellBackgroundColor = cell.contentView.backgroundColor
-                cell.contentView.backgroundColor = UIColor.globalTintColor.withAlphaComponent(0.2)
-                UIView.animate(withDuration: 1.5) {
-                    cell.contentView.backgroundColor = initialCellBackgroundColor
-                }
-            }
-            
-            return cell
+            cell = setupCommentCell(for: indexPath)
         case .commentInput:
-            let cell = tableView.dequeueReusableCell(withIdentifier: commentInputCellId, for: indexPath) as! CommentInputTableViewCell
-            
-            commentPlaceholderLabel = cell.placeholderLabel
-            cell.placeholderLabel.text = Localizer.string(for: .adEditorCommentPlaceholder)
-            cell.placeholderLabel.isHidden = false
-            
-            commentInputTextView = cell.textViewInput
-            commentInputTextView.delegate = self
-                        
-            cell.selectionStyle = .none
-            
-            commentPublishButton = cell.publishButton
-            commentPublishButton.addTarget(self, action: #selector(publishCommentButtonTapped(_ :)), for: .touchUpInside)
-
-            returnCell = cell
+            cell = setupCommentInputCell(for: indexPath)
         case .body:
-            let cell = tableView.dequeueReusableCell(withIdentifier: bodyCellId, for: indexPath) as! AdBodyCell
-            cell.titleLabel.text = currentAd.name
-            cell.dateLabel.text = currentAd.dateRange
-            cell.selectionStyle = .none
-            
-            // TODO: Stash this formatting code in a separate class
-            var description: String!
-            if currentState == .previewing {
-                description = currentAd.shortDescription
-            } else {
-                description = currentAd.description
-            }
-            
-            var markdownParser: MarkdownParser!
-            markdownParser = MarkdownParser(font: UIFont.preferredFont(forTextStyle: .body), color: .label)
-            
-            markdownParser.enabledElements = .all
-            markdownParser.bold.font = UIFont.preferredFont(for: .body, weight: .medium)
-            markdownParser.italic.font = UIFont.preferredFont(forTextStyle: .body).italic()
-            markdownParser.header.font = UIFont.preferredFont(for: .title3, weight: .medium)
-            markdownParser.quote.font = UIFont.preferredFont(forTextStyle: .body).italic()
-            markdownParser.quote.color = .lightGray
-            markdownParser.link.color = .globalTintColor
-            
-            let attrDescription = NSMutableAttributedString(string: description)
-            let style = NSMutableParagraphStyle()
-            style.lineSpacing = 6
-            attrDescription.addAttribute(.paragraphStyle, value: style, range: NSRange(location: 0, length: attrDescription.length))
-            
-            cell.bodyTextView.attributedText = markdownParser.parse(attrDescription)
-            
-            
-            returnCell = cell
+            cell = setupBodyCell(for: indexPath)
         case .editableBody:
-            let cell = tableView.dequeueReusableCell(withIdentifier: editableBodyCellId, for: indexPath) as! EditableAdBodyCell
-            cell.titleTextField.text = adNameUnderEditing
-            cell.bodyTextView.text = adBodyUnderEditing
-            cell.titleTextField.delegate = self
-            cell.titleTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-            cell.bodyTextView.delegate = self
-            titlePlaceholderLabel = cell.titlePlaceholderLabel
-            bodyPlaceholderLabel = cell.bodyPlaceholderLabel
-            titlePlaceholderLabel.text = Localizer.string(for: .adEditorNamePlaceholder)
-            bodyPlaceholderLabel.text = Localizer.string(for: .adEditorDescriptionPlaceholder)
-            titlePlaceholderLabel.animateVisibility(shouldHide: currentAd != nil, duration: 0)
-            bodyPlaceholderLabel.animateVisibility(shouldHide: currentAd != nil, duration: 0)
-            titleEditableTextField = cell.titleTextField
-            bodyEditableTextView = cell.bodyTextView
-            returnCell = cell
+            cell = setupEditableBodyCell(for: indexPath)
         case .people:
             let participant = currentAdPeople[indexPath.row]
-            
             if participant.type == .user || participant.type == .organization {
-                let cell = tableView.dequeueReusableCell(withIdentifier: adParticipantCellId, for: indexPath) as! UserTableViewCell
-                
-                var name: String?
-                var surname: String?
-                var detailInfo: String?
-                
-                if let user = participant.content as? User {
-                    
-                    if user.id! == currentAd.userId {
-                        detailInfo = Localizer.string(for: .adEditorCreator)
-                    }
-                    name = user.firstName
-                    surname = user.lastName
-                    
-                    if user.id! == PersistentStore.shared.user.id {
-                        cell.avatarGradientLayer.colors = UserGradient.currentColors
-                    }
-                    
-                } else if let organization = participant.content as? Organization {
-                    
-                    detailInfo = Localizer.string(for: .adEditorCreator)
-                    name = organization.name
-                    
-                }
-                
-                
-                cell.initialsLabel.text = String(name!.prefix(1)) + (surname?.prefix(1) ?? "")
-                cell.nameLabel.text = (name ?? "") + " " + (surname ?? "")
-                cell.nameLabel.font = .preferredFont(for: .body, weight: .medium)
-                cell.detailTextLabel?.text = detailInfo
-                
-                cell.selectionStyle = .none
-                
-                cell.contentView.backgroundColor = .secondarySystemBackground
-                
-                return cell
+                cell = setupParticipantCell(for: indexPath, participant: participant)
+            } else {
+                cell = setupCurrentUserCell(for: indexPath)
             }
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: currentUserCellId, for: indexPath) as! CurrentUserAdTableViewCell
-            
-            let currentUser = PersistentStore.shared.user!
-            cell.initialsLabel.text = String(currentUser.firstName.prefix(1)) + currentUser.lastName.prefix(1)
-            
-            cell.nameLabel.textColor = .globalTintColor
-            cell.nameLabel.text = Localizer.string(for: .adEditorJoinAd) + "..."
-            
-            cell.contentView.backgroundColor = .secondarySystemBackground
-            
-            return cell
         case .preferences:
-            let cell = tableView.dequeueReusableCell(withIdentifier: adPreferencesCellId, for: indexPath) as! AdPreferencesCell
-            cell.selectionStyle = .none
-            beginDateButton = cell.beginDateButton
-            endDateButton = cell.endDateButton
-            beginDateButton.addTarget(self, action: #selector(beginDateButtonTapped(_:)), for: .touchUpInside)
-            endDateButton.addTarget(self, action: #selector(endDateButtonTapped(_:)), for: .touchUpInside)
-            returnCell = cell
+            cell = setupPreferencesCell(for: indexPath)
         }
         
-        returnCell.contentView.backgroundColor = .secondarySystemBackground
+        cell.contentView.backgroundColor = .secondarySystemBackground
         
-        return returnCell
+        return cell
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let section = currentSections[section]
         if section == .comments {
             return Localizer.string(for: .adEditorComments)
+        }
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let section = currentSections[section]
+        if section == .people {
+            return UIView()
         }
         return nil
     }
@@ -795,6 +807,14 @@ extension AdViewController: UITableViewDataSource {
 extension AdViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.tintColor = .secondarySystemBackground
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        let section = currentSections[section]
+        if section == .people {
+            return 10
+        }
+        return 0
     }
 }
 

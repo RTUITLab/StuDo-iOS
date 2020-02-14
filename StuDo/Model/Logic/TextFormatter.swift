@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MarkdownKit
 
 class TextFormatter {
     
@@ -27,33 +28,22 @@ class TextFormatter {
         return formatter.string(from: date)
     }
     
+    static func parseMarkdownString(_ string: String, textStyle: UIFont.TextStyle = .body, fontWeight: UIFont.Weight = .regular) -> NSAttributedString {
+        parseMarkdownString(NSAttributedString(string: string), textStyle: textStyle, fontWeight: fontWeight)
+    }
     
-    static func additionalInfoAttributedString(for ad: Ad, style: UIFont.TextStyle = .caption2) -> NSAttributedString {
+    static func parseMarkdownString(_ string: NSAttributedString, textStyle: UIFont.TextStyle = .body, fontWeight: UIFont.Weight = .regular) -> NSAttributedString {
         
-        var creator: String!
-        if let userName = ad.userName {
-            creator = userName
-        } else if let organizationName = ad.organizationName {
-            creator = organizationName
-        } else if let user = ad.user {
-            creator = user.firstName + " " + user.lastName
-        } else if let organization = ad.organization {
-            creator = organization.name
-        }
+        let markdownParser = MarkdownParser(font: UIFont.preferredFont(for: textStyle, weight: fontWeight), color: .label)
         
-        let timeString = TextFormatter.mediumString(from: ad.beginTime)
+        markdownParser.enabledElements = .all
+        markdownParser.bold.font = UIFont.preferredFont(for: textStyle, weight: .medium)
+        markdownParser.italic.font = UIFont.preferredFont(forTextStyle: textStyle).italic()
+        markdownParser.header.font = UIFont.preferredFont(for: .title3, weight: .medium)
+        markdownParser.quote.font = UIFont.preferredFont(forTextStyle: textStyle).italic()
+        markdownParser.quote.color = .lightGray
+        markdownParser.link.color = .globalTintColor
         
-        
-        let attributedString = NSMutableAttributedString(string: timeString, attributes: [
-            .font: UIFont.preferredFont(forTextStyle: style)
-            ])
-        attributedString.append(NSAttributedString(string: " ‧ ", attributes: [
-            NSAttributedString.Key.font: UIFont.preferredFont(for: style, weight: .bold)
-            ]))
-        attributedString.append(NSAttributedString(string: creator, attributes: [
-            .font : UIFont.preferredFont(for: style, weight: .semibold)
-            ]))
-        
-        return attributedString
+        return markdownParser.parse(string)
     }
 }
