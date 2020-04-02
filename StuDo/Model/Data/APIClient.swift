@@ -905,9 +905,7 @@ extension APIClient {
         self.perform(secureRequest: request) { (result) in
             switch result {
             case .success(let response):
-                guard let data = response.body, let deletedProfileId = String(data: data, encoding: .utf8) else {
-                    throw APIError.decodingFailure
-                }
+                let deletedProfileId = try self.decodeString(from: response)
                 
                 DispatchQueue.main.async {
                     self.delegate?.apiClient(self, didDeleteProfileWithId: deletedProfileId)
