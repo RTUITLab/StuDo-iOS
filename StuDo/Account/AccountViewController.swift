@@ -131,7 +131,6 @@ extension AccountViewController: APIClientDelegate {
             }
         }
         
-        // ERROR: deletedIndex is -1 when deleted a row
         let _ = ownProfiles.remove(at: deletedIndex)
         tableView.deleteRows(at: [IndexPath(row: deletedIndex, section: 1)], with: .automatic)
         

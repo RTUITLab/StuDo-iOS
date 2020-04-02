@@ -22,7 +22,7 @@ class AdTableViewCell: UITableViewCell {
         if let moreButtonImage = moreButton.currentImage?.withRenderingMode(.alwaysTemplate) {
             moreButton.setImage(moreButtonImage, for: .normal)
             moreButton.tintColor = UIColor(red:0.815, green:0.819, blue:0.837, alpha:1.000)
-            let inset: CGFloat = 10
+            let inset: CGFloat = 15
             moreButton.imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         }
         

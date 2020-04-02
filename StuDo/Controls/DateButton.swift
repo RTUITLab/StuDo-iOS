@@ -15,14 +15,12 @@ class DateButton: UIButton {
     func dateChanged(isSet: Bool) {
         if isSet {
             label.text = TextFormatter.mediumString(from: date)
-            label.textColor = .black
             
             UIView.animate(withDuration: 0.4) {
                 self.backgroundColor = .globalTintColor
             }
         } else {
             label.text = labelPlaceholder
-            label.textColor = .white
             backgroundColor = .placeholderText
         }
     }
@@ -69,6 +67,7 @@ class DateButton: UIButton {
         
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 13, weight: .semibold)
+        label.textColor = .white
         
         dateChanged(isSet: false)
     }

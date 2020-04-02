@@ -32,15 +32,7 @@ extension DateFormatter {
             decodedDate = formatter.date(from: dateString)!
         }
         
-        // As the time strings stored on the server don't include 'Z' at the end,
-        // the date is believed to be in local time and is handled not correctly,
-        // since it actually represents GMT Time
-        
-        // To correct this, offset the decoded time by the difference between
-        // time in current time zone and in GMT
-        
-        let timeOffset = TimeZone.current.secondsFromGMT(for: decodedDate)
-        return Calendar.current.date(byAdding: .second, value: Int(timeOffset), to: decodedDate)!
+        return decodedDate
 
     }
 }

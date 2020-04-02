@@ -135,7 +135,6 @@ class AdViewController: UIViewController {
         tableView.dataSource = self
         
         client.delegate = self
-        presentationController?.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -174,6 +173,11 @@ class AdViewController: UIViewController {
         
         headerView.moreButton.animateVisibility(shouldHide: true)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let pc = presentationController
+        presentationController?.delegate = self
+    }
         
     private func setTableView() {
         
@@ -183,9 +187,6 @@ class AdViewController: UIViewController {
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
-        // TODO: Remove
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CELL")
         
         tableView.register(UINib(nibName: String(describing: AdBodyCell.self), bundle: nil), forCellReuseIdentifier: bodyCellId)
         tableView.register(UINib(nibName: String(describing: EditableAdBodyCell.self), bundle: nil), forCellReuseIdentifier: editableBodyCellId)
@@ -442,6 +443,26 @@ class AdViewController: UIViewController {
         
     }
     
+    private func presentCommentActions(id: String) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        guard let comment = currentAdComments.filter({ $0.id == id }).first else { return }
+        if comment.authorId == PersistentStore.shared.user.id {
+            alert.addAction(UIAlertAction(title: Localizer.string(for: .adEditorDeleteComment), style: .destructive, handler: { _ in
+                self.client.deleteComment(withId: id, adId: self.currentAd.id)
+            }))
+        } else {
+            let nameParts = comment.nameParts ?? []
+            let initials = nameParts.map({ String($0.prefix(1)) }).reduce("", { $0 + $1 })
+            let commentCreatorName = nameParts.reduce("", { "\($0)\($1) " })
+            alert.addAction(UIAlertAction(title: commentCreatorName, style: .default, handler: { _ in
+                self.client.getUser(id: comment.authorId)
+            }))
+        }
+        alert.addAction(UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
     // MARK: Ad Participants
     
     private func updateParticipants(with ad: Ad) {
@@ -653,7 +674,6 @@ class AdViewController: UIViewController {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: commentCellId, for: indexPath) as! CommentTableViewCell
         cell.bodyTextView.attributedText = TextFormatter.parseMarkdownString(comment.text, fontWeight: .light)
-        cell.nameLabel.text = comment.author
         cell.dateLabel.text = comment.dateString
         
         let nameParts = comment.nameParts ?? []
@@ -663,14 +683,11 @@ class AdViewController: UIViewController {
         
         cell.isAvatarHighlighted = (comment.authorId == PersistentStore.shared.user.id)
         cell.selectionStyle = .none
+        cell.bodyTextView.isUserInteractionEnabled = false
         
         if newCommentsIndices[comment.id] != nil {
             newCommentsIndices.removeValue(forKey: comment.id)
-            let initialCellBackgroundColor = cell.contentView.backgroundColor
-            cell.contentView.backgroundColor = UIColor.globalTintColor.withAlphaComponent(0.2)
-            UIView.animate(withDuration: 1.5) {
-                cell.contentView.backgroundColor = initialCellBackgroundColor
-            }
+            animateBackgroundChange(for: cell)
         }
         
         if indexPath.row == currentAdComments.count - 1 {
@@ -792,6 +809,14 @@ class AdViewController: UIViewController {
         cell.avatarViewSizeConstraint.constant = 40
         return cell
     }
+    
+    fileprivate func animateBackgroundChange(for cell: UITableViewCell) {
+        let initialCellBackgroundColor = cell.contentView.backgroundColor
+        cell.contentView.backgroundColor = UIColor.globalTintColor.withAlphaComponent(0.2)
+        UIView.animate(withDuration: 1.5) {
+            cell.contentView.backgroundColor = initialCellBackgroundColor
+        }
+    }
 
 }
 
@@ -871,6 +896,30 @@ extension AdViewController: UITableViewDelegate {
         }
         return 0
     }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        switch currentSections[indexPath.section] {
+        case .comments:
+            return indexPath
+        default:
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch currentSections[indexPath.section] {
+        case .comments:
+            let comment = currentAdComments[indexPath.row]
+            presentCommentActions(id: comment.id)
+        
+            if let cell = tableView.cellForRow(at: indexPath) {
+                animateBackgroundChange(for: cell)
+            }
+        default:
+            break
+        }
+        
+    }
 }
 
 // MARK: TextViewDelegate
@@ -928,7 +977,7 @@ extension AdViewController: UITextFieldDelegate {
     
 }
 
-// MARK: UIPresentationCo
+// MARK: UIPresentationController
 
 extension AdViewController: UIAdaptivePresentationControllerDelegate {
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
@@ -992,6 +1041,28 @@ extension AdViewController: APIClientDelegate {
         RootViewController.stopLoadingIndicator(with: .success)
         needToUpdateComments = true
         client.getAd(withId: adId)
+    }
+    
+    func apiClient(_ client: APIClient, didDeleteCommentWithId commentId: String) {
+        var deletedIndex: Int = -1
+        for (index, comment) in currentAdComments.enumerated() {
+            if comment.id == commentId {
+                deletedIndex = index
+                break
+            }
+        }
+        
+        let _ = currentAdComments.remove(at: deletedIndex)
+        
+        if let commentsSectionIndex = getSectionIndex(for: .comments) {
+            tableView.deleteRows(at: [IndexPath(row: deletedIndex, section: Int(commentsSectionIndex.first!))], with: .automatic)
+        }
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveUser user: User) {
+        let userVC = UserPublicController(user: user)
+        let navVC = UINavigationController(rootViewController: userVC)
+        present(navVC, animated: true, completion: nil)
     }
 
     

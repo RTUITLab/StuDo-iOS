@@ -218,6 +218,8 @@
 	<string>Diese Anzeige veröffentlichen als</string>
 	<key>adEditorCommentPlaceholder</key>
 	<string>Schreiben Sie Ihren Kommentar</string>
+	<key>adEditorDeleteComment</key>
+	<string>Kommentar löschen</string>
 	<key>organizationTitleAllOrganizations</key>
 	<string>Alle Gruppen</string>
 	<key>organizationTitleMyOrganizations</key>

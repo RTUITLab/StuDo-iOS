@@ -223,9 +223,12 @@ class APIClient {
                 guard let httpResponse = response as? HTTPURLResponse else {
                     throw APIError.requestFailed
                 }
+                guard httpResponse.statusCode != 402 else {
+                    RootViewController.main.logout()
+                    return
+                }
                 guard httpResponse.statusCode == 200 else {
                     throw APIError.wrongResponseStatus(httpResponse.statusCode)
-
                 }
             
                 try completion(.success(APIResponse(statusCode: httpResponse.statusCode, body: data)))
@@ -272,6 +275,7 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String)
     
     func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String)
+    func apiClient(_ client: APIClient, didDeleteCommentWithId commentId: String)
 
 
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad)
@@ -321,6 +325,7 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String) {}
     func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {}
     func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String) {}
+    func apiClient(_ client: APIClient, didDeleteCommentWithId commentId: String) {}
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
     func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String) {}
@@ -801,6 +806,22 @@ extension APIClient {
             }
         }
         
+    }
+    
+    func deleteComment(withId id: String, adId: String) {
+        let request = APIRequest(method: .delete, path: "ad/comment/\(adId)/\(id)")
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):                
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didDeleteCommentWithId: id)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
     }
     
     

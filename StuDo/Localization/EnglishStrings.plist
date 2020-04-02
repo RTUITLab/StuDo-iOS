@@ -212,6 +212,8 @@
 	<string>Comments</string>
 	<key>adEditorCommentPlaceholder</key>
 	<string>Write your comment</string>
+	<key>adEditorDeleteComment</key>
+	<string>Delete this comment</string>
 	<key>adEditorAddToBookmarks</key>
 	<string>Add to bookmarks</string>
 	<key>adEditorRemoveFromBookmarks</key>

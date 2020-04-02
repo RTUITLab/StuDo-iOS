@@ -26,8 +26,6 @@
 	<string>Цветовая схема</string>
 	<key>settingsTitle</key>
 	<string>Настройки</string>
-	<key>userShowAllProfiles</key>
-	<string>Показать все профили</string>
 	<key>search</key>
 	<string>Найти</string>
 	<key>organizationInfoHeaderTitle</key>
@@ -38,6 +36,8 @@
 	<string>Резюме помогут другим найти Вас по Вашим навыкам. Вы можете добавить неограниченное количество резюме.</string>
 	<key>passwordChangeAlertMessage</key>
 	<string>Вы успешно изменили свой пароль.</string>
+	<key>adEditorDeleteComment</key>
+	<string>Удалить комментарий</string>
 	<key>accountDetailStudentID</key>
 	<string>Номер студенческого билета</string>
 	<key>organizationDescriptionPlaceholder</key>
@@ -226,6 +226,8 @@
 	<string>Синий</string>
 	<key>adEditorDiscardChanges</key>
 	<string>Отменить изменения</string>
+	<key>userShowAllProfiles</key>
+	<string>Показать все профили</string>
 	<key>feedNoOrganizationAdsDescription</key>
 	<string>Вы имеете право публиковать объявления от имени данной организации.</string>
 	<key>navigationMenuMyAds</key>
