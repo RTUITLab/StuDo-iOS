@@ -27,7 +27,6 @@ class CommentTableViewCell: UserTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         nameLabelCenterYConstraint.isActive = false
-        nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         
         avatarViewBottomConstraint.isActive = false
         avatarView.topAnchor.constraint(equalTo: nameLabel.topAnchor, constant: 0).isActive = true

@@ -485,6 +485,36 @@ class AdViewController: UIViewController {
         }
     }
     
+    private func presentParticipantsActions(indexPath: IndexPath) {
+        let participant = currentAdPeople[indexPath.row]
+        switch participant.type {
+        case .user, .organization:
+            break
+        default:
+            return
+        }
+        
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        if let user = participant.content as? User {
+            if user.id == PersistentStore.shared.user.id { return }
+            alert.addAction(UIAlertAction(title: "\(user.firstName) \(user.lastName)", style: .default, handler: { _ in
+                self.client.getUser(id: user.id!)
+            }))
+        } else if let organization = participant.content as? Organization {
+            alert.addAction(UIAlertAction(title: organization.name, style: .default, handler: { _ in
+                self.client.getOrganization(withId: organization.id)
+            }))
+        }
+        
+        let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
     
     // MARK: - Actions & Observers
     
@@ -899,7 +929,7 @@ extension AdViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         switch currentSections[indexPath.section] {
-        case .comments:
+        case .comments, .people:
             return indexPath
         default:
             return nil
@@ -911,10 +941,10 @@ extension AdViewController: UITableViewDelegate {
         case .comments:
             let comment = currentAdComments[indexPath.row]
             presentCommentActions(id: comment.id)
-        
-            if let cell = tableView.cellForRow(at: indexPath) {
-                animateBackgroundChange(for: cell)
-            }
+            animateBackgroundChange(for: tableView.cellForRow(at: indexPath)!)
+        case .people:
+            presentParticipantsActions(indexPath: indexPath)
+            animateBackgroundChange(for: tableView.cellForRow(at: indexPath)!)
         default:
             break
         }
@@ -1061,7 +1091,15 @@ extension AdViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didRecieveUser user: User) {
         let userVC = UserPublicController(user: user)
+        userVC.navigationItem.title = "\(user.firstName) \(user.lastName)"
         let navVC = UINavigationController(rootViewController: userVC)
+        present(navVC, animated: true, completion: nil)
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {
+        let orgVC = OrganizationViewController(organization: organization)
+        orgVC.navigationItem.title = organization.name
+        let navVC = UINavigationController(rootViewController: orgVC)
         present(navVC, animated: true, completion: nil)
     }
 
