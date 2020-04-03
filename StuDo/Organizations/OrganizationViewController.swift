@@ -147,8 +147,6 @@ class OrganizationViewController: UITableViewController {
         super.viewDidAppear(animated)
         if currentOrganization == nil {
             nameTextField.becomeFirstResponder()
-        } else {
-            tableView.reloadData()
         }
         tabBarController?.hideTabBar()
         
@@ -406,6 +404,28 @@ class OrganizationViewController: UITableViewController {
             let wishersVC = ApplicantsViewController(organization: currentOrganization!)
             wishersVC.applicants = organizationWishers
             navigationController?.pushViewController(wishersVC, animated: true)
+        } else if info == .members {
+            let currentMember = organizationMembers[indexPath.row - 1]
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            if let user = currentUserAsMember, user.rights.contains(.canEditRights) {
+                if currentMember.user.id! != currentOrganization!.creatorId {
+                    alert.addAction(UIAlertAction(title: Localizer.string(for: .organizationEditRights), style: .default, handler: { (_) in
+                        let rightsVC = RightsViewController(member: currentMember, organization: self.currentOrganization!)
+                        self.navigationController?.pushViewController(rightsVC, animated: true)
+                    }))
+                }
+            }
+            
+            if currentMember.user.id! != PersistentStore.shared.user.id! {
+                alert.addAction(UIAlertAction(title: "\(currentMember.user.firstName) \(currentMember.user.lastName)", style: .default, handler: { _ in
+                    self.client.getUser(id: currentMember.user.id!)
+                }))
+            }
+            if !alert.actions.isEmpty {
+                alert.addAction(UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil))
+                present(alert, animated: true, completion: nil)
+            }
+            
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -489,11 +509,13 @@ extension OrganizationViewController: APIClientDelegate {
         }
         
         if currentUserAsMember == nil {
-            currentUserState = .notMember
-            tableView.beginUpdates()
-            tableView.insertRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
-            tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
-            tableView.endUpdates()
+            if currentUserState == .unknown {
+                currentUserState = .notMember
+                tableView.beginUpdates()
+                tableView.insertRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+                tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+                tableView.endUpdates()
+            }
         } else {
             tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
         }
@@ -545,6 +567,12 @@ extension OrganizationViewController: APIClientDelegate {
             }
         }
     }
+    
+    func apiClient(_ client: APIClient, didRecieveUser user: User) {
+        let userVC = UserPublicController(user: user)
+        navigationController?.pushViewController(userVC, animated: true)
+    }
+    
 }
 
 

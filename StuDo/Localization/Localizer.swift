@@ -148,6 +148,13 @@ enum LozalizerString: String {
     case organizationWishersList
     case organizationNoWishers
     case organizationAddWisher
+    case organizationEditRights
+    
+    case rightCanDeleteOrganization
+    case rightCanEditAd
+    case rightCanEditMembers
+    case rightCanEditOrganizationInformation
+    case rightCanEditRights
     
     case userPublicProfilesSectionHeader
     case userPublicAdsSectionHeader

@@ -6,6 +6,16 @@
 	<string>Имя</string>
 	<key>notificationEventReminderMessageBefore1h</key>
 	<string>Событие, указанное в данном объявлении, начинается через 1 час.</string>
+    <key>rightCanDeleteOrganization</key>
+    <string>Удаление организации</string>
+    <key>rightCanEditAd</key>
+    <string>Редактирование объявлений</string>
+    <key>rightCanEditMembers</key>
+    <string>Редактирование участников</string>
+    <key>rightCanEditOrganizationInformation</key>
+    <string>Редактирование информации</string>
+    <key>rightCanEditRights</key>
+    <string>Редактирование прав</string>
 	<key>accountOrganizationsSectionDescription</key>
 	<string>Вы можете присоединиться к различным организациям и получить право публиковать объявления от имени организации.</string>
 	<key>accountDetailChangeAlertCancel</key>
@@ -210,6 +220,8 @@
 	<string>Вы уверены, что не хотите сохранять данное объявление?</string>
 	<key>organizationAddWisher</key>
 	<string>Принять</string>
+	<key>organizationEditRights</key>
+	<string>Изменить права</string>
 	<key>passwordChangeAlertTitle</key>
 	<string>Пароль изменён!</string>
 	<key>authRepeatPassword</key>

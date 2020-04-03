@@ -134,7 +134,11 @@ extension CurrentUserTableViewCell {
     func generateProfileImage(for user: User) {
         let gradientLayer = CAGradientLayer()
         
-        gradientLayer.colors = UserGradient.currentColors
+        if user.id == PersistentStore.shared.user.id {
+            gradientLayer.colors = UserGradient.currentColors
+        } else {
+            gradientLayer.colors = UserGradient.grayColors
+        }
         
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)

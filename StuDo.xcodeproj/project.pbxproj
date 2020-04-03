@@ -28,6 +28,7 @@
 		493E8AD6228B4356004EC563 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 493E8AD4228B4356004EC563 /* LaunchScreen.storyboard */; };
 		493E8AE1228B4357004EC563 /* StuDoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8AE0228B4357004EC563 /* StuDoTests.swift */; };
 		493E8AEC228B4357004EC563 /* StuDoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8AEB228B4357004EC563 /* StuDoUITests.swift */; };
+		493F4110243793BD0016F988 /* RightsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F410F243793BD0016F988 /* RightsViewController.swift */; };
 		494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C64A822C24B0E0039740B /* PersistentStore.swift */; };
 		494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C64AA22C253AC0039740B /* AccountDetailViewController.swift */; };
 		49544FA522FB22240019A544 /* FadeAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */; };
@@ -129,6 +130,7 @@
 		493E8AE7228B4357004EC563 /* StuDoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StuDoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		493E8AEB228B4357004EC563 /* StuDoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuDoUITests.swift; sourceTree = "<group>"; };
 		493E8AED228B4357004EC563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		493F410F243793BD0016F988 /* RightsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightsViewController.swift; sourceTree = "<group>"; };
 		494C64A822C24B0E0039740B /* PersistentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStore.swift; sourceTree = "<group>"; };
 		494C64AA22C253AC0039740B /* AccountDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailViewController.swift; sourceTree = "<group>"; };
 		49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeAnimatedTransitioning.swift; sourceTree = "<group>"; };
@@ -441,6 +443,7 @@
 				4938CF3A2341421300055A98 /* MemberTableViewCell.swift */,
 				499EE3DB24375D9800793F36 /* ApplicantsViewController.swift */,
 				499EE3DD24375E2100793F36 /* ApplicantTableViewCell.swift */,
+				493F410F243793BD0016F988 /* RightsViewController.swift */,
 			);
 			path = Organizations;
 			sourceTree = "<group>";
@@ -780,6 +783,7 @@
 				49B1B383228DD75400CA9EC7 /* FeedViewController.swift in Sources */,
 				4938CF3723412A6800055A98 /* CommentTableViewCell.swift in Sources */,
 				49C85B2D22D8F64C00578F39 /* AccountHeaderCell.swift in Sources */,
+				493F4110243793BD0016F988 /* RightsViewController.swift in Sources */,
 				49B65E2F23F43772006C48AE /* AdPreferencesCell.swift in Sources */,
 				49E7187123F1D9960071374E /* AdControllerHeaderView.swift in Sources */,
 				491DCA8C231C089D00A78111 /* UIColorExtension.swift in Sources */,

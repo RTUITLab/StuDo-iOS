@@ -248,6 +248,18 @@
 	<string>No Applications</string>
 	<key>organizationAddWisher</key>
 	<string>Accept</string>
+	<key>organizationEditRights</key>
+	<string>Edit rights</string>
+	<key>rightCanDeleteOrganization</key>
+	<string>Delete organization</string>
+	<key>rightCanEditAd</key>
+	<string>Edit ads</string>
+	<key>rightCanEditMembers</key>
+	<string>Edit members</string>
+	<key>rightCanEditOrganizationInformation</key>
+	<string>Edit group&apos;s info</string>
+	<key>rightCanEditRights</key>
+	<string>Edit rights</string>
 	<key>userPublicProfilesSectionHeader</key>
 	<string>Profiles</string>
 	<key>userPublicAdsSectionHeader</key>

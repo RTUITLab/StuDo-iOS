@@ -118,6 +118,18 @@
 	<string>Passwort ändern</string>
 	<key>accountDetailLogout</key>
 	<string>Ausloggen</string>
+    
+    <key>rightCanDeleteOrganization</key>
+    <string>Organisation löschen</string>
+    <key>rightCanEditAd</key>
+    <string>Anzeigen bearbeiten</string>
+    <key>rightCanEditMembers</key>
+    <string>Mitglieder bearbeiten</string>
+    <key>rightCanEditOrganizationInformation</key>
+    <string>Gruppeninformationen bearbeiten</string>
+    <key>rightCanEditRights</key>
+    <string>Rechten bearbeiten</string>
+    
 	<key>accountDetailChangeAlertMessage</key>
 	<string>Sie haben Ihre persönlichen Daten geändert. Möchten Sie die Veränderung speichern?</string>
 	<key>accountDetailChangeAlertCancel</key>
@@ -222,6 +234,8 @@
 	<string>Annehmen</string>
 	<key>adEditorCommentPlaceholder</key>
 	<string>Schreiben Sie Ihren Kommentar</string>
+	<key>organizationEditRights</key>
+	<string>Rechte ändern</string>
 	<key>adEditorDeleteComment</key>
 	<string>Kommentar löschen</string>
 	<key>organizationTitleAllOrganizations</key>

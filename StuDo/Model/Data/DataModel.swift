@@ -162,7 +162,7 @@ struct OrganizationMember {
     let rights: [OrganizationMemberRight]
 }
 
-enum OrganizationMemberRight: String {
+enum OrganizationMemberRight: String, CaseIterable {
     case canEditMembers = "CanEditMembers"
     case canEditRights = "CanEditRights"
     case canEditAd = "CanEditAd"
