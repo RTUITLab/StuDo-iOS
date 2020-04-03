@@ -144,6 +144,10 @@ enum LozalizerString: String {
     case organizationJoin
     case organizationLeave
     case organizationDeletionAlertMessage
+    case organizationJoinSuccessMessage
+    case organizationWishersList
+    case organizationNoWishers
+    case organizationAddWisher
     
     case userPublicProfilesSectionHeader
     case userPublicAdsSectionHeader

@@ -36,8 +36,6 @@
 	<string>Резюме помогут другим найти Вас по Вашим навыкам. Вы можете добавить неограниченное количество резюме.</string>
 	<key>passwordChangeAlertMessage</key>
 	<string>Вы успешно изменили свой пароль.</string>
-	<key>adEditorDeleteComment</key>
-	<string>Удалить комментарий</string>
 	<key>accountDetailStudentID</key>
 	<string>Номер студенческого билета</string>
 	<key>organizationDescriptionPlaceholder</key>
@@ -122,6 +120,8 @@
 	<string>Ваш пароль должен иметь длину не менее 6 символов.</string>
 	<key>accountDetailPassword</key>
 	<string>Изменить пароль</string>
+	<key>adEditorDeleteComment</key>
+	<string>Удалить комментарий</string>
 	<key>adEditorComments</key>
 	<string>Комментарии</string>
 	<key>accountDetailChangeAlertMessage</key>
@@ -144,6 +144,8 @@
 	<string>Закрыть редактор</string>
 	<key>authEmail</key>
 	<string>E-mail</string>
+	<key>organizationJoinSuccessMessage</key>
+	<string>Заявка отправлена</string>
 	<key>save</key>
 	<string>Сохранить</string>
 	<key>authForgotPassword</key>
@@ -170,10 +172,10 @@
 	<string>Продолжить редактирование</string>
 	<key>feedTitleMyAds</key>
 	<string>Мои объявления</string>
-	<key>userPublicAdsSectionHeader</key>
-	<string>Объявления</string>
 	<key>userPublicProfilesSectionHeader</key>
 	<string>Резюме</string>
+	<key>userPublicAdsSectionHeader</key>
+	<string>Объявления</string>
 	<key>emailChangeAlertMessage</key>
 	<string>На Ваш новый e-mail отправлена ссылка подтверждения. После подверждения за Вашим аккаунтом будет закреплён новый адрес.</string>
 	<key>authRegistrationAlertTitle</key>
@@ -206,12 +208,18 @@
 	<string>Избранные объявления</string>
 	<key>adEditorCancelCreatingAlertMessage</key>
 	<string>Вы уверены, что не хотите сохранять данное объявление?</string>
+	<key>organizationAddWisher</key>
+	<string>Принять</string>
 	<key>passwordChangeAlertTitle</key>
 	<string>Пароль изменён!</string>
 	<key>authRepeatPassword</key>
 	<string>Повторите пароль</string>
 	<key>notificationEventReminderMessageBefore15m</key>
 	<string>Событие, указанное в данном объявлении, начинается через 15 минут.</string>
+	<key>organizationWishersList</key>
+	<string>Заявки</string>
+	<key>organizationNoWishers</key>
+	<string>Нет заявок</string>
 	<key>accountSettings</key>
 	<string>Настройки</string>
 	<key>adEditorCreator</key>

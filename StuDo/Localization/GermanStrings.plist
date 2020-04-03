@@ -214,16 +214,24 @@
 	<string>Ich gehe auch</string>
 	<key>adEditorComments</key>
 	<string>Kommentare</string>
+	<key>organizationNoWishers</key>
+	<string>Keine Anfrage</string>
 	<key>adEditorPublishAdAlertMessage</key>
 	<string>Diese Anzeige veröffentlichen als</string>
+	<key>organizationAddWisher</key>
+	<string>Annehmen</string>
 	<key>adEditorCommentPlaceholder</key>
 	<string>Schreiben Sie Ihren Kommentar</string>
 	<key>adEditorDeleteComment</key>
 	<string>Kommentar löschen</string>
 	<key>organizationTitleAllOrganizations</key>
 	<string>Alle Gruppen</string>
+	<key>organizationJoinSuccessMessage</key>
+	<string>Anfrage gesendet</string>
 	<key>organizationTitleMyOrganizations</key>
 	<string>Nur meine</string>
+	<key>organizationWishersList</key>
+	<string>Anfragen</string>
 	<key>organizationListTitle</key>
 	<string>Gruppen</string>
 	<key>organizationInfoHeaderTitle</key>

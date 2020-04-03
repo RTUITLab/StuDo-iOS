@@ -42,6 +42,8 @@
 		4986BE3D23F0A52A0068F8E1 /* CGPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4986BE3C23F0A52A0068F8E1 /* CGPointExtension.swift */; };
 		499075D8233E642B0045DE6A /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D7233E642B0045DE6A /* UserTableViewCell.swift */; };
 		499075DA233E77120045DE6A /* CurrentUserAdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */; };
+		499EE3DC24375D9800793F36 /* ApplicantsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499EE3DB24375D9800793F36 /* ApplicantsViewController.swift */; };
+		499EE3DE24375E2100793F36 /* ApplicantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499EE3DD24375E2100793F36 /* ApplicantTableViewCell.swift */; };
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
 		49A8F77C22D745C200C2661E /* CurrentUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */; };
 		49ADF625231C1C4200AA3FCB /* DateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADF624231C1C4200AA3FCB /* DateButton.swift */; };
@@ -141,6 +143,8 @@
 		4986BE3C23F0A52A0068F8E1 /* CGPointExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtension.swift; sourceTree = "<group>"; };
 		499075D7233E642B0045DE6A /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserAdTableViewCell.swift; sourceTree = "<group>"; };
+		499EE3DB24375D9800793F36 /* ApplicantsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantsViewController.swift; sourceTree = "<group>"; };
+		499EE3DD24375E2100793F36 /* ApplicantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantTableViewCell.swift; sourceTree = "<group>"; };
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		49A8F77B22D745C200C2661E /* CurrentUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserTableViewCell.swift; sourceTree = "<group>"; };
 		49ADF624231C1C4200AA3FCB /* DateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateButton.swift; sourceTree = "<group>"; };
@@ -435,6 +439,8 @@
 				4973AD22231D50DF00B4B578 /* OrganizationListController.swift */,
 				4973AD24231D58DD00B4B578 /* OrganizationViewController.swift */,
 				4938CF3A2341421300055A98 /* MemberTableViewCell.swift */,
+				499EE3DB24375D9800793F36 /* ApplicantsViewController.swift */,
+				499EE3DD24375E2100793F36 /* ApplicantTableViewCell.swift */,
 			);
 			path = Organizations;
 			sourceTree = "<group>";
@@ -746,11 +752,13 @@
 				4973AD25231D58DD00B4B578 /* OrganizationViewController.swift in Sources */,
 				49D76A7723102B26002B22D4 /* SettingsViewController.swift in Sources */,
 				49B1B381228DD5CB00CA9EC7 /* AccountViewController.swift in Sources */,
+				499EE3DE24375E2100793F36 /* ApplicantTableViewCell.swift in Sources */,
 				49544FA522FB22240019A544 /* FadeAnimatedTransitioning.swift in Sources */,
 				49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */,
 				49E2DB1022FDB22B0015DCD8 /* UITableViewExtension.swift in Sources */,
 				493E7D29232E2BB600278DAF /* Notifications.swift in Sources */,
 				49DEADCE2302EE440031B3DF /* NewAdButton.swift in Sources */,
+				499EE3DC24375D9800793F36 /* ApplicantsViewController.swift in Sources */,
 				49034AF0232B9BE800749D18 /* UserPublicController.swift in Sources */,
 				49BBB99D2306E6B600883EB9 /* ListItemCell.swift in Sources */,
 				4933A921232A6C2800A09646 /* AdTableViewCell.swift in Sources */,

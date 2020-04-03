@@ -240,6 +240,14 @@
 	<string>Leave group</string>
 	<key>organizationDeletionAlertMessage</key>
 	<string>Are you sure you want to delete this group? This cannot be undone.</string>
+	<key>organizationJoinSuccessMessage</key>
+	<string>Request sent</string>
+	<key>organizationWishersList</key>
+	<string>Applications</string>
+	<key>organizationNoWishers</key>
+	<string>No Applications</string>
+	<key>organizationAddWisher</key>
+	<string>Accept</string>
 	<key>userPublicProfilesSectionHeader</key>
 	<string>Profiles</string>
 	<key>userPublicAdsSectionHeader</key>

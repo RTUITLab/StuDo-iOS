@@ -305,6 +305,10 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?)
     func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization)
     func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember])
+    func apiClient(_ client: APIClient, didRecieveOrganizationWishers wishers: [OrganizationMember])
+    func apiClientDidSendApplyOrganizationRequest(_ client: APIClient)
+    func apiClientDidAttachOrganizationRight(_ client: APIClient, _ right: OrganizationMemberRight, forMember member: OrganizationMember)
+    func apiClientDidDetachOrganizationRight(_ client: APIClient, _ right: OrganizationMemberRight, forMember member: OrganizationMember)
     func apiClient(_ client: APIClient, didCreateOrganization newOrganization: Organization)
     func apiClient(_ client: APIClient, didUpdateOrganization updatedOrganization: Organization)
     func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String)
@@ -344,6 +348,10 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {}
     func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {}
     func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember]) {}
+    func apiClient(_ client: APIClient, didRecieveOrganizationWishers wishers: [OrganizationMember]) {}
+    func apiClientDidSendApplyOrganizationRequest(_ client: APIClient) {}
+    func apiClientDidAttachOrganizationRight(_ client: APIClient, _ right: OrganizationMemberRight, forMember member: OrganizationMember) {}
+    func apiClientDidDetachOrganizationRight(_ client: APIClient, _ right: OrganizationMemberRight, forMember member: OrganizationMember) {}
     func apiClient(_ client: APIClient, didCreateOrganization newOrganization: Organization) {}
     func apiClient(_ client: APIClient, didUpdateOrganization updatedOrganization: Organization) {}
     func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String) {}
@@ -721,6 +729,23 @@ extension APIClient {
         }
     }
     
+    func getWishers(forOrganizationWithId id: String) {
+        let request = APIRequest(method: .get, path: "organization/wish/\(id)")
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                let wishers = try self.decodeOrganizationMembers(from: response)
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didRecieveOrganizationWishers: wishers)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+    }
+    
     
     func deleteOrganization(withId id: String) {
         let request = APIRequest(method: .delete, path: "organization/\(id)")
@@ -735,6 +760,23 @@ extension APIClient {
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+    }
+    
+    func apply(to organization: Organization) {
+        if let request = try? APIRequest(method: .post, path: "organization/wish/\(organization.id)") {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success(_):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClientDidSendApplyOrganizationRequest(self)
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
                 }
             }
         }
@@ -761,6 +803,50 @@ extension APIClient {
             }
         }
         
+    }
+    
+    func attach(right: OrganizationMemberRight, for member: OrganizationMember, in organization: Organization) {
+        let dict = [
+            "OrganizationId": organization.id,
+            "UserId": member.user.id!,
+            "Right": right.rawValue
+        ]
+        if let request = try? APIRequest(method: .post, path: "organization/right/attach", body: dict) {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success(_):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClientDidAttachOrganizationRight(self, right, forMember: member)
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
+    }
+    
+    func detach(right: OrganizationMemberRight, for member: OrganizationMember, in organization: Organization) {
+        let dict = [
+            "OrganizationId": organization.id,
+            "UserId": member.user.id!,
+            "Right": right.rawValue
+        ]
+        if let request = try? APIRequest(method: .post, path: "organization/right/detach", body: dict) {
+            self.perform(secureRequest: request) { (result) in
+                switch result {
+                case .success(_):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClientDidDetachOrganizationRight(self, right, forMember: member)
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                    }
+                }
+            }
+        }
     }
     
     

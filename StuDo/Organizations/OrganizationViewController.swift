@@ -24,7 +24,9 @@ class OrganizationViewController: UITableViewController {
     
     var organizationMembers = [OrganizationMember]()
     var organizationAds = [Ad]()
+    var organizationWishers = [OrganizationMember]()
     
+    var applicationSent = false // becomes true if user's awaiting response to join application
     var currentOrganization: Organization? = nil
     var nameTextField: UITextField!
     
@@ -35,14 +37,15 @@ class OrganizationViewController: UITableViewController {
         case name
         case description
         case members
+        case wishers
         case delete
         case join
         case ads
     }
     
-    let infoPositionsNotMember: [[InfoUnit]] = [[.name, .description, .join], [.members], [.ads]]
-    let infoPositionsMember: [[InfoUnit]] = [[.name, .description], [.members], [.ads]]
-    let infoPositionsEditing: [[InfoUnit]] = [[.name, .description, .delete], [.members]]
+    let infoPositionsNotMember: [[InfoUnit]] = [[.name, .description, .join], [.wishers, .members], [.ads]]
+    let infoPositionsMember: [[InfoUnit]] = [[.name, .description], [.wishers, .members], [.ads]]
+    let infoPositionsEditing: [[InfoUnit]] = [[.name, .description, .delete], [.wishers, .members]]
     
     let client = APIClient()
     
@@ -98,6 +101,7 @@ class OrganizationViewController: UITableViewController {
             client.getOrganization(withId: organization.id)
             client.getMembers(forOrganizationWithId: organization.id)
             client.getAds(forOrganizationWithId: organization.id)
+            client.getWishers(forOrganizationWithId: organization.id)
         } else {
             createButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(createButtonTapped(_:)))
             createButton!.isEnabled = false
@@ -143,6 +147,8 @@ class OrganizationViewController: UITableViewController {
         super.viewDidAppear(animated)
         if currentOrganization == nil {
             nameTextField.becomeFirstResponder()
+        } else {
+            tableView.reloadData()
         }
         tabBarController?.hideTabBar()
         
@@ -236,11 +242,12 @@ class OrganizationViewController: UITableViewController {
             sectionPositions = infoPositionsMember[section]
         }
         
-        if sectionPositions.first! == .members {
-            return organizationMembers.count
-        } else if sectionPositions.first! == .ads {
+        if sectionPositions.first! == .ads {
             return organizationAds.count
+        } else if sectionPositions.last! == .members {
+            return organizationMembers.count + 1
         }
+        
         return sectionPositions.count
     }
     
@@ -258,14 +265,18 @@ class OrganizationViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let info = getInfo(for: indexPath)
         
+        print(indexPath, info, currentUserState)
+
         if info == .members {
             let cell = tableView.dequeueReusableCell(withIdentifier: userCellId, for: indexPath) as! UserTableViewCell
             
-            let currentMember = organizationMembers[indexPath.row]
+            let currentMember = organizationMembers[indexPath.row - 1]
             if currentMember.user.id! == currentOrganization!.creatorId {
                 cell.detailTextLabel?.text = Localizer.string(for: .organizationAdmin)
                 cell.detailTextLabel?.textColor = .globalTintColor
                 creatorCellRow = indexPath.row
+            } else {
+                cell.detailTextLabel?.text = ""
             }
             
             cell.initialsLabel.text = String(currentMember.user.firstName.prefix(1)) + currentMember.user.lastName.prefix(1)
@@ -273,6 +284,8 @@ class OrganizationViewController: UITableViewController {
             
             if currentMember.user.id! == PersistentStore.shared.user.id {
                 cell.avatarGradientLayer.colors = UserGradient.currentColors
+            } else {
+                cell.avatarGradientLayer.colors = UserGradient.grayColors
             }
             
             return cell
@@ -332,15 +345,22 @@ class OrganizationViewController: UITableViewController {
         cell.accessoryType = .disclosureIndicator
         
         if info == .delete {
-            if #available(iOS 13, *) {
-                cell.textLabel?.textColor = .systemRed
-            } else {
-                cell.textLabel?.textColor = .red
-            }
+            cell.isHidden = shouldHideDeleteRow
+            cell.textLabel?.textColor = .systemRed
             cell.textLabel?.text = Localizer.string(for: .delete)
         } else if info == .join {
+            if applicationSent {
+                cell.textLabel?.text = Localizer.string(for: .organizationJoinSuccessMessage)
+                cell.textLabel?.textColor = .placeholderText
+                cell.accessoryType = .none
+            } else {
+                cell.textLabel?.textColor = .globalTintColor
+                cell.textLabel?.text = Localizer.string(for: .organizationJoin)
+            }
+        } else if info == .wishers {
             cell.textLabel?.textColor = .globalTintColor
-            cell.textLabel?.text = Localizer.string(for: .organizationJoin)
+            cell.textLabel?.text = Localizer.string(for: .organizationWishersList)
+            cell.isHidden = shouldHideWishersRow
         }
         
         return cell
@@ -352,6 +372,14 @@ class OrganizationViewController: UITableViewController {
             return true
         }
         return false
+    }
+    
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        let info = getInfo(for: indexPath)
+        if info == .join && applicationSent {
+            return nil
+        }
+        return indexPath
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -372,8 +400,39 @@ class OrganizationViewController: UITableViewController {
             let currentAd = organizationAds[indexPath.row]
             let adVC = AdViewController(ad: currentAd)
             present(adVC, animated: true, completion: nil)
+        } else if info == .join {
+            client.apply(to: currentOrganization!)
+        } else if info == .wishers {
+            let wishersVC = ApplicantsViewController(organization: currentOrganization!)
+            wishersVC.applicants = organizationWishers
+            navigationController?.pushViewController(wishersVC, animated: true)
         }
+        
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let info = getInfo(for: indexPath)
+        if info == .wishers && shouldHideWishersRow{
+            return 0
+        } else if info == .delete && shouldHideDeleteRow {
+            return 0
+        }
+        return UITableView.automaticDimension
+    }
+    
+    var shouldHideWishersRow: Bool {
+        if let user = currentUserAsMember {
+            if user.rights.contains(.canEditRights) && !organizationWishers.isEmpty { return false }
+        }
+        return true
+    }
+    
+    var shouldHideDeleteRow: Bool {
+        if let user = currentUserAsMember {
+            return !user.rights.contains(.canDeleteOrganization)
+        }
+        return true
     }
     
 }
@@ -472,20 +531,41 @@ extension OrganizationViewController: APIClientDelegate {
         nameTextField.isUserInteractionEnabled = false
         descriptionTextView.isUserInteractionEnabled = false
     }
+    
+    func apiClientDidSendApplyOrganizationRequest(_ client: APIClient) {
+        applicationSent = true
+        tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveOrganizationWishers wishers: [OrganizationMember]) {
+        organizationWishers = wishers
+        for wisher in wishers {
+            if wisher.user.id == PersistentStore.shared.user.id! {
+                applicationSent = true
+            }
+        }
+    }
 }
 
 
 
 extension OrganizationViewController {
     fileprivate func getInfo(for indexPath: IndexPath) -> InfoUnit {
+        var sectionInfo: [InfoUnit]!
         if currentUserState == .notMember {
-            return infoPositionsNotMember[indexPath.section][indexPath.row]
-        }
-        if isEditingModeEnabled {
-            return infoPositionsEditing[indexPath.section][indexPath.row]
+            sectionInfo = infoPositionsNotMember[indexPath.section]
         } else {
-            return infoPositionsMember[indexPath.section][indexPath.row]
+            if isEditingModeEnabled {
+                sectionInfo = infoPositionsEditing[indexPath.section]
+            } else {
+                sectionInfo = infoPositionsMember[indexPath.section]
+            }
         }
+        
+        if indexPath.row >= sectionInfo.count {
+            return sectionInfo.last!
+        }
+        return sectionInfo[indexPath.row]
     }
 }
 
