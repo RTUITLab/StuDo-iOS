@@ -38,7 +38,7 @@ class AccountViewController: UIViewController {
     var hideAllProfiles = true
     var ownProfiles = [Profile]()
     
-    private var sections: [SectionName] = [.myAccount, .myProfiles, .organizations, .settingsAbout]
+    private var sections: [SectionName] = [.myAccount, .myProfiles, .settingsAbout]
     
     var emailLabel: UILabel!
 
