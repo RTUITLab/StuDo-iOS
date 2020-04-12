@@ -80,7 +80,7 @@ class CurrentUserTableViewCell: UITableViewCell {
             addSubview(separator)
             separator.translatesAutoresizingMaskIntoConstraints = false
             separator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-            separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
+            separator.heightAnchor.constraint(equalToConstant: 0.4).isActive = true
             separator.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 10).isActive = true
             separator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
             

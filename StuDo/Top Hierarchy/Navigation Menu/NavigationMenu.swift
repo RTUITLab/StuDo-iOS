@@ -24,61 +24,22 @@ class NavigationMenu: UITableView {
     
     weak var menuDelegate: NavigationMenuDelegate?
     
-    func resetSelectedOption() {
-        selectedOption = .allAds
-    }
-    private(set) var selectedOption: MenuItemName = .allAds
+    private(set) var selectedOption: MenuItemName = .ads
     var previouslySelectedOptionIndexPath: IndexPath!
     
-    var maxHeight: CGFloat = -1
     let menuItemHeight: CGFloat = 60
-    let headerHeight: CGFloat = 38
     var calculatedMenuHeight: CGFloat {
-        var numberOfRows = 2
-        var additionalHeight: CGFloat = 0
-        if menuItems.count > 1, let organizations = menuItems.last {
-            numberOfRows += organizations.count
-            additionalHeight = headerHeight
-        }
-        let fullHeight = CGFloat(numberOfRows) * menuItemHeight + additionalHeight
-        
-        let heightLimit = UIScreen.main.bounds.height * 0.8
-        if fullHeight < heightLimit {
-            return fullHeight
-        } else {
-            if maxHeight < 0 {
-                var maxHeight: CGFloat = headerHeight
-                while maxHeight + menuItemHeight < heightLimit {
-                    maxHeight += menuItemHeight
-                }
-                self.maxHeight = maxHeight
-            }
-            return maxHeight
-        }
+        return menuItemHeight * CGFloat(menuItems.count)
     }
     
     enum MenuItemName: Equatable {
-        case allAds
-        case myAds
-        case bookmarks
-        case organization(String, String)
+        case ads
+        case profiles
     }
-    private let defaultMenuItems: [[MenuItemName]] = [[.allAds, .myAds, .bookmarks]]
+    private let defaultMenuItems: [MenuItemName] = [.ads, .profiles]
     private lazy var menuItems = {
         return defaultMenuItems
     }()
-    
-    func set(organizations: [Organization]) {
-        menuItems = defaultMenuItems
-        var orgMenuItems = [MenuItemName]()
-        for org in organizations {
-            orgMenuItems.append(.organization(org.id, org.name))
-        }
-        if !orgMenuItems.isEmpty {
-            menuItems.append(orgMenuItems)
-        }
-        reloadData()
-    }
     
 
     init() {
@@ -91,13 +52,12 @@ class NavigationMenu: UITableView {
         dataSource = self
         
         rowHeight = menuItemHeight
+        isScrollEnabled = false
         
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange(notification:)), name: PersistentStoreNotification.themeDidChange.name, object: nil)
         
-        if #available(iOS 13, *) {
-            backgroundColor = .secondarySystemBackground
-        }
+        backgroundColor = .systemBackground
 
     }
     
@@ -115,11 +75,11 @@ class NavigationMenu: UITableView {
 extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return menuItems.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menuItems[section].count
+        return menuItems.count
     }
     
     
@@ -127,17 +87,13 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueReusableCell(withIdentifier: navigationMenuCellId, for: indexPath) as! NavigationMenuCell
         
-        let currentMenuItem = menuItems[indexPath.section][indexPath.row]
+        let currentMenuItem = menuItems[indexPath.row]
         
         switch currentMenuItem {
-        case .allAds:
-            cell.textLabel?.text = Localizer.string(for: .navigationMenuAllAds)
-        case .myAds:
-            cell.textLabel?.text = Localizer.string(for: .navigationMenuMyAds)
-        case .bookmarks:
-            cell.textLabel?.text = Localizer.string(for: .navigationMenuBookmarks)
-        case .organization(_, let name):
-            cell.textLabel?.text = name
+        case .ads:
+            cell.textLabel?.text = Localizer.string(for: .feedTitleAllAds)
+        case .profiles:
+            cell.textLabel?.text = Localizer.string(for: .feedTitleProfiles)
         }
         
         cell.tickGlyph.tintColor = .globalTintColor
@@ -147,10 +103,6 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
             previouslySelectedOptionIndexPath = indexPath
         } else {
             cell.tickGlyph.alpha = 0
-        }
-        
-        if #available(iOS 13, *) {
-            cell.contentView.backgroundColor = .secondarySystemBackground
         }
         
         return cell
@@ -169,34 +121,8 @@ extension NavigationMenu: UITableViewDataSource, UITableViewDelegate {
         }
         
         previouslySelectedOptionIndexPath = indexPath
-        selectedOption = menuItems[indexPath.section][indexPath.row]
+        selectedOption = menuItems[indexPath.row]
         menuDelegate?.navigationMenu(self, didChangeOption: selectedOption)
-    }
-    
-    
-    
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 {
-            return headerHeight
-        }
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 1 {
-            let header = dequeueReusableHeaderFooterView(withIdentifier: navigationMenuHeaderId)!
-            header.backgroundView = UIView()
-            if #available(iOS 13, *) {
-                header.backgroundView?.backgroundColor = .secondarySystemBackground
-                header.textLabel?.textColor = .tertiaryLabel
-            } else {
-                header.backgroundView?.backgroundColor = .white
-            }
-            header.textLabel?.text = Localizer.string(for: .navigationMenuSavedSources)
-            return header
-        }
-        return nil
     }
     
     
@@ -214,6 +140,12 @@ class NavigationMenuCell: ListItemCell {
         
         let tickImage = #imageLiteral(resourceName: "tick").withRenderingMode(.alwaysTemplate)
         tickGlyph.image = tickImage
+        let scale: CGFloat = 0.74
+        tickGlyph.transform = .init(scaleX: scale, y: scale)
+        
+        textLabel?.font = .preferredFont(for: .subheadline, weight: .medium)
+        
+        backgroundColor = nil
     }
     
     required init?(coder aDecoder: NSCoder) {

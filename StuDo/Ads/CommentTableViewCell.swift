@@ -48,7 +48,7 @@ class CommentTableViewCell: UserTableViewCell {
         
         
         
-        nameLabel.font = .preferredFont(for: .body, weight: .medium)
+        nameLabel.font = .preferredFont(for: .body, weight: .regular)
         
         
         bodyTextView.isScrollEnabled = false

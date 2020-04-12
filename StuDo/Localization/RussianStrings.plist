@@ -6,16 +6,6 @@
 	<string>Имя</string>
 	<key>notificationEventReminderMessageBefore1h</key>
 	<string>Событие, указанное в данном объявлении, начинается через 1 час.</string>
-    <key>rightCanDeleteOrganization</key>
-    <string>Удаление организации</string>
-    <key>rightCanEditAd</key>
-    <string>Редактирование объявлений</string>
-    <key>rightCanEditMembers</key>
-    <string>Редактирование участников</string>
-    <key>rightCanEditOrganizationInformation</key>
-    <string>Редактирование информации</string>
-    <key>rightCanEditRights</key>
-    <string>Редактирование прав</string>
 	<key>accountOrganizationsSectionDescription</key>
 	<string>Вы можете присоединиться к различным организациям и получить право публиковать объявления от имени организации.</string>
 	<key>accountDetailChangeAlertCancel</key>
@@ -84,6 +74,8 @@
 	<string>Ваши избранные объявления будут отображаться здесь.</string>
 	<key>adEditorDeleteAd</key>
 	<string>Удалить объявление</string>
+	<key>organizationEditRights</key>
+	<string>Изменить права</string>
 	<key>adEditorCancelEditingAlertMessage</key>
 	<string>Вы уверены, что хотите отменить редактирование данного объявления? Несохранённые изменения будут утеряны.</string>
 	<key>notificationRemindBefore1h</key>
@@ -114,6 +106,8 @@
 	<string>Все объявления</string>
 	<key>feedNoOwnAdsDescription</key>
 	<string>Публикуемые Вами объявления появятся здесь.</string>
+	<key>organizationNoWishers</key>
+	<string>Нет заявок</string>
 	<key>greenThemeName</key>
 	<string>Зелёный</string>
 	<key>yellowThemeName</key>
@@ -128,6 +122,8 @@
 	<string>Мы отправим вам ссылку для подтверждения на данный e-mail.</string>
 	<key>passwordNewSectionDescription</key>
 	<string>Ваш пароль должен иметь длину не менее 6 символов.</string>
+	<key>rightCanEditAd</key>
+	<string>Редактирование объявлений</string>
 	<key>accountDetailPassword</key>
 	<string>Изменить пароль</string>
 	<key>adEditorDeleteComment</key>
@@ -150,14 +146,16 @@
 	<string>Оставить комментарий</string>
 	<key>back</key>
 	<string>Назад</string>
-	<key>adEditorCancelAdCreation</key>
-	<string>Закрыть редактор</string>
+	<key>rightCanEditMembers</key>
+	<string>Редактирование участников</string>
 	<key>authEmail</key>
 	<string>E-mail</string>
 	<key>organizationJoinSuccessMessage</key>
 	<string>Заявка отправлена</string>
 	<key>save</key>
 	<string>Сохранить</string>
+	<key>adEditorCancelAdCreation</key>
+	<string>Закрыть редактор</string>
 	<key>authForgotPassword</key>
 	<string>Забыли пароль?</string>
 	<key>adEditorEditAd</key>
@@ -168,6 +166,8 @@
 	<string>Язык приложения</string>
 	<key>pinkThemeName</key>
 	<string>Розовый</string>
+	<key>rightCanDeleteOrganization</key>
+	<string>Удаление организации</string>
 	<key>accountAddNewProfile</key>
 	<string>Добавить</string>
 	<key>accountDetailEmail</key>
@@ -176,6 +176,8 @@
 	<string>Новое объявление</string>
 	<key>accountDetailLastName</key>
 	<string>Фамилия</string>
+	<key>feedTitleProfiles</key>
+	<string>Резюме</string>
 	<key>accountDetailFirstName</key>
 	<string>Имя</string>
 	<key>adEditorReturnToEditor</key>
@@ -210,6 +212,8 @@
 	<string>Войти</string>
 	<key>adEditorBeginDateLabel</key>
 	<string>Дата начала</string>
+	<key>rightCanEditOrganizationInformation</key>
+	<string>Редактирование информации</string>
 	<key>profileNameSectionHeader</key>
 	<string>Название</string>
 	<key>cancel</key>
@@ -218,10 +222,6 @@
 	<string>Избранные объявления</string>
 	<key>adEditorCancelCreatingAlertMessage</key>
 	<string>Вы уверены, что не хотите сохранять данное объявление?</string>
-	<key>organizationAddWisher</key>
-	<string>Принять</string>
-	<key>organizationEditRights</key>
-	<string>Изменить права</string>
 	<key>passwordChangeAlertTitle</key>
 	<string>Пароль изменён!</string>
 	<key>authRepeatPassword</key>
@@ -230,12 +230,14 @@
 	<string>Событие, указанное в данном объявлении, начинается через 15 минут.</string>
 	<key>organizationWishersList</key>
 	<string>Заявки</string>
-	<key>organizationNoWishers</key>
-	<string>Нет заявок</string>
 	<key>accountSettings</key>
 	<string>Настройки</string>
+	<key>organizationAddWisher</key>
+	<string>Принять</string>
 	<key>adEditorCreator</key>
 	<string>Создатель</string>
+	<key>rightCanEditRights</key>
+	<string>Редактирование прав</string>
 	<key>passwordEnterNew</key>
 	<string>Введите новый пароль</string>
 	<key>accountOrganizations</key>
@@ -254,6 +256,8 @@
 	<string>Только мои объявления</string>
 	<key>feedNoAdsDescription</key>
 	<string>Никто ещё не опубликовал ни одного объявления. Будьте первым!</string>
+	<key>feedNoProfilesDescription</key>
+	<string>Никто ещё не опубликовал ни одного резюме. Будьте первым!</string>
 	<key>notificationRemindBefore15m</key>
 	<string>За 15 минут</string>
 	<key>organizationDeletionAlertMessage</key>

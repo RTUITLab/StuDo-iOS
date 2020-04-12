@@ -63,6 +63,7 @@ class AdControllerHeaderView: UIView {
         headerLabel.translatesAutoresizingMaskIntoConstraints = false
         headerLabel.centerXAnchor.constraint(equalTo: horizontalHandle.centerXAnchor).isActive = true
         headerLabel.centerYAnchor.constraint(equalTo: horizontalHandle.centerYAnchor).isActive = true
+        headerLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8, constant: 0).isActive = true
         
         let leftRightPadding: CGFloat = 16
 
@@ -96,7 +97,7 @@ class AdControllerHeaderView: UIView {
         headerSeparator.isHidden = true
         headerLabel.isHidden = true
         
-        self.backgroundColor = .secondarySystemBackground
+        self.backgroundColor = .systemBackground
         headerSeparator.backgroundColor = .separator
         horizontalHandle.backgroundColor = .separator
         headerLabel.textColor = .label

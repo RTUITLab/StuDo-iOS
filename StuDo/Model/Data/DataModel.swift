@@ -405,17 +405,20 @@ struct Profile: Decodable {
     let id: String?
     let name: String
     let description: String
+    let username: String?
     
     enum CodingKeys: String, CodingKey {
         case id
         case name
         case description
+        case username
     }
     
-    init(id: String, name: String, description: String) {
+    init(id: String, name: String, description: String, username: String? = nil) {
         self.id = id
         self.name = name
         self.description = description
+        self.username = username
     }
 }
 
@@ -425,6 +428,7 @@ extension Profile: Encodable {
         self.id = nil
         self.name = name
         self.description = description
+        self.username = nil
     }
     
     func encode(to encoder: Encoder) throws {
@@ -577,7 +581,12 @@ extension APIClient {
             throw APIError.decodingFailureWithField(descriptionField)
         }
         
-        return Profile(id: id, name: name, description: description)
+        let usernameField = "userName"
+        guard let username = object[usernameField] as? String else {
+            throw APIError.decodingFailureWithField(usernameField)
+        }
+        
+        return Profile(id: id, name: name, description: description, username: username)
     }
     
     

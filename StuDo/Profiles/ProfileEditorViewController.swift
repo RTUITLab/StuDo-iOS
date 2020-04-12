@@ -11,6 +11,7 @@ import UIKit
 fileprivate let textFieldCellId = "textFieldCellId"
 fileprivate let textViewCellId = "textViewCellId"
 fileprivate let value1styleCellID = "value1styleCellID"
+fileprivate let userCellId = "userCellId"
 
 
 
@@ -44,10 +45,12 @@ class ProfileEditorViewController: UITableViewController {
         case name
         case description
         case deleteAction
+        case user
     }
-    private let fieldPosition: [[FieldType]] = [[.name], [.description], [.deleteAction]]
+    private let fieldPosition: [[FieldType]]
     
     var userCanEditProfile: Bool
+    var shouldShowUserPage: Bool
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +65,8 @@ class ProfileEditorViewController: UITableViewController {
         tableView.register(TableViewCellWithInputField.self, forCellReuseIdentifier: textFieldCellId)
         tableView.register(TableViewCellWithTextViewInput.self, forCellReuseIdentifier: textViewCellId)
         tableView.register(TableViewCellValue1Style.self, forCellReuseIdentifier: value1styleCellID)
+        tableView.register(UserTableViewCell.self, forCellReuseIdentifier: userCellId)
+
         
         if userCanEditProfile {
             saveButton = UIBarButtonItem(title: Localizer.string(for: .done), style: .done, target: self, action: #selector(saveButtonTapped(_:)))
@@ -75,8 +80,15 @@ class ProfileEditorViewController: UITableViewController {
         tabBarController?.hideTabBar()
     }
     
-    init(profile: Profile?, canEditProfile: Bool = true) {
+    init(profile: Profile?, canEditProfile: Bool = true, shouldShowUserPage: Bool = false) {
         self.userCanEditProfile = canEditProfile
+        self.shouldShowUserPage = shouldShowUserPage
+        if shouldShowUserPage {
+            fieldPosition = [[.name], [.description], [.user]]
+        } else {
+            fieldPosition = [[.name], [.description], [.deleteAction]]
+        }
+        
         super.init(style: .grouped)
         
         client.delegate = self
@@ -129,6 +141,9 @@ extension ProfileEditorViewController {
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if shouldShowUserPage {
+            return 3
+        }
         return shouldAllowDeletion ? 3 : 2
     }
     
@@ -190,6 +205,22 @@ extension ProfileEditorViewController {
             
             cell.selectionStyle = .none
             
+            return cell
+        } else if sectionInfo == .user {
+            let cell = tableView.dequeueReusableCell(withIdentifier: userCellId, for: indexPath) as! UserTableViewCell
+
+            let username = profile!.username!
+            let nameParts = username.split(separator: " ")
+            let initials = nameParts.reduce("", { res, next in
+                res + String(next.first!)
+            })
+            cell.initialsLabel.text = initials
+            cell.nameLabel.text = username
+            cell.nameLabel.font = .preferredFont(for: .body, weight: .medium)
+            
+            cell.selectionStyle = .none
+                    
+            cell.avatarViewSizeConstraint.constant = 40
             return cell
         }
         

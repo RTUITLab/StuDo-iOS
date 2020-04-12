@@ -926,20 +926,30 @@ extension APIClient {
         self.perform(secureRequest: request) { (result) in
             switch result {
             case .success(let response):
-                guard let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
-                    throw APIError.decodingFailure
-                }
-                
-                var profiles = [Profile]()
-                for object in decodedJSON {
-                    let profile = try self.decodeProfile(from: object)
-                    profiles.append(profile)
-                }
-                
+                let profiles = try self.decodeProfiles(form: response)
                 DispatchQueue.main.async {
                     self.delegate?.apiClient(self, didRecieveProfiles: profiles)
                 }
                 
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+
+    }
+    
+    func getProfiles() {
+        let request = APIRequest(method: .get, path: "resumes/")
+        
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success(let response):
+                let profiles = try self.decodeProfiles(form: response)
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didRecieveProfiles: profiles)
+                }
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.delegate?.apiClient(self, didFailRequest: request, withError: error)
@@ -1232,6 +1242,19 @@ extension APIClient {
         }
         
         return ads
+    }
+    
+    fileprivate func decodeProfiles(form response: (APIResponse<Data?>)) throws -> [Profile] {
+        guard let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+            throw APIError.decodingFailure
+        }
+        
+        var profiles = [Profile]()
+        for object in decodedJSON {
+            let profile = try self.decodeProfile(from: object)
+            profiles.append(profile)
+        }
+        return profiles
     }
     
     

@@ -50,6 +50,8 @@
 	<string>Keine Anzeigen dabei.</string>
 	<key>feedNoAdsDescription</key>
 	<string>Keine Anzeigen noch da. Mach die Erste!</string>
+	<key>feedNoProfilesDescription</key>
+	<string>Keine Profile noch da. Mach die Erste!</string>
 	<key>feedNoOwnAdsDescription</key>
 	<string>Die von Ihnen veröffentlichten Anzeigen erscheinen hier.</string>
 	<key>feedNoOrganizationAdsDescription</key>
@@ -118,18 +120,16 @@
 	<string>Passwort ändern</string>
 	<key>accountDetailLogout</key>
 	<string>Ausloggen</string>
-    
-    <key>rightCanDeleteOrganization</key>
-    <string>Organisation löschen</string>
-    <key>rightCanEditAd</key>
-    <string>Anzeigen bearbeiten</string>
-    <key>rightCanEditMembers</key>
-    <string>Mitglieder bearbeiten</string>
-    <key>rightCanEditOrganizationInformation</key>
-    <string>Gruppeninformationen bearbeiten</string>
-    <key>rightCanEditRights</key>
-    <string>Rechten bearbeiten</string>
-    
+	<key>rightCanDeleteOrganization</key>
+	<string>Organisation löschen</string>
+	<key>rightCanEditAd</key>
+	<string>Anzeigen bearbeiten</string>
+	<key>rightCanEditMembers</key>
+	<string>Mitglieder bearbeiten</string>
+	<key>rightCanEditOrganizationInformation</key>
+	<string>Gruppeninformationen bearbeiten</string>
+	<key>rightCanEditRights</key>
+	<string>Rechten bearbeiten</string>
 	<key>accountDetailChangeAlertMessage</key>
 	<string>Sie haben Ihre persönlichen Daten geändert. Möchten Sie die Veränderung speichern?</string>
 	<key>accountDetailChangeAlertCancel</key>
@@ -220,6 +220,8 @@
 	<string>Autor</string>
 	<key>adEditorEndDateLabel</key>
 	<string>Endtermin</string>
+	<key>feedTitleProfiles</key>
+	<string>Profile</string>
 	<key>adEditorDurationLabel</key>
 	<string>Dauer</string>
 	<key>adEditorJoinAd</key>

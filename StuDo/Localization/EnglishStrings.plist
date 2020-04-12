@@ -38,6 +38,8 @@
 	<string>Pink</string>
 	<key>feedTitleAllAds</key>
 	<string>News</string>
+	<key>feedTitleProfiles</key>
+	<string>Profiles</string>
 	<key>feedTitleMyAds</key>
 	<string>My Ads</string>
 	<key>feedTitleBookmarks</key>
@@ -46,6 +48,8 @@
 	<string>No ads to display.</string>
 	<key>feedNoAdsDescription</key>
 	<string>No one has published ads yet. Be the first!</string>
+	<key>feedNoProfilesDescription</key>
+	<string>No one has published a profile. Be the first!</string>
 	<key>feedNoOwnAdsDescription</key>
 	<string>The ads you&apos;ll publish will appear here.</string>
 	<key>feedNoBookmarkedAdsDescription</key>

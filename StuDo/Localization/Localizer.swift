@@ -31,9 +31,11 @@ enum LozalizerString: String {
     
     case feedTitleMyAds
     case feedTitleAllAds
+    case feedTitleProfiles
     case feedTitleBookmarks
     case feedNoAdsTitle
     case feedNoAdsDescription
+    case feedNoProfilesDescription
     case feedNoOwnAdsDescription
     case feedNoBookmarkedAdsDescription
     case feedNoOrganizationAdsDescription

@@ -195,7 +195,7 @@ class AdViewController: UIViewController {
         tableView.register(CurrentUserAdTableViewCell.self, forCellReuseIdentifier: currentUserCellId)
         tableView.register(UserTableViewCell.self, forCellReuseIdentifier: adParticipantCellId)
         
-        tableView.backgroundColor = .secondarySystemBackground
+        tableView.backgroundColor = .systemBackground
         tableView.tableFooterView = UIView()
         
         tableView.separatorStyle = .none
@@ -215,8 +215,7 @@ class AdViewController: UIViewController {
         
         headerView.layer.shadowColor = UIColor(red:0.447, green:0.447, blue:0.443, alpha:0.4).cgColor
         headerView.layer.shadowRadius = 5
-        headerView.backgroundColor = .red
-        
+
     }
     
     // MARK: Layout
@@ -466,19 +465,13 @@ class AdViewController: UIViewController {
     // MARK: Ad Participants
     
     private func updateParticipants(with ad: Ad) {
+        var creator: AdParticipant!
         if let user = ad.user {
-            let creator = AdParticipant(type: .user, content: user)
-            if user.id! != PersistentStore.shared.user.id! {
-                let joinAdCell = AdParticipant(type: .other, content: nil)
-                currentAdPeople = [creator, joinAdCell]
-            } else {
-                currentAdPeople = [creator]
-            }
+            creator = AdParticipant(type: .user, content: user)
         } else if let organization = ad.organization {
-            let creator = AdParticipant(type: .organization, content: organization)
-            let joinAdCell = AdParticipant(type: .other, content: nil)
-            currentAdPeople = [creator, joinAdCell]
+            creator = AdParticipant(type: .organization, content: organization)
         }
+        currentAdPeople = [creator]
         
         if let peopleIndex = getSectionIndex(for: .people) {
             tableView.reloadSections(peopleIndex, with: .fade)
@@ -889,7 +882,7 @@ extension AdViewController: UITableViewDataSource {
             }
         }
         
-        cell.contentView.backgroundColor = .secondarySystemBackground
+        cell.contentView.backgroundColor = .systemBackground
         
         return cell
     }
@@ -916,7 +909,7 @@ extension AdViewController: UITableViewDataSource {
 
 extension AdViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        view.tintColor = .secondarySystemBackground
+        view.tintColor = .systemBackground
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {

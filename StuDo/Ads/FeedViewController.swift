@@ -10,6 +10,7 @@ import UIKit
 import UserNotifications
 
 fileprivate let feedItemCellID = "feedItemCellID"
+fileprivate let profileCellID = "profileCellID"
 
 class FeedViewController: UIViewController {
     
@@ -17,6 +18,7 @@ class FeedViewController: UIViewController {
     
     // MARK: Data & Logic
     
+    var profiles = [Profile]()
     var feedItems = [Ad]()
     var client = APIClient()
     
@@ -27,6 +29,7 @@ class FeedViewController: UIViewController {
         case myAds
         case bookmarks
         case organization(String)
+        case profiles
     }
     var currentMode: FeedMode = .allAds
         
@@ -61,6 +64,7 @@ class FeedViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "AdTableViewCell", bundle: nil), forCellReuseIdentifier: feedItemCellID)
+        tableView.register(TableViewCellWithSubtitle.self, forCellReuseIdentifier: profileCellID)
         
         tableView.estimatedRowHeight = 140
         tableView.rowHeight = UITableView.automaticDimension
@@ -91,10 +95,6 @@ class FeedViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
         
         let userDeletedOrganizationName = OrganizationViewController.OrganizationNotifications.userDidDeleteOrganization.name
-        NotificationCenter.default.addObserver(self, selector: #selector(userDidDeleteOrganization(notification:)), name: userDeletedOrganizationName, object: nil)
-        
-        
-        
         
         view.addSubview(placeholderView)
         placeholderView.translatesAutoresizingMaskIntoConstraints = false
@@ -150,6 +150,8 @@ class FeedViewController: UIViewController {
         switch currentMode {
         case .allAds:
             client.getAds()
+        case .profiles:
+            client.getProfiles()
         case .myAds:
             client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
         case .bookmarks:
@@ -169,10 +171,20 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if currentMode == .profiles {
+            return profiles.count
+        }
         return feedItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if currentMode == .profiles {
+            let cell = tableView.dequeueReusableCell(withIdentifier: profileCellID, for: indexPath)
+            let profile = profiles[indexPath.row]
+            cell.textLabel?.text = profile.name
+            cell.detailTextLabel?.text = profile.description
+            return cell
+        }
         let cell = tableView.dequeueReusableCell(withIdentifier: feedItemCellID, for: indexPath) as! AdTableViewCell
         
         let currentAd = feedItems[indexPath.row]
@@ -205,6 +217,12 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if currentMode == .profiles {
+            let currentProfile = profiles[indexPath.row]
+            let profileVC = ProfileEditorViewController(profile: currentProfile, canEditProfile: false, shouldShowUserPage: true)
+            navigationController?.pushViewController(profileVC, animated: true)
+            return
+        }
         let selectedAd = feedItems[indexPath.row]
         presentAdViewer(selectedAd)
     }
@@ -231,9 +249,17 @@ extension FeedViewController: APIClientDelegate {
             noAdsDescriptionLabel.text = Localizer.string(for: .feedNoBookmarkedAdsDescription)
         case .organization:
             noAdsDescriptionLabel.text = Localizer.string(for: .feedNoOrganizationAdsDescription)
+        default:
+            break
         }
         
         placeholderView.isHidden = !feedItems.isEmpty
+    }
+    
+    fileprivate func set(_ profiles: [Profile]) {
+        self.profiles = profiles
+        noAdsDescriptionLabel.text = Localizer.string(for: .feedNoProfilesDescription)
+        placeholderView.isHidden = !profiles.isEmpty
     }
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {
@@ -260,24 +286,6 @@ extension FeedViewController: APIClientDelegate {
         }
     }
     
-    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {
-        if let tabBarVC = tabBarController as? TabBarController {
-            if let options = options {
-                for item in options {
-                    switch item {
-                    case .canPublish:
-                        tabBarVC.navigationMenu.set(organizations: organizations)
-                        
-                        let menuHeight = tabBarVC.navigationMenu.calculatedMenuHeight
-                        tabBarVC.navigationMenu.frame.size = CGSize(width: view.frame.width, height: menuHeight)
-                    default:
-                        break
-                    }
-                }
-            }
-        }
-    }
-    
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String) {
         switch currentMode {
@@ -287,6 +295,14 @@ extension FeedViewController: APIClientDelegate {
             refreshControl.endRefreshing()
         default:
             break
+        }
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {
+        if currentMode == .profiles {
+            set(profiles)
+            tableView.reloadData()
+            refreshControl.endRefreshing()
         }
     }
     
@@ -338,22 +354,14 @@ extension FeedViewController: FoldingTitleViewDelegate {
 extension FeedViewController: NavigationMenuDelegate {
     func navigationMenu(_ navigationMenu: NavigationMenu, didChangeOption newOption: NavigationMenu.MenuItemName) {
         switch newOption {
-        case .allAds:
+        case .ads:
             currentMode = .allAds
             client.getAds()
             titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
-        case .myAds:
-            currentMode = .myAds
-            client.getAds(forUserWithId: PersistentStore.shared.user!.id!)
-            titleView.titleLabel.text = Localizer.string(for: .feedTitleMyAds)
-        case .bookmarks:
-            currentMode = .bookmarks
-            client.getBookmarkedAds()
-            titleView.titleLabel.text = Localizer.string(for: .feedTitleBookmarks)
-        case .organization(let id, let name):
-            currentMode = .organization(id)
-            titleView.titleLabel.text = name
-            client.getAds(forOrganizationWithId: id)
+        case .profiles:
+            currentMode = .profiles
+            client.getProfiles()
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleProfiles)
         }
         
         titleView.changeState()
@@ -420,24 +428,10 @@ extension FeedViewController {
             titleView.titleLabel.text = Localizer.string(for: .feedTitleBookmarks)
         case .organization(_):
             break
+        case .profiles:
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleProfiles)
         }
         noAdsTitleLabel.text = Localizer.string(for: .feedNoAdsTitle)
         navigationItem.title = Localizer.string(for: .back)
-    }
-    
-    @objc func userDidDeleteOrganization(notification: Notification) {
-        guard let userInfo = notification.userInfo, let deletedOrganizationId = userInfo[OrganizationViewController.organizationIdKey] as? String else { return }
-        switch currentMode {
-        case .organization(let id):
-            if deletedOrganizationId == id {
-                if let tabBarVC = tabBarController as? TabBarController {
-                    titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
-                    tabBarVC.navigationMenu.resetSelectedOption()
-                }
-            }
-            currentMode = .allAds
-        default:
-            break
-        }
     }
 }
