@@ -32,6 +32,25 @@ class FeedViewController: UIViewController {
         case profiles
     }
     var currentMode: FeedMode = .allAds
+    func switchMode(newMode: FeedMode) {
+        currentMode = newMode
+        switch currentMode {
+        case .allAds:
+            client.getAds()
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
+        case .myAds:
+            client.getAds(forUserWithId: PersistentStore.shared.user.id!)
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
+        case .bookmarks:
+            client.getBookmarkedAds()
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
+        case .profiles:
+            client.getProfiles()
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleProfiles)
+        default:
+            break
+        }
+    }
         
     
     // MARK: Visible properties
@@ -130,6 +149,10 @@ class FeedViewController: UIViewController {
         noAdsDescriptionLabel.numberOfLines = 3
         
         navigationItem.title = Localizer.string(for: .back)
+        
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
+        blurView.frame = CGRect(x: 0, y: 0, width: 100, height: 400)
+        tableView.backgroundView = blurView
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -214,6 +237,41 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         shouldRefreshOnAppear = false
         
         self.present(detailVC, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if currentMode != .profiles && section == 0 {
+            let headerView = AdNavigationView()
+            switch currentMode {
+            case .allAds:
+                headerView.selectedIndex = 0
+            case .myAds:
+                headerView.selectedIndex = 1
+            case .bookmarks:
+                headerView.selectedIndex = 2
+            default:
+                break
+            }
+            headerView.actionClosure = { [unowned self] index in
+                if index == 0 {
+                    self.switchMode(newMode: .allAds)
+                } else if index == 1 {
+                    self.switchMode(newMode: .myAds)
+                } else if index == 2 {
+                    self.switchMode(newMode: .bookmarks)
+                }
+                tableView.reloadData()
+            }
+            return headerView
+        }
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if currentMode != .profiles && section == 0 {
+            return 40
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -355,17 +413,12 @@ extension FeedViewController: NavigationMenuDelegate {
     func navigationMenu(_ navigationMenu: NavigationMenu, didChangeOption newOption: NavigationMenu.MenuItemName) {
         switch newOption {
         case .ads:
-            currentMode = .allAds
-            client.getAds()
-            titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
+            switchMode(newMode: .allAds)
         case .profiles:
-            currentMode = .profiles
-            client.getProfiles()
-            titleView.titleLabel.text = Localizer.string(for: .feedTitleProfiles)
+            switchMode(newMode: .profiles)
         }
         
         titleView.changeState()
-
     }
     
     

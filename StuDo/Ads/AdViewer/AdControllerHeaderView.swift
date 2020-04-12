@@ -64,6 +64,7 @@ class AdControllerHeaderView: UIView {
         headerLabel.centerXAnchor.constraint(equalTo: horizontalHandle.centerXAnchor).isActive = true
         headerLabel.centerYAnchor.constraint(equalTo: horizontalHandle.centerYAnchor).isActive = true
         headerLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8, constant: 0).isActive = true
+        headerLabel.textAlignment = .center
         
         let leftRightPadding: CGFloat = 16
 

@@ -43,6 +43,7 @@
 		4986BE3D23F0A52A0068F8E1 /* CGPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4986BE3C23F0A52A0068F8E1 /* CGPointExtension.swift */; };
 		499075D8233E642B0045DE6A /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D7233E642B0045DE6A /* UserTableViewCell.swift */; };
 		499075DA233E77120045DE6A /* CurrentUserAdTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */; };
+		4997EADC244358C2007D572E /* AdNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4997EADB244358C2007D572E /* AdNavigationView.swift */; };
 		499EE3DC24375D9800793F36 /* ApplicantsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499EE3DB24375D9800793F36 /* ApplicantsViewController.swift */; };
 		499EE3DE24375E2100793F36 /* ApplicantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499EE3DD24375E2100793F36 /* ApplicantTableViewCell.swift */; };
 		49A543C822FF06AB00A466EF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A543C722FF06AB00A466EF /* RootViewController.swift */; };
@@ -145,6 +146,7 @@
 		4986BE3C23F0A52A0068F8E1 /* CGPointExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtension.swift; sourceTree = "<group>"; };
 		499075D7233E642B0045DE6A /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		499075D9233E77120045DE6A /* CurrentUserAdTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserAdTableViewCell.swift; sourceTree = "<group>"; };
+		4997EADB244358C2007D572E /* AdNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdNavigationView.swift; sourceTree = "<group>"; };
 		499EE3DB24375D9800793F36 /* ApplicantsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantsViewController.swift; sourceTree = "<group>"; };
 		499EE3DD24375E2100793F36 /* ApplicantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantTableViewCell.swift; sourceTree = "<group>"; };
 		49A543C722FF06AB00A466EF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -479,6 +481,7 @@
 			isa = PBXGroup;
 			children = (
 				49B1B382228DD75400CA9EC7 /* FeedViewController.swift */,
+				4997EADB244358C2007D572E /* AdNavigationView.swift */,
 				4933A920232A6C2800A09646 /* AdTableViewCell.swift */,
 				4933A91C232A667F00A09646 /* AdTableViewCell.xib */,
 				49AF5A6423F04034007832FD /* AdViewer */,
@@ -786,6 +789,7 @@
 				493F4110243793BD0016F988 /* RightsViewController.swift in Sources */,
 				49B65E2F23F43772006C48AE /* AdPreferencesCell.swift in Sources */,
 				49E7187123F1D9960071374E /* AdControllerHeaderView.swift in Sources */,
+				4997EADC244358C2007D572E /* AdNavigationView.swift in Sources */,
 				491DCA8C231C089D00A78111 /* UIColorExtension.swift in Sources */,
 				493C5A5022A189370032AB6E /* APIClient.swift in Sources */,
 				49713C60230B093300E65807 /* AboutHeaderView.swift in Sources */,

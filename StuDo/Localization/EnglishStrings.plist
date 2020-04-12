@@ -61,11 +61,11 @@
 	<key>feedCreatorPage</key>
 	<string>Show creator&apos;s page</string>
 	<key>navigationMenuAllAds</key>
-	<string>All news</string>
+	<string>All</string>
 	<key>navigationMenuMyAds</key>
-	<string>Only my ads</string>
+	<string>My Ads</string>
 	<key>navigationMenuBookmarks</key>
-	<string>My bookmarked ads</string>
+	<string>Bookmarded</string>
 	<key>navigationMenuOrganizationAds</key>
 	<string>My organization&apos;s ads</string>
 	<key>navigationMenuSavedSources</key>
@@ -73,7 +73,7 @@
 	<key>accountTitle</key>
 	<string>Account</string>
 	<key>accountMyProfiles</key>
-	<string>My profiles</string>
+	<string>My Profiles</string>
 	<key>accountAddNewProfile</key>
 	<string>Add New</string>
 	<key>accountProfileSectionDescription</key>

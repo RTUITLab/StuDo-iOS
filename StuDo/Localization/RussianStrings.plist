@@ -103,7 +103,7 @@
 	<key>profileDescriptionSectionFooter</key>
 	<string>Опишите в нескольких предложениях, чем Вы могли бы помочь другим в данном качестве.</string>
 	<key>navigationMenuAllAds</key>
-	<string>Все объявления</string>
+	<string>Все</string>
 	<key>feedNoOwnAdsDescription</key>
 	<string>Публикуемые Вами объявления появятся здесь.</string>
 	<key>organizationNoWishers</key>
@@ -219,7 +219,7 @@
 	<key>cancel</key>
 	<string>Отменить</string>
 	<key>navigationMenuBookmarks</key>
-	<string>Избранные объявления</string>
+	<string>Избранные</string>
 	<key>adEditorCancelCreatingAlertMessage</key>
 	<string>Вы уверены, что не хотите сохранять данное объявление?</string>
 	<key>passwordChangeAlertTitle</key>
@@ -242,6 +242,8 @@
 	<string>Введите новый пароль</string>
 	<key>accountOrganizations</key>
 	<string>Организации</string>
+	<key>feedNoProfilesDescription</key>
+	<string>Никто ещё не опубликовал ни одного резюме. Будьте первым!</string>
 	<key>feedPublishedBy</key>
 	<string>Опубликовал(-а)</string>
 	<key>blueThemeName</key>
@@ -253,11 +255,9 @@
 	<key>feedNoOrganizationAdsDescription</key>
 	<string>Вы имеете право публиковать объявления от имени данной организации.</string>
 	<key>navigationMenuMyAds</key>
-	<string>Только мои объявления</string>
+	<string>Мои</string>
 	<key>feedNoAdsDescription</key>
 	<string>Никто ещё не опубликовал ни одного объявления. Будьте первым!</string>
-	<key>feedNoProfilesDescription</key>
-	<string>Никто ещё не опубликовал ни одного резюме. Будьте первым!</string>
 	<key>notificationRemindBefore15m</key>
 	<string>За 15 минут</string>
 	<key>organizationDeletionAlertMessage</key>

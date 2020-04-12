@@ -15,18 +15,14 @@ class AccountHeaderView: UITableViewHeaderFooterView {
     
     var sectionTitle: String? {
         didSet {
-            sectionTitleLabel.text = sectionTitle?.uppercased()
+            sectionTitleLabel.text = sectionTitle
         }
     }
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        if #available(iOS 13, *) {
-            contentView.backgroundColor = .secondarySystemGroupedBackground
-        } else {
-            contentView.backgroundColor = UIColor.white
-        }
+        contentView.backgroundColor = .secondarySystemGroupedBackground
         
         contentView.addSubview(sectionTitleLabel)
         sectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -39,8 +35,8 @@ class AccountHeaderView: UITableViewHeaderFooterView {
         actionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         actionButton.setTitleColor(actionButton.tintColor, for: .normal)
         
-        sectionTitleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
-        sectionTitleLabel.textColor = UIColor(red:0.631, green:0.631, blue:0.631, alpha:1.000)
+        sectionTitleLabel.font = .preferredFont(for: .subheadline, weight: .medium)
+        sectionTitleLabel.textColor = .secondaryLabel
         
         actionButton.setTitleColor(.globalTintColor, for: .normal)
         actionButton.setTitleColor(UIColor.globalTintColor.withAlphaComponent(0.5), for: .highlighted)

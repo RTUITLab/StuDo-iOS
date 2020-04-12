@@ -63,15 +63,15 @@
 	<key>feedPublishedBy</key>
 	<string>Veröffentlicht von</string>
 	<key>navigationMenuAllAds</key>
-	<string>Alle Neuigkeiten</string>
+	<string>Alle</string>
 	<key>navigationMenuMyAds</key>
-	<string>Nur meine Anzeigen</string>
+	<string>Meine</string>
 	<key>navigationMenuOrganizationAds</key>
 	<string>Die Anzeigen meiner Organization</string>
 	<key>feedTitleBookmarks</key>
 	<string>Lesezeichnen</string>
 	<key>navigationMenuBookmarks</key>
-	<string>Meine Lesezeichnen</string>
+	<string>Lesezeichnen</string>
 	<key>navigationMenuSavedSources</key>
 	<string>Gespeicherte Quellen</string>
 	<key>accountTitle</key>
