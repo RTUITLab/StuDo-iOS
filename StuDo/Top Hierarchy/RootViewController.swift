@@ -13,7 +13,7 @@ class RootViewController: UIViewController {
     var isInitialSetup = true
     var loadingIndicator = LoadingIndicator()
     
-    private var mainController: TabBarController!
+    var mainController: TabBarController!
     private var authorizationController: AuthorizationViewController!
     
     static var main: RootViewController!

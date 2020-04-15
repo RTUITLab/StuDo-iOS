@@ -8,7 +8,15 @@
 
 import UIKit
 
-class AdNavigationView: UIScrollView {
+class AdNavigationView: UICollectionView {
+    
+    init() {
+        super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private var labels = [UILabel]()
     
@@ -18,7 +26,15 @@ class AdNavigationView: UIScrollView {
         Localizer.string(for: .navigationMenuBookmarks)
     ]
     
-    var selectedIndex: Int = 0
+    var handleView: UIView!
+    var handleXConstraint: NSLayoutConstraint!
+    var selectedIndex: Int = 0 {
+        didSet {
+            handleView.removeConstraint(handleXConstraint)
+            handleXConstraint = handleView.centerXAnchor.constraint(equalTo: labels[selectedIndex].centerXAnchor)
+            handleXConstraint.isActive = true
+        }
+    }
 
     var initialLayout = true
     override func layoutSubviews() {
@@ -60,10 +76,11 @@ class AdNavigationView: UIScrollView {
             self.insertSubview(blurView, belowSubview: stackView)
             
             let handleHeight: CGFloat = 5
-            let handleView = UIView()
+            handleView = UIView()
             self.addSubview(handleView)
             handleView.translatesAutoresizingMaskIntoConstraints = false
-            handleView.centerXAnchor.constraint(equalTo: labels[selectedIndex].centerXAnchor).isActive = true
+            handleXConstraint = handleView.centerXAnchor.constraint(equalTo: labels[selectedIndex].centerXAnchor)
+            handleXConstraint.isActive = true
             handleView.centerYAnchor.constraint(equalTo: self.bottomAnchor, constant: -1).isActive = true
             handleView.widthAnchor.constraint(equalTo: labels[selectedIndex].widthAnchor, multiplier: 1, constant: 0).isActive = true
             handleView.heightAnchor.constraint(equalToConstant: handleHeight).isActive = true
@@ -85,7 +102,6 @@ class AdNavigationView: UIScrollView {
             .filter({ $1.frame.contains(tap.location(in: self))})
             .map({ $0.offset }).first
             else { return }
-        actionClosure?(selectedIndex)
     }
 
 }

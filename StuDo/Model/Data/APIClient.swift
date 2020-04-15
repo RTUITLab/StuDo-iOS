@@ -109,8 +109,11 @@ class APIClient {
     typealias APIClientCompletion = (APIResult<Data?>) throws -> ()
     
     private let session = URLSession.shared
+    #if DEBUG
     private let baseURL = URL(string: "https://dev.studo.rtuitlab.ru/api/")!
-//    private let baseURL = URL(string: "https://e2f1478c.ngrok.io/api/")!
+    #else
+    private let baseURL = URL(string: "https://studo.rtuitlab.ru/api/")!
+    #endif
 
     
     weak var delegate: APIClientDelegate?
@@ -652,6 +655,25 @@ extension APIClient {
         
     }
     
+    func unbookmarkAd(withId adId: String) {
+        
+        let request =  APIRequest(method: .delete, path: "ad/bookmarks/\(adId)")
+        
+        self.perform(secureRequest: request) { (result) in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didUnbookmarkAdWithId: adId)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                }
+            }
+        }
+        
+    }
+    
     
     
     
@@ -970,7 +992,7 @@ extension APIClient {
                     throw APIError.decodingFailure
                 }
                 
-                let profile = try self.decodeProfile(from: decodedJSON)
+                let profile = try self.decodeProfile(from: decodedJSON, fullDecode: true)
                 
                 DispatchQueue.main.async {
                     self.delegate?.apiClient(self, didRecieveProfile: profile)
@@ -999,7 +1021,7 @@ extension APIClient {
                         throw APIError.decodingFailure
                     }
                     
-                    let profile = try self.decodeProfile(from: decodedJSON)
+                    let profile = try self.decodeProfile(from: decodedJSON, fullDecode: true)
 
                     DispatchQueue.main.async {
                         self.delegate?.apiClient(self, didCreateProfile: profile)
@@ -1048,7 +1070,7 @@ extension APIClient {
                         throw APIError.decodingFailure
                     }
                     
-                    let profile = try self.decodeProfile(from: decodedJSON)
+                    let profile = try self.decodeProfile(from: decodedJSON, fullDecode: true)
                     
                     DispatchQueue.main.async {
                         self.delegate?.apiClient(self, didUpdateProfile: profile)

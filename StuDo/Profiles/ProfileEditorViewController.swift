@@ -247,6 +247,10 @@ extension ProfileEditorViewController {
         if sectionInfo == .deleteAction {
             client.deleteProfile(withId: profile!.id!)
             RootViewController.startLoadingIndicator()
+        } else if sectionInfo == .user, let user = profile?.user {
+            let userVC = UserPublicController(user: user)
+            userVC.navigationItem.title = "\(user.firstName) \(user.lastName)"
+            navigationController?.pushViewController(userVC, animated: true)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)

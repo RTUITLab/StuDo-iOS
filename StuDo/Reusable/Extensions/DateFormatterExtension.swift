@@ -8,6 +8,7 @@
 
 import UIKit
 
+fileprivate let iso8601NewDateformat = "yyyy-MM-ddTHH:mm:ss.fff"
 fileprivate let iso8601Dateformat = "yyyy-MM-dd'T'HH:mm:ss"
 fileprivate let iso8601DateformatWithNanoseconds = "yyyy-MM-dd'T'HH:mm:ss.SSS"
 

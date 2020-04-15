@@ -11,11 +11,12 @@ import UserNotifications
 
 fileprivate let feedItemCellID = "feedItemCellID"
 fileprivate let profileCellID = "profileCellID"
+fileprivate let emptyCellID = "emptyCellID"
 
 class FeedViewController: UIViewController {
     
     let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-    
+                
     // MARK: Data & Logic
     
     var profiles = [Profile]()
@@ -23,6 +24,8 @@ class FeedViewController: UIViewController {
     var client = APIClient()
     
     var indexPathUnderChange: IndexPath!
+    
+//    var adNavigationHeightConstraint: NSLayoutConstraint!
     
     enum FeedMode: Equatable {
         case allAds
@@ -54,6 +57,8 @@ class FeedViewController: UIViewController {
         
     
     // MARK: Visible properties
+    
+    private let sectionHeaderHeight: CGFloat = 40
 
     var tableView: UITableView!
     let refreshControl = UIRefreshControl()
@@ -66,6 +71,8 @@ class FeedViewController: UIViewController {
     let noAdsTitleLabel = UILabel()
     let noAdsDescriptionLabel = UILabel()
     
+//    var adNavigationView: AdNavigationView! = nil
+    
     deinit {
         print("FeedViewController deinitialized")
         NotificationCenter.default.removeObserver(self)
@@ -74,16 +81,17 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .secondarySystemFill
+        
         client.delegate = self
 
-        tableView = UITableView(frame: view.frame, style: .plain)
-        
-        view.addSubview(tableView)
+        tableView = UITableView(frame: .zero, style: .plain)
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "AdTableViewCell", bundle: nil), forCellReuseIdentifier: feedItemCellID)
         tableView.register(TableViewCellWithSubtitle.self, forCellReuseIdentifier: profileCellID)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: emptyCellID)
         
         tableView.estimatedRowHeight = 140
         tableView.rowHeight = UITableView.automaticDimension
@@ -114,6 +122,37 @@ class FeedViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
         
         let userDeletedOrganizationName = OrganizationViewController.OrganizationNotifications.userDidDeleteOrganization.name
+        
+        
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+
+//        adNavigationView = AdNavigationView(frame: .zero)
+//
+//        adNavigationView.actionClosure = { [unowned self] index in
+//            if index == 0 {
+//                self.switchMode(newMode: .allAds)
+//            } else if index == 1 {
+//                self.switchMode(newMode: .myAds)
+//            } else if index == 2 {
+//                self.switchMode(newMode: .bookmarks)
+//            }
+//            self.tableView.reloadData()
+//        }
+//
+//        view.addSubview(adNavigationView)
+//        adNavigationView.translatesAutoresizingMaskIntoConstraints = false
+//        adNavigationView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+//        adNavigationView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+//        adNavigationView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+//
+//        adNavigationHeightConstraint = adNavigationView.heightAnchor.constraint(equalToConstant: sectionHeaderHeight)
+//        adNavigationHeightConstraint.isActive = true
+        
         
         view.addSubview(placeholderView)
         placeholderView.translatesAutoresizingMaskIntoConstraints = false
@@ -148,11 +187,13 @@ class FeedViewController: UIViewController {
         noAdsDescriptionLabel.textColor = .lightGray
         noAdsDescriptionLabel.numberOfLines = 3
         
+        
         navigationItem.title = Localizer.string(for: .back)
         
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
         blurView.frame = CGRect(x: 0, y: 0, width: 100, height: 400)
         tableView.backgroundView = blurView
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -161,6 +202,10 @@ class FeedViewController: UIViewController {
         } else {
             client.getOrganizations([.canPublish])
             refreshAds()
+        }
+        
+        if indexPathUnderChange != nil {
+            indexPathUnderChange = nil
         }
         tabBarController?.showTabBar()
     }
@@ -184,6 +229,80 @@ class FeedViewController: UIViewController {
             break
         }
     }
+    
+    
+    func removeIndexUnderChange() {
+        feedItems.remove(at: indexPathUnderChange.row)
+        tableView.deleteRows(at: [indexPathUnderChange], with: .fade)
+        indexPathUnderChange = nil
+    }
+    
+    func updateIndexUnderChange(_ newAd: Ad) {
+        guard let newAdIndex = feedItems.enumerated().filter({ $0.element.id == newAd.id }).first?.offset else { return }
+        feedItems[newAdIndex] = newAd
+        tableView.reloadRows(at: [IndexPath(row: newAdIndex, section: 0)], with: .none)
+        indexPathUnderChange = nil
+    }
+    
+    
+    // MARK: Touch Control
+    
+//    var firstLocation: CGPoint?
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        let firstTouch = touches.first!
+//        firstLocation = firstTouch.location(in: view)
+//    }
+//    
+//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        guard let touch = touches.first, let firstLocation = firstLocation else { return }
+//        let location = touch.location(in: view)
+//        print(abs(location.x - firstLocation.x))
+//        guard abs(location.x - firstLocation.x) > 70 else { return }
+//        if (location.x > firstLocation.x) {
+//            handle(.right)
+//        } else if (location.x < firstLocation.x) {
+//            handle(.left)
+//        }
+//        self.firstLocation = nil
+//        print(tableView.frame)
+//    }
+    
+//    func handle(_ swipe: SwipeDirection) {
+//        var shouldUpdate = true
+//        var direction: UIView.AnimationOptions = .transitionCrossDissolve
+//        switch swipe {
+//        case .left:
+//            if currentMode == .allAds {
+//                switchMode(newMode: .myAds)
+//            } else if currentMode == .myAds {
+//                switchMode(newMode: .bookmarks)
+//            } else {
+//                shouldUpdate = false
+//            }
+//            direction = .transitionFlipFromRight
+//        case .right:
+//            if currentMode == .bookmarks {
+//                switchMode(newMode: .myAds)
+//            } else if currentMode == .myAds {
+//                switchMode(newMode: .allAds)
+//            } else {
+//                shouldUpdate = false
+//            }
+//            direction = .transitionFlipFromLeft
+//        }
+//
+//        if shouldUpdate {
+//            UIView.transition(with: tableView,
+//            duration: 0.35,
+//            options: direction,
+//            animations: { self.tableView.reloadData() })
+//        }
+//    }
+//
+//    enum SwipeDirection {
+//        case right
+//        case left
+//    }
 
 }
 
@@ -206,8 +325,10 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
             let profile = profiles[indexPath.row]
             cell.textLabel?.text = profile.name
             cell.detailTextLabel?.text = profile.description
+            
             return cell
         }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: feedItemCellID, for: indexPath) as! AdTableViewCell
         
         let currentAd = feedItems[indexPath.row]
@@ -221,7 +342,7 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         cell.layoutIfNeeded()
-        
+                
         return cell
     }
     
@@ -240,37 +361,10 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if currentMode != .profiles && section == 0 {
-            let headerView = AdNavigationView()
-            switch currentMode {
-            case .allAds:
-                headerView.selectedIndex = 0
-            case .myAds:
-                headerView.selectedIndex = 1
-            case .bookmarks:
-                headerView.selectedIndex = 2
-            default:
-                break
-            }
-            headerView.actionClosure = { [unowned self] index in
-                if index == 0 {
-                    self.switchMode(newMode: .allAds)
-                } else if index == 1 {
-                    self.switchMode(newMode: .myAds)
-                } else if index == 2 {
-                    self.switchMode(newMode: .bookmarks)
-                }
-                tableView.reloadData()
-            }
-            return headerView
-        }
         return nil
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if currentMode != .profiles && section == 0 {
-            return 40
-        }
         return 0
     }
     
@@ -282,8 +376,14 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
             return
         }
         let selectedAd = feedItems[indexPath.row]
+        indexPathUnderChange = indexPath
         presentAdViewer(selectedAd)
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
 }
 
 
@@ -312,12 +412,29 @@ extension FeedViewController: APIClientDelegate {
         }
         
         placeholderView.isHidden = !feedItems.isEmpty
+        
+        tableView.contentInset = .zero
+//        tableView.contentInset = UIEdgeInsets(top: sectionHeaderHeight, left: 0, bottom: 0, right: 0)
+//        adNavigationHeightConstraint.constant = sectionHeaderHeight
+        
+//        switch currentMode {
+//        case .allAds:
+//            adNavigationView.selectedIndex = 0
+//        case .myAds:
+//            adNavigationView.selectedIndex = 1
+//        case .bookmarks:
+//            adNavigationView.selectedIndex = 2
+//        default:
+//            break
+//        }
     }
     
     fileprivate func set(_ profiles: [Profile]) {
         self.profiles = profiles
         noAdsDescriptionLabel.text = Localizer.string(for: .feedNoProfilesDescription)
         placeholderView.isHidden = !profiles.isEmpty
+        tableView.contentInset = .zero
+//        adNavigationHeightConstraint.constant = 0
     }
     
     func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {
@@ -366,13 +483,8 @@ extension FeedViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {
         RootViewController.stopLoadingIndicator(with: .success)
-        feedItems.remove(at: indexPathUnderChange.row)
-        tableView.deleteRows(at: [indexPathUnderChange], with: .fade)
-        indexPathUnderChange = nil
+        removeIndexUnderChange()
     }
-    
-    
-    
     
     
     func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {
@@ -383,6 +495,25 @@ extension FeedViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveUser user: User) {
         let userVC = UserPublicController(user: user)
         navigationController?.pushViewController(userVC, animated: true)
+    }
+    
+    func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String) {
+        RootViewController.stopLoadingIndicator(with: .success)
+        guard let itemIndex = feedItems.enumerated().filter({ $1.id == adId}).map({ $0.offset}).first else { return }
+        feedItems[itemIndex].isFavorite = true
+    }
+    
+    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String) {
+        RootViewController.stopLoadingIndicator(with: .success)
+        guard let itemIndex = feedItems.enumerated().filter({ $1.id == adId}).map({ $0.offset}).first else { return }
+        feedItems[itemIndex].isFavorite = false
+        if currentMode == .bookmarks {
+            DispatchQueue.main.async {
+                self.feedItems.remove(at: itemIndex)
+                self.tableView.deleteRows(at: [IndexPath(row: itemIndex, section: 0)], with: .fade)
+                self.placeholderView.animateVisibility(shouldHide: !self.feedItems.isEmpty)
+            }
+        }
     }
     
     
@@ -454,6 +585,18 @@ extension FeedViewController {
             }))
         }
         
+        if currentAd.isFavorite {
+            alert.addAction(UIAlertAction(title: Localizer.string(for: .adEditorRemoveFromBookmarks), style: .default, handler: { _ in
+                self.client.unbookmarkAd(withId: currentAd.id!)
+                RootViewController.startLoadingIndicator()
+            }))
+        } else {
+            alert.addAction(UIAlertAction(title: Localizer.string(for: .adEditorAddToBookmarks), style: .default, handler: { _ in
+                self.client.bookmarkAd(withId: currentAd.id!)
+                RootViewController.startLoadingIndicator()
+            }))
+        }
+        
         if currentAd.userId == PersistentStore.shared.user.id {
             let currentAd = feedItems[indexPath.row]
             alert.addAction(UIAlertAction(title: Localizer.string(for: .adEditorEditAd), style: .default, handler: { _ in
@@ -488,3 +631,4 @@ extension FeedViewController {
         navigationItem.title = Localizer.string(for: .back)
     }
 }
+

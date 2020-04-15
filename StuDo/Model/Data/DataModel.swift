@@ -204,6 +204,8 @@ struct Ad {
     
     let comments: [Comment]?
     
+    var isFavorite: Bool
+    
     // Not endoceded
     var fullDescription: String {
         guard let description = description else { return shortDescription }
@@ -230,6 +232,7 @@ struct Ad {
         self.organizationId = nil
         self.organization = nil
         self.comments = nil
+        self.isFavorite = false
     }
     
     init(organizationId: String, name: String, description: String, shortDescription: String, beginTime: Date, endTime: Date) {
@@ -247,10 +250,11 @@ struct Ad {
         self.userId = nil
         self.organization = nil
         self.comments = nil
+        self.isFavorite = false
     }
     
     // initializer for ads fetched from the server
-    init(id: String, name: String, description: String?, shortDescription: String, beginTime: String, endTime: String, userName: String?, organizationName: String? = nil, user: User? = nil, organization: Organization? = nil, userId: String? = nil, organizationId: String? = nil, comments: [Comment]?) {
+    init(id: String, name: String, description: String?, shortDescription: String, beginTime: String, endTime: String, userName: String?, organizationName: String? = nil, user: User? = nil, organization: Organization? = nil, userId: String? = nil, organizationId: String? = nil, comments: [Comment]?, isFavorite: Bool) {
         self.id = id
         
         self.name = name
@@ -271,6 +275,7 @@ struct Ad {
         self.endTime = DateFormatter.dateFromISO8601String(endTime)
         
         self.comments = comments
+        self.isFavorite = isFavorite
     }
     
 }
@@ -406,19 +411,22 @@ struct Profile: Decodable {
     let name: String
     let description: String
     let username: String?
+    let user: User?
     
     enum CodingKeys: String, CodingKey {
         case id
         case name
         case description
         case username
+        case user
     }
     
-    init(id: String, name: String, description: String, username: String? = nil) {
+    init(id: String, name: String, description: String, username: String? = nil, user: User? = nil) {
         self.id = id
         self.name = name
         self.description = description
         self.username = username
+        self.user = user
     }
 }
 
@@ -429,6 +437,7 @@ extension Profile: Encodable {
         self.name = name
         self.description = description
         self.username = nil
+        self.user = nil
     }
     
     func encode(to encoder: Encoder) throws {
@@ -498,6 +507,11 @@ extension APIClient {
         let organizationIdField = "organizationId"
         let organizationId = object[organizationIdField] as? String
         
+        let favoriteField = "isFavorite"
+        guard let isFavorite = object[favoriteField] as? Bool else {
+            throw APIError.decodingFailureWithField(favoriteField)
+        }
+        
         
         if fullDecode == false {
             let userNameField = "userName"
@@ -507,7 +521,7 @@ extension APIClient {
             let organizationName = object[organizationNameField] as? String
             
             
-            return Ad(id: id, name: name, description: nil, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: userName, organizationName: organizationName, user: nil, organization: nil, userId: userId, organizationId: organizationId, comments: nil)
+            return Ad(id: id, name: name, description: nil, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: userName, organizationName: organizationName, user: nil, organization: nil, userId: userId, organizationId: organizationId, comments: nil, isFavorite: isFavorite)
         }
         
         
@@ -557,14 +571,14 @@ extension APIClient {
             comments.append(comment)
         }
         
-        return Ad(id: id, name: name, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: nil, organizationName: nil, user: user, organization: organization, userId: userId, organizationId: organizationId, comments: comments)
+        return Ad(id: id, name: name, description: description, shortDescription: shortDescription, beginTime: beginTime, endTime: endTime, userName: nil, organizationName: nil, user: user, organization: organization, userId: userId, organizationId: organizationId, comments: comments, isFavorite: isFavorite)
         
     }
     
     
     
     
-    func decodeProfile(from object: [String: Any]) throws ->  Profile  {
+    func decodeProfile(from object: [String: Any], fullDecode: Bool = false) throws ->  Profile  {
         
         let idField = "id"
         guard let id = object[idField] as? String else {
@@ -581,12 +595,25 @@ extension APIClient {
             throw APIError.decodingFailureWithField(descriptionField)
         }
         
+        if fullDecode {
+            var user: User?
+            
+            let userField = "user"
+            if let userDictionary = object[userField] as? [String: Any] {
+                user = try decode(userDictionary: userDictionary)
+            }
+            
+            return Profile(id: id, name: name, description: description, username: nil, user: user)
+            
+        }
+        
         let usernameField = "userName"
         guard let username = object[usernameField] as? String else {
             throw APIError.decodingFailureWithField(usernameField)
         }
         
-        return Profile(id: id, name: name, description: description, username: username)
+        return Profile(id: id, name: name, description: description, username: username, user: nil)
+        
     }
     
     

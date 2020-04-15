@@ -315,6 +315,7 @@ class AdViewController: UIViewController {
                 
                 let currentUser = PersistentStore.shared.user!
                 
+                #if ORGANIZATIONS_ENABLED
                 if !publishableOrganizations.isEmpty {
 
                     let alert = UIAlertController(title: Localizer.string(for: .adEditorPublishAdAlertMessage), message: nil, preferredStyle: .actionSheet)
@@ -342,6 +343,9 @@ class AdViewController: UIViewController {
                 } else {
                     createAd(id: currentUser.id!, asUser: true)
                 }
+                #else
+                createAd(id: currentUser.id!, asUser: true)
+                #endif
             }
         }
         
@@ -533,12 +537,18 @@ class AdViewController: UIViewController {
             actionSheet.addAction(inviteAction)
             actionSheet.addAction(editAction)
             actionSheet.addAction(deleteAction)
+        }
+        
+        if currentAd.isFavorite {
+            actionSheet.addAction(UIAlertAction(title: Localizer.string(for: .adEditorRemoveFromBookmarks), style: .default, handler: { _ in
+                
+                RootViewController.startLoadingIndicator()
+            }))
         } else {
-            let title = Localizer.string(for: .adEditorAddToBookmarks)
-            let bookmarkAction = UIAlertAction(title: title, style: .default) { _ in
-                self.toggleBookmark()
-            }
-            actionSheet.addAction(bookmarkAction)
+            actionSheet.addAction(UIAlertAction(title: Localizer.string(for: .adEditorAddToBookmarks), style: .default, handler: { _ in
+                self.client.bookmarkAd(withId: self.currentAd.id!)
+                RootViewController.startLoadingIndicator()
+            }))
         }
         
         let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
@@ -1036,6 +1046,7 @@ extension AdViewController: APIClientDelegate {
         RootViewController.stopLoadingIndicator(with: .success) {
             self.exitEditingState(shouldShowPrompt: false)
         }
+        RootViewController.main.mainController.feedViewController.refreshAds()
     }
     
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {
@@ -1046,12 +1057,15 @@ extension AdViewController: APIClientDelegate {
                 self.headerView.titleText = self.currentAd.name
             }
         }
+        RootViewController.main.mainController.feedViewController.updateIndexUnderChange(updatedAd)
     }
     
     func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {
         RootViewController.stopLoadingIndicator(with: .success) {
             self.dismiss(animated: true, completion: nil)
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {        RootViewController.main.mainController.feedViewController.removeIndexUnderChange()
+        })
     }
     
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
@@ -1064,6 +1078,16 @@ extension AdViewController: APIClientDelegate {
         RootViewController.stopLoadingIndicator(with: .success)
         needToUpdateComments = true
         client.getAd(withId: adId)
+    }
+    
+    func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String) {
+        RootViewController.stopLoadingIndicator(with: .success)
+        currentAd.isFavorite = true
+    }
+    
+    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String) {
+        RootViewController.stopLoadingIndicator(with: .success)
+        currentAd.isFavorite = false
     }
     
     func apiClient(_ client: APIClient, didDeleteCommentWithId commentId: String) {
