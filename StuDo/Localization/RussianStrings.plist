@@ -70,6 +70,8 @@
 	<string>Хорошо</string>
 	<key>feedNoAdsTitle</key>
 	<string>Нет объявлений.</string>
+	<key>feedNoProfilesTitle</key>
+	<string>Нет резюме.</string>
 	<key>feedNoBookmarkedAdsDescription</key>
 	<string>Ваши избранные объявления будут отображаться здесь.</string>
 	<key>adEditorDeleteAd</key>

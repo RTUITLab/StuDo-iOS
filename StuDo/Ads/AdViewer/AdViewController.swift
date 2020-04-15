@@ -1046,7 +1046,7 @@ extension AdViewController: APIClientDelegate {
         RootViewController.stopLoadingIndicator(with: .success) {
             self.exitEditingState(shouldShowPrompt: false)
         }
-        RootViewController.main.mainController.feedViewController.refreshAds()
+//        RootViewController.main.mainController.feedViewController.refreshAds()
     }
     
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {
@@ -1057,14 +1057,15 @@ extension AdViewController: APIClientDelegate {
                 self.headerView.titleText = self.currentAd.name
             }
         }
-        RootViewController.main.mainController.feedViewController.updateIndexUnderChange(updatedAd)
+//        RootViewController.main.mainController.feedViewController.updateIndexUnderChange(updatedAd)
     }
     
     func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {
         RootViewController.stopLoadingIndicator(with: .success) {
             self.dismiss(animated: true, completion: nil)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {        RootViewController.main.mainController.feedViewController.removeIndexUnderChange()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+//            RootViewController.main.mainController.feedViewController.removeIndexUnderChange()
         })
     }
     

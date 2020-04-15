@@ -29,6 +29,9 @@
 		493E8AE1228B4357004EC563 /* StuDoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8AE0228B4357004EC563 /* StuDoTests.swift */; };
 		493E8AEC228B4357004EC563 /* StuDoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493E8AEB228B4357004EC563 /* StuDoUITests.swift */; };
 		493F4110243793BD0016F988 /* RightsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F410F243793BD0016F988 /* RightsViewController.swift */; };
+		493F90EA24474090006EBB99 /* PublicProfilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F90E924474090006EBB99 /* PublicProfilesViewController.swift */; };
+		493F90EC2447462D006EBB99 /* AdsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F90EB2447462D006EBB99 /* AdsViewController.swift */; };
+		493F90F024474773006EBB99 /* BackgroundInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F90EF24474773006EBB99 /* BackgroundInfoView.swift */; };
 		494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C64A822C24B0E0039740B /* PersistentStore.swift */; };
 		494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494C64AA22C253AC0039740B /* AccountDetailViewController.swift */; };
 		49544FA522FB22240019A544 /* FadeAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */; };
@@ -132,6 +135,9 @@
 		493E8AEB228B4357004EC563 /* StuDoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuDoUITests.swift; sourceTree = "<group>"; };
 		493E8AED228B4357004EC563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		493F410F243793BD0016F988 /* RightsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightsViewController.swift; sourceTree = "<group>"; };
+		493F90E924474090006EBB99 /* PublicProfilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicProfilesViewController.swift; sourceTree = "<group>"; };
+		493F90EB2447462D006EBB99 /* AdsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsViewController.swift; sourceTree = "<group>"; };
+		493F90EF24474773006EBB99 /* BackgroundInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundInfoView.swift; sourceTree = "<group>"; };
 		494C64A822C24B0E0039740B /* PersistentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStore.swift; sourceTree = "<group>"; };
 		494C64AA22C253AC0039740B /* AccountDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailViewController.swift; sourceTree = "<group>"; };
 		49544FA422FB22240019A544 /* FadeAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeAnimatedTransitioning.swift; sourceTree = "<group>"; };
@@ -403,6 +409,17 @@
 			path = StuDoUITests;
 			sourceTree = "<group>";
 		};
+		493F90E824474059006EBB99 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				49B1B382228DD75400CA9EC7 /* FeedViewController.swift */,
+				493F90E924474090006EBB99 /* PublicProfilesViewController.swift */,
+				493F90EB2447462D006EBB99 /* AdsViewController.swift */,
+				493F90EF24474773006EBB99 /* BackgroundInfoView.swift */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
 		496772CB233A1C0400776852 /* Account */ = {
 			isa = PBXGroup;
 			children = (
@@ -480,7 +497,7 @@
 		49C85B2F22D9EBFC00578F39 /* Ads */ = {
 			isa = PBXGroup;
 			children = (
-				49B1B382228DD75400CA9EC7 /* FeedViewController.swift */,
+				493F90E824474059006EBB99 /* Feed */,
 				4997EADB244358C2007D572E /* AdNavigationView.swift */,
 				4933A920232A6C2800A09646 /* AdTableViewCell.swift */,
 				4933A91C232A667F00A09646 /* AdTableViewCell.xib */,
@@ -753,6 +770,7 @@
 				49E61DD9231A564C007BC4FF /* UIFontExtension.swift in Sources */,
 				49E2DB1622FDB4E20015DCD8 /* DataChecker.swift in Sources */,
 				49ADF629231CF4BD00AA3FCB /* SlideUpTransition.swift in Sources */,
+				493F90F024474773006EBB99 /* BackgroundInfoView.swift in Sources */,
 				4928D43622A3ED9700F4D703 /* DataModel.swift in Sources */,
 				495B27AF22C0145600AADD19 /* AuthorizationViewController.swift in Sources */,
 				4973AD25231D58DD00B4B578 /* OrganizationViewController.swift in Sources */,
@@ -763,6 +781,7 @@
 				49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */,
 				49E2DB1022FDB22B0015DCD8 /* UITableViewExtension.swift in Sources */,
 				493E7D29232E2BB600278DAF /* Notifications.swift in Sources */,
+				493F90EA24474090006EBB99 /* PublicProfilesViewController.swift in Sources */,
 				49DEADCE2302EE440031B3DF /* NewAdButton.swift in Sources */,
 				499EE3DC24375D9800793F36 /* ApplicantsViewController.swift in Sources */,
 				49034AF0232B9BE800749D18 /* UserPublicController.swift in Sources */,
@@ -772,6 +791,7 @@
 				494C64A922C24B0E0039740B /* PersistentStore.swift in Sources */,
 				49D76A7C231050A8002B22D4 /* Localizer.swift in Sources */,
 				499075DA233E77120045DE6A /* CurrentUserAdTableViewCell.swift in Sources */,
+				493F90EC2447462D006EBB99 /* AdsViewController.swift in Sources */,
 				491DA7D923F206BC005892BD /* EditableAdBodyCell.swift in Sources */,
 				49C85B2722D8D06300578F39 /* GlobalConstants.swift in Sources */,
 				494C64AB22C253AC0039740B /* AccountDetailViewController.swift in Sources */,

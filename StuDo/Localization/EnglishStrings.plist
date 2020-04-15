@@ -46,6 +46,8 @@
 	<string>Bookmarks</string>
 	<key>feedNoAdsTitle</key>
 	<string>No ads to display.</string>
+	<key>feedNoProfilesTitle</key>
+	<string>No profiles to display.</string>
 	<key>feedNoAdsDescription</key>
 	<string>No one has published ads yet. Be the first!</string>
 	<key>feedNoProfilesDescription</key>

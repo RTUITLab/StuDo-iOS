@@ -48,6 +48,8 @@
 	<string>Meine Anzeigen</string>
 	<key>feedNoAdsTitle</key>
 	<string>Keine Anzeigen dabei.</string>
+	<key>feedNoProfilesTitle</key>
+	<string>Keine Profile debei.</string>
 	<key>feedNoAdsDescription</key>
 	<string>Keine Anzeigen noch da. Mach die Erste!</string>
 	<key>feedNoProfilesDescription</key>
