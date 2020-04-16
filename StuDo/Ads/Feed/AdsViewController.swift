@@ -17,7 +17,7 @@ class AdsViewController: UICollectionViewController {
     // -------------------------------------
     // MARK: - Properties
     
-    enum AdSection: Int, Equatable {
+    enum AdSection: Int, Equatable, CaseIterable {
         case all = 0
         case own
         case bookmarked
@@ -44,6 +44,8 @@ class AdsViewController: UICollectionViewController {
         adNavigationView.collectionView
     }
     
+    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+    
     // -------------------------------------
     // MARK: - Methods
     
@@ -61,6 +63,7 @@ class AdsViewController: UICollectionViewController {
         super.init(collectionViewLayout: layout)
         
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange(notification:)), name: PersistentStoreNotification.themeDidChange.name, object: nil)
     }
     
     deinit {
@@ -80,10 +83,7 @@ class AdsViewController: UICollectionViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .secondarySystemBackground
         
-        adNavigationCollectionView.register(AdNavigationCell.self, forCellWithReuseIdentifier: adNavigationCellID)
-        adNavigationCollectionView.dataSource = self
-        adNavigationCollectionView.delegate = self
-        adNavigationCollectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .left)
+        setupAdNavigationCollectionView()
 
         client.delegate = self
         requestUpdate(adSection: .all)
@@ -96,9 +96,21 @@ class AdsViewController: UICollectionViewController {
     
     // MARK: Data
     
-    private func updateTable(for index: Int) {
+    public func requestUpdateForAllSections() {
+        let sections = AdSection.allCases
+        for section in sections {
+            requestUpdate(adSection: section)
+        }
+    }
+    
+    private func reloadAllTables() {
+        collectionView.reloadData()
+    }
+    
+    private func reloadTable(for index: Int) {
         DispatchQueue.main.async {
             if let cell = self.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? CollectionViewCellWithTableView {
+                print("updated section: \(index)")
                 cell.tableView.reloadData()
                 cell.tableView.backgroundView?.isHidden = !self.feedItems[index].isEmpty
                 cell.tableView.refreshControl?.endRefreshing()
@@ -106,11 +118,13 @@ class AdsViewController: UICollectionViewController {
         }
     }
     
-    fileprivate func update(ads: [Ad], for adSection: AdSection) {
+    fileprivate func update(ads: [Ad], for adSection: AdSection, shouldUpdateTable: Bool = true) {
         isInitialTableViewLoad = false
         let index = adSection.rawValue
         feedItems[index] = ads
-        updateTable(for: index)
+        if shouldUpdateTable {
+            reloadTable(for: index)
+        }
     }
     
     fileprivate func requestUpdate(adSection: AdSection) {
@@ -121,6 +135,19 @@ class AdsViewController: UICollectionViewController {
             client.getAds(forUserWithId: PersistentStore.shared.user.id!)
         case .bookmarked:
             client.getBookmarkedAds()
+        }
+    }
+    
+    fileprivate func requestUpdate(adSection: AdSection, ifContains adId: String) {
+        if feedItems[adSection.rawValue].contains(where: {$0.id == adId}) {
+            requestUpdate(adSection: .all)
+        }
+    }
+    
+    fileprivate func requestUpdate(forAllSectionsExcept excludedSection: AdSection) {
+        let sections = AdSection.allCases.filter({ $0 != excludedSection})
+        for section in sections {
+            requestUpdate(adSection: section)
         }
     }
     
@@ -151,11 +178,42 @@ class AdsViewController: UICollectionViewController {
         return infoView
     }
     
+    fileprivate func presentAdViewer(_ selectedAd: Ad, userInfo: [String: Any]? = nil, startInEditorMode: Bool = false) {
+        
+        let detailVC = AdViewController(ad: selectedAd)
+        detailVC.clientUserInfo = userInfo
+        
+        if startInEditorMode {
+            detailVC.currentState = .editing
+        }
+        
+        impactFeedback.impactOccurred()
+        
+        self.present(detailVC, animated: true, completion: nil)
+    }
+    
+    fileprivate func setupAdNavigationCollectionView() {
+        
+        adNavigationCollectionView.register(AdNavigationCell.self, forCellWithReuseIdentifier: adNavigationCellID)
+        adNavigationCollectionView.dataSource = self
+        adNavigationCollectionView.delegate = self
+        
+        adNavigationCollectionView.selectItem(at: IndexPath(item: currentSection, section: 0), animated: false, scrollPosition: .right)
+    }
+    
     // MARK: Observers & Actions
     
     @objc private func languageDidChange(notification: Notification) {
         navigationItem.title = Localizer.string(for: .back)
-        adNavigationCollectionView.reloadData()
+        adNavigationView.reloadCollectionView()
+        setupAdNavigationCollectionView()
+        reloadAllTables()
+    }
+    
+    @objc private func themeDidChange(notification: Notification) {
+        adNavigationView.reloadCollectionView()
+        setupAdNavigationCollectionView()
+        reloadAllTables()
     }
     
     @objc private func refreshTriggered(_ refreshControl: UIRefreshControl) {
@@ -186,6 +244,60 @@ extension AdsViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didRecieveBookmarkedAds ads: [Ad]) {
         update(ads: ads, for: .bookmarked)
     }
+    
+    
+    
+    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String, userInfo: [String : Any]? = nil) {
+        RootViewController.stopLoadingIndicator(with: .success)
+        
+        guard let tableView = userInfo?["tableView"] as? UITableView,
+            let indexPath = userInfo?["indexPath"] as? IndexPath,
+            let currentSection = AdSection(rawValue: tableView.tag) else { return }
+        
+        DispatchQueue.main.async {
+            var updatedFeedItems = self.feedItems[tableView.tag]
+            updatedFeedItems.remove(at: indexPath.row)
+            self.update(ads: updatedFeedItems, for: currentSection, shouldUpdateTable: false)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+        
+        requestUpdate(forAllSectionsExcept: currentSection)
+        
+    }
+    
+    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String, userInfo: [String : Any]?) {
+        RootViewController.stopLoadingIndicator(with: .success)
+        let section = AdSection(rawValue: currentSection)!
+        if section == .bookmarked {
+            if let tableView = userInfo?["tableView"] as? UITableView,
+                let indexPath = userInfo?["indexPath"] as? IndexPath {
+                DispatchQueue.main.async {
+                    var updatedFeedItems = self.feedItems[AdSection.bookmarked.rawValue]
+                    updatedFeedItems.remove(at: indexPath.row)
+                    self.update(ads: updatedFeedItems, for: .bookmarked, shouldUpdateTable: false)
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                }
+            }
+        } else {
+            requestUpdate(adSection: .bookmarked)
+        }
+        requestUpdate(adSection: .all, ifContains: adId)
+        requestUpdate(adSection: .own, ifContains: adId)
+    }
+    
+    func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String) {
+        RootViewController.stopLoadingIndicator(with: .success)
+        requestUpdate(adSection: .all, ifContains: adId)
+        requestUpdate(adSection: .own, ifContains: adId)
+        requestUpdate(adSection: .bookmarked)
+    }
+    
+    func apiClient(_ client: APIClient, didRecieveUser user: User) {
+        let userVC = UserPublicController(user: user)
+        navigationController?.pushViewController(userVC, animated: true)
+    }
+    
+    
     
 }
 
@@ -231,11 +343,22 @@ extension AdsViewController: UICollectionViewDelegateFlowLayout {
         self.collectionView.scrollToItem(at: indexPath, at: .right, animated: true)
     }
     
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard collectionView === self.collectionView,
+            let cell = cell as? CollectionViewCellWithTableView else { return }
+        cell.tableView.reloadData()
+    }
+    
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         guard scrollView === self.collectionView else { return }
         let targetOffset = targetContentOffset.pointee
-        let index = Int(targetOffset.x / self.collectionView.frame.width)
-        adNavigationCollectionView.selectItem(at: IndexPath(item: index, section: 0), animated: true, scrollPosition: .right)
+        
+        let newSection = Int(targetOffset.x / self.collectionView.frame.width)
+        guard currentSection != newSection else { return }
+        
+        adNavigationCollectionView.deselectItem(at: IndexPath(item: currentSection, section: 0), animated: true)
+        adNavigationCollectionView.selectItem(at: IndexPath(item: newSection, section: 0), animated: true, scrollPosition: .right)
+        currentSection = newSection
     }
     
     
@@ -292,7 +415,7 @@ extension AdsViewController: UICollectionViewDelegateFlowLayout {
                 cell.label.text = Localizer.string(for: .navigationMenuBookmarks)
             }
         }
-                
+                        
         return cell
     }
     
@@ -318,7 +441,7 @@ extension AdsViewController: UITableViewDataSource, UITableViewDelegate {
         cell.dateLabel.text = currentAd.dateRange
         cell.moreButtonCallback = { [weak self] in
             guard let self = self else { return }
-            self.moreButtonTappedInCell(tableIndex: tableView.tag, rowIndex: indexPath.row)
+            self.moreButtonTappedInCell(tableView: tableView, rowIndex: indexPath.row)
         }
         
         return cell
@@ -328,6 +451,15 @@ extension AdsViewController: UITableViewDataSource, UITableViewDelegate {
         cell.layoutIfNeeded()
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedAd = feedItems[tableView.tag][indexPath.row]
+        let userInfo: [String: Any] = [
+            "indexPath": indexPath,
+            "tableView": tableView
+        ]
+        presentAdViewer(selectedAd, userInfo: userInfo)
+    }
+    
     
 }
 
@@ -335,9 +467,14 @@ extension AdsViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension AdsViewController {
     
-    fileprivate func moreButtonTappedInCell(tableIndex: Int, rowIndex: Int) {
+    fileprivate func moreButtonTappedInCell(tableView: UITableView, rowIndex: Int) {
         
-        let currentAd = feedItems[tableIndex][rowIndex]
+        let currentAd = feedItems[tableView.tag][rowIndex]
+        
+        let userInfo: [String: Any] = [
+            "indexPath": IndexPath(row: rowIndex, section: 0),
+            "tableView": tableView
+        ]
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
@@ -361,7 +498,7 @@ extension AdsViewController {
         
         if currentAd.isFavorite {
             alert.addAction(UIAlertAction(title: Localizer.string(for: .adEditorRemoveFromBookmarks), style: .default, handler: { _ in
-                self.client.unbookmarkAd(withId: currentAd.id!)
+                self.client.unbookmarkAd(withId: currentAd.id!, userInfo: userInfo)
                 RootViewController.startLoadingIndicator()
             }))
         } else {
@@ -373,11 +510,10 @@ extension AdsViewController {
         
         if currentAd.userId == PersistentStore.shared.user.id {
             alert.addAction(UIAlertAction(title: Localizer.string(for: .adEditorEditAd), style: .default, handler: { _ in
-                //                self.presentAdViewer(currentAd, startInEditorMode: true)
+                self.presentAdViewer(currentAd, userInfo: userInfo, startInEditorMode: true)
             }))
             alert.addAction(UIAlertAction(title: Localizer.string(for: .adEditorDeleteAd), style: .destructive, handler: { _ in
-                //                self.indexPathUnderChange = indexPath
-                self.client.deleteAd(withId: currentAd.id)
+                self.client.deleteAd(withId: currentAd.id, userInfo: userInfo)
                 RootViewController.startLoadingIndicator()
             }))
         }

@@ -76,6 +76,9 @@ class UserPublicController: UITableViewController {
         let currentSection = infoPositions[section]
         
         if currentSection == .profiles {
+            if hideAllProfiles {
+                return min(profiles.count, profilesInTableInitialLimit + 1)
+            }
             return profiles.count
         } else if currentSection == .ads {
             return ads.count

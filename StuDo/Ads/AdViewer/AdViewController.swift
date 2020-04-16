@@ -112,6 +112,7 @@ class AdViewController: UIViewController {
     
     var currentState: AdViewControllerState
     
+    var clientUserInfo: [String: Any]? = nil
     
     // MARK: - ViewController Lifecycle
     
@@ -242,7 +243,7 @@ class AdViewController: UIViewController {
     
     private func deleteCurrentAd() {
         func deleteAd() {
-            client.deleteAd(withId: currentAd.id)
+            client.deleteAd(withId: currentAd.id, userInfo: clientUserInfo)
             RootViewController.startLoadingIndicator()
         }
         
@@ -260,6 +261,14 @@ class AdViewController: UIViewController {
     private func toggleBookmark() {
         client.bookmarkAd(withId: currentAd!.id)
         RootViewController.startLoadingIndicator()
+    }
+    
+    fileprivate func updateAdsVC() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+            if let adsVC = RootViewController.main.mainController.feedViewController.visibleViewController as? AdsViewController {
+                adsVC.requestUpdateForAllSections()
+            }
+        })
     }
     
     // MARK: Editing & Publishing
@@ -529,19 +538,9 @@ class AdViewController: UIViewController {
     @objc func moreButtonTapped(_ button: UIButton) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        if canEditAd {
-            let inviteAction = UIAlertAction(title: Localizer.string(for: .adEditorFindPeople), style: .default, handler: nil)
-            let editAction = UIAlertAction(title: Localizer.string(for: .adEditorEditAd), style: .default, handler: { _ in self.enableEditingState() } )
-            let deleteAction = UIAlertAction(title: Localizer.string(for: .adEditorDeleteAd), style: .destructive, handler: { _ in self.deleteCurrentAd() } )
-
-            actionSheet.addAction(inviteAction)
-            actionSheet.addAction(editAction)
-            actionSheet.addAction(deleteAction)
-        }
-        
         if currentAd.isFavorite {
             actionSheet.addAction(UIAlertAction(title: Localizer.string(for: .adEditorRemoveFromBookmarks), style: .default, handler: { _ in
-                
+                self.client.unbookmarkAd(withId: self.currentAd.id!)
                 RootViewController.startLoadingIndicator()
             }))
         } else {
@@ -549,6 +548,14 @@ class AdViewController: UIViewController {
                 self.client.bookmarkAd(withId: self.currentAd.id!)
                 RootViewController.startLoadingIndicator()
             }))
+        }
+        
+        if canEditAd {
+            let editAction = UIAlertAction(title: Localizer.string(for: .adEditorEditAd), style: .default, handler: { _ in self.enableEditingState() } )
+            let deleteAction = UIAlertAction(title: Localizer.string(for: .adEditorDeleteAd), style: .destructive, handler: { _ in self.deleteCurrentAd() } )
+
+            actionSheet.addAction(editAction)
+            actionSheet.addAction(deleteAction)
         }
         
         let cancelAction = UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil)
@@ -1046,7 +1053,7 @@ extension AdViewController: APIClientDelegate {
         RootViewController.stopLoadingIndicator(with: .success) {
             self.exitEditingState(shouldShowPrompt: false)
         }
-//        RootViewController.main.mainController.feedViewController.refreshAds()
+        updateAdsVC()
     }
     
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {
@@ -1057,15 +1064,17 @@ extension AdViewController: APIClientDelegate {
                 self.headerView.titleText = self.currentAd.name
             }
         }
-//        RootViewController.main.mainController.feedViewController.updateIndexUnderChange(updatedAd)
+        updateAdsVC()
     }
     
-    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {
+    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String, userInfo: [String: Any]? = nil) {
         RootViewController.stopLoadingIndicator(with: .success) {
             self.dismiss(animated: true, completion: nil)
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-//            RootViewController.main.mainController.feedViewController.removeIndexUnderChange()
+            if let adsVC = RootViewController.main.mainController.feedViewController.visibleViewController as? AdsViewController {
+                adsVC.apiClient(client, didDeleteAdWithId: adId, userInfo: userInfo)
+            }
         })
     }
     
@@ -1084,11 +1093,13 @@ extension AdViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String) {
         RootViewController.stopLoadingIndicator(with: .success)
         currentAd.isFavorite = true
+        updateAdsVC()
     }
     
-    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String) {
+    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String, userInfo: [String : Any]?) {
         RootViewController.stopLoadingIndicator(with: .success)
         currentAd.isFavorite = false
+        updateAdsVC()
     }
     
     func apiClient(_ client: APIClient, didDeleteCommentWithId commentId: String) {

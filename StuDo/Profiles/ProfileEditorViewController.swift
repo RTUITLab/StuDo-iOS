@@ -217,9 +217,7 @@ extension ProfileEditorViewController {
             cell.initialsLabel.text = initials
             cell.nameLabel.text = username
             cell.nameLabel.font = .preferredFont(for: .body, weight: .medium)
-            
-            cell.selectionStyle = .none
-                    
+                                
             cell.avatarViewSizeConstraint.constant = 40
             return cell
         }

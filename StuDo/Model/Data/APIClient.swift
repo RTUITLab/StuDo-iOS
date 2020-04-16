@@ -263,10 +263,10 @@ protocol APIClientDelegate: class {
 
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad)
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad)
-    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String)
+    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String, userInfo: [String: Any]?)
     
     func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String)
-    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String)
+    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String, userInfo: [String : Any]?)
     func apiClient(_ client: APIClient, didRecieveBookmarkedAds ads: [Ad])
     
     
@@ -316,11 +316,11 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
     func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String) {}
-    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String) {}
+    func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String, userInfo: [String : Any]?) {}
     func apiClient(_ client: APIClient, didRecieveBookmarkedAds ads: [Ad]) {}
     func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {}
     func apiClient(_ client: APIClient, didRecieveProfile profile: Profile) {}
-    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String) {}
+    func apiClient(_ client: APIClient, didDeleteAdWithId adId: String, userInfo: [String: Any]?) {}
     func apiClient(_ client: APIClient, didCreateProfile newProfile: Profile) {}
     func apiClient(_ client: APIClient, didUpdateProfile updatedProfile: Profile) {}
     func apiClient(_ client: APIClient, didDeleteProfileWithId profileID: String) {}
@@ -415,14 +415,13 @@ extension APIClient {
                     switch result {
                     case .success(let response):
                         try self.processLoginInfo(from: response)
+                        print("TOKEN REFRESHED")
                         for (request, completion) in APIClient.requestQueue {
                             self.perform(secureRequest: request, completion)
                         }
                         APIClient.requestQueue = []
-                    case .failure(let error):
-                        DispatchQueue.main.async {
-                            self.delegate?.apiClient(self, didFailRequest: request, withError: error)
-                        }
+                    case .failure(let _):
+                        RootViewController.main.logout(); return
                     }
                 }
             }
@@ -599,7 +598,7 @@ extension APIClient {
     }
     
     
-    func deleteAd(withId id: String) {
+    func deleteAd(withId id: String, userInfo: [String: Any]? = nil) {
         let request = APIRequest(method: .delete, path: "ad/\(id)")
         self.perform(secureRequest: request) { (result) in
             switch result {
@@ -609,7 +608,7 @@ extension APIClient {
                 }
                 
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didDeleteAdWithId: id)
+                    self.delegate?.apiClient(self, didDeleteAdWithId: id, userInfo: userInfo)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -661,7 +660,7 @@ extension APIClient {
         
     }
     
-    func unbookmarkAd(withId adId: String) {
+    func unbookmarkAd(withId adId: String, userInfo: [String: Any]? = nil) {
         
         let request =  APIRequest(method: .delete, path: "ad/bookmarks/\(adId)")
         
@@ -669,7 +668,7 @@ extension APIClient {
             switch result {
             case .success:
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didUnbookmarkAdWithId: adId)
+                    self.delegate?.apiClient(self, didUnbookmarkAdWithId: adId, userInfo: userInfo)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -1280,7 +1279,7 @@ extension APIClient {
         var profiles = [Profile]()
         for object in decodedJSON {
             let profile = try self.decodeProfile(from: object)
-            profiles.appen≠d(profile)
+            profiles.append(profile)
         }
         return profiles
     }

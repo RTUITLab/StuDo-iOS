@@ -10,21 +10,12 @@ import UIKit
 
 class AdNavigationView: UIView {
     
-    let collectionView: UICollectionView
+    var collectionView: UICollectionView!
     
     init() {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        layout.estimatedItemSize = CGSize(width: 80, height: 44)
-        
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = nil
-        collectionView.alwaysBounceHorizontal = true
-        
         super.init(frame: .zero)
-        
+        setupCollectionView()
+
         backgroundColor = nil
     }
     
@@ -33,6 +24,7 @@ class AdNavigationView: UIView {
     }
     
     var initialLayout = true
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         if initialLayout {
@@ -46,15 +38,40 @@ class AdNavigationView: UIView {
             blurView.topAnchor.constraint(equalTo: topAnchor).isActive = true
             blurView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
             
-            addSubview(collectionView)
-            collectionView.translatesAutoresizingMaskIntoConstraints = false
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-            collectionView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+            setupCollectionViewLayout()
             
             collectionView.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
         }
+    }
+    
+    
+    private func setupCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.estimatedItemSize = CGSize(width: 80, height: 44)
+        
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = nil
+        collectionView.alwaysBounceHorizontal = true
+    }
+    
+    private func setupCollectionViewLayout() {
+        
+        addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+    
+    public func reloadCollectionView() {
+        collectionView.removeFromSuperview()
+        collectionView = nil
+        setupCollectionView()
+        setupCollectionViewLayout()
     }
 
 }
@@ -88,6 +105,10 @@ class AdNavigationCell: UICollectionViewCell {
         highlightView.layer.cornerRadius = 2
         highlightView.isHidden = true
 
+    }
+    
+    override func prepareForReuse() {
+        highlightView.backgroundColor = .globalTintColor
     }
     
     required init?(coder: NSCoder) {
