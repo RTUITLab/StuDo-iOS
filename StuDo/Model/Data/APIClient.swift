@@ -226,7 +226,8 @@ class APIClient {
                 guard let httpResponse = response as? HTTPURLResponse else {
                     throw APIError.requestFailed
                 }
-                guard httpResponse.statusCode != 402 else {
+                guard httpResponse.statusCode != 401 else {
+                    print(request.path)
                     RootViewController.main.logout()
                     return
                 }
@@ -246,7 +247,6 @@ class APIClient {
     
     private func perform(secureRequest request: APIRequest, _ completion: @escaping APIClientCompletion) {
         guard let token = APIClient.accessToken else { return }
-        
         let tokenHeader = HTTPHeader(field: "Authorization", value: "Bearer " + token)
         
         var requestCopy = request

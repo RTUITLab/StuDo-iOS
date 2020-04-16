@@ -43,7 +43,7 @@ class RootViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         gradientLayer = CAGradientLayer()
         gradientLayer.colors = [darkBlue.cgColor, lightBlue.cgColor]
@@ -51,7 +51,7 @@ class RootViewController: UIViewController {
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         gradientLayer.frame = view.bounds
         
-        view.layer.addSublayer(gradientLayer)
+//        view.layer.addSublayer(gradientLayer)
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 10)) {
             self.proceed()
@@ -121,7 +121,9 @@ class RootViewController: UIViewController {
     
     func login() {
         gradientLayer.removeFromSuperlayer()
-        authorizationController.dismiss(animated: true, completion: nil)
+        if authorizationController != nil {
+            authorizationController.dismiss(animated: true, completion: nil)
+        }
         proceed()
     }
     
@@ -130,12 +132,17 @@ class RootViewController: UIViewController {
     
     func logout() {
         
-        PersistentStore.cleanUserRelatedPersistentData()
+        DispatchQueue.main.async {
+            PersistentStore.cleanUserRelatedPersistentData()
+            
+            self.view.layer.addSublayer(self.gradientLayer)
+            
+            if self.mainController != nil {
+                self.mainController.dismiss(animated: true, completion: nil)
+            }
+            self.proceed()
+        }
         
-        view.layer.addSublayer(gradientLayer)
-
-        mainController.dismiss(animated: true, completion: nil)
-        proceed()
     }
     
     

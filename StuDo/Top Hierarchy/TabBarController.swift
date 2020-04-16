@@ -34,9 +34,6 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         
         client.delegate = self
         
-        let currentUserId = PersistentStore.shared.user!.id!
-        client.getProfiles(forUserWithId: currentUserId)
-        
         delegate = self
 
         feedViewController = FeedViewController()

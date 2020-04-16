@@ -15,6 +15,7 @@ class BackgroundInfoView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        isHidden = true
         
         titleLabel.textAlignment = .center
         titleLabel.font = .preferredFont(forTextStyle: .headline)

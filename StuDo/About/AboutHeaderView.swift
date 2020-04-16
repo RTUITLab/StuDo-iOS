@@ -15,13 +15,13 @@ class AboutHeaderView: UITableViewHeaderFooterView {
 
     func setVersion(_ version: String) {
         let attributedString = NSMutableAttributedString(string: Localizer.string(for: .aboutVersion), attributes: [
-            .foregroundColor: UIColor.lightGray,
+            .foregroundColor: UIColor.secondaryLabel,
             .font: UIFont.systemFont(ofSize: 16, weight: .regular)
             ])
         
         let versionNumberString = NSAttributedString(string: " \(version)", attributes: [
-            .foregroundColor: UIColor.lightGray,
-            .font: UIFont.systemFont(ofSize: 16, weight: .bold)
+            .foregroundColor: UIColor.secondaryLabel,
+            .font: UIFont.systemFont(ofSize: 16, weight: .medium)
             ])
         
         attributedString.append(versionNumberString)
@@ -34,11 +34,11 @@ class AboutHeaderView: UITableViewHeaderFooterView {
         contentView.addSubview(logoImage)
         logoImage.translatesAutoresizingMaskIntoConstraints = false
         logoImage.heightAnchor.constraint(equalToConstant: 180).isActive = true
-        logoImage.widthAnchor.constraint(equalTo: logoImage.heightAnchor).isActive = true
+//        logoImage.widthAnchor.constraint(equalTo: logoImage.heightAnchor).isActive = true
         logoImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18).isActive = true
         logoImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         
-        logoImage.image = #imageLiteral(resourceName: "rtu-itlab-logo-blue")
+        logoImage.image = #imageLiteral(resourceName: "logo")
         logoImage.contentMode = .scaleAspectFit
         
         

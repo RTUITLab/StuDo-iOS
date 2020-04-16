@@ -106,9 +106,11 @@ class FeedViewController: UIViewController {
         
         switch currentMode {
         case .ads:
-            visibleViewController = UICollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+            visibleViewController = AdsViewController()
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleAllAds)
         case .profiles:
             visibleViewController = PublicProfilesViewController(style: .plain)
+            titleView.titleLabel.text = Localizer.string(for: .feedTitleProfiles)
         default:
             break
         }

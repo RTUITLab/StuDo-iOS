@@ -150,10 +150,11 @@ class AuthorizationViewController: UIViewController {
         view.addSubview(logoImageView)
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-        logoImageView.widthAnchor.constraint(equalToConstant: logoSize).isActive = true
+//        logoImageView.widthAnchor.constraint(equalToConstant: logoSize).isActive = true
         logoImageView.heightAnchor.constraint(equalToConstant: logoSize).isActive = true
         
-        logoImageView.image = #imageLiteral(resourceName: "rtu-itlab-logo")
+        logoImageView.image = #imageLiteral(resourceName: "logo-white")
+        logoImageView.contentMode = .scaleAspectFit
         
         
         
