@@ -7,12 +7,7 @@
 //
 
 import UIKit
-
-enum KeychainError: Error {
-    case noPassword
-    case unexpectedPasswordData
-    case unhandledError(status: OSStatus)
-}
+import JWTDecode
 
 
 // MARK:- Request
@@ -106,7 +101,11 @@ enum APIResult<Body> {
 }
 
 class APIClient {
+    
     typealias APIClientCompletion = (APIResult<Data?>) throws -> ()
+    
+    static private var shouldRefreshTokens = false
+    static private var requestQueue = [(APIRequest, APIClientCompletion)]()
     
     private let session = URLSession.shared
     #if DEBUG
@@ -115,89 +114,61 @@ class APIClient {
     private let baseURL = URL(string: "https://studo.rtuitlab.ru/api/")!
     #endif
 
-    
     weak var delegate: APIClientDelegate?
     
+    static private let keychainAccessTokenKey: String = "ru.rtuitlab.studo.accessTokenData"
+    static private let keychainRefreshTokenKey: String = "ru.rtuitlab.studo.refreshTokenData"
     
-
-    // Stored for migration issues
-//    static private let keychainTokenLabel: String = "tokenAccessData"
-    
-    static private let keychainTokenLabel: String = "ru.rtuitlab.studo.tokenAccessData"
-    static private var accessToken: String?
-    static private var isInitialCall = true
-    
-    static private func searchTokenInKeychain(item: inout CFTypeRef?) throws {
-        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-                                    kSecAttrLabel as String: APIClient.keychainTokenLabel,
-                                    kSecMatchLimit as String: kSecMatchLimitOne,
-                                    kSecReturnAttributes as String: true,
-                                    kSecReturnData as String: true]
-        let status = SecItemCopyMatching(query as CFDictionary, &item)
-        guard status != errSecItemNotFound else { throw KeychainError.noPassword }
-        guard status == errSecSuccess else { throw KeychainError.unhandledError(status: status) }
-    }
-    
-    static private func saveAccessTokenToKeychain(accessToken: String) throws {
-        guard let tokenData = accessToken.data(using: .utf8) else { return }
-        
-        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-                                    kSecAttrLabel as String: keychainTokenLabel,
-                                    kSecValueData as String: tokenData]
-        
-        let status = SecItemAdd(query as CFDictionary, nil)
-        guard status == errSecSuccess else { throw KeychainError.unhandledError(status: status) }
-        APIClient.accessToken = accessToken
+    static private func tokenIsValid(accessToken: String) -> Bool {
+        guard let decodedJWT = try? JWTDecode.decode(jwt: accessToken) else { return false }
+        let error = IDTokenValidation(issuer: decodedJWT.body["iss"] as! String, audience: decodedJWT.body["aud"] as! String).validate(decodedJWT)
+        return error == nil
         
     }
-
-    static private func restoreAccessTokenFromKeychain() throws {
-        
-        var item: CFTypeRef?
-        try searchTokenInKeychain(item: &item)
-        
-        guard let existingItem = item as? [String : Any],
-            let tokenData = existingItem[kSecValueData as String] as? Data,
-            let token = String(data: tokenData, encoding: String.Encoding.utf8)
-            else {
-                throw KeychainError.unexpectedPasswordData
-        }
-        
-        APIClient.accessToken = token
-    }
     
-    
-    static func deleteAccessTokenFromKeychain() throws {
-        var item: CFTypeRef?
-        try searchTokenInKeychain(item: &item)
-        
-        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-                                    kSecAttrLabel as String: APIClient.keychainTokenLabel]
-        var status = SecItemCopyMatching(query as CFDictionary, &item)
-        guard status != errSecItemNotFound else { throw KeychainError.noPassword }
-        guard status == errSecSuccess else { throw KeychainError.unhandledError(status: status) }
-        
-        status = SecItemDelete(query as CFDictionary)
-        guard status == errSecSuccess || status == errSecItemNotFound else { throw KeychainError.unhandledError(status: status) }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    init() {
-        if APIClient.isInitialCall {
-            APIClient.isInitialCall = false
-            try? APIClient.restoreAccessTokenFromKeychain()
+    static private func update(accessToken: String, refreshToken: String) {
+        let aTokenItem = tokenItem(forKey: keychainAccessTokenKey)
+        let rTokenItem = tokenItem(forKey: keychainRefreshTokenKey)
+        do {
+            try aTokenItem.savePassword(accessToken)
+            try rTokenItem.savePassword(refreshToken)
+            print("Tokens updated")
+        } catch {
+            print("Tokens NOT updated")
         }
     }
     
+    static private func getTokens() -> (accessToken: String, refreshToken: String)? {
+        let aTokenItem = tokenItem(forKey: keychainAccessTokenKey)
+        let rTokenItem = tokenItem(forKey: keychainRefreshTokenKey)
+        do {
+            let aToken = try aTokenItem.readPassword()
+            let rToken = try rTokenItem.readPassword()
+            return (aToken, rToken)
+        } catch {
+            print("Tokens NOT read")
+            return nil
+        }
+    }
     
+    static func deleteTokens() {
+        let aTokenItem = tokenItem(forKey: keychainAccessTokenKey)
+        let rTokenItem = tokenItem(forKey: keychainRefreshTokenKey)
+        do {
+            try aTokenItem.deleteItem()
+            try rTokenItem.deleteItem()
+        } catch {
+            print("Tokens NOT deleted")
+        }
+    }
     
-    
+    static private func tokenItem(forKey key: String) -> KeychainPasswordItem {
+        return KeychainPasswordItem(
+            service: KeychainPasswordItem.KeychainConfiguration.serviceName,
+            account: key,
+            accessGroup: KeychainPasswordItem.KeychainConfiguration.accessGroup
+        )
+    }
     
     
     private func perform(_ request: APIRequest, _ completion: @escaping APIClientCompletion) {
@@ -246,17 +217,26 @@ class APIClient {
     }
     
     private func perform(secureRequest request: APIRequest, _ completion: @escaping APIClientCompletion) {
-        guard let token = APIClient.accessToken else { return }
-        let tokenHeader = HTTPHeader(field: "Authorization", value: "Bearer " + token)
-        
-        var requestCopy = request
-        if requestCopy.headers != nil {
-            requestCopy.headers!.append(tokenHeader)
-        } else {
-            requestCopy.headers = [tokenHeader]
+        guard let tokens = APIClient.getTokens(),
+            APIClient.tokenIsValid(accessToken: tokens.accessToken) else {
+                APIClient.requestQueue.append((request, completion))
+                APIClient.shouldRefreshTokens = true
+                refreshTokens(); return
         }
         
-        self.perform(requestCopy, completion)
+        DispatchQueue.global(qos: .userInitiated).sync {
+            let tokenHeader = HTTPHeader(field: "Authorization", value: "Bearer " + tokens.accessToken)
+            
+            var requestCopy = request
+            if requestCopy.headers != nil {
+                requestCopy.headers!.append(tokenHeader)
+            } else {
+                requestCopy.headers = [tokenHeader]
+            }
+            
+            self.perform(requestCopy, completion)
+        }
+        
     }
 
     
@@ -378,7 +358,7 @@ extension APIClient {
     // ==========================
     
     func register(user: User) {
-        if let request = try? APIRequest(method: .post, path: "auth/register", body: user.registerDictionaryFormat) {
+        if let request = try? APIRequest(method: .post, path: "auth/register/", body: user.registerDictionaryFormat) {
             self.perform(request) { (result) in
                 switch result {
                 case .success(_):
@@ -400,20 +380,11 @@ extension APIClient {
     
     
     func login(withCredentials creds: Credentials) {
-        if let request = try? APIRequest(method: .post, path: "auth/login", body: creds) {
+        if let request = try? APIRequest(method: .post, path: "auth/login/", body: creds) {
             self.perform(request) { [self] (result) in
                 switch result {
                 case .success(let response):
-                    if let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                        guard let userDictionary = decodedJSON["user"] as? [String: Any] else {
-                            throw APIError.decodingFailure
-                        }
-                        guard let accessToken = decodedJSON["accessToken"] as? String else {
-                            throw APIError.decodingFailure
-                        }
-                        
-                        try? APIClient.saveAccessTokenToKeychain(accessToken: accessToken)
-                        let user = try self.decode(userDictionary: userDictionary)
+                    if let user = try self.processLoginInfo(from: response) {
                         DispatchQueue.main.async {
                             self.delegate?.apiClient(self, didFinishLoginRequest: request, andRecievedUser: user)
                         }
@@ -428,6 +399,41 @@ extension APIClient {
     }
     
     
+    private func refreshTokens() {
+        DispatchQueue.global(qos: .userInitiated).sync {
+            guard let tokens = APIClient.getTokens() else {
+                RootViewController.main.logout(); return
+            }
+            guard APIClient.shouldRefreshTokens else {
+                return
+            }
+            APIClient.shouldRefreshTokens = false
+            
+            let dictionary = ["RefreshToken": tokens.refreshToken]
+            if let request = try? APIRequest(method: .post, path: "refresh/", body: dictionary) {
+                self.perform(request) { [self] (result) in
+                    switch result {
+                    case .success(let response):
+                        try self.processLoginInfo(from: response)
+                        for (request, completion) in APIClient.requestQueue {
+                            self.perform(secureRequest: request, completion)
+                        }
+                        APIClient.requestQueue = []
+                    case .failure(let error):
+                        DispatchQueue.main.async {
+                            self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                        }
+                    }
+                }
+            }
+            
+        }
+
+    }
+    
+    
+    
+    
     
     
     
@@ -440,7 +446,7 @@ extension APIClient {
     
     
     func getAds() {
-        let request = APIRequest(method: .get, path: "ad")
+        let request = APIRequest(method: .get, path: "ad/")
         self.perform(secureRequest: request) { (result) in
             switch result {
             case .success(let response):
@@ -533,7 +539,7 @@ extension APIClient {
         
         let createForm = AdCreateForm(name: ad.name, description: ad.description!, shortDescription: ad.shortDescription, beginTime: beginTime, endTime: endTime, organizationId: ad.organizationId)
         
-        if let request = try? APIRequest(method: .post, path: "ad", body: createForm) {
+        if let request = try? APIRequest(method: .post, path: "ad/", body: createForm) {
             self.perform(secureRequest: request) { (result) in
                 switch result {
                 case .success(let response):
@@ -568,7 +574,7 @@ extension APIClient {
         
         let updateForm = AdUpdateForm(id: ad.id, name: ad.name, description: ad.description!, shortDescription: ad.shortDescription, beginTime: beginTime, endTime: endTime)
         
-        if let request = try? APIRequest(method: .put, path: "ad", body: updateForm) {
+        if let request = try? APIRequest(method: .put, path: "ad/", body: updateForm) {
             self.perform(secureRequest: request) { (result) in
                 switch result {
                 case .success(let response):
@@ -687,7 +693,7 @@ extension APIClient {
     }
     
     func getOrganizations(_ filterItems: [OrganizationRequestOption]? = nil) {
-        var request = APIRequest(method: .get, path: "organization")
+        var request = APIRequest(method: .get, path: "organization/")
         
         if let filterItems = filterItems, !filterItems.isEmpty {
             var queries = [URLQueryItem]()
@@ -1274,7 +1280,7 @@ extension APIClient {
         var profiles = [Profile]()
         for object in decodedJSON {
             let profile = try self.decodeProfile(from: object)
-            profiles.append(profile)
+            profiles.appen≠d(profile)
         }
         return profiles
     }
@@ -1305,6 +1311,28 @@ extension APIClient {
         }
         
         return organizationMembers
+    }
+    
+    @discardableResult fileprivate func processLoginInfo(from response: APIResponse<Data?>) throws -> User? {
+        if let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+            guard let userDictionary = decodedJSON["user"] as? [String: Any] else {
+                throw APIError.decodingFailure
+            }
+            guard let accessToken = decodedJSON["accessToken"] as? String else {
+                throw APIError.decodingFailure
+            }
+            
+            guard let refreshToken = decodedJSON["refreshToken"] as? String else {
+                throw APIError.decodingFailure
+            }
+            
+            APIClient.update(accessToken: accessToken, refreshToken: refreshToken)
+            
+            let user = try self.decode(userDictionary: userDictionary)
+            PersistentStore.shared.user = user
+            return user
+        }
+        return nil
     }
     
     

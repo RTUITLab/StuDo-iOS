@@ -585,7 +585,7 @@ class AuthorizationViewController: UIViewController {
             let credentials = Credentials(email: email, password: password)
             client.login(withCredentials: credentials)
         } else if currentMode == .signUp {
-            let newUser = User(id: nil, firstName: name, lastName: surname, email: email, studentID: nil, password: password)
+            let newUser = User(id: nil, firstName: name, lastName: surname, email: email, studentID: "", password: password)
             client.register(user: newUser)
         }
         
@@ -776,9 +776,6 @@ extension AuthorizationViewController: APIClientDelegate {
     }
     
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {
-        
-        PersistentStore.shared.user = user
-        
         RootViewController.stopLoadingIndicator(with: .success) {
             RootViewController.main.login()
         }

@@ -10,6 +10,7 @@
 		18EB448542738C85008954F8 /* Pods_StuDo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 037C607D7A4FCD956CCB5C23 /* Pods_StuDo.framework */; };
 		34445C941AC774AB402BEC54 /* Pods_StuDoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33751538F6BBDCA5F378E119 /* Pods_StuDoTests.framework */; };
 		49034AF0232B9BE800749D18 /* UserPublicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49034AEF232B9BE800749D18 /* UserPublicController.swift */; };
+		49127B1824488E080074FE09 /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49127B1724488E080074FE09 /* KeychainPasswordItem.swift */; };
 		491DA7D923F206BC005892BD /* EditableAdBodyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DA7D723F206BC005892BD /* EditableAdBodyCell.swift */; };
 		491DA7DA23F206BC005892BD /* EditableAdBodyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491DA7D823F206BC005892BD /* EditableAdBodyCell.xib */; };
 		491DCA8C231C089D00A78111 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491DCA8B231C089D00A78111 /* UIColorExtension.swift */; };
@@ -112,6 +113,7 @@
 		2FE429D61770B68559E85652 /* Pods-StuDoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StuDoUITests.debug.xcconfig"; path = "Target Support Files/Pods-StuDoUITests/Pods-StuDoUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		33751538F6BBDCA5F378E119 /* Pods_StuDoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StuDoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		49034AEF232B9BE800749D18 /* UserPublicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPublicController.swift; sourceTree = "<group>"; };
+		49127B1724488E080074FE09 /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
 		491DA7D723F206BC005892BD /* EditableAdBodyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableAdBodyCell.swift; sourceTree = "<group>"; };
 		491DA7D823F206BC005892BD /* EditableAdBodyCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditableAdBodyCell.xib; sourceTree = "<group>"; };
 		491DCA8B231C089D00A78111 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				493C5A4F22A189370032AB6E /* APIClient.swift */,
+				49127B1724488E080074FE09 /* KeychainPasswordItem.swift */,
 				4928D43522A3ED9700F4D703 /* DataModel.swift */,
 				49E2DB1522FDB4E20015DCD8 /* DataChecker.swift */,
 			);
@@ -789,6 +792,7 @@
 				49BBB9992306BCC700883EB9 /* FoldingTitleView.swift in Sources */,
 				49E2DB1022FDB22B0015DCD8 /* UITableViewExtension.swift in Sources */,
 				493E7D29232E2BB600278DAF /* Notifications.swift in Sources */,
+				49127B1824488E080074FE09 /* KeychainPasswordItem.swift in Sources */,
 				493F90EA24474090006EBB99 /* PublicProfilesViewController.swift in Sources */,
 				49DEADCE2302EE440031B3DF /* NewAdButton.swift in Sources */,
 				499EE3DC24375D9800793F36 /* ApplicantsViewController.swift in Sources */,

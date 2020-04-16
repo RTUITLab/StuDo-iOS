@@ -125,8 +125,10 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     var tabBarIsHidden = false
     
+    private var initialTabBarFrame: CGRect?
     override func hideTabBar() {
         guard tabBarIsHidden == false else { return }
+        initialTabBarFrame = tabBar.frame
         
         let offsetTransform = CGAffineTransform(translationX: 0, y: view.frame.height / 2)
         
@@ -143,12 +145,17 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     override func showTabBar() {
         guard tabBarIsHidden == true else { return }
         
+        if let initialFrame = initialTabBarFrame {
+            tabBar.frame = initialFrame
+        }
+        
         self.tabBar.isHidden = false
         self.actionButton.isHidden = false
-        
+                
         UIView.animate(withDuration: showHideAnimationDuration) {
             self.tabBar.transform = .identity
             self.actionButton.transform = .identity
+            print(self.tabBar.frame)
         }
         
         tabBarIsHidden = false

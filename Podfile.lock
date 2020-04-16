@@ -1,16 +1,21 @@
 PODS:
+  - JWTDecode (2.4.1)
   - MarkdownKit (1.5)
 
 DEPENDENCIES:
+  - JWTDecode (~> 2.4)
   - MarkdownKit
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - MarkdownKit
+  trunk:
+    - JWTDecode
 
 SPEC CHECKSUMS:
+  JWTDecode: 4bd4da0cdf0f8154fd467fa48499f34ec057fb88
   MarkdownKit: 379028e9cd3ebf05ccac87205cd9aead446159d4
 
-PODFILE CHECKSUM: 080cbad942e7fc9ccec14e3c7ea22c967c8ddbf9
+PODFILE CHECKSUM: 99928923488188ddc6e4d1b45624a786283f4225
 
 COCOAPODS: 1.8.4
