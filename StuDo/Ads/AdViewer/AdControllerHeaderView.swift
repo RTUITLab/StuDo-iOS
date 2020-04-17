@@ -130,6 +130,7 @@ class AdControllerHeaderView: UIView {
     
     func togglePublishButton(isEnabled: Bool) {
         publishButton.tintColor = isEnabled ? .globalTintColor : .lightGray
+        publishButton.isEnabled = isEnabled
     }
     
     var showEditingControls = false {

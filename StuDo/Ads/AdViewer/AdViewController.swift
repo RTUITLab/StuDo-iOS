@@ -1080,6 +1080,7 @@ extension AdViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         RootViewController.stopLoadingIndicator(with: .fail)
+        commentInputTextView.isEditable = true
     }
     
     func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String) {
