@@ -24,4 +24,5 @@ Create ad for event           |  Find the events for you
 #### Libraries Used
 
 - [MarkdownKit](https://github.com/bmoliveira/MarkdownKit) by Bruno Oliveira [@bmoliveira](https://github.com/bmoliveira)
+- [JWTDecode](https://github.com/auth0/JWTDecode.swift) by [@Auth0](https://github.com/auth0)
 

@@ -107,13 +107,15 @@ class AdsViewController: UICollectionViewController {
         collectionView.reloadData()
     }
     
-    private func reloadTable(for index: Int) {
+    private func reloadTable(for index: Int, fullReload: Bool = false) {
         DispatchQueue.main.async {
             if let cell = self.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? CollectionViewCellWithTableView {
                 print("updated section: \(index)")
-                cell.tableView.reloadData()
                 cell.tableView.backgroundView?.isHidden = !self.feedItems[index].isEmpty
                 cell.tableView.refreshControl?.endRefreshing()
+                if fullReload {
+                    cell.tableView.reloadData()
+                }
             }
         }
     }
@@ -122,9 +124,7 @@ class AdsViewController: UICollectionViewController {
         isInitialTableViewLoad = false
         let index = adSection.rawValue
         feedItems[index] = ads
-        if shouldUpdateTable {
-            reloadTable(for: index)
-        }
+        reloadTable(for: index, fullReload: shouldUpdateTable)
     }
     
     fileprivate func requestUpdate(adSection: AdSection) {
