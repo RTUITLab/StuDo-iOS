@@ -637,9 +637,14 @@ class AuthorizationViewController: UIViewController {
             self.additionalInfoContainerView.alpha = additionalInfoContentsAlpha
             self.forgotPasswordButton.alpha = forgotPasswordButtonAlpha
         }, completion: { _ in
-            self.proceedButtton.setTitle(proceedButtonTitle, for: .normal)
-            self.changeModeButton.setTitle(changeModeButtonTitle, for: .normal)
+            
         })
+        UIView.transition(with: self.proceedButtton, duration: 0.4, options: .transitionCrossDissolve, animations: {
+            self.proceedButtton.setTitle(proceedButtonTitle, for: .normal)
+        }, completion: nil)
+        UIView.transition(with: self.proceedButtton, duration: 0.4, options: .transitionCrossDissolve, animations: {
+            self.changeModeButton.setTitle(changeModeButtonTitle, for: .normal)
+        }, completion: nil)
     }
     
     

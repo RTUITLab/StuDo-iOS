@@ -410,7 +410,7 @@ extension APIClient {
             APIClient.shouldRefreshTokens = false
             
             let dictionary = ["RefreshToken": tokens.refreshToken]
-            if let request = try? APIRequest(method: .post, path: "refresh/", body: dictionary) {
+            if let request = try? APIRequest(method: .post, path: "auth/refresh/", body: dictionary) {
                 self.perform(request) { [self] (result) in
                     switch result {
                     case .success(let response):
@@ -418,6 +418,7 @@ extension APIClient {
                         print("TOKEN REFRESHED")
                         for (request, completion) in APIClient.requestQueue {
                             self.perform(secureRequest: request, completion)
+                            print("PERFORMING AGAIN \(request.path)")
                         }
                         APIClient.requestQueue = []
                     case .failure(let _):
