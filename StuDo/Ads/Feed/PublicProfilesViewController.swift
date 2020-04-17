@@ -35,6 +35,7 @@ class PublicProfilesViewController: UITableViewController {
         requestDataRefresh()
         
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(forceUpdate(notification:)), name: AppDelegateNotification.forceDataUpdate.name, object: nil)
         
         refreshControl = UIRefreshControl()
         refreshControl!.addTarget(self, action: #selector(requestDataRefresh), for: .valueChanged)
@@ -69,6 +70,10 @@ class PublicProfilesViewController: UITableViewController {
         navigationItem.title = Localizer.string(for: .back)
         updateBackgroundInfoView()
         tableView.reloadData()
+    }
+    
+    @objc private func forceUpdate(notification: Notification) {
+        requestDataRefresh()
     }
 
     // MARK: - Table view data source

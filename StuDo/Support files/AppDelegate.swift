@@ -19,4 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        NotificationCenter.default.post(name: AppDelegateNotification.forceDataUpdate.name, object: nil)
+    }
+}
+
+
+enum AppDelegateNotification: String, NotificationName {
+    case forceDataUpdate
 }

@@ -64,6 +64,7 @@ class AdsViewController: UICollectionViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange(notification:)), name: PersistentStoreNotification.themeDidChange.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(forceUpdate(notification:)), name: AppDelegateNotification.forceDataUpdate.name, object: nil)
     }
     
     deinit {
@@ -214,6 +215,10 @@ class AdsViewController: UICollectionViewController {
         adNavigationView.reloadCollectionView()
         setupAdNavigationCollectionView()
         reloadAllTables()
+    }
+    
+    @objc private func forceUpdate(notification: Notification) {
+        requestUpdateForAllSections()
     }
     
     @objc private func refreshTriggered(_ refreshControl: UIRefreshControl) {

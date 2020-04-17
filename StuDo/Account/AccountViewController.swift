@@ -65,19 +65,22 @@ class AccountViewController: UIViewController {
         navigationItem.title = Localizer.string(for: .accountTitle)
         navigationItem.largeTitleDisplayMode = .never
         
-        if ownProfiles.isEmpty {
-            let currentUserId = PersistentStore.shared.user!.id!
-            client.getProfiles(forUserWithId: currentUserId)
-        }
-        
-        
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(_:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(forceUpdate(notification:)), name: AppDelegateNotification.forceDataUpdate.name, object: nil)
+        
+        requestDataUpdate()
         
     }
     
     deinit {
         print("AccountViewController deinitialized")
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    fileprivate func requestDataUpdate() {
+        let currentUserId = PersistentStore.shared.user!.id!
+        client.getProfiles(forUserWithId: currentUserId)
+        client.getUser(id: currentUserId)
     }
     
     
@@ -91,7 +94,6 @@ class AccountViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         tabBarController?.showTabBar()
-        client.getUser(id: PersistentStore.shared.user!.id!)
     }
     
     @objc func cellButtonTapped(_ button: UIButton) {
@@ -138,8 +140,7 @@ extension AccountViewController: APIClientDelegate {
     
     
     func apiClient(_ client: APIClient, didRecieveUser user: User) {
-        PersistentStore.shared.user = user
-        emailLabel.text = user.email
+        tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
     }
     
 }
@@ -393,5 +394,9 @@ extension AccountViewController {
     @objc func languageDidChange(_ nofication: Notification) {
         tableView.reloadData()
         navigationItem.title = Localizer.string(for: .accountTitle)
+    }
+    
+    @objc private func forceUpdate(notification: Notification) {
+        requestDataUpdate()
     }
 }

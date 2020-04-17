@@ -305,6 +305,7 @@ extension AccountDetailViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didChangeUserInfo newUserInfo: (firstName: String, lastName: String, studentID: String)) {
         let cUser = PersistentStore.shared.user! // currentUser
         PersistentStore.shared.user = User(id: cUser.id, firstName: newUserInfo.firstName, lastName: newUserInfo.lastName, email: cUser.email, studentID: newUserInfo.studentID, password: nil)
+        NotificationCenter.default.post(name: AppDelegateNotification.forceDataUpdate.name, object: nil)
         
         RootViewController.stopLoadingIndicator(with: .success) {
             if self.navigationController?.visibleViewController === self {
