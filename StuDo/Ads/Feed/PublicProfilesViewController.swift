@@ -114,7 +114,7 @@ extension PublicProfilesViewController: APIClientDelegate {
         RootViewController.stopLoadingIndicator(with: .fail)
     }
     
-    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {
+    func apiClient(_ client: APIClient, didReceiveProfiles profiles: [Profile]) {
         set(profiles)
         refreshControl?.endRefreshing()
     }

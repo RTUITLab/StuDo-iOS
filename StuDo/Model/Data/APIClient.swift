@@ -252,10 +252,10 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User)
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User)
     
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad])
-    func apiClient(_ client: APIClient, didRecieveAd ad: Ad)
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String)
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String)
+    func apiClient(_ client: APIClient, didReceiveAds ads: [Ad])
+    func apiClient(_ client: APIClient, didReceiveAd ad: Ad)
+    func apiClient(_ client: APIClient, didReceiveAds ads: [Ad], forUserWithId: String)
+    func apiClient(_ client: APIClient, didReceiveAds ads: [Ad], forOrganizationWithId: String)
     
     func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String)
     func apiClient(_ client: APIClient, didDeleteCommentWithId commentId: String)
@@ -267,11 +267,11 @@ protocol APIClientDelegate: class {
     
     func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String)
     func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String, userInfo: [String : Any]?)
-    func apiClient(_ client: APIClient, didRecieveBookmarkedAds ads: [Ad])
+    func apiClient(_ client: APIClient, didReceiveBookmarkedAds ads: [Ad])
     
     
-    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile])
-    func apiClient(_ client: APIClient, didRecieveProfile profile: Profile)
+    func apiClient(_ client: APIClient, didReceiveProfiles profiles: [Profile])
+    func apiClient(_ client: APIClient, didReceiveProfile profile: Profile)
     
     func apiClient(_ client: APIClient, didCreateProfile newProfile: Profile)
     func apiClient(_ client: APIClient, didUpdateProfile updatedProfile: Profile)
@@ -285,10 +285,10 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest)
     func apiClient(_ client: APIClient, didChangeUserInfo newUserInfo: (firstName: String, lastName: String, studentID: String))
     
-    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?)
-    func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization)
-    func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember])
-    func apiClient(_ client: APIClient, didRecieveOrganizationWishers wishers: [OrganizationMember])
+    func apiClient(_ client: APIClient, didReceiveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?)
+    func apiClient(_ client: APIClient, didReceiveOrganization organization: Organization)
+    func apiClient(_ client: APIClient, didReceiveOrganizationMembers members: [OrganizationMember])
+    func apiClient(_ client: APIClient, didReceiveOrganizationWishers wishers: [OrganizationMember])
     func apiClientDidSendApplyOrganizationRequest(_ client: APIClient)
     func apiClientDidAttachOrganizationRight(_ client: APIClient, _ right: OrganizationMemberRight, forMember member: OrganizationMember)
     func apiClientDidDetachOrganizationRight(_ client: APIClient, _ right: OrganizationMemberRight, forMember member: OrganizationMember)
@@ -296,7 +296,7 @@ protocol APIClientDelegate: class {
     func apiClient(_ client: APIClient, didUpdateOrganization updatedOrganization: Organization)
     func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String)
     
-    func apiClient(_ client: APIClient, didRecieveUser user: User)
+    func apiClient(_ client: APIClient, didReceiveUser user: User)
 
 }
 
@@ -307,19 +307,19 @@ extension APIClientDelegate {
     
     func apiClient(_ client: APIClient, didFinishRegistrationRequest request: APIRequest, andRecievedUser user: User) {}
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {}
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {}
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String) {}
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String) {}
-    func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {}
+    func apiClient(_ client: APIClient, didReceiveAds ads: [Ad]) {}
+    func apiClient(_ client: APIClient, didReceiveAds ads: [Ad], forUserWithId: String) {}
+    func apiClient(_ client: APIClient, didReceiveAds ads: [Ad], forOrganizationWithId: String) {}
+    func apiClient(_ client: APIClient, didReceiveAd ad: Ad) {}
     func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String) {}
     func apiClient(_ client: APIClient, didDeleteCommentWithId commentId: String) {}
     func apiClient(_ client: APIClient, didCreateAd newAd: Ad) {}
     func apiClient(_ client: APIClient, didUpdateAd updatedAd: Ad) {}
     func apiClient(_ client: APIClient, didBookmarkAdWithId adId: String) {}
     func apiClient(_ client: APIClient, didUnbookmarkAdWithId adId: String, userInfo: [String : Any]?) {}
-    func apiClient(_ client: APIClient, didRecieveBookmarkedAds ads: [Ad]) {}
-    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {}
-    func apiClient(_ client: APIClient, didRecieveProfile profile: Profile) {}
+    func apiClient(_ client: APIClient, didReceiveBookmarkedAds ads: [Ad]) {}
+    func apiClient(_ client: APIClient, didReceiveProfiles profiles: [Profile]) {}
+    func apiClient(_ client: APIClient, didReceiveProfile profile: Profile) {}
     func apiClient(_ client: APIClient, didDeleteAdWithId adId: String, userInfo: [String: Any]?) {}
     func apiClient(_ client: APIClient, didCreateProfile newProfile: Profile) {}
     func apiClient(_ client: APIClient, didUpdateProfile updatedProfile: Profile) {}
@@ -328,17 +328,17 @@ extension APIClientDelegate {
     func apiClient(_ client: APIClient, didChangePasswordWithRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangeEmailWithRequest: APIRequest) {}
     func apiClient(_ client: APIClient, didChangeUserInfo newUserInfo: (firstName: String, lastName: String, studentID: String)) {}
-    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {}
-    func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {}
-    func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember]) {}
-    func apiClient(_ client: APIClient, didRecieveOrganizationWishers wishers: [OrganizationMember]) {}
+    func apiClient(_ client: APIClient, didReceiveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {}
+    func apiClient(_ client: APIClient, didReceiveOrganization organization: Organization) {}
+    func apiClient(_ client: APIClient, didReceiveOrganizationMembers members: [OrganizationMember]) {}
+    func apiClient(_ client: APIClient, didReceiveOrganizationWishers wishers: [OrganizationMember]) {}
     func apiClientDidSendApplyOrganizationRequest(_ client: APIClient) {}
     func apiClientDidAttachOrganizationRight(_ client: APIClient, _ right: OrganizationMemberRight, forMember member: OrganizationMember) {}
     func apiClientDidDetachOrganizationRight(_ client: APIClient, _ right: OrganizationMemberRight, forMember member: OrganizationMember) {}
     func apiClient(_ client: APIClient, didCreateOrganization newOrganization: Organization) {}
     func apiClient(_ client: APIClient, didUpdateOrganization updatedOrganization: Organization) {}
     func apiClient(_ client: APIClient, didDeleteOrganizationWithId organizationId: String) {}
-    func apiClient(_ client: APIClient, didRecieveUser user: User) {}
+    func apiClient(_ client: APIClient, didReceiveUser user: User) {}
 }
 
 
@@ -452,7 +452,7 @@ extension APIClient {
             case .success(let response):
                 let ads = try self.decodeAds(from: response)
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveAds: ads)
+                    self.delegate?.apiClient(self, didReceiveAds: ads)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -472,7 +472,7 @@ extension APIClient {
             case .success(let response):
                 let ads = try self.decodeAds(from: response)
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveAds: ads, forUserWithId: userId)
+                    self.delegate?.apiClient(self, didReceiveAds: ads, forUserWithId: userId)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -493,7 +493,7 @@ extension APIClient {
             case .success(let response):
                 let ads = try self.decodeAds(from: response)
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveAds: ads, forOrganizationWithId: organizationId)
+                    self.delegate?.apiClient(self, didReceiveAds: ads, forOrganizationWithId: organizationId)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -517,7 +517,7 @@ extension APIClient {
                     let ad = try self.decodeAd(from: decodedJSON, fullDecode: true)
                     
                     DispatchQueue.main.async {
-                        self.delegate?.apiClient(self, didRecieveAd: ad)
+                        self.delegate?.apiClient(self, didReceiveAd: ad)
                     }
                 }
             case .failure(let error):
@@ -631,7 +631,7 @@ extension APIClient {
             case .success(let response):
                 let ads = try self.decodeAds(from: response)
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveBookmarkedAds: ads)
+                    self.delegate?.apiClient(self, didReceiveBookmarkedAds: ads)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -708,7 +708,7 @@ extension APIClient {
             case .success(let response):
                 let organizations = try self.decodeOrganizations(from: response)
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveOrganizations: organizations, withOptions: filterItems)
+                    self.delegate?.apiClient(self, didReceiveOrganizations: organizations, withOptions: filterItems)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -729,7 +729,7 @@ extension APIClient {
                     let organization = try self.decodeOrganization(from: decodedJSON, fullDecode: true)
                     
                     DispatchQueue.main.async {
-                        self.delegate?.apiClient(self, didRecieveOrganization: organization)
+                        self.delegate?.apiClient(self, didReceiveOrganization: organization)
                     }
                 }
             case .failure(let error):
@@ -747,7 +747,7 @@ extension APIClient {
             case .success(let response):
                 let members = try self.decodeOrganizationMembers(from: response)
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveOrganizationMembers: members)
+                    self.delegate?.apiClient(self, didReceiveOrganizationMembers: members)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -764,7 +764,7 @@ extension APIClient {
             case .success(let response):
                 let wishers = try self.decodeOrganizationMembers(from: response)
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveOrganizationWishers: wishers)
+                    self.delegate?.apiClient(self, didReceiveOrganizationWishers: wishers)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -956,7 +956,7 @@ extension APIClient {
             case .success(let response):
                 let profiles = try self.decodeProfiles(form: response)
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveProfiles: profiles)
+                    self.delegate?.apiClient(self, didReceiveProfiles: profiles)
                 }
                 
             case .failure(let error):
@@ -976,7 +976,7 @@ extension APIClient {
             case .success(let response):
                 let profiles = try self.decodeProfiles(form: response)
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveProfiles: profiles)
+                    self.delegate?.apiClient(self, didReceiveProfiles: profiles)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -1001,7 +1001,7 @@ extension APIClient {
                 let profile = try self.decodeProfile(from: decodedJSON, fullDecode: true)
                 
                 DispatchQueue.main.async {
-                    self.delegate?.apiClient(self, didRecieveProfile: profile)
+                    self.delegate?.apiClient(self, didReceiveProfile: profile)
                 }
                 
             case .failure(let error):
@@ -1110,7 +1110,7 @@ extension APIClient {
                 if let data = response.body, let decodedJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
                     let user = try self.decode(userDictionary: decodedJSON)
                     DispatchQueue.main.async {
-                        self.delegate?.apiClient(self, didRecieveUser: user)
+                        self.delegate?.apiClient(self, didReceiveUser: user)
                     }
                 }
             case .failure(let error):

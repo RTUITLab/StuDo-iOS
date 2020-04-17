@@ -181,7 +181,7 @@ extension TabBarController: APIClientDelegate {
         print(error.localizedDescription)
     }
     
-    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {
+    func apiClient(_ client: APIClient, didReceiveProfiles profiles: [Profile]) {
         accountViewController.ownProfiles = profiles
     }
     

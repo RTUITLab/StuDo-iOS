@@ -496,11 +496,11 @@ extension OrganizationViewController: APIClientDelegate {
         print(error.localizedDescription)
     }
     
-    func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {
+    func apiClient(_ client: APIClient, didReceiveOrganization organization: Organization) {
         set(organization: organization)
     }
     
-    func apiClient(_ client: APIClient, didRecieveOrganizationMembers members: [OrganizationMember]) {
+    func apiClient(_ client: APIClient, didReceiveOrganizationMembers members: [OrganizationMember]) {
         organizationMembers = members
         for member in members {
             if member.user.id == PersistentStore.shared.user.id! {
@@ -525,7 +525,7 @@ extension OrganizationViewController: APIClientDelegate {
         
     }
     
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forOrganizationWithId: String) {
+    func apiClient(_ client: APIClient, didReceiveAds ads: [Ad], forOrganizationWithId: String) {
         organizationAds = ads
         tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
     }
@@ -559,7 +559,7 @@ extension OrganizationViewController: APIClientDelegate {
         tableView.reloadSections(IndexSet(integer: 0), with: .fade)
     }
     
-    func apiClient(_ client: APIClient, didRecieveOrganizationWishers wishers: [OrganizationMember]) {
+    func apiClient(_ client: APIClient, didReceiveOrganizationWishers wishers: [OrganizationMember]) {
         organizationWishers = wishers
         for wisher in wishers {
             if wisher.user.id == PersistentStore.shared.user.id! {
@@ -568,7 +568,7 @@ extension OrganizationViewController: APIClientDelegate {
         }
     }
     
-    func apiClient(_ client: APIClient, didRecieveUser user: User) {
+    func apiClient(_ client: APIClient, didReceiveUser user: User) {
         let userVC = UserPublicController(user: user)
         navigationController?.pushViewController(userVC, animated: true)
     }

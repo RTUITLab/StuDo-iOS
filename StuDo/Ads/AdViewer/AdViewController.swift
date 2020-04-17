@@ -1034,7 +1034,7 @@ extension AdViewController: UIAdaptivePresentationControllerDelegate {
 
 extension AdViewController: APIClientDelegate {
     
-    func apiClient(_ client: APIClient, didRecieveAd ad: Ad) {
+    func apiClient(_ client: APIClient, didReceiveAd ad: Ad) {
         headerView.moreButton.animateVisibility(shouldHide: false)
         updateComments(with: ad.comments ?? [], partialUpdate: needToUpdateComments)
         updateParticipants(with: ad)
@@ -1043,7 +1043,7 @@ extension AdViewController: APIClientDelegate {
         headerView.titleText = self.currentAd.name
     }
     
-    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {
+    func apiClient(_ client: APIClient, didReceiveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {
         publishableOrganizations = organizations
     }
     
@@ -1118,14 +1118,14 @@ extension AdViewController: APIClientDelegate {
         }
     }
     
-    func apiClient(_ client: APIClient, didRecieveUser user: User) {
+    func apiClient(_ client: APIClient, didReceiveUser user: User) {
         let userVC = UserPublicController(user: user)
         userVC.navigationItem.title = "\(user.firstName) \(user.lastName)"
         let navVC = UINavigationController(rootViewController: userVC)
         present(navVC, animated: true, completion: nil)
     }
     
-    func apiClient(_ client: APIClient, didRecieveOrganization organization: Organization) {
+    func apiClient(_ client: APIClient, didReceiveOrganization organization: Organization) {
         let orgVC = OrganizationViewController(organization: organization)
         orgVC.navigationItem.title = organization.name
         let navVC = UINavigationController(rootViewController: orgVC)

@@ -118,7 +118,7 @@ extension AccountViewController: APIClientDelegate {
         print("Account VC: \(error.localizedDescription)")
     }
     
-    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {
+    func apiClient(_ client: APIClient, didReceiveProfiles profiles: [Profile]) {
         ownProfiles = profiles
         tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
     }
@@ -139,7 +139,8 @@ extension AccountViewController: APIClientDelegate {
     }
     
     
-    func apiClient(_ client: APIClient, didRecieveUser user: User) {
+    func apiClient(_ client: APIClient, didReceiveUser user: User) {
+        PersistentStore.shared.user = user
         tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
     }
     

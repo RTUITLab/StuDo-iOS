@@ -203,7 +203,7 @@ class OrganizationListController: UITableViewController {
 
 extension OrganizationListController: APIClientDelegate {
     
-    func apiClient(_ client: APIClient, didRecieveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {
+    func apiClient(_ client: APIClient, didReceiveOrganizations organizations: [Organization], withOptions options: [APIClient.OrganizationRequestOption]?) {
         if let options = options {
             for item in options {
                 switch item {

@@ -379,7 +379,7 @@ extension ProfileEditorViewController: APIClientDelegate {
         }
     }
     
-    func apiClient(_ client: APIClient, didRecieveProfile profile: Profile) {
+    func apiClient(_ client: APIClient, didReceiveProfile profile: Profile) {
         self.profile = profile
         
         if nameTextField != nil {

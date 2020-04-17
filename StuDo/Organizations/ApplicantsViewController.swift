@@ -81,7 +81,7 @@ class ApplicantsViewController: UITableViewController {
 
 
 extension ApplicantsViewController: APIClientDelegate {
-    func apiClient(_ client: APIClient, didRecieveOrganizationWishers wishers: [OrganizationMember]) {
+    func apiClient(_ client: APIClient, didReceiveOrganizationWishers wishers: [OrganizationMember]) {
         self.applicants = wishers
         tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
     }

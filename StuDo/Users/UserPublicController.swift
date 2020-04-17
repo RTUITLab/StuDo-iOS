@@ -160,17 +160,17 @@ class UserPublicController: UITableViewController {
 
 
 extension UserPublicController: APIClientDelegate {
-    func apiClient(_ client: APIClient, didRecieveUser user: User) {
+    func apiClient(_ client: APIClient, didReceiveUser user: User) {
         self.user = user
         tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
     }
     
-    func apiClient(_ client: APIClient, didRecieveProfiles profiles: [Profile]) {
+    func apiClient(_ client: APIClient, didReceiveProfiles profiles: [Profile]) {
         self.profiles = profiles
         tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
     }
     
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String) {
+    func apiClient(_ client: APIClient, didReceiveAds ads: [Ad], forUserWithId: String) {
         self.ads = ads
         tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
     }

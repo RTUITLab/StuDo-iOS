@@ -238,15 +238,15 @@ extension AdsViewController: APIClientDelegate {
         RootViewController.stopLoadingIndicator(with: .fail)
     }
     
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad]) {
+    func apiClient(_ client: APIClient, didReceiveAds ads: [Ad]) {
         update(ads: ads, for: .all)
     }
     
-    func apiClient(_ client: APIClient, didRecieveAds ads: [Ad], forUserWithId: String) {
+    func apiClient(_ client: APIClient, didReceiveAds ads: [Ad], forUserWithId: String) {
         update(ads: ads, for: .own)
     }
     
-    func apiClient(_ client: APIClient, didRecieveBookmarkedAds ads: [Ad]) {
+    func apiClient(_ client: APIClient, didReceiveBookmarkedAds ads: [Ad]) {
         update(ads: ads, for: .bookmarked)
     }
     
@@ -297,7 +297,7 @@ extension AdsViewController: APIClientDelegate {
         requestUpdate(adSection: .bookmarked)
     }
     
-    func apiClient(_ client: APIClient, didRecieveUser user: User) {
+    func apiClient(_ client: APIClient, didReceiveUser user: User) {
         let userVC = UserPublicController(user: user)
         navigationController?.pushViewController(userVC, animated: true)
     }
