@@ -13,7 +13,7 @@ class AboutHeaderView: UITableViewHeaderFooterView {
     let logoImage = UIImageView()
     let versionLabel = UILabel()
 
-    func setVersion(_ version: String) {
+    func setVersion(_ version: String, _ build: String) {
         let attributedString = NSMutableAttributedString(string: Localizer.string(for: .aboutVersion), attributes: [
             .foregroundColor: UIColor.secondaryLabel,
             .font: UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -24,7 +24,13 @@ class AboutHeaderView: UITableViewHeaderFooterView {
             .font: UIFont.systemFont(ofSize: 16, weight: .medium)
             ])
         
+        let buildString = NSMutableAttributedString(string: " (\(build))", attributes: [
+        .foregroundColor: UIColor.secondaryLabel,
+        .font: UIFont.systemFont(ofSize: 16, weight: .regular)
+        ])
+        
         attributedString.append(versionNumberString)
+        attributedString.append(buildString)
         versionLabel.attributedText = attributedString
     }
     

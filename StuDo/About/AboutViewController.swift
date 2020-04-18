@@ -26,6 +26,11 @@ class AboutViewController: UITableViewController {
         let nsObject: Any? = Bundle.main.infoDictionary?["CFBundleShortVersionString"]
         return nsObject as! String
     }()
+    
+    lazy var appBuild: String = {
+        let nsObject: Any? = Bundle.main.infoDictionary?["CFBundleVersion"]
+        return nsObject as! String
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +82,7 @@ class AboutViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: aboutHeaderViewID) as! AboutHeaderView
-            header.setVersion(appVersion)
+            header.setVersion(appVersion, appBuild)
             return header
         }
         
@@ -96,7 +101,7 @@ class AboutViewController: UITableViewController {
         } else if info == .feedback {
             
             if MFMailComposeViewController.canSendMail() {
-                let feedbackEmail = "message.mrfoggz@gmail.com"
+                let feedbackEmail = "studo.bugreport@icloud.com"
                 let subject = "StuDo v\(appVersion)"
                 
                 let mailVC = MFMailComposeViewController()
