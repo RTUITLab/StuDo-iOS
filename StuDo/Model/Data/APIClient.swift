@@ -104,8 +104,9 @@ class APIClient {
     
     typealias APIClientCompletion = (APIResult<Data?>) throws -> ()
     
-    static private var shouldRefreshTokens = false
+    static private var allowTokenRefresh = true
     static private var requestQueue = [(APIRequest, APIClientCompletion)]()
+    static private var refreshSemaphore = DispatchSemaphore(value: 1)
     
     private let session = URLSession.shared
     #if DEBUG
@@ -220,8 +221,14 @@ class APIClient {
         guard let tokens = APIClient.getTokens(),
             APIClient.tokenIsValid(accessToken: tokens.accessToken) else {
                 APIClient.requestQueue.append((request, completion))
-                APIClient.shouldRefreshTokens = true
-                refreshTokens(); return
+                
+                APIClient.refreshSemaphore.wait()
+                if APIClient.allowTokenRefresh {
+                    refreshTokens()
+                    APIClient.allowTokenRefresh = false
+                }
+                APIClient.refreshSemaphore.signal()
+                return
         }
         
         DispatchQueue.global(qos: .userInitiated).sync {
@@ -399,15 +406,12 @@ extension APIClient {
     }
     
     
+    
     private func refreshTokens() {
-        DispatchQueue.global(qos: .userInitiated).sync {
+        DispatchQueue.global(qos: .userInitiated).async {
             guard let tokens = APIClient.getTokens() else {
                 RootViewController.main.logout(); return
             }
-            guard APIClient.shouldRefreshTokens else {
-                return
-            }
-            APIClient.shouldRefreshTokens = false
             
             let dictionary = ["RefreshToken": tokens.refreshToken]
             if let request = try? APIRequest(method: .post, path: "auth/refresh/", body: dictionary) {
@@ -421,6 +425,9 @@ extension APIClient {
                             print("PERFORMING AGAIN \(request.path)")
                         }
                         APIClient.requestQueue = []
+                        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.5) {
+                            APIClient.allowTokenRefresh = true
+                        }
                     case .failure(let _):
                         RootViewController.main.logout(); return
                     }

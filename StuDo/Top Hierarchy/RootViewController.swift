@@ -122,9 +122,10 @@ class RootViewController: UIViewController {
     func login() {
         gradientLayer.removeFromSuperlayer()
         if authorizationController != nil {
-            authorizationController.dismiss(animated: true, completion: nil)
+            authorizationController.dismiss(animated: true, completion: {
+                self.proceed()
+            })
         }
-        proceed()
     }
     
     

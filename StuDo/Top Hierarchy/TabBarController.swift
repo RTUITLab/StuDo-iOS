@@ -100,6 +100,10 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
 
     }
     
+    deinit {
+        print("TabBarC Deinit")
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         actionButton.layer.cornerRadius = actionButtonSize / 2

@@ -759,6 +759,7 @@ class AdViewController: UIViewController {
     private func setupBodyCell(for indexPath: IndexPath) -> AdBodyCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: bodyCellId, for: indexPath) as! AdBodyCell
         cell.titleLabel.text = currentAd.name
+        cell.titleLabel.adjustsFontSizeToFitWidth = true
         cell.dateLabel.text = currentAd.dateRange
         cell.selectionStyle = .none
         
@@ -774,6 +775,7 @@ class AdViewController: UIViewController {
     private func setupEditableBodyCell(for indexPath: IndexPath) -> EditableAdBodyCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: editableBodyCellId, for: indexPath) as! EditableAdBodyCell
         cell.titleTextField.text = adNameUnderEditing
+        cell.titleTextField.autocapitalizationType = .sentences
         cell.bodyTextView.text = adBodyUnderEditing
         cell.titleTextField.delegate = self
         cell.titleTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)

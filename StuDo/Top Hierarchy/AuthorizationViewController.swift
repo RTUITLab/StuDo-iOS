@@ -404,6 +404,10 @@ class AuthorizationViewController: UIViewController {
         _ = checkIfShouldProceed()
     }
     
+    deinit {
+        print("AuthC Deinit")
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         adaptColors()
     }
