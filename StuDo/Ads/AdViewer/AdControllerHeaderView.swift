@@ -105,7 +105,8 @@ class AdControllerHeaderView: UIView {
         
         headerLabel.font = .systemFont(ofSize: 16, weight: .light)
         
-        let moreButtonImage = UIImage(systemName: "ellipsis.circle.fill")!.withRenderingMode(.alwaysTemplate)
+        // let moreButtonImage = UIImage(systemName: "ellipsis.circle.fill")!.withRenderingMode(.alwaysTemplate)
+        let moreButtonImage = #imageLiteral(resourceName: "three-dots-menu").withRenderingMode(.alwaysTemplate)
         moreButton.setImage(moreButtonImage, for: .normal)
         moreButton.adjustsImageWhenHighlighted = false
         moreButton.tintColor = .globalTintColor
