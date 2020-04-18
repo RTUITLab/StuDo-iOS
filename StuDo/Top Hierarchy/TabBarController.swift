@@ -129,10 +129,15 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     var tabBarIsHidden = false
     
-    private var initialTabBarFrame: CGRect?
+    private var initialTabBarOrigin: CGPoint?
+    private var initialActionButtonOrigin: CGPoint?
+    private var offsetYTransform: CGFloat = 500
+
     override func hideTabBar() {
         guard tabBarIsHidden == false else { return }
-        initialTabBarFrame = tabBar.frame
+        
+        initialTabBarOrigin = tabBar.frame.origin
+        initialActionButtonOrigin = actionButton.frame.origin
         
         let offsetTransform = CGAffineTransform(translationX: 0, y: view.frame.height / 2)
         
@@ -142,27 +147,35 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         }) { _ in
             self.tabBar.isHidden = true
             self.actionButton.isHidden = true
+            print("Frame hide after: \(self.tabBar.frame)")
         }
         tabBarIsHidden = true
     }
     
     override func showTabBar() {
         guard tabBarIsHidden == true else { return }
+        print("Frame show: \(self.tabBar.frame)")
         
-        if let initialFrame = initialTabBarFrame {
-            tabBar.frame = initialFrame
-        }
-        
-        self.tabBar.isHidden = false
-        self.actionButton.isHidden = false
-                
-        UIView.animate(withDuration: showHideAnimationDuration) {
+        if let tabBarO = initialTabBarOrigin, let actionButtonO = initialActionButtonOrigin {
+            
             self.tabBar.transform = .identity
             self.actionButton.transform = .identity
-            print(self.tabBar.frame)
+            
+            self.tabBar.frame.origin = CGPoint(x: 0, y: tabBarO.y + self.offsetYTransform)
+            self.actionButton.frame.origin = CGPoint(x: 0, y: actionButtonO.y + self.offsetYTransform)
+            
+            self.tabBar.isHidden = false
+            self.actionButton.isHidden = false
+                    
+            UIView.animate(withDuration: showHideAnimationDuration) {
+                self.tabBar.frame.origin = CGPoint(x: 0, y: tabBarO.y)
+                self.actionButton.frame.origin = CGPoint(x: actionButtonO.x, y: actionButtonO.y)
+                print(self.tabBar.frame)
+            }
+            
+            tabBarIsHidden = false
         }
         
-        tabBarIsHidden = false
     }
 
 }
