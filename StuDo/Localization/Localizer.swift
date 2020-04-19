@@ -165,6 +165,7 @@ enum LozalizerString: String {
     case userPublicProfilesSectionHeader
     case userPublicAdsSectionHeader
     case userShowAllProfiles
+    case userWriteEmail
     
     case notificationSetReminder
     case notificationReminderAlertTitle

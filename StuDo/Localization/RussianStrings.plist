@@ -18,10 +18,6 @@
 	<string>Напомнить мне о данном событии..</string>
 	<key>passwordCurrentSectionHeader</key>
 	<string>Действующий пароль</string>
-	<key>aboutInstruction</key>
-	<string>Как пользоваться StuDo?</string>
-	<key>aboutSourceCode</key>
-	<string>Исходный код на GitHub</string>
 	<key>authPasswordRestorationAlertMessage</key>
 	<string>Для восстановления пароля следуйте инструкциям, отправленным на Ваш почтовый адрес.</string>
 	<key>adEditorJoinAd</key>
@@ -32,6 +28,8 @@
 	<string>Настройки</string>
 	<key>search</key>
 	<string>Найти</string>
+	<key>userWriteEmail</key>
+	<string>Написать письмо</string>
 	<key>organizationInfoHeaderTitle</key>
 	<string>Организация</string>
 	<key>adEditorEndDateLabel</key>
@@ -160,14 +158,16 @@
 	<string>Заявка отправлена</string>
 	<key>save</key>
 	<string>Сохранить</string>
-	<key>adEditorCancelAdCreation</key>
-	<string>Закрыть редактор</string>
+	<key>aboutSourceCode</key>
+	<string>Исходный код на GitHub</string>
 	<key>authForgotPassword</key>
 	<string>Забыли пароль?</string>
 	<key>adEditorEditAd</key>
 	<string>Редактировать</string>
 	<key>organizationMembersHeaderTitle</key>
 	<string>Участники</string>
+	<key>adEditorCancelAdCreation</key>
+	<string>Закрыть редактор</string>
 	<key>settingsLanguage</key>
 	<string>Язык приложения</string>
 	<key>pinkThemeName</key>
@@ -292,5 +292,7 @@
 	<string>Оценить в App Store</string>
 	<key>navigationMenuSavedSources</key>
 	<string>Сохранённые источники</string>
+	<key>aboutInstruction</key>
+	<string>Как пользоваться StuDo?</string>
 </dict>
 </plist>

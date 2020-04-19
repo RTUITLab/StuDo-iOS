@@ -276,6 +276,8 @@
 	<string>Ads</string>
 	<key>userShowAllProfiles</key>
 	<string>Show all profiles</string>
+	<key>userWriteEmail</key>
+	<string>Send an email</string>
 	<key>notificationSetReminder</key>
 	<string>Set reminder</string>
 	<key>notificationReminderAlertTitle</key>

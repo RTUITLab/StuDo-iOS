@@ -26,6 +26,8 @@
 	<string>Orange</string>
 	<key>yellowThemeName</key>
 	<string>Gelb</string>
+	<key>userWriteEmail</key>
+	<string>Eine E-Mail senden</string>
 	<key>adEditorAddToBookmarks</key>
 	<string>Zu Lesezeichen hinzufügen</string>
 	<key>feedNoBookmarkedAdsDescription</key>

@@ -128,7 +128,7 @@ class AboutViewController: UITableViewController {
             
             if MFMailComposeViewController.canSendMail() {
                 let feedbackEmail = "studo.bugreport@icloud.com"
-                let subject = "StuDo v\(appVersion) (\(appBuild)"
+                let subject = "StuDo v\(appVersion) (\(appBuild))"
                 
                 let mailVC = MFMailComposeViewController()
                 mailVC.mailComposeDelegate = self

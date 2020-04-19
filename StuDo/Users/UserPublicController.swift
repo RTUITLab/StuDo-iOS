@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MessageUI
 
 fileprivate let userCellId = "userCellId"
 fileprivate let profileCellId = "profileCellId"
@@ -82,6 +83,8 @@ class UserPublicController: UITableViewController {
             return profiles.count
         } else if currentSection == .ads {
             return ads.count
+        } else if currentSection == .profileDescription && MFMailComposeViewController.canSendMail() {
+            return 2
         }
         
         return 1
@@ -92,13 +95,21 @@ class UserPublicController: UITableViewController {
         
         switch currentSection {
         case .profileDescription:
-            let cell = tableView.dequeueReusableCell(withIdentifier: userCellId, for: indexPath) as! CurrentUserTableViewCell
-            cell.fullnameLabel.text = "\(user.firstName) \(user.lastName)"
-            cell.generateProfileImage(for: user)
-            cell.emailLabel.text = user.email
-            cell.setupCell()
-            cell.selectionStyle = .none
-            return cell
+            if indexPath.row == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: userCellId, for: indexPath) as! CurrentUserTableViewCell
+                cell.fullnameLabel.text = "\(user.firstName) \(user.lastName)"
+                cell.generateProfileImage(for: user)
+                cell.emailLabel.text = user.email
+                cell.setupCell()
+                cell.selectionStyle = .none
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath)
+                cell.accessoryType = .disclosureIndicator
+                cell.textLabel!.text = Localizer.string(for: .userWriteEmail)
+                cell.textLabel!.textColor = .globalTintColor
+                return cell
+            }
         case .profiles:
             if hideAllProfiles && indexPath.row == profilesInTableInitialLimit {
                 let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath)
@@ -142,6 +153,19 @@ class UserPublicController: UITableViewController {
             let currentProfile = profiles[indexPath.row]
             let profileVC = ProfileEditorViewController(profile: currentProfile, canEditProfile: false)
             navigationController?.pushViewController(profileVC, animated: true)
+        } else if currentSection == .profileDescription && indexPath.row == 1 {
+            if MFMailComposeViewController.canSendMail() {
+                let feedbackEmail = user.email
+                let subject = "StuDo: "
+                
+                let mailVC = MFMailComposeViewController()
+                mailVC.mailComposeDelegate = self
+                mailVC.setSubject(subject)
+                mailVC.setToRecipients([feedbackEmail])
+                
+                tableView.deselectRow(at: indexPath, animated: true)
+                present(mailVC, animated: true, completion: nil)
+            }
         }
     }
     
@@ -173,5 +197,12 @@ extension UserPublicController: APIClientDelegate {
     func apiClient(_ client: APIClient, didReceiveAds ads: [Ad], forUserWithId: String) {
         self.ads = ads
         tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
+    }
+}
+
+
+extension UserPublicController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
