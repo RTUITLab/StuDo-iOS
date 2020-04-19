@@ -19,8 +19,30 @@ class AboutViewController: UITableViewController {
         case feedback = "Submit feedback"
         case rate = "Rate on App Store"
         case vkLink = "RTU IT Lab"
+        case instruction = "Instruction"
+        case sourceCode = "Source Code"
     }
-    let infoPosition: [[AboutInfoUnit]] = [[.feedback, .rate, .vkLink]]
+    let infoPosition: [[AboutInfoUnit]]
+    
+    override init(style: UITableView.Style) {
+        
+        var contactSection: [AboutInfoUnit] = [.rate, .vkLink]
+        if MFMailComposeViewController.canSendMail() {
+            contactSection = [.feedback, .rate, .vkLink]
+        }
+        
+        var infoPosition = [contactSection, [.sourceCode]]
+        #if !DEBUG
+        infoPosition.insert([.instruction], at: 0)
+        #endif
+        self.infoPosition = infoPosition
+        
+        super.init(style: style)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     lazy var appVersion: String = {
         let nsObject: Any? = Bundle.main.infoDictionary?["CFBundleShortVersionString"]
@@ -74,6 +96,10 @@ class AboutViewController: UITableViewController {
             cell.textLabel?.text = Localizer.string(for: .aboutRate)
         } else if info == .vkLink {
             cell.textLabel?.text = Localizer.string(for: .aboutRTULab)
+        } else if info == .sourceCode {
+            cell.textLabel?.text = Localizer.string(for: .aboutSourceCode)
+        } else if info == .instruction {
+            cell.textLabel?.text = Localizer.string(for: .aboutInstruction)
         }
         
         return cell
@@ -102,7 +128,7 @@ class AboutViewController: UITableViewController {
             
             if MFMailComposeViewController.canSendMail() {
                 let feedbackEmail = "studo.bugreport@icloud.com"
-                let subject = "StuDo v\(appVersion)"
+                let subject = "StuDo v\(appVersion) (\(appBuild)"
                 
                 let mailVC = MFMailComposeViewController()
                 mailVC.mailComposeDelegate = self
@@ -114,6 +140,12 @@ class AboutViewController: UITableViewController {
             
         } else if info == .rate {
             SKStoreReviewController.requestReview()
+        } else if info == .sourceCode {
+            let vkURL = URL(string: "https://github.com/RTUITLab/StuDo-iOS")!
+            UIApplication.shared.open(vkURL, options: [:], completionHandler: nil)
+        } else if info == .instruction {
+            let instructionAd = Ad(id: "d36ae6bc-1836-404c-9907-4a995a02ffb4", name: "", description: "", shortDescription: "", beginTime: Date(), endTime: Date())
+            self.present(AdViewController(ad: instructionAd), animated: true, completion: nil)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)

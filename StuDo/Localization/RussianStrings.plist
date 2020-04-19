@@ -18,6 +18,10 @@
 	<string>Напомнить мне о данном событии..</string>
 	<key>passwordCurrentSectionHeader</key>
 	<string>Действующий пароль</string>
+	<key>aboutInstruction</key>
+	<string>Как пользоваться StuDo?</string>
+	<key>aboutSourceCode</key>
+	<string>Исходный код на GitHub</string>
 	<key>authPasswordRestorationAlertMessage</key>
 	<string>Для восстановления пароля следуйте инструкциям, отправленным на Ваш почтовый адрес.</string>
 	<key>adEditorJoinAd</key>
@@ -60,18 +64,18 @@
 	<string>О приложении</string>
 	<key>accountDetailNameSectionDescription</key>
 	<string>Вы можете редактировать своё имя и фамилию.</string>
-	<key>aboutVersion</key>
-	<string>Версия</string>
+	<key>feedNoProfilesTitle</key>
+	<string>Нет резюме.</string>
 	<key>tealBlueThemeName</key>
 	<string>Голубой</string>
+	<key>aboutVersion</key>
+	<string>Версия</string>
 	<key>organizationAdmin</key>
 	<string>Создатель</string>
 	<key>okay</key>
 	<string>Хорошо</string>
 	<key>feedNoAdsTitle</key>
 	<string>Нет объявлений.</string>
-	<key>feedNoProfilesTitle</key>
-	<string>Нет резюме.</string>
 	<key>feedNoBookmarkedAdsDescription</key>
 	<string>Ваши избранные объявления будут отображаться здесь.</string>
 	<key>adEditorDeleteAd</key>

@@ -30,6 +30,10 @@
 	<string>Zu Lesezeichen hinzufügen</string>
 	<key>feedNoBookmarkedAdsDescription</key>
 	<string>Die von Ihnen mit einem Lesezeichen versehenen Anzeigen werden hier angezeigt.</string>
+	<key>aboutSourceCode</key>
+	<string>Quellcode auf GitHub</string>
+	<key>aboutInstruction</key>
+	<string>Wie benutzt man StuDo?</string>
 	<key>adEditorRemoveFromBookmarks</key>
 	<string>Von Lesezeichen entfernen</string>
 	<key>greenThemeName</key>

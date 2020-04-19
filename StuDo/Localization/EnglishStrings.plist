@@ -104,6 +104,10 @@
 	<string>Rate on App Store</string>
 	<key>aboutRTULab</key>
 	<string>RTU IT Lab</string>
+	<key>aboutSourceCode</key>
+	<string>Source Code on GitHub</string>
+	<key>aboutInstruction</key>
+	<string>How to use StuDo?</string>
 	<key>accountDetailFirstName</key>
 	<string>Name</string>
 	<key>accountDetailLastName</key>

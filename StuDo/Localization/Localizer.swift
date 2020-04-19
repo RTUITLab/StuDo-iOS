@@ -70,6 +70,8 @@ enum LozalizerString: String {
     case aboutFeedback
     case aboutRate
     case aboutRTULab
+    case aboutSourceCode
+    case aboutInstruction
     
     case accountDetailFirstName
     case accountDetailLastName

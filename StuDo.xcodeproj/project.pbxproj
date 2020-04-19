@@ -1004,7 +1004,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "Equals commit numbers";
+				CURRENT_PROJECT_VERSION = "Equals commit number";
 				DEVELOPMENT_TEAM = RMT8Q82SET;
 				INFOPLIST_FILE = "$(SRCROOT)/StuDo/Support files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1026,7 +1026,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "Equals commit numbers";
+				CURRENT_PROJECT_VERSION = "Equals commit number";
 				DEVELOPMENT_TEAM = RMT8Q82SET;
 				INFOPLIST_FILE = "$(SRCROOT)/StuDo/Support files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
