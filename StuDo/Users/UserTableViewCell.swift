@@ -59,12 +59,16 @@ class UserTableViewCell: TableViewCellValue1Style {
         contentView.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: avatarPadding).isActive = true
+        if let detailLabel = detailTextLabel {
+            nameLabel.trailingAnchor.constraint(equalTo: detailLabel.leadingAnchor, constant: -6).isActive = true
+        }
         
         nameLabelCenterYConstraint = nameLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor)
         nameLabelCenterYConstraint.isActive = true
         
         
         nameLabel.font = .preferredFont(for: .body, weight: .regular)
+        nameLabel.adjustsFontSizeToFitWidth = true
         
         detailTextLabel?.font = .preferredFont(for: .footnote, weight: .light)
         detailTextLabel?.textColor = .globalTintColor

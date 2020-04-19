@@ -841,6 +841,8 @@ class AdViewController: UIViewController {
         cell.selectionStyle = .none
                 
         cell.avatarViewSizeConstraint.constant = 40
+        
+        cell.layoutIfNeeded()
         return cell
     }
     

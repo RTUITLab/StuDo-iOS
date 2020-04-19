@@ -86,13 +86,15 @@ class AdControllerHeaderView: UIView {
         publishButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
         publishButton.centerXAnchor.constraint(equalTo: moreButton.centerXAnchor).isActive = true
         
-        let cancelEditingButtonSize: CGFloat = 24
+        let cancelEditingButtonInset: CGFloat = 5
+        let cancelEditingButtonSize: CGFloat = 24 + 2 * cancelEditingButtonInset
         self.addSubview(cancelEditingButton)
         cancelEditingButton.translatesAutoresizingMaskIntoConstraints = false
         cancelEditingButton.widthAnchor.constraint(equalToConstant: cancelEditingButtonSize).isActive = true
         cancelEditingButton.heightAnchor.constraint(equalToConstant: cancelEditingButtonSize).isActive = true
         cancelEditingButton.centerYAnchor.constraint(equalTo: moreButton.centerYAnchor).isActive = true
-        cancelEditingButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: leftRightPadding).isActive = true
+        cancelEditingButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: leftRightPadding - cancelEditingButtonInset).isActive = true
+        cancelEditingButton.imageEdgeInsets = UIEdgeInsets(top: cancelEditingButtonInset, left: cancelEditingButtonInset, bottom: cancelEditingButtonInset, right: cancelEditingButtonInset)
         
     }
     
@@ -132,7 +134,7 @@ class AdControllerHeaderView: UIView {
     }
     
     func togglePublishButton(isEnabled: Bool) {
-        publishButton.tintColor = isEnabled ? .globalTintColor : .lightGray
+        publishButton.tintColor = isEnabled ? .globalTintColor : UIColor.globalTintColor.withAlphaComponent(0.4)
         publishButton.isEnabled = isEnabled
     }
     

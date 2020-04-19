@@ -221,6 +221,15 @@ class AccountDetailViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        let sectionInfo = sections[indexPath.section]
+        if sectionInfo == .studentId {
+            studentIdTextField.becomeFirstResponder()
+            return nil
+        }
+        return indexPath
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let sectionInfo = sections[indexPath.section]
         

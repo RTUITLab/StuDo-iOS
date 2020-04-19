@@ -15,19 +15,23 @@ class AdTableViewCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var moreButton: UIButton!
     @IBOutlet var moreButtonTrailingAnchor: NSLayoutConstraint!
+    @IBOutlet var titleLabelTrailingAnchor: NSLayoutConstraint!
     
     var moreButtonCallback: (() -> Void)? = nil
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        let inset: CGFloat = 28
         if let moreButtonImage = moreButton.currentImage {
             moreButton.setImage(moreButtonImage.withTintColor(.globalTintColor).withRenderingMode(.alwaysOriginal), for: .normal)
             moreButton.setImage(moreButtonImage.withTintColor(UIColor.globalTintColor.withAlphaComponent(0.5)).withRenderingMode(.alwaysOriginal), for: .highlighted)
             moreButton.setImage(moreButtonImage.withTintColor(UIColor.globalTintColor.withAlphaComponent(0.5)).withRenderingMode(.alwaysOriginal), for: .focused)
-            let inset: CGFloat = 28
             moreButtonTrailingAnchor.constant = -28 + moreButtonTrailingAnchor.constant
             moreButton.imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         }
+        
+        titleLabelTrailingAnchor.constant = -inset + 6
+        titleLabel.adjustsFontSizeToFitWidth = true
         
         selectionStyle = .none
         

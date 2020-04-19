@@ -73,6 +73,7 @@
                 <outlet property="moreButton" destination="qX7-TU-fEO" id="AdH-oW-y0I"/>
                 <outlet property="moreButtonTrailingAnchor" destination="Kzy-E1-PoS" id="eJj-gC-1Dt"/>
                 <outlet property="titleLabel" destination="Pgk-uy-7pM" id="avZ-7U-T6t"/>
+                <outlet property="titleLabelTrailingAnchor" destination="no2-ek-FzJ" id="TWC-hf-EGb"/>
             </connections>
             <point key="canvasLocation" x="-430.43478260869568" y="-71.651785714285708"/>
         </tableViewCell>
