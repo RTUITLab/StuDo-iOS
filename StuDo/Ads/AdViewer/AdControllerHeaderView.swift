@@ -68,13 +68,15 @@ class AdControllerHeaderView: UIView {
         
         let leftRightPadding: CGFloat = 16
 
-        let moreButtonSize: CGFloat = 20
+        let moreButtonSize: CGFloat = 70
         self.addSubview(moreButton)
         moreButton.translatesAutoresizingMaskIntoConstraints = false
         moreButton.widthAnchor.constraint(equalToConstant: moreButtonSize).isActive = true
         moreButton.heightAnchor.constraint(equalToConstant: moreButtonSize).isActive = true
         moreButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        moreButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -leftRightPadding).isActive = true
+        let inset: CGFloat = 25
+        moreButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -leftRightPadding + inset).isActive = true
+        moreButton.imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         
         let publishButtonSize: CGFloat = 28
         self.addSubview(publishButton)

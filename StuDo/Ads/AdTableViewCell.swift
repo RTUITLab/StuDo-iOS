@@ -14,15 +14,18 @@ class AdTableViewCell: UITableViewCell {
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var moreButton: UIButton!
+    @IBOutlet var moreButtonTrailingAnchor: NSLayoutConstraint!
     
     var moreButtonCallback: (() -> Void)? = nil
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        if let moreButtonImage = moreButton.currentImage?.withRenderingMode(.alwaysTemplate) {
-            moreButton.setImage(moreButtonImage, for: .normal)
-            moreButton.tintColor = UIColor(red:0.815, green:0.819, blue:0.837, alpha:1.000)
-            let inset: CGFloat = 15
+        if let moreButtonImage = moreButton.currentImage {
+            moreButton.setImage(moreButtonImage.withTintColor(.globalTintColor).withRenderingMode(.alwaysOriginal), for: .normal)
+            moreButton.setImage(moreButtonImage.withTintColor(UIColor.globalTintColor.withAlphaComponent(0.5)).withRenderingMode(.alwaysOriginal), for: .highlighted)
+            moreButton.setImage(moreButtonImage.withTintColor(UIColor.globalTintColor.withAlphaComponent(0.5)).withRenderingMode(.alwaysOriginal), for: .focused)
+            let inset: CGFloat = 28
+            moreButtonTrailingAnchor.constant = -28 + moreButtonTrailingAnchor.constant
             moreButton.imageEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         }
         
@@ -41,6 +44,11 @@ class AdTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         dateLabel.textColor = .globalTintColor
+        if let moreButtonImage = moreButton.currentImage {
+            moreButton.setImage(moreButtonImage.withTintColor(.globalTintColor).withRenderingMode(.alwaysOriginal), for: .normal)
+            moreButton.setImage(moreButtonImage.withTintColor(UIColor.globalTintColor.withAlphaComponent(0.5)).withRenderingMode(.alwaysOriginal), for: .highlighted)
+            moreButton.setImage(moreButtonImage.withTintColor(UIColor.globalTintColor.withAlphaComponent(0.5)).withRenderingMode(.alwaysOriginal), for: .focused)
+        }
     }
     
     deinit {

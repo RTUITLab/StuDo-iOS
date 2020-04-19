@@ -16,7 +16,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pgk-uy-7pM">
-                        <rect key="frame" x="15" y="7" width="345" height="20.5"/>
+                        <rect key="frame" x="15" y="7" width="319" height="20.5"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -41,10 +41,10 @@
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qX7-TU-fEO">
-                        <rect key="frame" x="360" y="-4.5" width="44" height="44"/>
+                        <rect key="frame" x="334" y="-17.5" width="70" height="70"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="44" id="kPi-RJ-Wgc"/>
-                            <constraint firstAttribute="height" constant="44" id="nLr-b6-Ukk"/>
+                            <constraint firstAttribute="width" constant="70" id="kPi-RJ-Wgc"/>
+                            <constraint firstAttribute="height" constant="70" id="nLr-b6-Ukk"/>
                         </constraints>
                         <color key="tintColor" red="0.43529411759999997" green="0.43529411759999997" blue="0.43529411759999997" alpha="1" colorSpace="calibratedRGB"/>
                         <state key="normal" image="three-dots-menu"/>
@@ -71,6 +71,7 @@
                 <outlet property="dateLabel" destination="gkp-hK-klz" id="NVx-py-cbI"/>
                 <outlet property="descriptionTextView" destination="Dtb-wa-7Rl" id="ksZ-aj-39t"/>
                 <outlet property="moreButton" destination="qX7-TU-fEO" id="AdH-oW-y0I"/>
+                <outlet property="moreButtonTrailingAnchor" destination="Kzy-E1-PoS" id="eJj-gC-1Dt"/>
                 <outlet property="titleLabel" destination="Pgk-uy-7pM" id="avZ-7U-T6t"/>
             </connections>
             <point key="canvasLocation" x="-430.43478260869568" y="-71.651785714285708"/>

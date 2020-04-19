@@ -664,6 +664,7 @@ class AdViewController: UIViewController {
     private func exitEditingState(shouldShowPrompt: Bool = true) {
         func exitEditing() {
             currentState = .viewing
+            headerView.titleText = self.currentAd.name
             self.headerView.showEditingControls = false
             if currentAd != nil {
                 self.reloadTableView()
@@ -678,7 +679,11 @@ class AdViewController: UIViewController {
         }
         
         if currentAd == nil && adNameUnderEditing.isEmpty && adBodyUnderEditing.isEmpty {
-            dismiss(animated: true, completion: nil)
+            tableView.keyboardDismissMode = .interactive
+            bodyEditableTextView.becomeFirstResponder()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                self.dismiss(animated: true, completion: nil)
+            }
             return
         }
                 
