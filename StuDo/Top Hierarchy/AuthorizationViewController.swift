@@ -52,10 +52,12 @@ class AuthorizationViewController: UIViewController {
     
     
     var containerViewHeightConstraint: NSLayoutConstraint!
+    var containerViewBottomConstraint: NSLayoutConstraint!
     var credentialsContainerHeightConstraint: NSLayoutConstraint!
     var additionalInfoContainerHeightConstraint: NSLayoutConstraint!
     
     var initialContainerViewHeight: CGFloat!
+    var initialContainerBottomConstant: CGFloat = 16
     var credentialsContainerFullHeight: CGFloat!
     var credentialsContainerShrunkHeight: CGFloat!
     var additionalInfoContainerFullHeight: CGFloat!
@@ -177,7 +179,9 @@ class AuthorizationViewController: UIViewController {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        containerViewBottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: initialContainerBottomConstant)
+        containerViewBottomConstraint.isActive = true
         
         containerViewHeightConstraint = containerView.heightAnchor.constraint(equalToConstant: initialContainerViewHeight)
         containerViewHeightConstraint.isActive = true
@@ -189,8 +193,6 @@ class AuthorizationViewController: UIViewController {
         }
         containerView.layer.cornerRadius = 8
         containerView.layer.masksToBounds = false
-        
-        
         
         
         let scrollViewPadding: CGFloat = 0
@@ -472,6 +474,7 @@ class AuthorizationViewController: UIViewController {
         
         
         containerViewHeightConstraint.constant = toFullscreen ? view.frame.height : initialContainerViewHeight
+        containerViewBottomConstraint.constant = toFullscreen ? 0 : initialContainerBottomConstant
         
         containerView.setNeedsUpdateConstraints()
         scrollView.alwaysBounceVertical = toFullscreen
@@ -779,9 +782,7 @@ extension AuthorizationViewController: UITextFieldDelegate {
 
 extension AuthorizationViewController: APIClientDelegate {
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
-        RootViewController.stopLoadingIndicator(with: .fail) {
-            self.displayMessage(userMessage: error.localizedDescription)
-        }
+        RootViewController.stopLoadingIndicator(with: .fail)
     }
     
     func apiClient(_ client: APIClient, didFinishLoginRequest request: APIRequest, andRecievedUser user: User) {

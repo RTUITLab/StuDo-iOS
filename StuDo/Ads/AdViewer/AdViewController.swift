@@ -664,9 +664,9 @@ class AdViewController: UIViewController {
     private func exitEditingState(shouldShowPrompt: Bool = true) {
         func exitEditing() {
             currentState = .viewing
-            headerView.titleText = self.currentAd.name
             self.headerView.showEditingControls = false
             if currentAd != nil {
+                headerView.titleText = self.currentAd.name
                 self.reloadTableView()
             } else {
                 dismiss(animated: true, completion: nil)
@@ -1089,7 +1089,9 @@ extension AdViewController: APIClientDelegate {
     
     func apiClient(_ client: APIClient, didFailRequest request: APIRequest, withError error: Error) {
         RootViewController.stopLoadingIndicator(with: .fail)
-        commentInputTextView.isEditable = true
+        if commentInputTextView != nil {
+            commentInputTextView.isEditable = true
+        }
     }
     
     func apiClient(_ client: APIClient, didCreateCommentForAdWithId adId: String) {

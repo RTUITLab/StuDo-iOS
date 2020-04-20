@@ -50,7 +50,7 @@ struct APIRequest {
 enum APIError: Error {
     case invalidURL
     case requestFailed
-    case wrongResponseStatus(Int)
+    case wrongResponseStatus(Int, String?)
     case decodingFailure
     case decodingFailureWithField(String)
     case decodingFailureWithFieldAndValue(String, String)
@@ -172,6 +172,7 @@ class APIClient {
     }
     
     
+    private var alertWindow: UIWindow?
     private func perform(_ request: APIRequest, _ completion: @escaping APIClientCompletion) {
         var urlComponents = URLComponents()
         urlComponents.scheme = baseURL.scheme
@@ -195,6 +196,16 @@ class APIClient {
         
         let task = session.dataTask(with: urlRequest) { (data, response, error) in
             do {
+                
+                if let error = error {
+                    let nsError = error as NSError
+                    switch nsError.code {
+                    case NSURLErrorTimedOut, NSURLErrorCannotLoadFromNetwork, NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost, NSURLErrorCannotConnectToHost:
+                        self.presentErrorAlert(title: Localizer.string(for: .errorNoResponse), description: Localizer.string(for: .errorNoResponseDescription))
+                    default: break
+                    }
+                }
+                
                 guard let httpResponse = response as? HTTPURLResponse else {
                     throw APIError.requestFailed
                 }
@@ -204,7 +215,10 @@ class APIClient {
                     return
                 }
                 guard httpResponse.statusCode == 200 else {
-                    throw APIError.wrongResponseStatus(httpResponse.statusCode)
+                    if let data = data, let errorString = try? self.decodeString(from: APIResponse(statusCode: httpResponse.statusCode, body: data)) {
+                        throw APIError.wrongResponseStatus(httpResponse.statusCode, errorString)
+                    }
+                    throw APIError.wrongResponseStatus(httpResponse.statusCode, nil)
                 }
             
                 try completion(.success(APIResponse(statusCode: httpResponse.statusCode, body: data)))
@@ -245,6 +259,24 @@ class APIClient {
         }
         
     }
+    
+    private func presentErrorAlert(title: String, description: String?) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: title, message: description, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: Localizer.string(for: .okay), style: .default, handler: { _ in
+                self.alertWindow = nil
+            }))
+            self.alertWindow = UIWindow(frame: UIScreen.main.bounds)
+            let vc = UIViewController()
+            if let topWindow = (UIApplication.shared.delegate as? AppDelegate)?.window {
+                self.alertWindow!.windowLevel = topWindow.windowLevel + 1
+            }
+            self.alertWindow!.rootViewController = vc
+            self.alertWindow!.makeKeyAndVisible()
+            vc.present(alert, animated: true, completion: nil)
+        }
+    }
+
 
     
 }
@@ -399,6 +431,11 @@ extension APIClient {
                 case .failure(let error):
                     DispatchQueue.main.async {
                         self.delegate?.apiClient(self, didFailRequest: request, withError: error)
+                        switch error {
+                        case .wrongResponseStatus(let statusCode, let description):
+                            self.presentErrorAlert(title: Localizer.string(for: .errorWrongCredentials), description: description)
+                        default: break
+                        }
                     }
                 }
             }

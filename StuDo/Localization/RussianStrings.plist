@@ -28,8 +28,6 @@
 	<string>Настройки</string>
 	<key>search</key>
 	<string>Найти</string>
-	<key>userWriteEmail</key>
-	<string>Написать письмо</string>
 	<key>organizationInfoHeaderTitle</key>
 	<string>Организация</string>
 	<key>adEditorEndDateLabel</key>
@@ -128,6 +126,8 @@
 	<string>Ваш пароль должен иметь длину не менее 6 символов.</string>
 	<key>rightCanEditAd</key>
 	<string>Редактирование объявлений</string>
+	<key>userWriteEmail</key>
+	<string>Написать письмо</string>
 	<key>accountDetailPassword</key>
 	<string>Изменить пароль</string>
 	<key>adEditorDeleteComment</key>
@@ -294,5 +294,11 @@
 	<string>Сохранённые источники</string>
 	<key>aboutInstruction</key>
 	<string>Как пользоваться StuDo?</string>
+	<key>errorNoResponse</key>
+	<string>Сервер не отвечает</string>
+	<key>errorNoResponseDescription</key>
+	<string>Пожалуйста, проверьте Ваше соединение с Интернетом</string>
+	<key>errorWrongCredentials</key>
+	<string>Неправильные данные</string>
 </dict>
 </plist>

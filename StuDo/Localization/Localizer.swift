@@ -175,6 +175,10 @@ enum LozalizerString: String {
     case notificationEventReminderMessageBefore1h
     case notificationsDisabledAlertTitle
     case notificationsDisabledSettings
+    
+    case errorNoResponse
+    case errorNoResponseDescription
+    case errorWrongCredentials
 }
 
 class Localizer: NSObject {

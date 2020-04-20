@@ -82,7 +82,7 @@ class AdsViewController: UICollectionViewController {
         collectionView!.register(CollectionViewCellWithTableView.self, forCellWithReuseIdentifier: collectionCellID)
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .secondarySystemBackground
+        collectionView.backgroundColor = .systemBackground
         
         setupAdNavigationCollectionView()
 
@@ -222,9 +222,7 @@ class AdsViewController: UICollectionViewController {
     }
     
     @objc private func refreshTriggered(_ refreshControl: UIRefreshControl) {
-        guard let tableView = refreshControl.superview as? UITableView,
-            let section = AdSection(rawValue: tableView.tag) else { return }
-        requestUpdate(adSection: section)
+        requestUpdateForAllSections()
     }
     
 }

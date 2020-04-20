@@ -294,5 +294,11 @@
 	<string>Benachrichtigungen sind derzeit deaktiviert. Sie können sie in den Einstellungen aktivieren.</string>
 	<key>notificationsDisabledSettings</key>
 	<string>Einstellungen</string>
+	<key>errorNoResponseDescription</key>
+	<string>Bitte überprüfe deine Internetverbindung</string>
+	<key>errorNoResponse</key>
+	<string>Server antwortet nicht</string>
+	<key>errorWrongCredentials</key>
+	<string>Falsche Anmeldeinformationen</string>
 </dict>
 </plist>

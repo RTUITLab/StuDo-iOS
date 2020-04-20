@@ -294,5 +294,11 @@
 	<string>Notifications are currently disabled. You can enable them in settings.</string>
 	<key>notificationsDisabledSettings</key>
 	<string>Settings</string>
+	<key>errorNoResponse</key>
+	<string>Server is not responding</string>
+	<key>errorNoResponseDescription</key>
+	<string>Please check your Internet connection</string>
+	<key>errorWrongCredentials</key>
+	<string>Wrong Credentials</string>
 </dict>
 </plist>
