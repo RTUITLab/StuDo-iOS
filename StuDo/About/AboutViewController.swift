@@ -21,17 +21,18 @@ class AboutViewController: UITableViewController {
         case vkLink = "RTU IT Lab"
         case instruction = "Instruction"
         case sourceCode = "Source Code"
+        case websiteLink = "Website link"
     }
     let infoPosition: [[AboutInfoUnit]]
     
     override init(style: UITableView.Style) {
         
-        var contactSection: [AboutInfoUnit] = [.rate, .vkLink]
+        var contactSection: [AboutInfoUnit] = [.rate]
         if MFMailComposeViewController.canSendMail() {
-            contactSection = [.feedback, .rate, .vkLink]
+            contactSection = [.feedback, .rate]
         }
         
-        var infoPosition = [contactSection, [.sourceCode]]
+        var infoPosition = [contactSection, [.vkLink, .websiteLink], [.sourceCode]]
         #if !DEBUG
         infoPosition.insert([.instruction], at: 0)
         #endif
@@ -96,6 +97,8 @@ class AboutViewController: UITableViewController {
             cell.textLabel?.text = Localizer.string(for: .aboutRate)
         } else if info == .vkLink {
             cell.textLabel?.text = Localizer.string(for: .aboutRTULab)
+        } else if info == .websiteLink {
+            cell.textLabel?.text = Localizer.string(for: .aboutWebsite)
         } else if info == .sourceCode {
             cell.textLabel?.text = Localizer.string(for: .aboutSourceCode)
         } else if info == .instruction {
@@ -124,6 +127,9 @@ class AboutViewController: UITableViewController {
             let vkURL = URL(string: "https://vk.com/rtuitlab")!
             UIApplication.shared.open(vkURL, options: [:], completionHandler: nil)
             
+        } else if info == .websiteLink {
+            let url = URL(string: "https://rtuitlab.dev")!
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         } else if info == .feedback {
             
             if MFMailComposeViewController.canSendMail() {

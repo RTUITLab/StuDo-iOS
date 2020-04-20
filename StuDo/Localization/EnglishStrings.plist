@@ -103,11 +103,13 @@
 	<key>aboutRate</key>
 	<string>Rate on App Store</string>
 	<key>aboutRTULab</key>
-	<string>RTU IT Lab</string>
+	<string>RTU IT Lab on VK</string>
 	<key>aboutSourceCode</key>
 	<string>Source Code on GitHub</string>
 	<key>aboutInstruction</key>
 	<string>How to use StuDo?</string>
+	<key>aboutWebsite</key>
+	<string>Lab website</string>
 	<key>accountDetailFirstName</key>
 	<string>Name</string>
 	<key>accountDetailLastName</key>

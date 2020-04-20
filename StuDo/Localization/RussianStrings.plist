@@ -42,6 +42,8 @@
 	<string>Описание</string>
 	<key>aboutRTULab</key>
 	<string>Сообщество RTU IT Lab</string>
+	<key>aboutWebsite</key>
+	<string>Веб-сайт лаборатории</string>
 	<key>passwordRepeatNew</key>
 	<string>Введите новый пароль ещё раз</string>
 	<key>adEditorDescriptionPlaceholder</key>

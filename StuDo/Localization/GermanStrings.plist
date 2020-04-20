@@ -36,6 +36,8 @@
 	<string>Quellcode auf GitHub</string>
 	<key>aboutInstruction</key>
 	<string>Wie benutzt man StuDo?</string>
+	<key>aboutWebsite</key>
+	<string>Website von RTU IT Lab</string>
 	<key>adEditorRemoveFromBookmarks</key>
 	<string>Von Lesezeichen entfernen</string>
 	<key>greenThemeName</key>
@@ -113,7 +115,7 @@
 	<key>aboutRate</key>
 	<string>Auf App Store bewerten</string>
 	<key>aboutRTULab</key>
-	<string>RTU IT Lab</string>
+	<string>RTU IT Lab auf VK</string>
 	<key>accountDetailFirstName</key>
 	<string>Name</string>
 	<key>accountDetailLastName</key>
