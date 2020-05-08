@@ -21,7 +21,7 @@ class DateButton: UIButton {
             }
         } else {
             label.text = labelPlaceholder
-            backgroundColor = .placeholderText
+            backgroundColor = #colorLiteral(red: 0.8088194728, green: 0.8033806682, blue: 0.8252900243, alpha: 1)
         }
     }
     

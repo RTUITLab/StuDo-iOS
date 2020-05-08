@@ -103,10 +103,9 @@ class FoldingTitleView: UIView {
     
     @objc func handle(tap: UITapGestureRecognizer) {
         guard shouldAllowChandingState == true else { return }
-        
+        shouldAllowChandingState = false
         changeState()
         
-        shouldAllowChandingState = false
         DispatchQueue.main.asyncAfter(deadline: .now() + foldingAnimationDuration) {
             self.shouldAllowChandingState = true
         }

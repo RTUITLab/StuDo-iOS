@@ -400,6 +400,7 @@ extension AdsViewController: UICollectionViewDelegateFlowLayout {
 //        setCurrentSection(from: scrollView.contentOffset)
 //    }
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard scrollView === self.collectionView else { return }
         setCurrentSection(from: scrollView.contentOffset)
     }
     
