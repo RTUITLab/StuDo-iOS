@@ -133,6 +133,8 @@ class RootViewController: UIViewController {
     
     func logout() {
         
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        
         DispatchQueue.main.async {
             PersistentStore.cleanUserRelatedPersistentData()
             

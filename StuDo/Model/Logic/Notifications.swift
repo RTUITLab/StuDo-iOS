@@ -14,8 +14,9 @@ class Notifications: NSObject {
     private static let center = UNUserNotificationCenter.current()
     
     static func checkIfCanSetNotifications(for date: Date) -> Bool {
+        let lastReminderDate = Calendar.current.date(byAdding: .minute, value: -15, to: date)!
         let currentDate: Date = Date()
-        return date > currentDate
+        return lastReminderDate > currentDate
     }
     
     
@@ -54,13 +55,17 @@ class Notifications: NSObject {
             
             let alert = UIAlertController(title: Localizer.string(for: .notificationReminderAlertTitle), message: nil, preferredStyle: .actionSheet)
             
-            alert.addAction(UIAlertAction(title: Localizer.string(for: .notificationRemindBefore15m), style: .default, handler: { _ in
-                publishAction(for: .before15m)
-            }))
+            if Calendar.current.date(byAdding: .minute, value: -15, to: ad.beginTime)! > Date() {
+                alert.addAction(UIAlertAction(title: Localizer.string(for: .notificationRemindBefore15m), style: .default, handler: { _ in
+                    publishAction(for: .before15m)
+                }))
+            }
             
-            alert.addAction(UIAlertAction(title: Localizer.string(for: .notificationRemindBefore1h), style: .default, handler: { _ in
-                publishAction(for: .before1h)
-            }))
+            if Calendar.current.date(byAdding: .minute, value: -60, to: ad.beginTime)! > Date() {
+                alert.addAction(UIAlertAction(title: Localizer.string(for: .notificationRemindBefore1h), style: .default, handler: { _ in
+                    publishAction(for: .before1h)
+                }))
+            }
             
             alert.addAction(UIAlertAction(title: Localizer.string(for: .cancel), style: .cancel, handler: nil))
             
@@ -92,24 +97,29 @@ class Notifications: NSObject {
     
     
     private static func publishNotification(for ad: Ad, option: NotificationOption, completion: @escaping (Bool) -> ()) {
+        let notificationId = "ad-reminder:\(ad.id!)"
         
+        center.removePendingNotificationRequests(withIdentifiers: [notificationId])
         
         let content = UNMutableNotificationContent()
         content.title = ad.name
+        var diffValue: Int = 0
         switch option {
         case .before15m:
             content.body = Localizer.string(for: .notificationEventReminderMessageBefore15m)
+            diffValue = -15
         case .before1h:
             content.body = Localizer.string(for: .notificationEventReminderMessageBefore1h)
+            diffValue = -60
         }
         content.sound = UNNotificationSound.default
         
-        let triggerDate = Calendar.current.date(byAdding: .minute, value: -15, to: ad.beginTime)!
+        let triggerDate = Calendar.current.date(byAdding: .minute, value: diffValue, to: ad.beginTime)!
         let triggerDateComponents = Calendar.current.dateComponents([.minute, .hour, .day, .month, .year], from: triggerDate)
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
         
-        let request = UNNotificationRequest(identifier: "ad-reminder:\(ad.id!)", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: notificationId, content: content, trigger: trigger)
         
         center.add(request, withCompletionHandler: nil)
         center.add(request) { (error) in

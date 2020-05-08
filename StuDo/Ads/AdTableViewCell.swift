@@ -35,6 +35,8 @@ class AdTableViewCell: UITableViewCell {
         
         selectionStyle = .none
         
+        descriptionTextView.textContainer.lineBreakMode = .byTruncatingTail
+        descriptionTextView.textContainer.maximumNumberOfLines = 5
         descriptionTextView.isUserInteractionEnabled = false
         descriptionTextView.isScrollEnabled = false
         descriptionTextView.backgroundColor = .clear

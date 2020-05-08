@@ -538,6 +538,13 @@ class AdViewController: UIViewController {
     @objc func moreButtonTapped(_ button: UIButton) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
+        if Notifications.checkIfCanSetNotifications(for: currentAd.beginTime) {
+            actionSheet.addAction(UIAlertAction(title: Localizer.string(for: .notificationSetReminder), style: .default, handler: { _ in
+                let notificationAlert = Notifications.notificationAlert(for: self.currentAd, in: self)
+                self.present(notificationAlert, animated: true, completion: nil)
+            }))
+        }
+        
         if currentAd.isFavorite {
             actionSheet.addAction(UIAlertAction(title: Localizer.string(for: .adEditorRemoveFromBookmarks), style: .default, handler: { _ in
                 self.client.unbookmarkAd(withId: self.currentAd.id!)

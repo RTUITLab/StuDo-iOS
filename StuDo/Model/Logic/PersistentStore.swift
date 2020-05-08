@@ -106,12 +106,15 @@ class PersistentStore: NSObject {
         if let storedLanguage = defaults.string(forKey: currentLanguageKey) {
             currentLanguage = StuDoAvailableLanguage(rawValue: storedLanguage)!
         } else {
-            let locale = Locale.preferredLanguages.first
-            if locale == "ru" {
-                currentLanguage = .Russian
-            } else {
-                currentLanguage = .English
+            var language: StuDoAvailableLanguage = .English
+            if let locale = Locale.preferredLanguages.first {
+                if locale.contains("ru") {
+                    language = .Russian
+                } else if locale.contains("de") {
+                    language = .German
+                }
             }
+            currentLanguage = language
             UserDefaults.standard.set(currentLanguage.rawValue, forKey: currentLanguageKey)
         }
         

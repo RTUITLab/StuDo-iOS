@@ -110,8 +110,9 @@ class AdsViewController: UICollectionViewController {
     
     private func reloadTable(for index: Int, fullReload: Bool = false) {
         DispatchQueue.main.async {
+            print("trying update: \(index)")
             if let cell = self.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? CollectionViewCellWithTableView {
-                print("updated section: \(index)")
+                print("updated section: \(index) - background hidden \(!self.feedItems[index].isEmpty)")
                 cell.tableView.backgroundView?.isHidden = !self.feedItems[index].isEmpty
                 cell.tableView.refreshControl?.endRefreshing()
                 if fullReload {
@@ -176,6 +177,7 @@ class AdsViewController: UICollectionViewController {
             infoView.titleLabel.text = Localizer.string(for: .feedNoAdsTitle)
             infoView.descriptionLabel.text = Localizer.string(for: .feedNoBookmarkedAdsDescription)
         }
+        infoView.isHidden = true
         return infoView
     }
     
@@ -349,6 +351,11 @@ extension AdsViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard collectionView === self.collectionView,
             let cell = cell as? CollectionViewCellWithTableView else { return }
+        if !isInitialTableViewLoad {
+            cell.tableView.backgroundView?.isHidden = !self.feedItems[indexPath.item].isEmpty
+        } else {
+            cell.tableView.backgroundView?.isHidden = true
+        }
         cell.tableView.reloadData()
     }
     
@@ -395,11 +402,9 @@ extension AdsViewController: UICollectionViewDelegateFlowLayout {
         
         tableView.tag = indexPath.item
         
+        tableView.backgroundView = nil
         if let section = AdSection(rawValue: indexPath.item) {
             tableView.backgroundView = infoView(for: section)
-            if !isInitialTableViewLoad {
-                tableView.backgroundView!.isHidden = !self.feedItems[indexPath.item].isEmpty
-            }
         }
         
         return cell
@@ -444,7 +449,7 @@ extension AdsViewController: UITableViewDataSource, UITableViewDelegate {
         cell.dateLabel.text = currentAd.dateRange
         cell.moreButtonCallback = { [weak self] in
             guard let self = self else { return }
-            self.moreButtonTappedInCell(tableView: tableView, rowIndex: indexPath.row)
+            self.moreButtonTappedInCell(tableView: tableView, adId: currentAd.id)
         }
         
         return cell
@@ -470,8 +475,8 @@ extension AdsViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension AdsViewController {
     
-    fileprivate func moreButtonTappedInCell(tableView: UITableView, rowIndex: Int) {
-        
+    fileprivate func moreButtonTappedInCell(tableView: UITableView, adId: String) {
+        guard let rowIndex = feedItems[tableView.tag].firstIndex(where: {$0.id == adId}) else { return }
         let currentAd = feedItems[tableView.tag][rowIndex]
         
         let userInfo: [String: Any] = [

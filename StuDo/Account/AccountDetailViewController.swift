@@ -175,7 +175,6 @@ class AccountDetailViewController: UITableViewController {
             
             cell.inputField.clearButtonMode = .whileEditing
             cell.inputField.delegate = self
-            cell.inputField.keyboardType = .numberPad
             cell.inputField.returnKeyType = .done
             studentIdTextField = cell.inputField
             
