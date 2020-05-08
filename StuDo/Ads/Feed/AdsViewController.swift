@@ -65,6 +65,8 @@ class AdsViewController: UICollectionViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(languageDidChange(notification:)), name: PersistentStoreNotification.languageDidChange.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange(notification:)), name: PersistentStoreNotification.themeDidChange.name, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(forceUpdate(notification:)), name: AppDelegateNotification.forceDataUpdate.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive(notification:)), name: UIApplication.willResignActiveNotification, object: nil)
+        
     }
     
     deinit {
@@ -95,7 +97,22 @@ class AdsViewController: UICollectionViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        hideRefreshControls()
+    }
+    
     // MARK: Data
+    
+    private func setCurrentSection(from offset: CGPoint) {
+        let newSection = Int(offset.x / self.collectionView.frame.width)
+        guard currentSection != newSection else { return }
+        
+        adNavigationCollectionView.deselectItem(at: IndexPath(item: currentSection, section: 0), animated: true)
+        adNavigationCollectionView.selectItem(at: IndexPath(item: newSection, section: 0), animated: true, scrollPosition: .right)
+        print("section: \(currentSection) to \(newSection)")
+        currentSection = newSection
+    }
     
     public func requestUpdateForAllSections() {
         let sections = AdSection.allCases
@@ -164,6 +181,15 @@ class AdsViewController: UICollectionViewController {
         adNavigationView.heightAnchor.constraint(equalToConstant: adNavigationCollectionViewHeight).isActive = true
     }
     
+    private func hideRefreshControls() {
+        for index in 0...2 {
+            if let cell = self.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? CollectionViewCellWithTableView {
+                cell.tableView.refreshControl?.beginRefreshing()
+                cell.tableView.refreshControl?.endRefreshing()
+            }
+        }
+    }
+    
     private func infoView(for section: AdSection) -> BackgroundInfoView {
         let infoView = BackgroundInfoView()
         switch section {
@@ -221,6 +247,10 @@ class AdsViewController: UICollectionViewController {
     
     @objc private func forceUpdate(notification: Notification) {
         requestUpdateForAllSections()
+    }
+    
+    @objc private func appWillResignActive(notification: Notification) {
+        hideRefreshControls()
     }
     
     @objc private func refreshTriggered(_ refreshControl: UIRefreshControl) {
@@ -356,19 +386,21 @@ extension AdsViewController: UICollectionViewDelegateFlowLayout {
         } else {
             cell.tableView.backgroundView?.isHidden = true
         }
+        cell.tableView.refreshControl?.endRefreshing()
         cell.tableView.reloadData()
     }
     
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         guard scrollView === self.collectionView else { return }
         let targetOffset = targetContentOffset.pointee
-        
-        let newSection = Int(targetOffset.x / self.collectionView.frame.width)
-        guard currentSection != newSection else { return }
-        
-        adNavigationCollectionView.deselectItem(at: IndexPath(item: currentSection, section: 0), animated: true)
-        adNavigationCollectionView.selectItem(at: IndexPath(item: newSection, section: 0), animated: true, scrollPosition: .right)
-        currentSection = newSection
+        setCurrentSection(from: targetOffset)
+    }
+    
+//    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        setCurrentSection(from: scrollView.contentOffset)
+//    }
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        setCurrentSection(from: scrollView.contentOffset)
     }
     
     
