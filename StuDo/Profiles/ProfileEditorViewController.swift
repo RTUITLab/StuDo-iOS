@@ -225,7 +225,7 @@ extension ProfileEditorViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: value1styleCellID, for: indexPath)
         
         if sectionInfo == .deleteAction {
-            cell.textLabel?.text = "Delete profile"
+            cell.textLabel?.text = Localizer.string(for: .deleteProfile)
             if #available(iOS 13, *) {
                 cell.textLabel?.textColor = .systemRed
             } else {
