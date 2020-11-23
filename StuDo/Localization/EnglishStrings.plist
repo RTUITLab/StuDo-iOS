@@ -302,5 +302,7 @@
 	<string>Please check your Internet connection</string>
 	<key>errorWrongCredentials</key>
 	<string>Wrong Credentials</string>
+	<key>deleteProfile</key>
+	<string>Delete profile</string>
 </dict>
 </plist>

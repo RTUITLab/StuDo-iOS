@@ -180,6 +180,8 @@ enum LozalizerString: String {
     case errorNoResponse
     case errorNoResponseDescription
     case errorWrongCredentials
+    
+    case deleteProfile
 }
 
 class Localizer: NSObject {

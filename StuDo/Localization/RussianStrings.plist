@@ -300,7 +300,9 @@
 	<string>Сервер не отвечает</string>
 	<key>errorNoResponseDescription</key>
 	<string>Пожалуйста, проверьте Ваше соединение с Интернетом</string>
-	<key>errorWrongCredentials</key>
-	<string>Неправильные данные</string>
+    <key>errorWrongCredentials</key>
+    <string>Неправильные данные</string>
+	<key>deleteProfile</key>
+	<string>Удалить профиль</string>
 </dict>
 </plist>

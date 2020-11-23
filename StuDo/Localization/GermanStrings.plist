@@ -302,5 +302,7 @@
 	<string>Server antwortet nicht</string>
 	<key>errorWrongCredentials</key>
 	<string>Falsche Anmeldeinformationen</string>
+	<key>deleteProfile</key>
+	<string>Profil löschen</string>
 </dict>
 </plist>
