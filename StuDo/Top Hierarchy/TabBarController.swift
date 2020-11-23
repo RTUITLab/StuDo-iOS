@@ -139,42 +139,19 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         initialTabBarOrigin = tabBar.frame.origin
         initialActionButtonOrigin = actionButton.frame.origin
         
-        let offsetTransform = CGAffineTransform(translationX: 0, y: view.frame.height / 2)
+        self.tabBar.animateVisibility(shouldHide: true)
+        self.actionButton.animateVisibility(shouldHide: true)
         
-        UIView.animate(withDuration: showHideAnimationDuration, animations: {
-            self.tabBar.transform = offsetTransform
-            self.actionButton.transform = offsetTransform
-        }) { _ in
-            self.tabBar.isHidden = true
-            self.actionButton.isHidden = true
-            print("Frame hide after: \(self.tabBar.frame)")
-        }
         tabBarIsHidden = true
     }
     
     override func showTabBar() {
         guard tabBarIsHidden == true else { return }
-        print("Frame show: \(self.tabBar.frame)")
         
-        if let tabBarO = initialTabBarOrigin, let actionButtonO = initialActionButtonOrigin {
-            
-            self.tabBar.transform = .identity
-            self.actionButton.transform = .identity
-            
-            self.tabBar.frame.origin = CGPoint(x: 0, y: tabBarO.y + self.offsetYTransform)
-            self.actionButton.frame.origin = CGPoint(x: 0, y: actionButtonO.y + self.offsetYTransform)
-            
-            self.tabBar.isHidden = false
-            self.actionButton.isHidden = false
-                    
-            UIView.animate(withDuration: showHideAnimationDuration) {
-                self.tabBar.frame.origin = CGPoint(x: 0, y: tabBarO.y)
-                self.actionButton.frame.origin = CGPoint(x: actionButtonO.x, y: actionButtonO.y)
-                print(self.tabBar.frame)
-            }
-            
-            tabBarIsHidden = false
-        }
+        self.tabBar.animateVisibility(shouldHide: false)
+        self.actionButton.animateVisibility(shouldHide: false)
+        
+        tabBarIsHidden = false
         
     }
 
