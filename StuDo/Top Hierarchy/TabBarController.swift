@@ -138,7 +138,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         
         initialTabBarOrigin = tabBar.frame.origin
         initialActionButtonOrigin = actionButton.frame.origin
-        
+        //fsdfaf
         self.tabBar.animateVisibility(shouldHide: true)
         self.actionButton.animateVisibility(shouldHide: true)
         
